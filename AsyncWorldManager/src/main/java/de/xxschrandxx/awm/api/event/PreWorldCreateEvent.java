@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 
 public class PreWorldCreateEvent extends Event {
@@ -13,7 +13,7 @@ public class PreWorldCreateEvent extends Event {
   public PreWorldCreateEvent(WorldData WorldData, boolean Async) {
     worlddata = WorldData;
     async = Async;
-    Main.Log(Level.WARNING, "Creating world " + worlddata.getWorldName() + ". Async: " + async);
+    AsyncWorldManager.Log(Level.WARNING, "Creating world " + worlddata.getWorldName() + ". Async: " + async);
   }
   public WorldData getWorldData() {
     return worlddata;

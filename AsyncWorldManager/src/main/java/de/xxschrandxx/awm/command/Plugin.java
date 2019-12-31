@@ -6,8 +6,8 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
-import de.xxschrandxx.awm.Main;
-import de.xxschrandxx.awm.api.config.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.api.spigot.Config;
 
 import net.md_5.bungee.api.chat.*;
 
@@ -19,11 +19,11 @@ public class Plugin {
           if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin.info")) {
             if (args.length != 2) {
               if (args[2].equalsIgnoreCase("config")) {
-                sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.info.head") + "\n  &a" + Main.getInstance().getDescription().getFullName()) + createmsg(Main.config.get().getDefaultSection(), "    ") + Main.Loop("\n" + Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.info.head")));
+                sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head") + "\n  &a" + AsyncWorldManager.getInstance().getDescription().getFullName()) + createmsg(AsyncWorldManager.config.get().getDefaultSection(), "    ") + AsyncWorldManager.Loop("\n" + AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head")));
                 return true;
               }
               else if (args[2].equalsIgnoreCase("messages")) {
-                sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.info.head") + "\n  &a" + Main.getInstance().getDescription().getFullName()) + createmsg(Main.messages.get().getDefaultSection(), "    ") + Main.Loop("\n" + Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.info.head")));
+                sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head") + "\n  &a" + AsyncWorldManager.getInstance().getDescription().getFullName()) + createmsg(AsyncWorldManager.messages.get().getDefaultSection(), "    ") + AsyncWorldManager.Loop("\n" + AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head")));
                 return true;
               }
               else {
@@ -35,7 +35,7 @@ public class Plugin {
             }
           }
           else {
-            sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.plugin.info")))).create())).create());
+            sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.plugin.info")))).create())).create());
             return true;
           }
         }
@@ -43,22 +43,22 @@ public class Plugin {
           if (args.length == 5) {
             if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin.set")) {
               if (args[2].equalsIgnoreCase("config")) {
-                if (setValue(Main.config, args[3], args[4])) {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.set.success").replace("%key%", args[3]).replace("%value%", args[4])));
+                if (setValue(AsyncWorldManager.config, args[3], args[4])) {
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.set.success").replace("%key%", args[3]).replace("%value%", args[4])));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.set.failure").replace("%key%", args[3]).replace("%value%", args[4])));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.set.failure").replace("%key%", args[3]).replace("%value%", args[4])));
                   return false;
                 }
               }
               else if (args[2].equalsIgnoreCase("messages")) {
-                if (setValue(Main.messages, args[3], args[4])) {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.set.success").replace("%key%", args[3]).replace("%value%", args[4])));
+                if (setValue(AsyncWorldManager.messages, args[3], args[4])) {
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.set.success").replace("%key%", args[3]).replace("%value%", args[4])));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.plugin.set.failure").replace("%key%", args[3]).replace("%value%", args[4])));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.set.failure").replace("%key%", args[3]).replace("%value%", args[4])));
                   return false;
                 }
               }
@@ -67,7 +67,7 @@ public class Plugin {
               }
             }
             else {
-              sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.plugin.set")))).create())).create());
+              sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.plugin.set")))).create())).create());
               return true;
             }
           }
@@ -84,12 +84,12 @@ public class Plugin {
       }
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.plugin.main")))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.plugin.main")))).create())).create());
       return true;
     }
   }
   private static String createmsg(ConfigurationSection section, String tabs) {
-    String message = Main.Loop("&7");
+    String message = AsyncWorldManager.Loop("&7");
     if (section != null) {
       for (String key : section.getKeys(false)) {
         if (section.getConfigurationSection(key) != null) {
@@ -97,7 +97,7 @@ public class Plugin {
           message = message + createmsg(section.getConfigurationSection(key), "  " + tabs);
         }
         else {
-          message = message + "\n" + tabs + Main.Loop(Main.messages.get().getString("command.plugin.info.format")).replace("%key%", key).replace("%value%", section.getString(key));
+          message = message + "\n" + tabs + AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.plugin.info.format")).replace("%key%", key).replace("%value%", section.getString(key));
         }
       }
     }
@@ -138,10 +138,10 @@ public class Plugin {
       else if ((args.length == 4) && args[1].equalsIgnoreCase("plugin")) {
         Config config = null;
         if (args[3].equalsIgnoreCase("config")) {
-          config = Main.config;
+          config = AsyncWorldManager.config;
         }
         else if (args[3].equalsIgnoreCase("messages")) {
-          config = Main.messages;
+          config = AsyncWorldManager.messages;
         }
         if (config != null) {
           list.addAll(config.get().getKeys(false));

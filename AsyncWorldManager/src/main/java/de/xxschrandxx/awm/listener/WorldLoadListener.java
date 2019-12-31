@@ -9,7 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
 public class WorldLoadListener implements Listener {
@@ -19,9 +20,9 @@ public class WorldLoadListener implements Listener {
     String worldname = world.getName();
     WorldData worlddata = Storage.getWorlddataFromName(worldname);
     if (worlddata == null) {
-      Main.Log(Level.WARNING, worldname + " loading without AWM configuration. Creating one from world...");
+      AsyncWorldManager.Log(Level.WARNING, worldname + " loading without AWM configuration. Creating one from world...");
       worlddata = WorldConfigManager.getWorlddataFromWorld(world);
-      File worldconfigfolder = new File(Main.getInstance().getDataFolder(), "worldconfigs");
+      File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
       if (!worldconfigfolder.exists())
         worldconfigfolder.mkdir();
       File worldconfigfile = new File(worldconfigfolder, worldname + ".yml");
@@ -29,7 +30,7 @@ public class WorldLoadListener implements Listener {
       WorldConfigManager.save(config, worlddata);
     }
     else {
-      Main.Log(Level.INFO, worldname + "'s configuration is setting up...");
+      AsyncWorldManager.Log(Level.INFO, worldname + "'s configuration is setting up...");
       WorldConfigManager.setWorldsData(world, worlddata);
     }
   }

@@ -12,7 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
 public class CommandPerformListener implements Listener {
@@ -33,11 +34,11 @@ public class CommandPerformListener implements Listener {
       if (args.length == 4) {
         if (sender instanceof ConsoleCommandSender) {
           if (testValues.isInt(args[1]) && testValues.isInt(args[2]) && testValues.isInt(args[3])) {
-            World world = Bukkit.getWorld(Main.config.get().getString("mainworld"));
+            World world = Bukkit.getWorld(AsyncWorldManager.config.get().getString("mainworld"));
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = Storage.getWorlddataFromName(Main.config.get().getString("mainworld"));
+            WorldData worlddata = Storage.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
               worlddata.setX(x);
               worlddata.setY(y);

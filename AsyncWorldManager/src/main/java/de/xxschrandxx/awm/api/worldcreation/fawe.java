@@ -6,14 +6,14 @@ import org.bukkit.WorldCreator;
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 
 import de.xxschrandxx.awm.api.config.testValues;
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
 
 public class fawe {
   public static void faweworld(WorldData preworlddata) {
-    Bukkit.getScheduler().runTask(Main.getInstance(), new Runnable() {
+    Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
       public void run() {
         WorldCreator preworldcreator = new WorldCreator(preworlddata.getWorldName());
         PreWorldCreateEvent preworldcreateevent = new PreWorldCreateEvent(preworlddata, true);

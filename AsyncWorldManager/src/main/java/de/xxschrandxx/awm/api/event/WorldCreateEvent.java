@@ -6,13 +6,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.WorldCreator;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class WorldCreateEvent extends Event {
   public WorldCreateEvent(WorldCreator WorldCreator, boolean Async) {
     worldcreator = WorldCreator;
     async = Async;
-    Main.Log(Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
+    AsyncWorldManager.Log(Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
   }
   private WorldCreator worldcreator;
   public WorldCreator getWorldCreator() {

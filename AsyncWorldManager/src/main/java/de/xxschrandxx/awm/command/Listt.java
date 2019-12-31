@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Storage;
 
 import net.md_5.bungee.api.chat.*;
@@ -17,19 +17,19 @@ public class Listt {
     if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.list")) {
       HashMap<String, String> worlds = new HashMap<String, String>();
       for (String worldname : Storage.getAllLoadedWorlds())
-        worlds.put(worldname, Main.messages.get().getString("command.list.loaded"));
+        worlds.put(worldname, AsyncWorldManager.messages.get().getString("command.list.loaded"));
       for (String worldname : Storage.getAllUnloadedWorlds())
-        worlds.put(worldname, Main.messages.get().getString("command.list.unloaded"));
+        worlds.put(worldname, AsyncWorldManager.messages.get().getString("command.list.unloaded"));
       for (String worldname : Storage.getAllUnknownWorlds())
-        worlds.put(worldname, Main.messages.get().getString("command.list.unknown"));
-      sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.list.main")));
+        worlds.put(worldname, AsyncWorldManager.messages.get().getString("command.list.unknown"));
+      sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.list.main")));
       for (Entry<String, String> entry : worlds.entrySet()) {
-        sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.list.chat") + entry.getValue()) + entry.getKey()).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.messages.get().getString("command.list.hover")).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm teleport " + entry.getKey())).create());
+        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.list.chat") + entry.getValue()) + entry.getKey()).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.messages.get().getString("command.list.hover")).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm teleport " + entry.getKey())).create());
       }
       return true;
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.list")))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.list")))).create())).create());
       return true;
     }
   }

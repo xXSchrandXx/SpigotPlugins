@@ -1,48 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<parent>
-		<groupId>de.xxschrandxx.api</groupId>
-		<artifactId>SchrandAPI</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-
-	<name>SchrandAPI</name>
-	<artifactId>Async-WorldManager</artifactId>
-	<groupId>de.xxschrandxx.awm</groupId>
-	<version>0.0.8-SNAPSHOT</version>
-	<url>https://github.com/xXSchrandXx/SchrandAPI</url>
-
-	<repositories>
-
-		<!-- FAWE-Repo -->
-		<repository>
-			<id>fawe-repo</id>
-			<url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/</url>
-		</repository>
-
-	</repositories>
-
-	<dependencies>
-
-		<!-- FAWE-API Dependency -->
-		<dependency>
-			<groupId>com.boydti</groupId>
-			<artifactId>fawe-api</artifactId>
-			<version>latest</version>
-		</dependency>
-
-		<!-- FAWE-Bukkit Dependency -->
-		<dependency>
-			<groupId>com.boydti</groupId>
-			<artifactId>fawe-bukkit</artifactId>
-			<version>latest</version>
-		</dependency>
-
-	</dependencies>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>de.xxschrandxx</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>AsyncWorldManager</artifactId>
+  <groupId>de.xxschrandxx.awm</groupId>
+  <version>0.0.8-SNAPSHOT</version>
+  
+  <dependencies>
+  	<dependency>
+      <groupId>de.xxschrandxx.api</groupId>
+      <artifactId>SchrandAPI</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

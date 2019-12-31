@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Storage;
 
 import net.md_5.bungee.api.chat.*;
@@ -16,11 +16,11 @@ public class Reload {
       Storage.stop();
       Storage.start();
       Storage.setallworlddatas();
-      sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.reload.success")));
+      sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.reload.success")));
       return true;
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)").replace("%perm%", Main.config.get().getString("command.permissions.reload"))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)").replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.reload"))).create())).create());
       return true;
     }
   }

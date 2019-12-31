@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -14,14 +15,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.io.Files;
 
-import de.xxschrandxx.awm.api.Metrics;
+import de.xxschrandxx.api.spigot.Config;
 import de.xxschrandxx.awm.api.config.*;
-import de.xxschrandxx.awm.command.WorldManager;
+import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
 import de.xxschrandxx.awm.listener.*;
 
-public class Main extends JavaPlugin {
+public class AsyncWorldManager extends JavaPlugin {
 //Variablen
-  private static Main instance;
+  private static AsyncWorldManager instance;
   public static Metrics metrics;
   public static Config config;
   public static Config messages;
@@ -67,9 +68,9 @@ public class Main extends JavaPlugin {
 //  Lade Kommandos
     Log(Level.WARNING, "Loading Commands...");
     Log(Level.INFO, "Loading Command 'worldmanager'...");
-    getCommand("worldmanager").setExecutor(new WorldManager());
+    getCommand("worldmanager").setExecutor(new CMDAsyncWorldManager());
     Log(Level.INFO, "Loading Tabcomplete 'worldmanager'...");
-    getCommand("worldmanager").setTabCompleter(new WorldManager());
+    getCommand("worldmanager").setTabCompleter(new CMDAsyncWorldManager());
 //  Lade listener
     Log(Level.WARNING, "Loading Listener...");
     Log(Level.INFO, "Loading Listener 'CommandBlockPerformlistener'...");
@@ -82,11 +83,11 @@ public class Main extends JavaPlugin {
     Bukkit.getPluginManager().registerEvents(new WorldLoadListener(), this);
     Log(Level.INFO, "Loading Listener 'WorldTeleportlistener'...");
     Bukkit.getPluginManager().registerEvents(new WorldTeleportListener(), this);
-    if (Main.config.get().getBoolean("Listener.CreatureSpawn")) {
+    if (config.get().getBoolean("Listener.CreatureSpawn")) {
       Log(Level.INFO, "Loading Listener 'CreatureSpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new CreatureSpawnListener(), this);
     }
-    if (Main.config.get().getBoolean("Listener.EntitySpawn")) {
+    if (config.get().getBoolean("Listener.EntitySpawn")) {
       Log(Level.INFO, "Loading Listener 'EntitySpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
     }
@@ -115,7 +116,7 @@ public class Main extends JavaPlugin {
       Storage.stop();
     }
   }
-  public static Main getInstance() {
+  public static AsyncWorldManager getInstance() {
     return instance;
   }
   public static String Loop(String Message){
@@ -163,7 +164,7 @@ public class Main extends JavaPlugin {
         Bukkit.getLogger().log(Level, "[AsyncWorldManager] " + msg);
       }
     }
-    else if (Main.config.get().getString("debug-logging").equalsIgnoreCase("all")) {
+    else if (config.get().getString("debug-logging").equalsIgnoreCase("all")) {
       Bukkit.getLogger().log(Level, "[AsyncWorldManager] " + msg);
     }
   }

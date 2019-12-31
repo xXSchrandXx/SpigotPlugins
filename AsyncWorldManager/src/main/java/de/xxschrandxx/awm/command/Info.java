@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Storage;
 import de.xxschrandxx.awm.api.config.WorldData;
 
@@ -34,7 +34,7 @@ public class Info {
         worlddata = Storage.getWorlddataFromName(m.getWorld().getName());
       }
       else {
-        sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.info.usage")));
+        sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.info.usage")));
         return true;
       }
       if (worlddata != null) {
@@ -47,7 +47,7 @@ public class Info {
             aliases = alias;
           }
           else {
-            aliases = aliases + Main.messages.get().getString("command.list.aliases") + alias;
+            aliases = aliases + AsyncWorldManager.messages.get().getString("command.list.aliases") + alias;
           }
         }
         String enviroment = worlddata.getEnviroment().name();
@@ -60,16 +60,16 @@ public class Info {
         String z = String.valueOf(worlddata.getZ());
         String yaw = String.valueOf(worlddata.getYaw());
         String pitch = String.valueOf(worlddata.getPitch());
-        sender.sendMessage(Main.Loop(Main.messages.get().getString("command.info.worldinfo").replace("%folder%", worldname).replace("%autoload%", autoload).replace("%aliases%", aliases).replace("%enviroment%", enviroment).replace("%seed%", seed).replace("%generator%", generator).replace("%worldtype%", worldtype).replace("%generatestructurs%", generatestructures).replace("%x%", x).replace("%y%", y).replace("%z%", z).replace("%yaw%", yaw).replace("%pitch%", pitch)));
+        sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.info.worldinfo").replace("%folder%", worldname).replace("%autoload%", autoload).replace("%aliases%", aliases).replace("%enviroment%", enviroment).replace("%seed%", seed).replace("%generator%", generator).replace("%worldtype%", worldtype).replace("%generatestructurs%", generatestructures).replace("%x%", x).replace("%y%", y).replace("%z%", z).replace("%yaw%", yaw).replace("%pitch%", pitch)));
         return true;
       }
       else {
-        sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.info.worldnotinconfig.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.info.worldnotinconfig.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + args[1])).create());
+        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.info.worldnotinconfig.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.info.worldnotinconfig.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + args[1])).create());
         return true;
       }
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.info")))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.info")))).create())).create());
       return true;
     }
   }

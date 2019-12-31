@@ -8,7 +8,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Storage;
 import de.xxschrandxx.awm.api.config.WorldData;
 
@@ -26,21 +26,21 @@ public class Teleport {
               if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 p.teleport(world.getSpawnLocation());
-                p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName())));
+                p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName())));
                 return true;
               }
               else {
-                p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
+                p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
                 return true;
               }
             }
             else {
-              p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
+              p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
               return true;
             }
           }
           else {
-            p.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.teleport.self")))).create())).create());
+            p.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.self")))).create())).create());
             return true;
           }
         }
@@ -54,32 +54,32 @@ public class Teleport {
                   Player p2 = Bukkit.getPlayer(args[2]);
                   if (WorldManager.hasPermission(p2, "command.permissions.worldmanager.teleport.bypass")) {
                     p2.teleport(world.getSpawnLocation());
-                    p2.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.other").replace("%player%", p.getName()).replace("%world%", worlddata.getWorldName())));
-                    p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName())));
+                    p2.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", p.getName()).replace("%world%", worlddata.getWorldName())));
+                    p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName())));
                     return true;
                   }
                   else {
-                    p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission")));
+                    p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission")));
                     return true;
                   }
                 }
                 else {
-                  p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2])));
+                  p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2])));
                   return true;
                 }
               }
               else {
-               p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
+               p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
                 return true;
               }
             }
             else {
-              p.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
+              p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
               return true;
             }
           }
           else {
-            p.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.teleport.other")))).create())).create());
+            p.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.other")))).create())).create());
             return true;
           }
         }
@@ -88,7 +88,7 @@ public class Teleport {
         }
       }
       else {
-        p.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.teleport.main")))).create())).create());
+        p.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.main")))).create())).create());
         return true;
       }
     }
@@ -101,27 +101,27 @@ public class Teleport {
             if (Bukkit.getPlayer(args[2]) != null) {
               Player p2 = Bukkit.getPlayer(args[2]);
               p2.teleport(world.getSpawnLocation());
-              p2.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.other").replace("%player%", "Console").replace("%world%", worlddata.getWorldName())));
-              sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName())));
+              p2.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", "Console").replace("%world%", worlddata.getWorldName())));
+              sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName())));
               return true;
             }
             else {
-              sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2])));
+              sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2])));
               return true;
             }
           }
           else {
-            sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
+            sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName())));
             return true;
           }
         }
         else {
-          sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
+          sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1])));
           return true;
         }
       }
       else {
-        sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.teleport.console")));
+        sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.console")));
         return true;
       }
     }

@@ -19,7 +19,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class testValues {
   public static boolean isInt(String s) {
@@ -28,7 +28,7 @@ public class testValues {
       return true;
     }
     catch (NumberFormatException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not an Integer.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not an Integer.", e);
       return false;
     }
   }
@@ -38,7 +38,7 @@ public class testValues {
       return true;
     }
     catch (NumberFormatException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not an Integer.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not an Integer.", e);
       return false;
     }
   }
@@ -48,7 +48,7 @@ public class testValues {
       return true;
     }
     catch (NumberFormatException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Double.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Double.", e);
       return false;
     }
   }
@@ -58,7 +58,7 @@ public class testValues {
       return true;
     }
     catch (NumberFormatException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Double.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Double.", e);
       return false;
     }
   }
@@ -68,7 +68,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Float.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Float.", e);
       return false;
     }
   }
@@ -78,7 +78,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Float.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Float.", e);
       return false;
     }
   }
@@ -88,7 +88,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Long.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Long.", e);
       return false;
     }
   }
@@ -98,7 +98,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Long.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Long.", e);
       return false;
     }
   }
@@ -108,7 +108,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Boolean.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Boolean.", e);
       return false;
     }
   }
@@ -118,7 +118,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Boolean.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Boolean.", e);
       return false;
     }
   }
@@ -128,7 +128,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Difficulty.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Difficulty.", e);
       return false;
     }
   }
@@ -138,7 +138,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a WorldType.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a WorldType.", e);
       return false;
     }
   }
@@ -148,7 +148,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a WorldType.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a WorldType.", e);
       return false;
     }
   }
@@ -160,7 +160,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Generator.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Generator.", e);
       return false;
     }
   }
@@ -172,7 +172,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Generator.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Generator.", e);
       return false;
     }
   }
@@ -182,7 +182,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not an Enviroment.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not an Enviroment.", e);
       return false;
     }
   }
@@ -192,7 +192,7 @@ public class testValues {
      return true;
    }
    catch (IllegalArgumentException | NullPointerException e) {
-     Main.Log(Level.INFO, s + " is not an Enviroment.", e);
+     AsyncWorldManager.Log(Level.INFO, s + " is not an Enviroment.", e);
      return false;
     }
   }
@@ -202,7 +202,7 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Gamemode.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Gamemode.", e);
       return false;
     }
   }
@@ -212,12 +212,12 @@ public class testValues {
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {
-      Main.Log(Level.INFO, s + " is not a Gamemode.", e);
+      AsyncWorldManager.Log(Level.INFO, s + " is not a Gamemode.", e);
       return false;
     }
   }
   public static CommandSender Dummy() {
-    if (Main.config.get().getString("debug-logging").equalsIgnoreCase("all")) {
+    if (AsyncWorldManager.config.get().getString("debug-logging").equalsIgnoreCase("all")) {
       return Bukkit.getConsoleSender();
     }
     else {

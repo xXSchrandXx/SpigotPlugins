@@ -1,15 +1,12 @@
-package de.xxschrandxx.awm.api.config;
+package de.xxschrandxx.npg.api.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import de.xxschrandxx.awm.Main;
 
 public class Config {
   JavaPlugin plugin;
@@ -53,7 +50,6 @@ public class Config {
     }
     catch (IOException ex) {
     }
-    Main.Log(Level.INFO, "Saving " + cfgFile.getName());
   }
   public String getLanguage(String path, Object... args) {
     String raw = cfg.getString(path);

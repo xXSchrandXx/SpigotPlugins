@@ -8,7 +8,8 @@ import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
 import net.md_5.bungee.api.chat.*;
@@ -19,11 +20,11 @@ public class Modify {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("list")) {
           if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.modify.list")) {
-            sender.sendMessage(Main.Loop(Main.messages.get().getString("command.modify.list")));
+            sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.modify.list")));
             return true;
           }
           else {
-            sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)").replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.modify.list"))).create())).create());
+            sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)").replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.modify.list"))).create())).create());
             return true;
           }
         }
@@ -45,11 +46,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.alias.alreadyalias").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.alias.alreadyalias").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
               }
@@ -62,11 +63,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.alias.notalias").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.alias.notalias").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
               }
@@ -79,11 +80,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -96,11 +97,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -109,11 +110,11 @@ public class Modify {
                   boolean value = Boolean.valueOf(prevalue);
                   worlddata.setEnableCommandBlocks(value);
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -126,11 +127,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -143,11 +144,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -160,11 +161,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -177,11 +178,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -194,11 +195,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -211,11 +212,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -228,11 +229,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -245,11 +246,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -262,11 +263,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -279,11 +280,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -296,11 +297,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -313,11 +314,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -330,11 +331,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -347,11 +348,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -364,11 +365,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -382,11 +383,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -399,11 +400,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -416,11 +417,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -433,11 +434,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -450,11 +451,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -467,11 +468,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -484,11 +485,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -501,11 +502,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -518,11 +519,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -535,11 +536,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -552,11 +553,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -569,11 +570,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -586,11 +587,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -603,11 +604,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -620,11 +621,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -637,11 +638,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -654,11 +655,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -671,11 +672,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -688,11 +689,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -705,11 +706,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -722,11 +723,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -739,11 +740,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number")));
                   return true;
                 }
               }
@@ -756,11 +757,11 @@ public class Modify {
                     WorldConfigManager.setWorldsData(world, worlddata);
                   }
                   WorldConfigManager.save(config, worlddata);
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue)));
                   return true;
                 }
                 else {
-                  sender.sendMessage(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
+                  sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false")));
                   return true;
                 }
               }
@@ -770,12 +771,12 @@ public class Modify {
               }
             }
             else {
-              sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.modify.worldnotload.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm load " + worlddata.getWorldName())).create());
+              sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm load " + worlddata.getWorldName())).create());
               return true;
             }
           }
           else {
-            sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.modify.worldnotfound.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.modify.worldnotfound.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + args[1])).create());
+            sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.modify.worldnotfound.chat").replace("%world%", args[1]))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.modify.worldnotfound.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + args[1])).create());
             return true;
           }
         }
@@ -788,7 +789,7 @@ public class Modify {
       }
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)").replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.modify.main"))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)").replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.modify.main"))).create())).create());
       return true;
     }
   }

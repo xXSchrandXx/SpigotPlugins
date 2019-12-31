@@ -17,7 +17,8 @@ import org.bukkit.WorldType;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.generator.ChunkGenerator;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.worldcreation.*;
 
 public class WorldConfigManager {
@@ -396,37 +397,37 @@ public class WorldConfigManager {
     aliases.add(worlddata.getWorldName());
     worlddata.setGenerator(world.getGenerator());
     worlddata.setAliases(aliases);
-    if (world.getName().equals(Main.config.get().getString("mainworld"))) {
+    if (world.getName().equals(AsyncWorldManager.config.get().getString("mainworld"))) {
       worlddata.setAutoLoad(false);
       worlddata.setFAWEWorld(false);
     }
     else {
-      if (Main.config.get().isBoolean("worldsettings.autoload")) {
-        worlddata.setAutoLoad(Main.config.get().getBoolean("worldsettings.autoload"));
+      if (AsyncWorldManager.config.get().isBoolean("worldsettings.autoload")) {
+        worlddata.setAutoLoad(AsyncWorldManager.config.get().getBoolean("worldsettings.autoload"));
       }
       else {
         worlddata.setAutoLoad(true);
       }
-      if (Main.config.get().getBoolean("fastasyncworldedit.faweworld")) {
-        if (Main.config.get().isBoolean("worldsettings.faweworld")) {
-          worlddata.setFAWEWorld(Main.config.get().getBoolean("worldsettings.faweworld"));
+      if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
+        if (AsyncWorldManager.config.get().isBoolean("worldsettings.faweworld")) {
+          worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("worldsettings.faweworld"));
         }
         else {
-          worlddata.setFAWEWorld(Main.config.get().getBoolean("fastasyncworldedit.faweworld"));
+          worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld"));
         }
       }
       else {
         worlddata.setFAWEWorld(false);
       }
     }
-    if (Main.config.get().isBoolean("worldsettings.autosave")) {
-      worlddata.setAutoSave(Main.config.get().getBoolean("worldsettings.autosave"));
+    if (AsyncWorldManager.config.get().isBoolean("worldsettings.autosave")) {
+      worlddata.setAutoSave(AsyncWorldManager.config.get().getBoolean("worldsettings.autosave"));
     }
     else {
       worlddata.setAutoSave(true);
     }
-    if (Main.config.get().isBoolean("worldsettings.enablecommandblocks")) {
-      worlddata.setEnableCommandBlocks(Main.config.get().getBoolean("worldsettings.enablecommandblocks"));
+    if (AsyncWorldManager.config.get().isBoolean("worldsettings.enablecommandblocks")) {
+      worlddata.setEnableCommandBlocks(AsyncWorldManager.config.get().getBoolean("worldsettings.enablecommandblocks"));
     }
     else {
       worlddata.setEnableCommandBlocks(true);
@@ -645,12 +646,12 @@ public class WorldConfigManager {
     List<String> aliases = new ArrayList<String>();
     aliases.add(worldname);
     worlddata.setAliases(aliases);
-    ConfigurationSection section = Main.config.get().getConfigurationSection("worldsettings");
+    ConfigurationSection section = AsyncWorldManager.config.get().getConfigurationSection("worldsettings");
     if (section.isBoolean("faweworld")) {
       worlddata.setFAWEWorld(section.getBoolean("faweworld"));
     }
-    else if (Main.config.get().isBoolean("fastasyncworldedit.faweworld")) {
-      worlddata.setFAWEWorld(Main.config.get().getBoolean("fastasyncworldedit.faweworld"));
+    else if (AsyncWorldManager.config.get().isBoolean("fastasyncworldedit.faweworld")) {
+      worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld"));
     }
     else {
       worlddata.setFAWEWorld(false);
@@ -692,7 +693,7 @@ public class WorldConfigManager {
       worlddata.setSeed(new Random().nextLong());
     }
     if (section.isString("generator")) {
-      worlddata.setGenerator(WorldCreator.getGeneratorForName(Main.config.get().getString("mainworld"), section.getString("generator"), testValues.Dummy()));
+      worlddata.setGenerator(WorldCreator.getGeneratorForName(AsyncWorldManager.config.get().getString("mainworld"), section.getString("generator"), testValues.Dummy()));
     }
     else {
       worlddata.setGenerator(null);
@@ -1055,28 +1056,28 @@ public class WorldConfigManager {
     config.save();
   }
   public static void unload(World world, boolean save) {
-    Main.Log(Level.INFO, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
+    AsyncWorldManager.Log(Level.INFO, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
     Bukkit.unloadWorld(world, save);
   }
   public static void remove(World world, Config config) {
     unload(world, true);
     if (config.getFile().exists()) {
-      Main.Log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.Log(Level.INFO, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }
   public static void delete(World world, Config config) {
     unload(world, false);
-    Main.Log(Level.INFO, "Deleting World " + world.getName());
-    Main.deleteDirectory(world.getWorldFolder());
+    AsyncWorldManager.Log(Level.INFO, "Deleting World " + world.getName());
+    AsyncWorldManager.deleteDirectory(world.getWorldFolder());
     world = null;
     if (config.getFile().exists()) {
-      Main.Log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.Log(Level.INFO, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }
   public static void createWorld(WorldData worlddata) {
-    if (Main.config.get().getBoolean("fastasyncworldedit.faweworld")) {
+    if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
       if (worlddata.getFAWEWorld()) {
         fawe.faweworld(worlddata);
         return;

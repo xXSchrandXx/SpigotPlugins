@@ -7,7 +7,8 @@ import java.util.List;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.awm.Main;
+import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import net.md_5.bungee.api.chat.*;
 
@@ -23,19 +24,19 @@ public class Create {
             Config config = Storage.getWorldConfig(args[1]);
             if ((worlddata == null) && (config == null)) {
               worlddata = WorldConfigManager.getWorlddataFromCommand(worldname, preenviroment, args);
-              File wfile = new File(Main.getInstance().getServer().getWorldContainer(), worldname);
+              File wfile = new File(AsyncWorldManager.getInstance().getServer().getWorldContainer(), worldname);
               if (!wfile.exists()) {
                 if (!preenviroment.isEmpty()) {
                   if (testValues.isEnviroment(preenviroment)) {
                     worlddata = WorldConfigManager.getWorlddataFromCommand(worldname, preenviroment, args);
-                    File worldconfigfolder = new File(Main.getInstance().getDataFolder(), "worldconfigs");
+                    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
                     if (!worldconfigfolder.exists())
                       worldconfigfolder.mkdir();
                     File worldconfigfile = new File(worldconfigfolder, worldname + ".yml");
                     config = new Config(worldconfigfile);
                     WorldConfigManager.createWorld(worlddata);
                     WorldConfigManager.save(config, worlddata);
-                    sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.create.success.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.create.success.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname)).create());
+                    sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.create.success.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.create.success.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname)).create());
                     return true;
                   }
                   else {
@@ -47,12 +48,12 @@ public class Create {
                 }
               }
               else {
-                sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.create.folderexist.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.create.folderexist.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + worldname)).create());
+                sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.create.folderexist.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.create.folderexist.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm import " + worldname)).create());
                 return true;
               }
             }
             else {
-              sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("command.create.worldexist.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop(Main.messages.get().getString("command.create.worldexist.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname)).create());
+              sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.create.worldexist.chat").replace("%world%", worldname))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.create.worldexist.hover"))).create())).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname)).create());
               return true;
             }
           }
@@ -69,7 +70,7 @@ public class Create {
       }
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(Main.Loop(Main.messages.get().getString("prefix") + Main.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Main.Loop("(Required: &e%perm%&7)".replace("%perm%", Main.config.get().getString("command.permissions.worldmanager.create")))).create())).create());
+      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.Loop("(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.create")))).create())).create());
       return true;
     }
   }

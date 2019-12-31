@@ -1,123 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<name>SpigotPlugins-Parent</name>
-	<artifactId>parent</artifactId>
-	<groupId>de.xxschrandxx</groupId>
-	<version>0.0.1-SNAPSHOT</version>
-	<url>https://github.com/xXSchrandXx/SchrandAPI</url>
-	<packaging>pom</packaging>
+  <name>SpigotPlugins-Parent</name>
+  <artifactId>parent</artifactId>
+  <groupId>de.xxschrandxx</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  <url>https://github.com/xXSchrandXx/SchrandAPI</url>
+  <packaging>pom</packaging>
 
-	<properties>
-			<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-			<project.build.number>-</project.build.number>
-			<project.build.version>${project.version}
-					Build:${project.build.number}
-			</project.build.version>
-	</properties>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.number>-</project.build.number>
+    <project.build.version>${project.version}Build:${project.build.number}</project.build.version>
+  </properties>
 
-	<repositories>
+  <modules>
+    <module>AsyncWorldManager</module>
+    <module>SchrandAPI</module>
+    <module>NetherPortalGate</module>
+    <module>ServerStatusSign</module>
+  </modules>
 
-		<!-- Bungee-Repo -->
-		<repository>
-			<id>bungeecord-repo</id>
-			<url>https://oss.sonatype.org/content/groups/public/</url>
-		</repository>
+  <repositories>
 
-		<!-- Spigot-Repo -->
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
+    <!-- Bungee-Repo -->
+    <repository>
+      <id>bungeecord-repo</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
 
-	</repositories>
+    <!-- Spigot-Repo -->
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
 
-	<dependencies>
-	
-		<!-- Bungee-Dependency -->
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>1.15-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
+    <!-- Metrics-Repo -->
+    <repository>
+      <id>CodeMC</id>
+      <url>https://repo.codemc.org/repository/maven-public</url>
+    </repository>
 
-		<!-- Spigot-Dependency -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.15.1-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
+    <!-- FAWE-Repo -->
+    <repository>
+      <id>fawe-repo</id>
+      <url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/</url>
+    </repository>
 
-	</dependencies>
+  </repositories>
 
-	<build>
+  <dependencies>
+  
+    <!-- Bungee-Dependency -->
+    <dependency>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.15-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
 
-		<defaultGoal>package</defaultGoal>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+    <!-- Spigot-Dependency -->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.15.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
 
-		<plugins>
+    <!-- Metrics Dependency -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
+    </dependency>
 
-				<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.0.1</version>
-				</plugin>
+    <!-- FAWE-API Dependency -->
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-api</artifactId>
+      <version>latest</version>
+    </dependency>
 
-				<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.3</version>
-						<configuration>
-								<source>1.8</source>
-								<target>1.8</target>
-						</configuration>
-				</plugin>
+    <!-- FAWE-Bukkit Dependency -->
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-bukkit</artifactId>
+      <version>latest</version>
+    </dependency>
 
-				<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-								<execution>
-										<id>attach-javadocs</id>
-										<goals>
-												<goal>shade</goal>
-										</goals>
-								</execution>
-						</executions>
-				</plugin>
+  </dependencies>
 
-				<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.0.0-M3</version>
-						<dependencies>
-								<dependency>
-										<groupId>org.apache.maven.surefire</groupId>
-										<artifactId>surefire-junit47</artifactId>
-										<version>3.0.0-M3</version>
-								</dependency>
-						</dependencies>
-				</plugin>
+  <build>
 
-		</plugins>
+    <defaultGoal>package</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
 
-	</build>
+    <plugins>
 
-	<issueManagement>
-		<system>Issues</system>
-		<url>https://github.com/xXSchrandXx/SpigotPlugins/issues/new</url>
-	</issueManagement>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.1</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+
+      </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M3</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.surefire</groupId>
+              <artifactId>surefire-junit47</artifactId>
+              <version>3.0.0-M3</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <issueManagement>
+    <system>Issues</system>
+    <url>https://github.com/xXSchrandXx/SpigotPlugins/issues/new</url>
+  </issueManagement>
 </project>
