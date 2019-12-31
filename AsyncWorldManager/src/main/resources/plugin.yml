@@ -1,0 +1,16 @@
+name: ${project.artifactId}
+main: ${project.groupId}.Main
+description: ${project.name}
+version: ${project.version}
+author: xXSchrandXx
+website: ${project.url}
+database: false
+load: POSTWORLD
+softdepend: [FastAsyncWorldEdit, WorldEdit]
+loadbefore: [PlotSquared]
+api-version: 1.13
+commands:
+  worldmanager:
+    description: Hauptkommando von WorldSystem.
+    aliases: [wm]
+    usage: /wm <> []
