@@ -19,7 +19,6 @@ public class MessageHandler {
 
 /**
  * Returns the Prefix set with setPrefix()
- * @see setPrefix()
  * @return
  */
   public static String getPrefix() {
@@ -38,7 +37,6 @@ public class MessageHandler {
 /**
  * Returns the Header set with setHeader()
  * or default '&8&m[]&6&m--------------------------------------------------&8&m[]'
- * @see setHeader()
  * @return
  */
   public static String getHeader() {
@@ -57,7 +55,6 @@ public class MessageHandler {
 /**
  * Returns the Footer set with setHeader()
  * or default '&8&m[]&6&m--------------------------------------------------&8&m[]'
- * @see setHeader()
  * @return
  */
   public static String getFooter() {
