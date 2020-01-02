@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import de.xxschrandxx.npg.api.API;
-import de.xxschrandxx.npg.api.Message;
+import de.xxschrandxx.api.spigot.MessageHandler;
 
 public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
   @Override
@@ -39,17 +39,17 @@ public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
           return Teleport.cmd(sender, args);
         }
         else {
-          Message.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+          MessageHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
       return true;
     }
   }

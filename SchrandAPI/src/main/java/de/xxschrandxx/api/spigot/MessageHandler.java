@@ -13,6 +13,10 @@ public class MessageHandler {
 
   private static String prefix = "";
 
+  private static String header = "&8&m[]&6&m--------------------------------------------------&8&m[]";
+
+  private static String footer = "&8&m[]&6&m--------------------------------------------------&8&m[]";
+
 /**
  * Returns the Prefix set with setPrefix()
  * @see setPrefix()
@@ -29,6 +33,44 @@ public class MessageHandler {
   public static void setPrefix(String Prefix) {
     if (Prefix != null)
       prefix = Prefix;
+  }
+
+/**
+ * Returns the Header set with setHeader()
+ * or default '&8&m[]&6&m--------------------------------------------------&8&m[]'
+ * @see setHeader()
+ * @return
+ */
+  public static String getHeader() {
+    return header;
+  }
+
+/**
+ * Sets the Prefix with given String
+ * @param Prefix
+ */
+  public static void setHeader(String Header) {
+    if (Header != null)
+      header = Header;
+  }
+
+/**
+ * Returns the Footer set with setHeader()
+ * or default '&8&m[]&6&m--------------------------------------------------&8&m[]'
+ * @see setHeader()
+ * @return
+ */
+  public static String getFooter() {
+    return header;
+  }
+
+/**
+ * Sets the Prefix with given String
+ * @param Prefix
+ */
+  public static void setFooter(String Header) {
+    if (Header != null)
+      header = Header;
   }
 
 /**
@@ -285,6 +327,22 @@ public class MessageHandler {
         Player.spigot().sendMessage(textcomponent);
       }
     }
+  }
+
+/**
+ * Send the given CommandSender the Header with ChatColors
+ * @param sender
+ */
+  public static void sendHeader(CommandSender sender) {
+    sendMessageWithoutPrefix(sender, header);
+  }
+
+/**
+ * Send the given CommandSender the Footer with ChatColors
+ * @param sender
+ */
+  public static void sendFooter(CommandSender sender) {
+    sendMessageWithoutPrefix(sender, footer);
   }
 
 }

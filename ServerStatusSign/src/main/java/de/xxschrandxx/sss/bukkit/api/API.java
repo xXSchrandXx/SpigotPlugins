@@ -20,8 +20,9 @@ import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.sss.SQLAPI;
-import de.xxschrandxx.sss.bukkit.Main;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 
 public class API {
 
@@ -89,15 +90,15 @@ public class API {
     }
     if (debug && clvl.equals("DEBUG")) {
       if (e != null)
-        Main.getInstance().getLogger().log(level, msg, e);
+        ServerStatusSign.getInstance().getLogger().log(level, msg, e);
       else
-        Main.getInstance().getLogger().log(level, msg);
+        ServerStatusSign.getInstance().getLogger().log(level, msg);
     }
     else if (!debug && clvl.equals("NORMAL")) {
       if (e != null)
-        Main.getInstance().getLogger().log(level, msg, e);
+        ServerStatusSign.getInstance().getLogger().log(level, msg, e);
       else
-        Main.getInstance().getLogger().log(level, msg);
+        ServerStatusSign.getInstance().getLogger().log(level, msg);
     }
   }
 
@@ -107,7 +108,7 @@ public class API {
  * Creates the default Config
  */
   public static void createdefaultConfig() {
-    config = new Config(Main.getInstance(), "config.yml");
+    config = new Config(ServerStatusSign.getInstance(), "config.yml");
     config.get().options().copyDefaults(true);
     config.get().addDefault("debug-logging", "normal");
     config.get().addDefault("tasktime", 10);
@@ -153,7 +154,7 @@ public class API {
  * Create the default Message
  */
   public static void createdefaultMessage() {
-    message = new Config(Main.getInstance(), "message.yml");
+    message = new Config(ServerStatusSign.getInstance(), "message.yml");
     message.get().options().copyDefaults(true);
     message.get().addDefault("prefix", "&8[&6ServerStatusSign&8]");
     message.get().addDefault("strich", "&8&m[]&6&m--------------------------------------------------&8&m[]");
@@ -206,14 +207,14 @@ public class API {
 
   private static Config serverstatussigns;
 
-  public static ConcurrentHashMap<UUID, ServerStatusSign> signmap = new ConcurrentHashMap<UUID, ServerStatusSign>();
+  public static ConcurrentHashMap<UUID, StatusSign> signmap = new ConcurrentHashMap<UUID, StatusSign>();
 
 /**
  * Puts a ServerStatusSign with given UUID into Config
  * @param uuid
  * @param sign
  */
-  public static void setServerStatusSign(UUID uuid, ServerStatusSign sign) {
+  public static void setServerStatusSign(UUID uuid, StatusSign sign) {
     Log(true, Level.INFO, "API.setServerStatusSign | Setting: " + uuid + " - Enabled: " + sign.isEnabled() + "/ Server: " + sign.getServer() + " / World: " + sign.getWorldName() + ", X:" + sign.getX()+ ", Y:" + sign.getY()+ ", Z:" + sign.getZ());
     signmap.put(uuid, sign);
   }
@@ -236,10 +237,10 @@ public class API {
  * @param l - Location of the Sign
  * @return
  */
-  public static Entry<UUID, ServerStatusSign> getServerStatusSignEntry(Location l) {
+  public static Entry<UUID, StatusSign> getServerStatusSignEntry(Location l) {
     Log(true, Level.INFO, "API.getServerStatusSignEntry | Testing: " + l);
-    Entry<UUID, ServerStatusSign> sign = null;
-    for (Entry<UUID, ServerStatusSign> entry : signmap.entrySet()) {
+    Entry<UUID, StatusSign> sign = null;
+    for (Entry<UUID, StatusSign> entry : signmap.entrySet()) {
       if (sameLocations(l, entry.getValue().toLocation()))
         sign = entry;
     }
@@ -253,10 +254,10 @@ public class API {
  * @param uuid
  * @return
  */
-  public static ServerStatusSign getServerStatusSign(UUID uuid) {
+  public static StatusSign getServerStatusSign(UUID uuid) {
     Log(true, Level.INFO, "API.removeServerStatusSign | Testing: " + uuid);
-    ServerStatusSign sign = null;
-    for (Entry<UUID, ServerStatusSign> entry : signmap.entrySet()) {
+    StatusSign sign = null;
+    for (Entry<UUID, StatusSign> entry : signmap.entrySet()) {
       if (entry.getKey().equals(uuid))
         sign = entry.getValue();
     }
@@ -270,7 +271,7 @@ public class API {
  */
   public static void loadServerStatusSign() {
     if (serverstatussigns == null)
-      serverstatussigns = new Config(Main.getInstance(), "serverstatussigns.yml");
+      serverstatussigns = new Config(ServerStatusSign.getInstance(), "serverstatussigns.yml");
     serverstatussigns.reload();
     signmap.clear();
     for (String uuidString : serverstatussigns.get().getKeys(false)) {
@@ -283,7 +284,7 @@ public class API {
         double X = section.getDouble("x");
         double Y = section.getDouble("y");
         double Z = section.getDouble("z");
-        setServerStatusSign(uuid, new ServerStatusSign(Enabled, Server, WorldName, X, Y, Z));
+        setServerStatusSign(uuid, new StatusSign(Enabled, Server, WorldName, X, Y, Z));
       }
     }
   }
@@ -296,7 +297,7 @@ public class API {
     for (String uuidString : serverstatussigns.get().getKeys(false)) {
       serverstatussigns.get().set(uuidString, null);
     }
-    for (Entry<UUID, ServerStatusSign> sign : signmap.entrySet()) {
+    for (Entry<UUID, StatusSign> sign : signmap.entrySet()) {
       ConfigurationSection section = serverstatussigns.get().createSection(sign.getKey().toString());
       section.set("enabled", sign.getValue().isEnabled());
       section.set("server", sign.getValue().getServer());
@@ -456,7 +457,7 @@ public class API {
       @Override
       public void run() {
         Log(true, Level.INFO, "API.SignTask | Starting...");
-        for (Entry<UUID, ServerStatusSign> entry : signmap.entrySet()) {
+        for (Entry<UUID, StatusSign> entry : signmap.entrySet()) {
           Log(true, Level.INFO, "API.SignTask | Updating: " + entry.getKey());
           if (entry.getValue().isEnabled()) {
             World world = Bukkit.getWorld(entry.getValue().getWorldName());
@@ -482,7 +483,7 @@ public class API {
                     int line = i+1;
                     Log(true, Level.INFO, "API.SignTask | Editing Line " + line);
                     sign.setLine(i, 
-                        Message.Loop(message.get().getString("sign.line." + line).
+                        MessageHandler.Loop(message.get().getString("sign.line." + line).
                             replace("%server%", entry.getValue().getServer()).
                             replace("%status%", getStatusMSG(true)).
                             replace("%online%", Integer.toString(getSQLAPI().getPlayerCount(entry.getValue().getServer()))).
@@ -493,7 +494,7 @@ public class API {
                   Log(true, Level.INFO, "API.SignTask | Updating Sign");
                   sign.update(true);
                 }
-              }.runTask(Main.getInstance());
+              }.runTask(ServerStatusSign.getInstance());
             }
             else {
               Log(true, Level.INFO, "API.SignTask | " + entry.getKey() + " is not a Sign anymore. Deleting...");
@@ -503,7 +504,7 @@ public class API {
           }
         }
       }
-    }.runTaskTimer(Main.getInstance(), 0, 20 * config.get().getInt("tasktime"));
+    }.runTaskTimer(ServerStatusSign.getInstance(), 0, 20 * config.get().getInt("tasktime"));
   }
 
 /**

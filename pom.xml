@@ -10,6 +10,8 @@
   <packaging>pom</packaging>
 
   <properties>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.number>-</project.build.number>
     <project.build.version>${project.version}Build:${project.build.number}</project.build.version>
@@ -45,9 +47,8 @@
     <!-- FAWE-Repo -->
     <repository>
       <id>fawe-repo</id>
-      <url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/</url>
+      <url>https://ci.athion.net/job/FastAsyncWorldEdit-1.15/ws/mvn/</url>
     </repository>
-
   </repositories>
 
   <dependencies>
@@ -67,28 +68,6 @@
       <artifactId>spigot-api</artifactId>
       <version>1.15.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-    </dependency>
-
-    <!-- Metrics Dependency -->
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>1.5</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- FAWE-API Dependency -->
-    <dependency>
-      <groupId>com.boydti</groupId>
-      <artifactId>fawe-api</artifactId>
-      <version>latest</version>
-    </dependency>
-
-    <!-- FAWE-Bukkit Dependency -->
-    <dependency>
-      <groupId>com.boydti</groupId>
-      <artifactId>fawe-bukkit</artifactId>
-      <version>latest</version>
     </dependency>
 
   </dependencies>
@@ -154,6 +133,23 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <outputDirectory>${project.basedir}/docs/apidoc</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
     </plugins>
 

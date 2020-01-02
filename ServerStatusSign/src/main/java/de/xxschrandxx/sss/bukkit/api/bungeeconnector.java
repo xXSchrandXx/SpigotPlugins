@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import de.xxschrandxx.sss.bukkit.Main;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 
 public class bungeeconnector
   implements PluginMessageListener
@@ -17,8 +17,8 @@ public class bungeeconnector
   public static boolean connectToBungeeServer(Player player, String server) {
     try{
       Messenger messenger = Bukkit.getMessenger();
-      if (!messenger.isOutgoingChannelRegistered(Main.getInstance(), "BungeeCord")) {
-        messenger.registerOutgoingPluginChannel(Main.getInstance(), "BungeeCord");
+      if (!messenger.isOutgoingChannelRegistered(ServerStatusSign.getInstance(), "BungeeCord")) {
+        messenger.registerOutgoingPluginChannel(ServerStatusSign.getInstance(), "BungeeCord");
       }
       if (server.length() == 0) {
         player.sendMessage("&cThe server name was empty!");
@@ -30,7 +30,7 @@ public class bungeeconnector
       out.writeUTF("Connect");
       out.writeUTF(server);
       
-      player.sendPluginMessage(Main.getInstance(), "BungeeCord", byteArray.toByteArray());
+      player.sendPluginMessage(ServerStatusSign.getInstance(), "BungeeCord", byteArray.toByteArray());
     }
     catch (Exception ex) {
       ex.printStackTrace();

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"de.xxschrandxx.api.bungee","l":"Config"},{"p":"de.xxschrandxx.api.spigot","l":"Config"},{"p":"de.xxschrandxx.api.spigot","l":"MessageHandler"}]

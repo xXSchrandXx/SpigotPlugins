@@ -5,7 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.xxschrandxx.sss.SQLAPI;
-import de.xxschrandxx.sss.bungee.Main;
+import de.xxschrandxx.sss.bungee.ServerStatusSign;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -96,7 +97,7 @@ public class API {
     defaults.set("sql.tableprefix", "");
     defaults.set("sql.usessl", false);
     defaults.set("permission.bypass", "sss.bypass");
-    config = new Config(Main.getInstance(), "config.yml", defaults);
+    config = new Config(ServerStatusSign.getInstance(), "config.yml", defaults);
     saveConfig();
   }
 
@@ -132,7 +133,7 @@ public class API {
         "&cPlease try again later...");
     defaults.set("listener.protocol", "&cStarting...");
     defaults.set("reconnect.", "");
-    message = new Config(Main.getInstance(), "message.yml", defaults);
+    message = new Config(ServerStatusSign.getInstance(), "message.yml", defaults);
     saveMessage();
   }
 

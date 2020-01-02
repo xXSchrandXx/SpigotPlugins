@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 public class Info {
@@ -23,7 +24,7 @@ public class Info {
             if (portal2 != null) {
               linkedportal = API.getPortalfromPortal(portal).getKey().toString();
             }
-            Message.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.info.message")
+            MessageHandler.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.info.message")
                 .replace("%uuid%", uuid.toString())
                 .replace("%name%", portal.getName())
                 .replace("%world%", portal.getExitWorld())
@@ -37,22 +38,22 @@ public class Info {
             return true;
           }
           else {
-            Message.sendMessage(sender, API.getMessage().getString("command.info.noportal").replace("%uuid%", uuid.toString()));
+            MessageHandler.sendMessage(sender, API.getMessage().getString("command.info.noportal").replace("%uuid%", uuid.toString()));
             return true;
           }
         }
         else {
-          Message.sendMessage(sender, API.getMessage().getString("command.info.nouuid"));
+          MessageHandler.sendMessage(sender, API.getMessage().getString("command.info.nouuid"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.info.usage"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.info.usage"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.info")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.info")));
       return true;
     }
   }

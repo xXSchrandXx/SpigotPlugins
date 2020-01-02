@@ -3,7 +3,7 @@ package de.xxschrandxx.npg.api.config;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.xxschrandxx.npg.Main;
+import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.*;
 
 public class Storage {
@@ -14,7 +14,7 @@ public class Storage {
   public static ConcurrentHashMap<UUID, Portal> portale = new ConcurrentHashMap<UUID, Portal>();
   
   public static void start() {
-    config = new Config(Main.getInstance(), "config.yml");
+    config = new Config(NetherPortalGate.getInstance(), "config.yml");
     config.reload();
     config.get().options().copyDefaults(true);
     config.get().addDefault("debug-logging", "normal");
@@ -37,7 +37,7 @@ public class Storage {
     config.get().addDefault("permissions.listener.create.bungeecord", "cg.portal.create.bungeecord");
     config.get().addDefault("permissions.listener.break", "cg.portal.break");
     config.save();
-    message = new Config(Main.getInstance(), "message.yml");
+    message = new Config(NetherPortalGate.getInstance(), "message.yml");
     message.reload();
     message.get().options().copyDefaults(true);
     message.get().addDefault("prefix", "&8[&6NetherPortalGate&8]&7");

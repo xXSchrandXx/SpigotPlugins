@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 public class Remove {
@@ -28,26 +29,26 @@ public class Remove {
               catch (Exception e) {}
             }
             API.removePortal(uuid);
-            Message.sendMessage(sender, API.getMessage().getString("command.remove.message").replace("%uuid%", uuid.toString()));
+            MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.message").replace("%uuid%", uuid.toString()));
             return true;
           }
           else {
-            Message.sendMessage(sender, API.getMessage().getString("command.remove.noportal").replace("%uuid%", uuid.toString()));
+            MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.noportal").replace("%uuid%", uuid.toString()));
             return true;
           }
         }
         else {
-          Message.sendMessage(sender, API.getMessage().getString("command.remove.nouuid"));
+          MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.nouuid"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.remove.usage"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.usage"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.remove")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.remove")));
       return true;
     }
   }

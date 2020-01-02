@@ -1,4 +1,5 @@
 /.git/
+.externalToolBuilders/
 *.settings/
 *target/
 *.classpath

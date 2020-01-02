@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 public class Teleport {
@@ -25,7 +26,7 @@ public class Teleport {
             Portal po = API.getPortalfromUUID(uuid);
             if (po != null) {
               if (Bukkit.getWorld(po.getExitWorld()) != null) {
-                p.teleportAsync(new Location(
+                p.teleport(new Location(
                     Bukkit.getWorld(po.getExitWorld()),
                     po.getExitX(),
                     po.getExitY(),
@@ -33,36 +34,36 @@ public class Teleport {
                     po.getExitYaw(),
                     po.getExitPitch()),
                     TeleportCause.COMMAND);
-                Message.sendPlayerMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
+                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
                 return true;
               }
               else {
-                Message.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
+                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
                 return true;
               }
             }
             else {
-              Message.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
+              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            Message.sendPlayerMessage(p, API.getMessage().getString("command.teleport.nouuid"));
+            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.nouuid"));
             return true;
           }
         }
         else {
-          Message.sendPlayerMessage(p, API.getMessage().getString("command.teleport.usage"));
+          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.usage"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.teleport")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.teleport")));
       return true;
     }
   }

@@ -7,9 +7,9 @@ import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.sss.bukkit.api.API;
-import de.xxschrandxx.sss.bukkit.api.Message;
-import de.xxschrandxx.sss.bukkit.api.ServerStatusSign;
+import de.xxschrandxx.sss.bukkit.api.StatusSign;
 
 public class CMDRemove {
 
@@ -22,27 +22,27 @@ public class CMDRemove {
         }
         catch (IllegalArgumentException e) {}
         if (uuid != null) {
-          ServerStatusSign sign = API.getServerStatusSign(uuid);
+          StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
             API.removeServerStatusSign(uuid);
-            Message.sendMessage(sender, API.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
+            MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
             return true;
           }
           else {
-            Message.sendMessage(sender, API.message.get().getString("command.remove.nosign"));
+            MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.nosign"));
             return true;
           }
         }
         else {
-          Message.sendMessage(sender, API.message.get().getString("command.remove.nouuid"));
+          MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.nouuid"));
           return true;
         }
       }
-      Message.sendMessage(sender, API.message.get().getString("command.remove.usage"));
+      MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.usage"));
       return true;
     }
     else {
-      Message.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.remove")));
+      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.remove")));
       return true;
     }
   }

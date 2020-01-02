@@ -13,10 +13,36 @@
   <version>0.0.8-SNAPSHOT</version>
   
   <dependencies>
+
+    <!-- API Dependency -->
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
       <artifactId>SchrandAPI</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
+
+    <!-- Metrics Dependency -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- FAWE-API Dependency -->
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-api</artifactId>
+      <version>latest</version>
+    </dependency>
+
+    <!-- FAWE-Bukkit Dependency -->
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-bukkit</artifactId>
+      <version>latest</version>
+    </dependency>
+
   </dependencies>
+
 </project>

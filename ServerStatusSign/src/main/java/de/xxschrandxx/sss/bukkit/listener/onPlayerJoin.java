@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.xxschrandxx.sss.bukkit.Main;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 
 public class onPlayerJoin implements Listener {
@@ -16,8 +16,8 @@ public class onPlayerJoin implements Listener {
       new BukkitRunnable() {
         @Override
         public void run() {
-          API.getSQLAPI().sendBukkitData(Bukkit.getIp(), Bukkit.getPort(), true, Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers(), Main.restart);
+          API.getSQLAPI().sendBukkitData(Bukkit.getIp(), Bukkit.getPort(), true, Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers(), ServerStatusSign.restart);
         }
-      }.runTask(Main.getInstance());
+      }.runTask(ServerStatusSign.getInstance());
   }
 }

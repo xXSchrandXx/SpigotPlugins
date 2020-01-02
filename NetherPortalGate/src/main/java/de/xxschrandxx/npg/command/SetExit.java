@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 public class SetExit {
@@ -28,31 +29,31 @@ public class SetExit {
               po.setExitPitch(p.getLocation().getPitch());
               po.setExitYaw(p.getLocation().getYaw());
               API.setPortal(uuid, po);
-              Message.sendPlayerMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
+              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
               return true;
             }
             else {
-              Message.sendPlayerMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
+              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            Message.sendPlayerMessage(p, API.getMessage().getString("command.setexit.nouuid"));
+            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.nouuid"));
             return true;
           }
         }
         else {
-          Message.sendPlayerMessage(p, API.getMessage().getString("command.setexit.usage"));
+          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.usage"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.setexit")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.setexit")));
       return true;
     }
   }

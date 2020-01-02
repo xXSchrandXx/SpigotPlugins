@@ -20,7 +20,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
-import de.xxschrandxx.npg.Main;
+import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.config.*;
 
 public class API {
@@ -389,7 +389,7 @@ public class API {
  * @param Portal
  */
   public static void savePortal(UUID UUID, Portal Portal) {
-    File portalconfigfolder = new File(Main.getInstance().getDataFolder(), "portals");
+    File portalconfigfolder = new File(NetherPortalGate.getInstance().getDataFolder(), "portals");
     if (!portalconfigfolder.exists()) {
       API.Log(true, Level.INFO, "savePortal | Creating portalfolder");
       portalconfigfolder.mkdir();
@@ -548,7 +548,7 @@ public class API {
  * @return File
  */
   public static File getPortalFolder() {
-    File portalconfigfolder = new File(Main.getInstance().getDataFolder(), "portals");
+    File portalconfigfolder = new File(NetherPortalGate.getInstance().getDataFolder(), "portals");
     if (!portalconfigfolder.isDirectory()) {
       portalconfigfolder.delete();
     }

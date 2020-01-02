@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 public class Config {
@@ -14,87 +15,87 @@ public class Config {
         if (args[1].equalsIgnoreCase("Load")) {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("all")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Config"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Config"));
               API.loadConfig();;
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Message"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Message"));
               API.loadMessage();
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Portals"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Portals"));
               API.loadAllPortals();
               return true;
             }
             else if (args[2].equalsIgnoreCase("config")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Config"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Config"));
               API.loadConfig();
               return true;
             }
             else if (args[2].equalsIgnoreCase("message")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Message"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Message"));
               API.loadMessage();
               return true;
             }
             else if (args[2].equalsIgnoreCase("portals")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Portals"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.message").replace("%config%", "Portals"));
               API.loadAllPortals();
               return true;
             }
             else {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.load.usage"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.usage"));
               return true;
             }
           }
           else {
-            Message.sendMessage(sender, API.getMessage().getString("command.config.load.usage"));
+            MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.load.usage"));
             return true;
           }
         }
         else if (args[1].equalsIgnoreCase("Save")) {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("all")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Config"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Config"));
               API.saveConfig();
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Message"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Message"));
               API.saveMessage();
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Portals"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Portals"));
               API.saveAllPortals();
               return true;
             }
             else if (args[2].equalsIgnoreCase("config")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Config"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Config"));
               API.saveConfig();
               return true;
             }
             else if (args[2].equalsIgnoreCase("message")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Message"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Message"));
               API.saveMessage();
               return true;
             }
             else if (args[2].equalsIgnoreCase("portals")) {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Portals"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.message").replace("%config%", "Portals"));
               API.saveAllPortals();
               return true;
             }
             else {
-              Message.sendMessage(sender, API.getMessage().getString("command.config.save.usage"));
+              MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.usage"));
               return true;
             }
           }
           else {
-            Message.sendMessage(sender, API.getMessage().getString("command.config.save.usage"));
+            MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.save.usage"));
             return true;
           }
         }
         else {
-          Message.sendMessage(sender, API.getMessage().getString("command.config.usage"));
+          MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.usage"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.config.usage"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.config.usage"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.config")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.config")));
       return true;
     }
   }

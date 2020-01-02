@@ -8,9 +8,9 @@ import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.sss.bukkit.api.API;
-import de.xxschrandxx.sss.bukkit.api.Message;
-import de.xxschrandxx.sss.bukkit.api.ServerStatusSign;
+import de.xxschrandxx.sss.bukkit.api.StatusSign;
 
 public class CMDList {
 
@@ -18,22 +18,22 @@ public class CMDList {
     if (API.hasPermission(sender, "permission.command.list")) {
       if (!API.signmap.isEmpty()) {
         String liste = "";
-        for (Entry<UUID, ServerStatusSign> entry : API.signmap.entrySet()) {
+        for (Entry<UUID, StatusSign> entry : API.signmap.entrySet()) {
           if (liste.isEmpty())
             liste = API.message.get().getString("command.list.format").replace("%id%", entry.getKey().toString());
           else
             liste = liste + '\n' + API.message.get().getString("command.list.format").replace("%id%", entry.getKey().toString());
         }
-        Message.sendMessageWithoutPrefix(sender, API.message.get().getString("command.list.message").replace("%list%", liste));
+        MessageHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.list.message").replace("%list%", liste));
         return true;
       }
       else {
-        Message.sendMessage(sender, API.message.get().getString("command.list.empty"));
+        MessageHandler.sendMessage(sender, API.message.get().getString("command.list.empty"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.list")));
+      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.list")));
       return true;
     }
   }

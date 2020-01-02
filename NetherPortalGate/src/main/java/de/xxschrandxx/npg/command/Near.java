@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.npg.api.*;
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -27,41 +28,41 @@ public class Near {
               Location center = p.getLocation();
               ConcurrentHashMap<UUID, Portal> pln = API.listNearbyPortals(center, radius);
               if (pln != null) {
-                Message.sendPlayerStrich(p);
-                Message.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
+                MessageHandler.sendHeader(p);
+                MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
                 for (Entry<UUID, Portal> pe : pln.entrySet()) {
-                  Message.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
+                  MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
                 }
-                Message.sendPlayerStrich(p);
+                MessageHandler.sendFooter(p);
                 return true;
               }
               else {
-                Message.sendPlayerMessage(p, API.getMessage().getString("command.near.list.noportals"));
+                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.list.noportals"));
                 return true;
               }
             }
             else {
-              Message.sendPlayerMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
+              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
               return true;
             }
           }
           else {
-            Message.sendPlayerMessage(p, API.getMessage().getString("command.near.noint"));
+            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.noint"));
             return true;
           }
         }
         else {
-          Message.sendPlayerMessage(p, API.getMessage().getString("command.near.usage"));
+          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.usage"));
           return true;
         }
       }
       else {
-        Message.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      Message.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.near")));
+      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.near")));
       return true;
     }
   }
