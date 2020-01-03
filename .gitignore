@@ -4,4 +4,4 @@
 *target/
 *.classpath
 *.project
-*apidocs/
+/docs/

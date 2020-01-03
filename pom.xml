@@ -89,7 +89,7 @@
 
     <defaultGoal>package</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <finalName>${project.artifactId}</finalName>
+    <finalName>${project.artifactId} v${project.version}</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -102,8 +102,21 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
-      </plugin>
+        <version>3.1.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+          <outputDirectory>${project.basedir}/docs/javadoc/${project.version}/</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -118,6 +131,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.1.0</version>
+        <configuration>
+          <outputFile>${project.basedir}/docs/jars/${project.name} v${project.version}.jar</outputFile>
+        </configuration>
         <executions>
           <execution>
             <phase>package</phase>
@@ -125,46 +141,8 @@
               <goal>shade</goal>
             </goals>
           </execution>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
         </executions>
-
       </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M3</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.surefire</groupId>
-              <artifactId>surefire-junit47</artifactId>
-              <version>3.0.0-M3</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-<!--           <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
-          <outputDirectory>${project.basedir}/docs/apidoc/</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
 
     </plugins>
 
