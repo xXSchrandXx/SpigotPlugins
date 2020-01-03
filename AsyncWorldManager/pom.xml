@@ -40,7 +40,7 @@
     <dependency>
       <groupId>com.boydti</groupId>
       <artifactId>fawe-bukkit</artifactId>
-      <version>latest</version>
+      <version>19.11.13-5505943-1282-22.3.5</version>
     </dependency>
 
   </dependencies>
