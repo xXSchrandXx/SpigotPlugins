@@ -8,4 +8,12 @@
   <artifactId>SchrandAPI</artifactId>
   <groupId>de.xxschrandxx.api</groupId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>net.luckperms</groupId>
+      <artifactId>api</artifactId>
+      <version>5.0</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 </project>

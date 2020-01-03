@@ -21,7 +21,6 @@ import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
 import de.xxschrandxx.awm.listener.*;
 
 public class AsyncWorldManager extends JavaPlugin {
-//Variablen
   private static AsyncWorldManager instance;
   public static Metrics metrics;
   public static Config config;
@@ -29,23 +28,20 @@ public class AsyncWorldManager extends JavaPlugin {
   public static Plugin FAWE = null;
   public static Plugin PAPER = null;
   private boolean setup = false;
-//Methoden
   @Override
   public void onLoad() {
+    //Unused
   }
   @Override
   public void onEnable() {
     instance = this;
-//  Lade config
     Storage.start();
-//  Check wo der WorldContainer liegt
     if (!isContainered()) {
       Log(Level.WARNING, "Error while loading AsynWorldManager! Please setup a WorldContainer in your Bukkit.yml");
       setup = true;
       getServer().shutdown();
       return;
     }
-//  FAWE Check
     Log(Level.INFO, "Checking for 'FastAsyncWorldEdit'...");
     if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null && isPresent("com.boydti.fawe.bukkit.wrapper.AsyncWorld")) {
       Log(Level.INFO, "FastAsyncWorldEdit found, using it...");
@@ -56,7 +52,6 @@ public class AsyncWorldManager extends JavaPlugin {
       config.get().set("fastasyncworldedit.faweworld", false);
       config.save();
     }
-//  Lade Metrics
     metrics = new Metrics(this);
     metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> Storage.getAllKnownWorlds().size()));
     if (metrics.isEnabled()) {
@@ -65,13 +60,11 @@ public class AsyncWorldManager extends JavaPlugin {
     else {
       Log(Level.INFO, "Metrics disabled per bStats config.");
     }
-//  Lade Kommandos
     Log(Level.WARNING, "Loading Commands...");
     Log(Level.INFO, "Loading Command 'worldmanager'...");
     getCommand("worldmanager").setExecutor(new CMDAsyncWorldManager());
     Log(Level.INFO, "Loading Tabcomplete 'worldmanager'...");
     getCommand("worldmanager").setTabCompleter(new CMDAsyncWorldManager());
-//  Lade listener
     Log(Level.WARNING, "Loading Listener...");
     Log(Level.INFO, "Loading Listener 'CommandBlockPerformlistener'...");
     Bukkit.getPluginManager().registerEvents(new CommandBlockPerformListener(), this);
@@ -91,7 +84,6 @@ public class AsyncWorldManager extends JavaPlugin {
       Log(Level.INFO, "Loading Listener 'EntitySpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
     }
-    //  Lade Welten
     Log(Level.INFO, "Loading Worlds...");
     Storage.loadworlds();
   }

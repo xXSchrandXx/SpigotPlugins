@@ -3,7 +3,6 @@ package de.xxschrandxx.api.spigot;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,14 +12,29 @@ public class Config {
   private String name = null;
   private FileConfiguration cfg = null;
   private File cfgFile = null;
-  public Config(JavaPlugin plugin, String name) {
-    this.plugin = plugin;
-    this.name = name;
+
+  /**
+   * Creates a cached Config.
+   * @param Plugin The plugin to use the datafolder from.
+   * @param Name The Name to use for the config.
+   */
+  public Config(JavaPlugin Plugin, String Name) {
+    this.plugin = Plugin;
+    this.name = Name;
   }
-  public Config(File file) {
-    this.name = file.getName();
-    this.cfgFile = file;
+
+  /**
+   * Creates a cached Config.
+   * @param File The File to save the Config to.
+   */
+  public Config(File File) {
+    this.name = File.getName();
+    this.cfgFile = File;
   }
+
+  /**
+   * Reloads the Config from the file.
+   */
   public void reload() {
     if (cfgFile == null) {
       cfgFile = new File(this.plugin.getDataFolder(), this.name);
@@ -29,18 +43,32 @@ public class Config {
     YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(cfgFile);
     cfg.setDefaults(defConfig);
   }
+
+  /**
+   * Gets the cached FileConfiguration.
+   * @return The cached FileConfiguration.
+   */
   public FileConfiguration get() {
     if (cfg == null) {
       reload();
     }
     return cfg;
   }
+
+  /**
+   * Gets the File to save this Config to.
+   * @return The File to save to.
+   */
   public File getFile() {
     if (cfgFile == null) {
       reload();
     }
     return cfgFile;
   }
+
+  /**
+   * Saves the Config to the File.
+   */
   public void save() {
     if (cfg == null || cfgFile == null) {
       return;
@@ -51,12 +79,5 @@ public class Config {
     catch (IOException ex) {
     }
   }
-  public String getLanguage(String path, Object... args) {
-    String raw = cfg.getString(path);
-    if(raw == null) return null;
-      for(int index = 0; index < args.length; index++) {
-        raw = raw.replace("%" + index, args[index].toString());
-      }
-    return ChatColor.translateAlternateColorCodes('&', raw);
-  }
+
 }

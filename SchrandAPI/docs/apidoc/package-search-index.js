@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"de.xxschrandxx.api.bungee"},{"l":"de.xxschrandxx.api.spigot"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"de.xxschrandxx.api.bungee"},{"l":"de.xxschrandxx.api.spigot"},{"l":"de.xxschrandxx.api.spigot.otherapi"}]

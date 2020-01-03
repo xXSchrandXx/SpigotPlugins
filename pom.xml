@@ -47,9 +47,17 @@
     <!-- FAWE-Repo -->
     <repository>
       <id>fawe-repo</id>
-      <url>https://ci.athion.net/job/FastAsyncWorldEdit-1.15/ws/mvn/</url>
+      <url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/</url>
     </repository>
+
+    <!-- LuckPerms-Repo -->
+    <repository>
+      <id>LuckPerms-API</id>
+      <url>https://repo1.maven.org/maven2/net/luckperms/api/</url>
+    </repository>
+
   </repositories>
+
 
   <dependencies>
   
@@ -139,7 +147,8 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.1.1</version>
         <configuration>
-          <outputDirectory>${project.basedir}/docs/apidoc</outputDirectory>
+          <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+          <outputDirectory>${project.basedir}/docs/apidoc/</outputDirectory>
         </configuration>
         <executions>
           <execution>
