@@ -48,7 +48,7 @@
     <!-- FAWE-Repo -->
     <repository>
       <id>fawe-repo</id>
-      <url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/</url>
+      <url>https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
     </repository>
 
     <!-- LuckPerms-Repo -->
