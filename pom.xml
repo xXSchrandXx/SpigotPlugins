@@ -149,7 +149,7 @@
         <version>3.1.1</version>
         <configuration>
           <source>${maven.compiler.source}</source>
-          <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+<!--           <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
           <outputDirectory>${project.basedir}/docs/apidoc/</outputDirectory>
         </configuration>
         <executions>
