@@ -13,8 +13,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.number>-</project.build.number>
-    <project.build.version>${project.version}Build:${project.build.number}</project.build.version>
     <maven.compiler.source>8</maven.compiler.source>
   </properties>
 
@@ -91,7 +89,7 @@
 
     <defaultGoal>package</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <finalName>${project.artifactId}-${project.version}</finalName>
+    <finalName>${project.artifactId}</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
