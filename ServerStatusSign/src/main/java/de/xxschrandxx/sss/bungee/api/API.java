@@ -32,23 +32,10 @@ public class API {
 
   public static enum LOG{NORMAL, DEBUG}
 
-/**
- * Logging a Message
- * @param debug
- * @param Level
- * @param msg
- */
   public static void Log(boolean debug, Level Level, String msg) {
     Log(debug, Level, msg, null);
   }
 
-/**
- * Logging a Message with Exception
- * @param debug
- * @param Level
- * @param msg
- * @param e
- */
   public static void Log(boolean debug, Level level, String msg, Exception e) {
     if (level == null) {
       Log(true, Level.WARNING, "API.Log | Level is null, returning.");
@@ -83,9 +70,6 @@ public class API {
 
   public static Config config;
 
-/**
- * Creates the default Config
- */
   public static void createdefaultConfig() {
     Configuration defaults = new Configuration();
     defaults.set("debug-logging", "normal");
@@ -101,17 +85,11 @@ public class API {
     saveConfig();
   }
 
-/**
- * Saves the Config
- */
   public static void saveConfig() {
     Log(true, Level.INFO, "API.saveConfig | Saving config.");
     config.save();
   }
 
-/**
- * Loads the Config
- */
   public static void loadConfig() {
     if (config == null)
       createdefaultConfig();
@@ -120,9 +98,6 @@ public class API {
 
   public static Config message;
 
-/**
- * Create the default Message
- */
   public static void createdefaultMessage() {
     Configuration defaults = new Configuration();
     defaults.set("listener.kick",
@@ -137,29 +112,17 @@ public class API {
     saveMessage();
   }
 
-/**
- * Saves the the Message
- */
   public static void saveMessage() {
     Log(true, Level.INFO, "API.saveMessage | Saving messages.");
     message.save();
   }
 
-/**
- * Loads the Message
- */
   public static void loadMessage() {
     if (message == null)
       createdefaultMessage();
     message.reload();
   }
 
-/**
- * Checks if CommandSender has a Permission
- * @param CommandSender - Who's getting checked
- * @param String - Path to the permission in the config
- * @return Boolean
- */
   public static boolean hasPermission(CommandSender CommandSender, String String) {
     if (CommandSender instanceof ProxiedPlayer) {
       ProxiedPlayer p = (ProxiedPlayer) CommandSender;
@@ -178,11 +141,6 @@ public class API {
     }
   }
 
-/**
- * Checks if a String is a int
- * @param String
- * @return Boolean - If String is int
- */
   public static boolean isInt(String String) {
     try {
       Integer.valueOf(String);

@@ -15,6 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.number>-</project.build.number>
     <project.build.version>${project.version}Build:${project.build.number}</project.build.version>
+    <maven.compiler.source>8</maven.compiler.source>
   </properties>
 
   <modules>
@@ -102,10 +103,10 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.8.0</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.source}</target>
         </configuration>
       </plugin>
 
@@ -147,6 +148,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.1.1</version>
         <configuration>
+          <source>${maven.compiler.source}</source>
           <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
           <outputDirectory>${project.basedir}/docs/apidoc/</outputDirectory>
         </configuration>

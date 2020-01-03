@@ -28,48 +28,21 @@ public class API {
 
   private static SQLAPI sql;
 
-/**
- * Setting up the SQL-Connection data
- * @param Host - String IP / Domain
- * @param Port - String Port
- * @param Username - String Username
- * @param Password - String Password
- * @param Database - String Databasename
- * @param Table - String Tablename
- * @param useSSL - Boolean if should use ssl
- */
   public static void setSQLAPI(String Host, String Port, String Username, String Password, String Database, String Table, boolean useSSL, Logger log) {
     Log(true, Level.INFO, "API.setSQLAPI | Setting the SQL-Data.");
     sql = new SQLAPI(Host, Port, Username, Password, Database, Table, useSSL, log);
   }
 
-/**
- * Getting the SQL-Connection
- * @return
- */
   public static SQLAPI getSQLAPI() {
     if (sql == null)
       Log(true, Level.WARNING, "API.getSQLAPI | Returning null!");
     return sql;
   }
 
-/**
- * Logging a Message
- * @param debug
- * @param Level
- * @param msg
- */
   public static void Log(boolean debug, Level Level, String msg) {
     Log(debug, Level, msg, null);
   }
 
-/**
- * Logging a Message with Exception
- * @param debug
- * @param Level
- * @param msg
- * @param e
- */
   public static void Log(boolean debug, Level level, String msg, Exception e) {
     if (level == null) {
       Log(true, Level.WARNING, "API.Log | Level is null, returning.");
@@ -104,9 +77,6 @@ public class API {
 
   public static Config config;
 
-/**
- * Creates the default Config
- */
   public static void createdefaultConfig() {
     config = new Config(ServerStatusSign.getInstance(), "config.yml");
     config.get().options().copyDefaults(true);
@@ -131,17 +101,11 @@ public class API {
     saveConfig();
   }
 
-/**
- * Saves the Config
- */
   public static void saveConfig() {
     Log(true, Level.INFO, "API.saveConfig | Saving config.");
     config.save();
   }
 
-/**
- * Loads the Config
- */
   public static void loadConfig() {
     if (config == null)
       createdefaultConfig();
@@ -150,9 +114,6 @@ public class API {
 
   public static Config message;
 
-/**
- * Create the default Message
- */
   public static void createdefaultMessage() {
     message = new Config(ServerStatusSign.getInstance(), "message.yml");
     message.get().options().copyDefaults(true);
@@ -188,17 +149,11 @@ public class API {
     saveMessage();
   }
 
-/**
- * Saves the the Message
- */
   public static void saveMessage() {
     Log(true, Level.INFO, "API.saveMessage | Saving messages.");
     message.save();
   }
 
-/**
- * Loads the Message
- */
   public static void loadMessage() {
     if (message == null)
       createdefaultMessage();
@@ -209,20 +164,11 @@ public class API {
 
   public static ConcurrentHashMap<UUID, StatusSign> signmap = new ConcurrentHashMap<UUID, StatusSign>();
 
-/**
- * Puts a ServerStatusSign with given UUID into Config
- * @param uuid
- * @param sign
- */
   public static void setServerStatusSign(UUID uuid, StatusSign sign) {
     Log(true, Level.INFO, "API.setServerStatusSign | Setting: " + uuid + " - Enabled: " + sign.isEnabled() + "/ Server: " + sign.getServer() + " / World: " + sign.getWorldName() + ", X:" + sign.getX()+ ", Y:" + sign.getY()+ ", Z:" + sign.getZ());
     signmap.put(uuid, sign);
   }
 
-/**
- * Removes a ServerStatusSign with given UUID
- * @param uuid
- */
   public static void removeServerStatusSign(UUID uuid) {
     Log(true, Level.INFO, "API.removeServerStatusSign | Removing: " + uuid);
     if (getServerStatusSign(uuid) == null) {
@@ -232,11 +178,6 @@ public class API {
     signmap.remove(uuid);
   }
 
-/**
- * Gets a ServerStatusSign from given Location
- * @param l - Location of the Sign
- * @return
- */
   public static Entry<UUID, StatusSign> getServerStatusSignEntry(Location l) {
     Log(true, Level.INFO, "API.getServerStatusSignEntry | Testing: " + l);
     Entry<UUID, StatusSign> sign = null;
@@ -249,11 +190,6 @@ public class API {
     return sign;
   }
 
-/**
- * Gets a ServerStatusSign with given UUID
- * @param uuid
- * @return
- */
   public static StatusSign getServerStatusSign(UUID uuid) {
     Log(true, Level.INFO, "API.removeServerStatusSign | Testing: " + uuid);
     StatusSign sign = null;
@@ -266,9 +202,6 @@ public class API {
     return sign;
   }
 
-/**
- * Loading the ServerStatusSign-Config
- */
   public static void loadServerStatusSign() {
     if (serverstatussigns == null)
       serverstatussigns = new Config(ServerStatusSign.getInstance(), "serverstatussigns.yml");
@@ -289,9 +222,6 @@ public class API {
     }
   }
 
-/**
- * Saving the ServerStatusSign-Config
- */
   public static void saveServerStatusSign() {
     Log(true, Level.INFO, "API.saveServerStatusSign | Saving serverstatussigns.");
     for (String uuidString : serverstatussigns.get().getKeys(false)) {
@@ -309,12 +239,6 @@ public class API {
     serverstatussigns.save();
   }
 
-/**
- * Checks if CommandSender has a Permission
- * @param CommandSender - Who's getting checked
- * @param String - Path to the permission in the config
- * @return Boolean
- */
   public static boolean hasPermission(CommandSender CommandSender, String String) {
     if (CommandSender instanceof Player) {
       Player p = (Player) CommandSender;
@@ -347,11 +271,6 @@ public class API {
     }
   }
 
-/**
- * Checks if a String is a int
- * @param String
- * @return Boolean - If String is int
- */
   public static boolean isInt(String String) {
     try {
       Integer.valueOf(String);
@@ -362,10 +281,6 @@ public class API {
     }
   }
 
-/**
- * Check if every Connection-Datas are set
- * @return
- */
   public static boolean isSQLSet() {
     boolean ready = true;
     if (!config.get().isSet("sql")) {
@@ -426,10 +341,6 @@ public class API {
 
   private static BukkitTask signtask;
 
-/**
- * Checks if the SignTask is running
- * @return
- */
   public static boolean isSignTaskRunning() {
     if (signtask != null)
       if (!signtask.isCancelled())
@@ -437,11 +348,6 @@ public class API {
     return false;
   }
 
-/**
- * Gets the String for Online / Offline Servers
- * @param isonline
- * @return
- */
   public static String getStatusMSG(boolean isonline) {
     if (isonline)
       return message.get().getString("sign.status.online");
@@ -449,9 +355,6 @@ public class API {
       return message.get().getString("sign.status.offline");
   }
 
-/**
- * Starting the SignTask
- */
   public static void startSignTask() {
     signtask = new BukkitRunnable() {
       @Override
@@ -507,18 +410,11 @@ public class API {
     }.runTaskTimer(ServerStatusSign.getInstance(), 0, 20 * config.get().getInt("tasktime"));
   }
 
-/**
- * Stopping the SignTask
- */
   public static void stopSignTask() {
     if (isSignTaskRunning())
       signtask.cancel();
   }
 
-/**
- * Gets a Random unused UUID
- * @return
- */
   public static UUID newUUID() {
     UUID uuid = UUID.randomUUID();
     if (getServerStatusSign(uuid) != null)
@@ -526,12 +422,6 @@ public class API {
     return uuid;
   }
 
-/**
- * Tests if two Locations are the same
- * @param Location1
- * @param Location2
- * @return Boolean - If the given Locations are the same
- */
   public static boolean sameLocations(Location Location1, Location Location2) {
     Log(true, Level.INFO, "API.sameLocations | Testing Location " + Location1 + " and " + Location2);
     if (Location1 == Location2)
