@@ -9,6 +9,22 @@
   <groupId>de.xxschrandxx.awm</groupId>
   <artifactId>AsyncWorldManager</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <artifactSet>
+            <includes>
+              <include>de.xxschrandxx.api:SchrandAPI:jar:*</include>
+              <include>org.bstats:bstats-bukkit:jar:*</include>
+            </includes>
+          </artifactSet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>com.sk89q.worldedit</groupId>
@@ -53,6 +69,18 @@
           <groupId>org.slf4j</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-api</artifactId>
+      <version>latest</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.boydti</groupId>
+      <artifactId>fawe-bukkit</artifactId>
+      <version>19.11.13-5505943-1282-22.3.5</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>net.md-5</groupId>

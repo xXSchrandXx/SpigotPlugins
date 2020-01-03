@@ -89,7 +89,6 @@
 
     <defaultGoal>package</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <finalName>${project.artifactId} v${project.version}</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -99,6 +98,7 @@
 
     <plugins>
 
+      <!-- Unused
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -111,19 +111,22 @@
         <executions>
           <execution>
             <id>attach-javadocs</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
+          <outputFileName>${project.name}-v${project.version}</outputFileName>
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.source}</target>
+          
         </configuration>
       </plugin>
 
@@ -131,9 +134,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.1.0</version>
+        <!-- Unused
         <configuration>
           <outputFile>${project.basedir}/docs/jars/${project.name}-v${project.version}.jar</outputFile>
         </configuration>
+        -->
         <executions>
           <execution>
             <phase>package</phase>
