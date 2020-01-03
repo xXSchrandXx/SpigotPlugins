@@ -33,6 +33,12 @@
       <url>https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
     </repository>
 
+    <!-- WorldEdit-Repo -->
+    <repository>
+      <id>we-repo</id>
+      <url>http://maven.sk89q.com/repo/</url>
+    </repository>
+
     <!-- Metrics-Repo -->
     <repository>
       <id>CodeMC</id>
