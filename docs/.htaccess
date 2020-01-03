@@ -1,1 +1,2 @@
-DirectoryIndex enable
+Options +Indexes
+IndexOptions FancyIndexing FoldersFirst NameWidth=* DescriptionWidth=*
