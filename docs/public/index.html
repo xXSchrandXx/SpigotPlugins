@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple File Browser</title>
+    <style>
+        .folder {
+            font-weight: bolder;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .file {
+            font-weight: lighter;
+        }
+        .video {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple File Browser</h1>
+    <div>
+        <h2 id="cur">\</h2>
+        <ul id="view"></ul>
+    </div>
+    <div id="screen"></div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(() => {
+            function makeListElem(data) {
+                let content = `<li class="folder">.</li><li class="folder">..</li>`;
+                let folders = [], files = [];
+                for (let d of data) {
+                    if (d.lastIndexOf('.') === -1) {
+                        folders.push(d);
+                    } else {
+                        files.push(d);
+                    }
+                }
+                folders.sort();
+                for (let f of folders) {
+                    content += `<li class="folder">${f}</li>`;
+                }
+                files.sort();
+                for (let file of files) {
+                    if (file.lastIndexOf('mp4') !== -1) {
+                        content += `<li class="video">${file}</li>`;
+                    } else {
+                        content += `<li class="file">${file}</li>`;
+                    }
+                }
+                return content;
+            }
+            function makeAjaxReq(url, curUrl) {
+                $('#view').html('<li>Refreshing...</li>');
+                $.ajax({url:`/${url}`, method:'post', data:`cur=${curUrl}`, dataType:'json'}).done(data => {
+                    $('#view').html(makeListElem(data));
+                    $('#cur').html(`${curUrl}${url}\\`);
+                });
+            }
+            makeAjaxReq('data', $('#cur').html());
+            $('#view').click(event => {
+                if (event.target.className === 'folder') {
+                    if (event.target.innerHTML === '.') {
+                        let curPath = $('#cur').html();
+                        curPath = curPath.slice(1, curPath.length-1);
+                        let pathArr = curPath.split('\\');
+                        curPath = '\\';
+                        for (let i = 0; i < pathArr.length-1; i++) {
+                            curPath += pathArr[i] + '\\';
+                        }
+                        makeAjaxReq(pathArr[pathArr.length-1], curPath);
+                    } else if (event.target.innerHTML === '..') {
+                        let curPath = $('#cur').html();
+                        curPath = curPath.slice(1, curPath.length-1);
+                        let pathArr = curPath.split('\\');
+                        if (pathArr.length < 2) {
+                            alert(`It's Root Directory!! You cannot go up!!`);
+                            return;
+                        }
+                        curPath = '\\';
+                        for (let i = 0; i < pathArr.length-2; i++) {
+                            curPath += pathArr[i] + '\\';
+                        }
+                        makeAjaxReq(pathArr[pathArr.length-2], curPath);
+                    } else {
+                        makeAjaxReq(event.target.innerHTML, $('#cur').html());
+                    }
+                } else if (event.target.className === 'video') {
+                    let curPath = $('#cur').html();
+                    curPath = curPath.slice(curPath.indexOf('\\', 1) + 1, curPath.length);
+                    $('#screen').html('<h3>Refreshing...</h3>');
+                    let videoElem = `<video width="640" height="360" controls><source id="screen" type="video/mp4" src="${curPath}${event.target.innerHTML}"></video>`;
+                    $('#screen').html(videoElem);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
