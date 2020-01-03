@@ -25,24 +25,24 @@ public class CMDRemove {
           StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
             API.removeServerStatusSign(uuid);
-            MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
+            MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
             return true;
           }
           else {
-            MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.nosign"));
+            MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.remove.nosign"));
             return true;
           }
         }
         else {
-          MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.nouuid"));
+          MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.remove.nouuid"));
           return true;
         }
       }
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.remove.usage"));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.remove.usage"));
       return true;
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.remove")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.remove")));
       return true;
     }
   }

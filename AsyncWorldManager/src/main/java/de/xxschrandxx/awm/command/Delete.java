@@ -15,7 +15,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Delete {
   public static boolean deletecmd (CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.delete")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.delete")) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
           WorldData worlddata = Storage.getWorlddataFromName(args[1]);
@@ -55,7 +55,7 @@ public class Delete {
   }
   public static List<String> deletelist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.delete")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.delete")) {
       if (args.length == 1) {
         list.add("delete");
       }

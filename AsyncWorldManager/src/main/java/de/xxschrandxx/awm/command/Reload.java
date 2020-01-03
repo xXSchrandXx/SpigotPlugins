@@ -12,7 +12,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Reload {
   public static boolean reloadcmd(CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.reload")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.reload")) {
       Storage.stop();
       Storage.start();
       Storage.setallworlddatas();
@@ -26,7 +26,7 @@ public class Reload {
   }
   public static List<String> reloadlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.reload")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.reload")) {
       if (args.length == 1) {
         list.add("reload");
       }

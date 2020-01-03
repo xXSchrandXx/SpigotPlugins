@@ -19,7 +19,7 @@ public class CMDRestart {
       return true;
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.restart")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.restart")));
       return true;
     }
   }

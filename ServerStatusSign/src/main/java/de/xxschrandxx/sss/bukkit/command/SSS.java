@@ -34,11 +34,11 @@ public class SSS implements CommandExecutor, TabCompleter {
           return CMDRestart.run(sender, command, label, args);
         }
       }
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.usage"));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.usage"));
       return true;
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.main")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.main")));
       return true;
     }
   }

@@ -16,7 +16,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Info {
   public static boolean infocmd(CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.info")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.info")) {
       WorldData worlddata = null;
       if (args.length == 2) {
     	  worlddata = Storage.getWorlddataFromAlias(args[1]);
@@ -75,7 +75,7 @@ public class Info {
   }
   public static List<String> infolist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.info")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.info")) {
       if (args.length == 1) {
         list.add("info");
       }

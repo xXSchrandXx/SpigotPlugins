@@ -57,6 +57,14 @@ public class MessageHandler {
   }
 
   /**
+   * Send the given CommandSender the Header with ChatColors
+   * @param Sender The CommandSender to which the Message is sent.
+   */
+  public static void sendHeader(CommandSender Sender) {
+    CommandSenderHandler.sendMessageWithoutPrefix(Sender, header);
+  }
+
+  /**
    * Returns the footer set with setHeader()
    * or default
    * @return String The footer.
@@ -72,6 +80,14 @@ public class MessageHandler {
   public static void setFooter(String Footer) {
     if (Footer != null)
       footer = Footer;
+  }
+
+  /**
+   * Send the given CommandSender the Footer with ChatColors
+   * @param Sender The CommandSender to which the Message is sent.
+   */
+  public static void sendFooter(CommandSender Sender) {
+    CommandSenderHandler.sendMessageWithoutPrefix(Sender, footer);
   }
 
   /**
@@ -211,22 +227,6 @@ public class MessageHandler {
           }
         }
       }
-    }
-
-    /**
-     * Send the given CommandSender the Header with ChatColors
-     * @param Sender The CommandSender to which the Message is sent.
-     */
-    public static void sendHeader(CommandSender Sender) {
-      sendMessageWithoutPrefix(Sender, header);
-    }
-
-    /**
-     * Send the given CommandSender the Footer with ChatColors
-     * @param Sender The CommandSender to which the Message is sent.
-     */
-    public static void sendFooter(CommandSender Sender) {
-      sendMessageWithoutPrefix(Sender, footer);
     }
 
   }

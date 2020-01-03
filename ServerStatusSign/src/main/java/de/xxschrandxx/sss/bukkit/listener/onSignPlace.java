@@ -22,7 +22,7 @@ public class onSignPlace implements Listener {
             e.setLine(1, MessageHandler.Loop(API.message.get().getString("sign.line.2")));
             e.setLine(2, MessageHandler.Loop(API.message.get().getString("sign.line.3")));
             e.setLine(3, MessageHandler.Loop(API.message.get().getString("sign.line.4")));
-            MessageHandler.sendPlayerMessage(p, API.message.get().getString("signcreate.success"));
+            MessageHandler.PlayerHandler.sendPlayerMessage(p, API.message.get().getString("signcreate.success"));
             return;
           }
         }

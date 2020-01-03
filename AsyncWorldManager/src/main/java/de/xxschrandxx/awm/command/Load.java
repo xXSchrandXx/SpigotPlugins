@@ -13,7 +13,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Load {
   public static boolean loadcmd(CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.load") || (sender instanceof BlockCommandSender)) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.load") || (sender instanceof BlockCommandSender)) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
           WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
@@ -48,7 +48,7 @@ public class Load {
   }
   public static List<String> loadlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.load")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.load")) {
       if (args.length == 1) {
         list.add("load");
       }

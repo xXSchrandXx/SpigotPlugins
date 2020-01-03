@@ -34,36 +34,36 @@ public class Teleport {
                     po.getExitYaw(),
                     po.getExitPitch()),
                     TeleportCause.COMMAND);
-                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
+                MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
                 return true;
               }
               else {
-                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
+                MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
                 return true;
               }
             }
             else {
-              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
+              MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.nouuid"));
+            MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.nouuid"));
             return true;
           }
         }
         else {
-          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.usage"));
+          MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.teleport.usage"));
           return true;
         }
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.teleport")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.teleport")));
       return true;
     }
   }

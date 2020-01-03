@@ -29,40 +29,40 @@ public class Near {
               ConcurrentHashMap<UUID, Portal> pln = API.listNearbyPortals(center, radius);
               if (pln != null) {
                 MessageHandler.sendHeader(p);
-                MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
+                MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
                 for (Entry<UUID, Portal> pe : pln.entrySet()) {
-                  MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
+                  MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
                 }
                 MessageHandler.sendFooter(p);
                 return true;
               }
               else {
-                MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.list.noportals"));
+                MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.list.noportals"));
                 return true;
               }
             }
             else {
-              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
+              MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
               return true;
             }
           }
           else {
-            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.noint"));
+            MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.noint"));
             return true;
           }
         }
         else {
-          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.usage"));
+          MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.near.usage"));
           return true;
         }
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.near")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.near")));
       return true;
     }
   }

@@ -63,7 +63,7 @@ public class Creator implements Listener {
             if (portal2 != null)
               linkedportal = portal2.getValue().getName();
             MessageHandler.sendHeader(p);
-            MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
+            MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
                 .replace("%uuid%", uuid.toString())
                 .replace("%name%", portal.getName())
                 .replace("%world%", portal.getExitWorld())
@@ -73,7 +73,7 @@ public class Creator implements Listener {
                 .replace("%pitch%", Float.toString(portal.getExitPitch()))
                 .replace("%yaw%", Float.toString(portal.getExitYaw()))
                 .replace("%portal%", linkedportal));
-            MessageHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
+            MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
             MessageHandler.sendFooter(p);
           }
         }

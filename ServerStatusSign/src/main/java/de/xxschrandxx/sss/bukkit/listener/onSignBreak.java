@@ -23,7 +23,7 @@ public class onSignBreak implements Listener {
       Player p = e.getPlayer();
       if (p.hasPermission(API.config.get().getString("permission.destroysign"))) {
         API.removeServerStatusSign(entry.getKey());
-        MessageHandler.sendPlayerMessage(p, API.message.get().getString("signdestroy.success"));
+        MessageHandler.PlayerHandler.sendPlayerMessage(p, API.message.get().getString("signdestroy.success"));
       }
       else {
         e.setCancelled(true);

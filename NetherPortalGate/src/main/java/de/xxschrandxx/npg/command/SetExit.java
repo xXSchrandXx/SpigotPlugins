@@ -29,31 +29,31 @@ public class SetExit {
               po.setExitPitch(p.getLocation().getPitch());
               po.setExitYaw(p.getLocation().getYaw());
               API.setPortal(uuid, po);
-              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
+              MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
               return true;
             }
             else {
-              MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
+              MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.nouuid"));
+            MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.nouuid"));
             return true;
           }
         }
         else {
-          MessageHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.usage"));
+          MessageHandler.PlayerHandler.sendPlayerMessage(p, API.getMessage().getString("command.setexit.usage"));
           return true;
         }
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.playneronly"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.setexit")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.setexit")));
       return true;
     }
   }

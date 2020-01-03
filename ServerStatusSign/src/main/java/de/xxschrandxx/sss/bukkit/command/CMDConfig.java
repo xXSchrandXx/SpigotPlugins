@@ -18,24 +18,24 @@ public class CMDConfig {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("config")) {
               API.loadConfig();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Config"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Config"));
               return true;
             }
             if (args[2].equalsIgnoreCase("message")) {
               API.loadMessage();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Message"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Message"));
               return true;
             }
             if (args[2].equalsIgnoreCase("signs")) {
               API.loadServerStatusSign();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Signs"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Signs"));
               return true;
             }
             if (args[2].equalsIgnoreCase("all")) {
               API.loadConfig();
               API.loadMessage();
               API.loadServerStatusSign();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "All"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "All"));
               return true;
             }
           }
@@ -44,34 +44,34 @@ public class CMDConfig {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("config")) {
               API.saveConfig();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Config"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Config"));
               return true;
             }
             if (args[2].equalsIgnoreCase("message")) {
               API.saveMessage();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Message"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Message"));
               return true;
             }
             if (args[2].equalsIgnoreCase("signs")) {
               API.saveServerStatusSign();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Signs"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Signs"));
               return true;
             }
             if (args[2].equalsIgnoreCase("all")) {
               API.saveConfig();
               API.saveMessage();
               API.saveServerStatusSign();
-              MessageHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "All"));
+              MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "All"));
               return true;
             }
           }
         }
       }
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.config.usage"));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.config.usage"));
       return true;
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.config")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.config")));
       return true;
     }
   }

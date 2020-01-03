@@ -8,6 +8,10 @@ import de.xxschrandxx.api.spigot.otherapi.LPAPI;
 
 public class PermissionHandler {
 
+  public PermissionHandler() {
+    checkPermissionPlugin();
+  }
+
   private boolean useop = false;
 
   /**

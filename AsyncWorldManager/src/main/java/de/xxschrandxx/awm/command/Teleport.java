@@ -18,9 +18,9 @@ public class Teleport {
   public static boolean teleportcmd(CommandSender sender, String [] args) {
     if (sender instanceof Player) {
       Player p = (Player) sender;
-      if (WorldManager.hasPermission(p, "command.permissions.worldmanager.teleport.main")) {
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.main")) {
         if (args.length != 1) {
-          if (WorldManager.hasPermission(p, "command.permissions.worldmanager.teleport.self")) {
+          if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.self")) {
             WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
               if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
@@ -45,14 +45,14 @@ public class Teleport {
           }
         }
         else if (args.length != 2) {
-          if (WorldManager.hasPermission(p, "command.permissions.worldmanager.teleport.other")) {
+          if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.other")) {
             WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
               if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 if (Bukkit.getPlayer(args[2]) != null) {
                   Player p2 = Bukkit.getPlayer(args[2]);
-                  if (WorldManager.hasPermission(p2, "command.permissions.worldmanager.teleport.bypass")) {
+                  if (AsyncWorldManager.getPermissionHandler().hasPermission(p2, "command.permissions.worldmanager.teleport.bypass")) {
                     p2.teleport(world.getSpawnLocation());
                     p2.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", p.getName()).replace("%world%", worlddata.getWorldName())));
                     p.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName())));
@@ -128,14 +128,14 @@ public class Teleport {
   }
   public static List<String> teleportlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.teleport")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport")) {
       if (args.length == 1) {
         list.add("teleport");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("teleport")) {
-        if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.teleport.other")) {
+        if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.other")) {
           for (Player p : Bukkit.getOnlinePlayers()) {
-            if (!WorldManager.hasPermission(sender, "command.permissions.worldmanager.teleport.bypass")) {
+            if (!AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.bypass")) {
               list.add(p.getName());
             }
           }

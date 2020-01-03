@@ -17,7 +17,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 
 public class Remove {
   public static boolean removecmd (CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.remove")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.remove")) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
           WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
@@ -57,7 +57,7 @@ public class Remove {
   }
   public static List<String> removelist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.remove")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.remove")) {
       if (args.length == 1) {
         list.add("remove");
       }

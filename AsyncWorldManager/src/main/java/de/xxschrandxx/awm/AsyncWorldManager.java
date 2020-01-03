@@ -2,6 +2,8 @@ package de.xxschrandxx.awm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bstats.bukkit.Metrics;
@@ -16,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.google.common.io.Files;
 
 import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.spigot.PermissionHandler;
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
 import de.xxschrandxx.awm.listener.*;
@@ -36,6 +39,7 @@ public class AsyncWorldManager extends JavaPlugin {
   public void onEnable() {
     instance = this;
     Storage.start();
+    ph = new PermissionHandler();
     if (!isContainered()) {
       Log(Level.WARNING, "Error while loading AsynWorldManager! Please setup a WorldContainer in your Bukkit.yml");
       setup = true;
@@ -171,6 +175,10 @@ public class AsyncWorldManager extends JavaPlugin {
       Bukkit.getLogger().log(Level, "[AsyncWorldManager] " + msg, e);
     }
   }
+  private static PermissionHandler ph;
+  public static PermissionHandler getPermissionHandler() {
+    return ph;
+  }
   public static boolean isPresent(String className) {
     try {
       Class.forName(className);
@@ -180,5 +188,85 @@ public class AsyncWorldManager extends JavaPlugin {
       return false;
     }
   }
-  
+  public static List<String> modifier() {
+    List<String> list = new ArrayList<String>();
+    list.add("-aliases:");
+    list.add("-autoload:true");
+    list.add("-autoload:false");
+    list.add("-autosave:true");
+    list.add("-autosave:false");
+    list.add("-difficulty:PEACEFUL");
+    list.add("-difficulty:EASY");
+    list.add("-difficulty:NORMAL");
+    list.add("-difficulty:HARD");
+    list.add("-pvp:true");
+    list.add("-pvp:false");
+    list.add("-s:");
+    list.add("-a:true");
+    list.add("-a:false");
+    list.add("-fawe:true");
+    list.add("-fawe:false");
+    list.add("-keepspawninmemory:true");
+    list.add("-keepspawninmemory:false");
+    list.add("-x:");
+    list.add("-y:");
+    list.add("-z:");
+    list.add("-yaw:");
+    list.add("-pitch:");
+    list.add("-allowanimalspawning:true");
+    list.add("-allowanimalspawning:false");
+    list.add("-allowmonsterspawning:true");
+    list.add("-allowmonsterspawning:false");
+    list.add("-ambientlimit:");
+    list.add("-animallimit:");
+    list.add("-wateranimallimit:");
+    list.add("-monsterlimit:");
+    list.add("-storm:true");
+    list.add("-storm:false");
+    list.add("-thunder:true");
+    list.add("-thunder:false");
+    list.add("-announceadvancements:true");
+    list.add("-announceadvancements:false");
+    list.add("-commandblockoutput:true");
+    list.add("-commandblockoutput:false");
+    list.add("-disableelytramovementcheck:true");
+    list.add("-disableelytramovementcheck:false");
+    list.add("-dodaylightcycle:true");
+    list.add("-dodaylightcycle:false");
+    list.add("-doentitydrops:true");
+    list.add("-doentitydrops:false");
+    list.add("-dofiretick:true");
+    list.add("-dofiretick:false");
+    list.add("-dolimitedcrafting:true");
+    list.add("-dolimitedcrafting:false");
+    list.add("-domobloot:true");
+    list.add("-domobloot:false");
+    list.add("-domobspawning:true");
+    list.add("-domobspawning:false");
+    list.add("-dotiledrops:true");
+    list.add("-dotiledrops:false");
+    list.add("-doweathercycle:true");
+    list.add("-doweathercycle:false");
+    list.add("-keepinventory:true");
+    list.add("-keepinventory:false");
+    list.add("-logadmincommands:true");
+    list.add("-logadmincommands:false");
+    list.add("-maxcommandchainlength:");
+    list.add("-maxentitycramming:");
+    list.add("-mobgriefing:true");
+    list.add("-mobgriefing:false");
+    list.add("-naturalregeneration:true");
+    list.add("-naturalregeneration:false");
+    list.add("-randomtickspeed:");
+    list.add("-reduceddebuginfo:true");
+    list.add("-reduceddebuginfo:false");
+    list.add("-sendcommandfeedback:true");
+    list.add("-sendcommandfeedback:false");
+    list.add("-showdeathmessages:true");
+    list.add("-showdeathmessages:false");
+    list.add("-spawnradius:");
+    list.add("-spectatorsgeneratechunks:true");
+    list.add("-spectatorsgeneratechunks:false");
+    return list;
+  }
 }

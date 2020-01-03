@@ -24,16 +24,16 @@ public class CMDList {
           else
             liste = liste + '\n' + API.message.get().getString("command.list.format").replace("%id%", entry.getKey().toString());
         }
-        MessageHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.list.message").replace("%list%", liste));
+        MessageHandler.CommandSenderHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.list.message").replace("%list%", liste));
         return true;
       }
       else {
-        MessageHandler.sendMessage(sender, API.message.get().getString("command.list.empty"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.list.empty"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.list")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.list")));
       return true;
     }
   }

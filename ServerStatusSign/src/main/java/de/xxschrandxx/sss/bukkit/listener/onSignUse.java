@@ -26,7 +26,7 @@ public class onSignUse implements Listener {
             Player p = e.getPlayer();
             if (p.hasPermission(API.config.get().getString("permission.usesign.") + entry.getValue().getServer())) {
               if (entry.getValue().isEnabled()) {
-                MessageHandler.sendPlayerMessage(p, API.message.get().getString("signuse.success").replace("%server%", entry.getValue().getServer()));
+                MessageHandler.PlayerHandler.sendPlayerMessage(p, API.message.get().getString("signuse.success").replace("%server%", entry.getValue().getServer()));
                 bungeeconnector.connectToBungeeServer(p, entry.getValue().getServer());
               }
             }

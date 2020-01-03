@@ -39,17 +39,17 @@ public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
           return Teleport.cmd(sender, args);
         }
         else {
-          MessageHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+          MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
           return true;
         }
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
       return true;
     }
   }

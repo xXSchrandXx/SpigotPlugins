@@ -29,26 +29,26 @@ public class Remove {
               catch (Exception e) {}
             }
             API.removePortal(uuid);
-            MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.message").replace("%uuid%", uuid.toString()));
+            MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.remove.message").replace("%uuid%", uuid.toString()));
             return true;
           }
           else {
-            MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.noportal").replace("%uuid%", uuid.toString()));
+            MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.remove.noportal").replace("%uuid%", uuid.toString()));
             return true;
           }
         }
         else {
-          MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.nouuid"));
+          MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.remove.nouuid"));
           return true;
         }
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.remove.usage"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.remove.usage"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.remove")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.remove")));
       return true;
     }
   }

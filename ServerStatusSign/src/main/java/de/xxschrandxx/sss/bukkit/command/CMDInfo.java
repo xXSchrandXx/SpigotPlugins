@@ -24,24 +24,24 @@ public class CMDInfo {
         if (uuid != null) {
           StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
-            MessageHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
+            MessageHandler.CommandSenderHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
             return true;
           }
           else {
-            MessageHandler.sendMessage(sender, API.message.get().getString("command.info.nosign"));
+            MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.nosign"));
             return true;
           }
         }
         else {
-          MessageHandler.sendMessage(sender, API.message.get().getString("command.info.nouuid"));
+          MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.nouuid"));
           return true;
         }
       }
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.info.usage"));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.usage"));
       return true;
     }
     else {
-      MessageHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.info")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.info")));
       return true;
     }
   }

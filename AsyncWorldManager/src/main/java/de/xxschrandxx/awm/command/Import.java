@@ -16,7 +16,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Import {
   public static boolean importcmd(CommandSender sender, String [] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.import")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.import")) {
       if (args.length != 1) {
         String worldname = args[1];
         if (args.length != 2) {
@@ -77,7 +77,7 @@ public class Import {
   }
   public static List<String> importlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.import")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.import")) {
       if (args.length == 1) {
         list.add("import");
       }
@@ -90,7 +90,7 @@ public class Import {
         }
       }
       else if (args[1].equalsIgnoreCase("modify")) {
-        list.addAll(WorldManager.modifier());
+        list.addAll(AsyncWorldManager.modifier());
       }
     }
     return list;

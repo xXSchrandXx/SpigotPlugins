@@ -16,10 +16,10 @@ import net.md_5.bungee.api.chat.*;
 
 public class Modify {
   public static boolean modifycmd (CommandSender sender, String args[]) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("list")) {
-          if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.modify.list")) {
+          if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.list")) {
             sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("command.modify.list")));
             return true;
           }
@@ -795,7 +795,7 @@ public class Modify {
   }
   public static List<String> modifylist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.modify")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify")) {
       if (args.length == 1) {
         list.add("modify");
         return list;
@@ -805,7 +805,7 @@ public class Modify {
         return list;
       }
       else if (args[1].equalsIgnoreCase("modify")) {
-        for (String modifier : WorldManager.modifier()) {
+        for (String modifier : AsyncWorldManager.modifier()) {
           list.add(modifier.replaceFirst("-", "").replace(":true", "").replace(":false", "").replace(":", ""));
         }
       }

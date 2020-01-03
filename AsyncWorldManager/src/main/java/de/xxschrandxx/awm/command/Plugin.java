@@ -13,10 +13,10 @@ import net.md_5.bungee.api.chat.*;
 
 public class Plugin {
   public static boolean plugincmd(CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin.main")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.plugin.main")) {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("info")) {
-          if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin.info")) {
+          if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.plugin.info")) {
             if (args.length != 2) {
               if (args[2].equalsIgnoreCase("config")) {
                 sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head") + "\n  &a" + AsyncWorldManager.getInstance().getDescription().getFullName()) + createmsg(AsyncWorldManager.config.get().getDefaultSection(), "    ") + AsyncWorldManager.Loop("\n" + AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.info.head")));
@@ -41,7 +41,7 @@ public class Plugin {
         }
         else if (args[1].equalsIgnoreCase("set")){
           if (args.length == 5) {
-            if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin.set")) {
+            if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.plugin.set")) {
               if (args[2].equalsIgnoreCase("config")) {
                 if (setValue(AsyncWorldManager.config, args[3], args[4])) {
                   sender.sendMessage(AsyncWorldManager.Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("command.plugin.set.success").replace("%key%", args[3]).replace("%value%", args[4])));
@@ -123,7 +123,7 @@ public class Plugin {
   }
   public static List<String> pluginlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.plugin")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.plugin")) {
       if (args.length == 1) {
         list.add("plugin");
       }

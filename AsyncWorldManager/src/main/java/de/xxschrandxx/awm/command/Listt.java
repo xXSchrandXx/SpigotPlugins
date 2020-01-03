@@ -14,7 +14,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Listt {
   public static boolean listcmd(CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.list")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.list")) {
       HashMap<String, String> worlds = new HashMap<String, String>();
       for (String worldname : Storage.getAllLoadedWorlds())
         worlds.put(worldname, AsyncWorldManager.messages.get().getString("command.list.loaded"));
@@ -35,7 +35,7 @@ public class Listt {
   }
   public static List<String> listlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.list")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.list")) {
       if (args.length == 1) {
         list.add("list");
       }

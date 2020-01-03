@@ -14,7 +14,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Unload {
   public static boolean unloadcmd (CommandSender sender, String[] args) {
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.unload")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.unload")) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
           WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
@@ -53,7 +53,7 @@ public class Unload {
   }
   public static List<String> unloadlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (WorldManager.hasPermission(sender, "command.permissions.worldmanager.unload")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.unload")) {
       if (args.length == 1) {
         list.add("unload");
       }

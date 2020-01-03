@@ -14,7 +14,7 @@ import net.md_5.bungee.api.chat.*;
 
 public class Create {
   public static boolean createcmd(CommandSender sender, String[] args) {
-    if (AsyncWorldManager.hasPermission(sender, "command.permissions.worldmanager.create")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.create")) {
       if (args.length != 1) {
         String worldname = args[1];
         if (args.length != 2) {
@@ -76,7 +76,7 @@ public class Create {
   }
   public static List<String> createlist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (AsyncWorldManager.hasPermission(sender, "command.permissions.worldmanager.create")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.create")) {
       if (args.length == 1) {
         list.add("create");
       }
@@ -86,7 +86,7 @@ public class Create {
         }
       }
       else if (args[1].equalsIgnoreCase("modify")) {
-        list.addAll(WorldManager.modifier());
+        list.addAll(AsyncWorldManager.modifier());
       }
     }
     return list;

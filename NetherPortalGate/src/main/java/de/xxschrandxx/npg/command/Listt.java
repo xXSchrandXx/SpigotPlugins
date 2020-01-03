@@ -22,27 +22,27 @@ public class Listt {
       }
       if (!list.isEmpty()) {
         MessageHandler.sendHeader(sender);
-        MessageHandler.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.list.message"));
+        MessageHandler.CommandSenderHandler.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.list.message"));
         if (sender instanceof Player) {
           for (String le : list) {
-            MessageHandler.sendPlayerMessageWithoutPrefix((Player) sender, API.getMessage().getString("command.list.list.format").replace("%portal%", le), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.list.list.hover").replace("%portal%", le), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + le);
+            MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix((Player) sender, API.getMessage().getString("command.list.list.format").replace("%portal%", le), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.list.list.hover").replace("%portal%", le), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + le);
           }
         }
         else {
           for (String le : list) {
-            MessageHandler.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.listformat").replace("%portal%", le).replace("%seperator%", API.getMessage().getString("seperator")));
+            MessageHandler.CommandSenderHandler.sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.listformat").replace("%portal%", le).replace("%seperator%", API.getMessage().getString("seperator")));
           }
         }
         MessageHandler.sendFooter(sender);
         return true;
       }
       else {
-        MessageHandler.sendMessage(sender, API.getMessage().getString("command.list.list.noportals"));
+        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.list.list.noportals"));
         return true;
       }
     }
     else {
-      MessageHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.list")));
+      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.list")));
       return true;
     }
   }
