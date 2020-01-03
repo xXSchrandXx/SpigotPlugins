@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"de.xxschrandxx.awm"},{"l":"de.xxschrandxx.awm.api.config"},{"l":"de.xxschrandxx.awm.api.event"},{"l":"de.xxschrandxx.awm.api.worldcreation"},{"l":"de.xxschrandxx.awm.command"},{"l":"de.xxschrandxx.awm.listener"}]
