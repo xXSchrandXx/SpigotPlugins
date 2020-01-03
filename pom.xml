@@ -98,7 +98,6 @@
 
     <plugins>
 
-      <!-- Unused
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -106,7 +105,9 @@
         <configuration>
           <source>${maven.compiler.source}</source>
           <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+          <!-- Unused
           <outputDirectory>${project.basedir}/docs/javadoc/${project.version}/</outputDirectory>
+          -->
         </configuration>
         <executions>
           <execution>
@@ -117,7 +118,6 @@
           </execution>
         </executions>
       </plugin>
-      -->
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -148,6 +148,103 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/docs/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>AsyncWorldManager/target/apidocs/</directory>
+                  <targetPath>apidocs</targetPath>
+                </resource>
+                <resource>
+                  <directory>NetherPortalGate/target/apidocs/</directory>
+                  <targetPath>apidocs</targetPath>
+                </resource>
+                <resource>
+                  <directory>SchrandAPI/target/apidocs/</directory>
+                  <targetPath>apidocs</targetPath>
+                </resource>
+                <resource>
+                  <directory>ServerStatusSign/target/apidocs/</directory>
+                  <targetPath>apidocs</targetPath>
+                </resource>
+                <resource>
+                  <directory>AsyncWorldManager/target/</directory>
+                  <targetPath>AsyncWorldManager</targetPath>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>NetherPortalGate/target/</directory>
+                  <targetPath>NetherPortalGate</targetPath>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>SchrandAPI/target/</directory>
+                  <targetPath>SchrandAPI</targetPath>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>ServerStatusSign/target/</directory>
+                  <targetPath>ServerStatusSign</targetPath>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-artifact</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <type>${project.packaging}</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>../docs/jars/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      -->
 
     </plugins>
 
