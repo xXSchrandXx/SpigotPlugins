@@ -88,7 +88,7 @@ def fun(dir,rootdir):
     print(Template(INDEX_TEMPLATE).render(dirnames=dirnames,filenames=filenames, header=dir,ROOTDIR=rootdir,time=time.ctime(os.path.getctime(dir))),file=f)
     f.close()
     for subdir in dirnames:
-        if subdir == 'apidocs'):
+        if subdir == 'apidocs':
             print('Skipping: '+subdir)
         else:
             try:
