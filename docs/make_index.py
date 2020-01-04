@@ -68,7 +68,7 @@ INDEX_TEMPLATE = r"""
 </html>
 """
 
-EXCLUDED = ['index.html', 'apidocs/']
+EXCLUDED = ['index.html', 'apidocs/**']
 
 import os
 import argparse
