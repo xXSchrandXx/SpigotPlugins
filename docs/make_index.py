@@ -1,6 +1,7 @@
 """ Build index from directory listing
 make_index.py </path/to/directory> [--header <header text>]
 """
+
 from __future__ import print_function
 import os.path, time
 

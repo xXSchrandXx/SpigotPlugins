@@ -19,5 +19,5 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BASE_BRANCH: master
         BRANCH: master
-        FOLDER: docs/_build/
-        BUILD_SCRIPT: pip install mako && /docs/make_index.py /docs/
+        FOLDER: docs/_build/html
+        BUILD_SCRIPT: pip install mako && docs/make_index.py /docs/
