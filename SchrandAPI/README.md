@@ -1,5 +1,4 @@
 ## SchrandAPI:
-
 Versions:
   * 0.0.1-SNAPSHOT:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/SchrandAPI/0.0.1-SNAPSHOT/apidocs/)

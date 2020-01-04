@@ -1,6 +1,6 @@
 ## NetherPortalGate:
-
 [Spigot](https://www.spigotmc.org/resources/netherportalgate.72065/)
+
 Versions:
   * 0.0.5-SNAPSHOT:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/apidocs/)
