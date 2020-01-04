@@ -7,17 +7,16 @@ on:
       - 'docs/**'
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '2.x', '3.x', 'pypy2', 'pypy3' ]
+    name: Python ${{ matrix.python-version }} sample
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
-
-    - name: Build and Deploy
-      uses: JacksonMaxfield/github-pages-deploy-action-python@master
-      env:
-        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BASE_BRANCH: master
-        BRANCH: master
-        FOLDER: docs/_build/html
-        BUILD_SCRIPT: pip install .[all] && make docs-build && docs/make_index.py /docs/
+      - uses: actions/checkout@v1
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python docs/make_index.py /docs/
