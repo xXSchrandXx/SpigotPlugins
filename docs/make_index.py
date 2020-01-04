@@ -9,9 +9,8 @@ INDEX_TEMPLATE = r"""
 
 <html>
 <head>
-<title>${header}</title>
-<meta name="description" content="${header}"/>
-
+    <title>${header}</title>
+    <meta name="description" content="${header}"/>
 </head>
 <body>
     <h2>Index of ${header}</h2>
