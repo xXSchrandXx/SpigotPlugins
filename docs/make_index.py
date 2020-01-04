@@ -77,7 +77,7 @@ import argparse
 from mako.template import Template
 
 def fun(dir,rootdir):
-    if dir = "apidocs"
+    if "apidocs" in os.path.dirname(dir)
       pass
     print('Processing: '+dir)
     filenames = [fname for fname in sorted(os.listdir(dir))
