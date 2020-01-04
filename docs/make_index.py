@@ -88,13 +88,13 @@ def fun(dir,rootdir):
     print(Template(INDEX_TEMPLATE).render(dirnames=dirnames,filenames=filenames, header=dir,ROOTDIR=rootdir,time=time.ctime(os.path.getctime(dir))),file=f)
     f.close()
     for subdir in dirnames:
-        try:
-            if equals(os.path.dirname(subdir), "apidocs"):
-              print('Skipping: '+subdir)
-            else:
-              fun(dir+subdir+"/",rootdir+'../')
-        except:
-            pass
+        if equals(os.path.dirname(subdir), "apidocs"):
+            print('Skipping: '+subdir)
+        else:
+            try:
+                fun(dir+subdir+"/",rootdir+'../')
+            except:
+                pass
 
 def main():
     parser = argparse.ArgumentParser()
