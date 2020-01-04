@@ -9,14 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ '2.x', '3.x', 'pypy2', 'pypy3' ]
-    name: Python ${{ matrix.python-version }} sample
+    name: Python build
     steps:
       - uses: actions/checkout@v1
       - name: Setup python
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
-      - run: python docs/make_index.py /docs/
+          python-version: '3.x'
+      - run: pip install mako && python docs/make_index.py /docs/
