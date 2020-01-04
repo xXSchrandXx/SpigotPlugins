@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
 
@@ -24,24 +24,24 @@ public class CMDInfo {
         if (uuid != null) {
           StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
-            MessageHandler.CommandSenderHandler.sendMessageWithoutPrefix(sender, API.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
+            ServerStatusSign.getCommandSenderHandler().sendMessageWithoutPrefix(sender, API.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
             return true;
           }
           else {
-            MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.nosign"));
+            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.nosign"));
             return true;
           }
         }
         else {
-          MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.nouuid"));
+          ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.nouuid"));
           return true;
         }
       }
-      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.info.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.usage"));
       return true;
     }
     else {
-      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.info")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.info")));
       return true;
     }
   }

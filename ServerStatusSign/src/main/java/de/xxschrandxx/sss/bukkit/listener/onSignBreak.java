@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
 
@@ -23,7 +23,7 @@ public class onSignBreak implements Listener {
       Player p = e.getPlayer();
       if (p.hasPermission(API.config.get().getString("permission.destroysign"))) {
         API.removeServerStatusSign(entry.getKey());
-        MessageHandler.PlayerHandler.sendPlayerMessage(p, API.message.get().getString("signdestroy.success"));
+        ServerStatusSign.getPlayerHandler().sendPlayerMessage(p, API.message.get().getString("signdestroy.success"));
       }
       else {
         e.setCancelled(true);

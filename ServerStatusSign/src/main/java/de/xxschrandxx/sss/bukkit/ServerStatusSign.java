@@ -5,6 +5,11 @@ import java.util.logging.Level;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.api.spigot.PermissionHandler;
+import de.xxschrandxx.api.spigot.MessageHandler.CommandSenderHandler;
+import de.xxschrandxx.api.spigot.MessageHandler.LoggerHandler;
+import de.xxschrandxx.api.spigot.MessageHandler.PlayerHandler;
 import de.xxschrandxx.sss.bukkit.api.*;
 import de.xxschrandxx.sss.bukkit.command.SSS;
 import de.xxschrandxx.sss.bukkit.listener.*;
@@ -17,6 +22,25 @@ public class ServerStatusSign extends JavaPlugin {
 
   public static ServerStatusSign getInstance() {
     return instance;
+  }
+
+  public static PermissionHandler ph;
+  public static PermissionHandler getPermissionHandler() {
+    return ph;
+  }
+
+  public static MessageHandler mh;
+  public static MessageHandler getMessageHandler() {
+    return mh;
+  }
+  public static CommandSenderHandler getCommandSenderHandler() {
+    return mh.getCommandSenderHandler();
+  }
+  public static PlayerHandler getPlayerHandler() {
+    return mh.getPlayerHandler();
+  }
+  public static LoggerHandler getLogHandler() {
+    return mh.getLogHandler();
   }
 
   @Override

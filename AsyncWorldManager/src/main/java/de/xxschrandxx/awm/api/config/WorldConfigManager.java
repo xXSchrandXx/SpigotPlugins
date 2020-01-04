@@ -20,6 +20,7 @@ import org.bukkit.generator.ChunkGenerator;
 import de.xxschrandxx.api.spigot.Config;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.worldcreation.*;
+import de.xxschrandxx.awm.util.Utils;
 
 public class WorldConfigManager {
   public static WorldData getWorlddataFromCommand(String worldname, String preenviroment, String[] args) {
@@ -1056,23 +1057,23 @@ public class WorldConfigManager {
     config.save();
   }
   public static void unload(World world, boolean save) {
-    AsyncWorldManager.Log(Level.INFO, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
+    AsyncWorldManager.getLogHandler().log(Level.INFO, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
     Bukkit.unloadWorld(world, save);
   }
   public static void remove(World world, Config config) {
     unload(world, true);
     if (config.getFile().exists()) {
-      AsyncWorldManager.Log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }
   public static void delete(World world, Config config) {
     unload(world, false);
-    AsyncWorldManager.Log(Level.INFO, "Deleting World " + world.getName());
-    AsyncWorldManager.deleteDirectory(world.getWorldFolder());
+    AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting World " + world.getName());
+    Utils.deleteDirectory(world.getWorldFolder());
     world = null;
     if (config.getFile().exists()) {
-      AsyncWorldManager.Log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }

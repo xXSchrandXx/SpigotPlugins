@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 
 public class SSS implements CommandExecutor, TabCompleter {
@@ -34,11 +34,11 @@ public class SSS implements CommandExecutor, TabCompleter {
           return CMDRestart.run(sender, command, label, args);
         }
       }
-      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.usage"));
       return true;
     }
     else {
-      MessageHandler.CommandSenderHandler.sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.main")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.main")));
       return true;
     }
   }

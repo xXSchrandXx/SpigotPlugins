@@ -9,8 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.API;
-import de.xxschrandxx.api.spigot.MessageHandler;
 
 public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
   @Override
@@ -18,38 +18,38 @@ public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
     if (API.hasPermission(sender, "permissions.command.main")) {
       if (args.length != 0) {
         if (args[0].equalsIgnoreCase("Config")) {
-          return Config.cmd(sender, args);
+          return CMDConfig.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("Info")) {
-          return Info.cmd(sender, args);
+          return CMDInfo.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("List")) {
-          return Listt.cmd(sender, args);
+          return CMDList.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("Near")) {
-          return Near.cmd(sender, args);
+          return CMDNear.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("Remove")) {
-          return Remove.cmd(sender, args);
+          return CMDRemove.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("SetExit")) {
-          return SetExit.cmd(sender, args);
+          return CMDSetExit.cmd(sender, args);
         }
         else if (args[0].equalsIgnoreCase("Teleport")) {
-          return Teleport.cmd(sender, args);
+          return CMDTeleport.cmd(sender, args);
         }
         else {
-          MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+          NetherPortalGate.getCommandSenderHandler().sendMessage(sender, API.getMessage().getString("command.main.usage"));
           return true;
         }
       }
       else {
-        MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("command.main.usage"));
+        NetherPortalGate.getCommandSenderHandler().sendMessage(sender, API.getMessage().getString("command.main.usage"));
         return true;
       }
     }
     else {
-      MessageHandler.CommandSenderHandler.sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
+      NetherPortalGate.getCommandSenderHandler().sendMessage(sender, API.getMessage().getString("nopermission").replace("%permission%", API.getConfig().getString("permissions.command.main")));
       return true;
     }
   }
@@ -58,13 +58,13 @@ public class CMDNetherPortalGate implements CommandExecutor, TabCompleter {
   public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
     List<String> list = new ArrayList<String>();
     if (API.hasPermission(sender, "permissions.command.main")) {
-      list.addAll(Config.list(sender, args));
-      list.addAll(Info.list(sender, args));
-      list.addAll(Listt.list(sender, args));
-      list.addAll(Near.list(sender, args));
-      list.addAll(Remove.list(sender, args));
-      list.addAll(SetExit.list(sender, args));
-      list.addAll(Teleport.list(sender, args));
+      list.addAll(CMDConfig.list(sender, args));
+      list.addAll(CMDInfo.list(sender, args));
+      list.addAll(CMDList.list(sender, args));
+      list.addAll(CMDNear.list(sender, args));
+      list.addAll(CMDRemove.list(sender, args));
+      list.addAll(CMDSetExit.list(sender, args));
+      list.addAll(CMDTeleport.list(sender, args));
     }
     if (!list.isEmpty())
       Collections.sort(list);

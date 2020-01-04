@@ -1,6 +1,8 @@
 package de.xxschrandxx.sss.bukkit.api;
 
 import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -80,7 +82,16 @@ public class API {
   public static void createdefaultConfig() {
     config = new Config(ServerStatusSign.getInstance(), "config.yml");
     config.get().options().copyDefaults(true);
-    config.get().addDefault("debug-logging", "normal");
+    List<String> logs = new ArrayList<String>();
+    logs.add("INFO");
+    logs.add("WARNING");    config.get().addDefault("debug-logging", logs);
+    ServerStatusSign.mh = new MessageHandler();
+    for (String lvl : config.get().getStringList("debug-logging")) {
+      try {
+        ServerStatusSign.getLogHandler().addLevel(Level.parse(lvl));
+      }
+      catch (NullPointerException | IllegalArgumentException e) {}
+    }
     config.get().addDefault("tasktime", 10);
     config.get().addDefault("sql.host", "localhost");
     config.get().addDefault("sql.port", "3306");
@@ -118,7 +129,10 @@ public class API {
     message = new Config(ServerStatusSign.getInstance(), "message.yml");
     message.get().options().copyDefaults(true);
     message.get().addDefault("prefix", "&8[&6ServerStatusSign&8]");
+    ServerStatusSign.getMessageHandler().setPrefix(message.get().getString("prefix"));
     message.get().addDefault("strich", "&8&m[]&6&m--------------------------------------------------&8&m[]");
+    ServerStatusSign.getMessageHandler().setHeader(message.get().getString("strich"));
+    ServerStatusSign.getMessageHandler().setFooter(message.get().getString("strich"));
     message.get().addDefault("command.usage", "&cUsage: &b/sss [config|info|list|remove]");
     message.get().addDefault("command.nopermission", "&7You don't have enough permissions. (%permission%)");
     message.get().addDefault("command.config.usage", "&cUsage: &b/sss config [load|save] [config|signs|message|all]");
@@ -386,7 +400,7 @@ public class API {
                     int line = i+1;
                     Log(true, Level.INFO, "API.SignTask | Editing Line " + line);
                     sign.setLine(i, 
-                        MessageHandler.Loop(message.get().getString("sign.line." + line).
+                        ServerStatusSign.getMessageHandler().Loop(message.get().getString("sign.line." + line).
                             replace("%server%", entry.getValue().getServer()).
                             replace("%status%", getStatusMSG(true)).
                             replace("%online%", Integer.toString(getSQLAPI().getPlayerCount(entry.getValue().getServer()))).

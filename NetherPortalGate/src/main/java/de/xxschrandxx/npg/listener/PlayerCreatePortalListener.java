@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.PortalCreateEvent.CreateReason;
 
-import de.xxschrandxx.npg.api.API;
+import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.event.PlayerCreatePortalEvent;
 
 public class PlayerCreatePortalListener implements Listener {
@@ -32,7 +32,7 @@ public class PlayerCreatePortalListener implements Listener {
       interactions.remove(Block);
       reverseInteractions.remove(Player);
       PlayerCreatePortalEvent pcpe = new PlayerCreatePortalEvent(Blocks, Player, Reason);
-      API.Log(true, Level.INFO, "PlayerCreatePortalListener | Calling PlayerCreatePortalEvent with " + Player.getName() + ".");
+      NetherPortalGate.getLogHandler().log(Level.INFO, "PlayerCreatePortalListener | Calling PlayerCreatePortalEvent with " + Player.getName() + ".");
       Bukkit.getPluginManager().callEvent(pcpe);
       return true;
     }

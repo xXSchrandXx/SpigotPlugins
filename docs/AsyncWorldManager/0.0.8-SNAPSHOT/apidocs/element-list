@@ -4,3 +4,4 @@ de.xxschrandxx.awm.api.event
 de.xxschrandxx.awm.api.worldcreation
 de.xxschrandxx.awm.command
 de.xxschrandxx.awm.listener
+de.xxschrandxx.awm.util

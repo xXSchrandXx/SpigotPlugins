@@ -34,7 +34,7 @@ public class BungeeCord
     }
     catch (Exception ex) {
       ex.printStackTrace();
-      API.Log(true, Level.WARNING, "Could not handle BungeeCord command from " + player.getName() + ": tried to connect to \"" + server + "\".");
+      NetherPortalGate.getLogHandler().log(Level.WARNING, "Could not handle BungeeCord command from " + player.getName() + ": tried to connect to \"" + server + "\".");
       
       return false;
     }

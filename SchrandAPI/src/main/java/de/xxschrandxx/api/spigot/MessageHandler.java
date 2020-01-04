@@ -15,17 +15,41 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class MessageHandler {
 
-  private static String prefix = "";
+  public MessageHandler() {
+    ch = new CommandSenderHandler();
+    ph = new PlayerHandler();
+    lh = new LoggerHandler();
+  }
 
-  private static String header = "&8&m[]&6&m--------------------------------------------------&8&m[]";
+  private CommandSenderHandler ch;
 
-  private static String footer = "&8&m[]&6&m--------------------------------------------------&8&m[]";
+  public CommandSenderHandler getCommandSenderHandler() {
+    return ch;
+  }
+
+  private PlayerHandler ph;
+
+  public PlayerHandler getPlayerHandler() {
+    return ph;
+  }
+
+  private LoggerHandler lh;
+
+  public LoggerHandler getLogHandler() {
+    return lh;
+  }
+
+  private String prefix = "";
+
+  private String header = "&8&m[]&6&m--------------------------------------------------&8&m[]";
+
+  private String footer = "&8&m[]&6&m--------------------------------------------------&8&m[]";
 
   /**
    * Returns the prefix set with setPrefix()
    * @return The prefix set with setPrefix()
    */
-  public static String getPrefix() {
+  public String getPrefix() {
     return prefix;
   }
 
@@ -33,7 +57,7 @@ public class MessageHandler {
    * Sets the prefix with given String
    * @param Prefix The prefix to set.
    */
-  public static void setPrefix(String Prefix) {
+  public void setPrefix(String Prefix) {
     if (Prefix != null)
       prefix = Prefix;
   }
@@ -43,7 +67,7 @@ public class MessageHandler {
    * or default
    * @return The header.
    */
-  public static String getHeader() {
+  public String getHeader() {
     return header;
   }
 
@@ -51,7 +75,7 @@ public class MessageHandler {
    * Sets the header with given String
    * @param Header The header to set.
    */
-  public static void setHeader(String Header) {
+  public void setHeader(String Header) {
     if (Header != null)
       header = Header;
   }
@@ -60,8 +84,8 @@ public class MessageHandler {
    * Send the given CommandSender the Header with ChatColors
    * @param Sender The CommandSender to which the Message is sent.
    */
-  public static void sendHeader(CommandSender Sender) {
-    CommandSenderHandler.sendMessageWithoutPrefix(Sender, header);
+  public void sendHeader(CommandSender Sender) {
+    ch.sendMessageWithoutPrefix(Sender, header);
   }
 
   /**
@@ -69,7 +93,7 @@ public class MessageHandler {
    * or default
    * @return String The footer.
    */
-  public static String getFooter() {
+  public String getFooter() {
     return footer;
   }
 
@@ -77,7 +101,7 @@ public class MessageHandler {
    * Sets the footer with given String
    * @param Footer The footer
    */
-  public static void setFooter(String Footer) {
+  public void setFooter(String Footer) {
     if (Footer != null)
       footer = Footer;
   }
@@ -86,8 +110,8 @@ public class MessageHandler {
    * Send the given CommandSender the Footer with ChatColors
    * @param Sender The CommandSender to which the Message is sent.
    */
-  public static void sendFooter(CommandSender Sender) {
-    CommandSenderHandler.sendMessageWithoutPrefix(Sender, footer);
+  public void sendFooter(CommandSender Sender) {
+    ch.sendMessageWithoutPrefix(Sender, footer);
   }
 
   /**
@@ -95,18 +119,18 @@ public class MessageHandler {
    * @param Message Message to Translate
    * @return Message with Colorcodes
    */
-  public static String Loop(String Message) {
+  public String Loop(String Message) {
     return ChatColor.translateAlternateColorCodes('&', Message);
   }
 
-  public static class CommandSenderHandler {
+  public class CommandSenderHandler {
 
     /**
      * Send the given CommandSender the Prefix and Message with ChatColors
      * @param Sender The CommandSender to which the Message is sent.
      * @param Message The Message to sent.
      */
-    public static void sendMessage(CommandSender Sender, String Message) {
+    public void sendMessage(CommandSender Sender, String Message) {
       sendMessage(Sender, Message, null, null, null, null);
     }
 
@@ -117,7 +141,7 @@ public class MessageHandler {
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use. The HoverValue to use.
      */
-    public static void sendMessage(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue) {
+    public void sendMessage(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue) {
       sendMessage(Sender, Message, HoverAction, HoverValue, null, null);
     }
 
@@ -128,7 +152,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendMessage(CommandSender Sender, String Message, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendMessage(CommandSender Sender, String Message, ClickEvent.Action ClickAction, String ClickValue) {
       sendMessage(Sender, Message, null, null, ClickAction, ClickValue);
     }
 
@@ -141,9 +165,9 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendMessage(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendMessage(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
       if (Sender instanceof Player) {
-        MessageHandler.PlayerHandler.sendPlayerMessage((Player) Sender, Message, HoverAction, HoverValue, ClickAction, ClickValue);
+        ph.sendPlayerMessage((Player) Sender, Message, HoverAction, HoverValue, ClickAction, ClickValue);
       }
       else {
         if ((Sender != null) && (Message != null)) {
@@ -170,7 +194,7 @@ public class MessageHandler {
      * @param Sender The CommandSender to which the Message is sent.
      * @param Message The Message to sent.
      */
-    public static void sendMessageWithoutPrefix(CommandSender Sender, String Message) {
+    public void sendMessageWithoutPrefix(CommandSender Sender, String Message) {
       sendMessage(Sender, Message, null, null, null, null);
     }
 
@@ -181,7 +205,7 @@ public class MessageHandler {
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
-    public static void sendMessageWithoutPrefix(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue) {
+    public void sendMessageWithoutPrefix(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue) {
       sendMessage(Sender, Message, HoverAction, HoverValue, null, null);
     }
 
@@ -192,7 +216,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use. The ClickValue to use.
      */
-    public static void sendMessageWithoutPrefix(CommandSender Sender, String Message, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendMessageWithoutPrefix(CommandSender Sender, String Message, ClickEvent.Action ClickAction, String ClickValue) {
       sendMessage(Sender, Message, null, null, ClickAction, ClickValue);
     }
 
@@ -205,9 +229,9 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendMessageWithoutPrefix(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendMessageWithoutPrefix(CommandSender Sender, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
       if (Sender instanceof Player) {
-        MessageHandler.PlayerHandler.sendPlayerMessage((Player) Sender, Message, HoverAction, HoverValue, ClickAction, ClickValue);
+        ph.sendPlayerMessage((Player) Sender, Message, HoverAction, HoverValue, ClickAction, ClickValue);
       }
       else {
         if ((Sender != null) && (Message != null)) {
@@ -231,14 +255,14 @@ public class MessageHandler {
 
   }
 
-  public static class PlayerHandler {
+  public class PlayerHandler {
 
     /**
      * Send the given Player the Prefix and Message with ChatColors
      * @param Player The Player to which the Message is sent.
      * @param Message The Message to sent.
      */
-    public static void sendPlayerMessage(Player Player, String Message) {
+    public void sendPlayerMessage(Player Player, String Message) {
       sendPlayerMessage(Player, Message, null, null, null, null);
     }
 
@@ -249,7 +273,7 @@ public class MessageHandler {
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
-    public static void sendPlayerMessage(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue) {
+    public void sendPlayerMessage(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue) {
       sendPlayerMessage(Player, Message, HoverAction, HoverValue, null, null);
     }
 
@@ -260,7 +284,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendPlayerMessage(Player Player, String Message, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendPlayerMessage(Player Player, String Message, ClickEvent.Action ClickAction, String ClickValue) {
       sendPlayerMessage(Player, Message, null, null, ClickAction, ClickValue);
     }
 
@@ -273,7 +297,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendPlayerMessage(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendPlayerMessage(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
       if ((Player != null) && (Message != null)) {
         if (Player.isOnline() && !Message.isEmpty()) {
           TextComponent textcomponent = new TextComponent(Loop(getPrefix() + Message));
@@ -297,7 +321,7 @@ public class MessageHandler {
      * @param Player The Player to which the Message is sent.
      * @param Message The Message to sent.
      */
-    public static void sendPlayerMessageWithoutPrefix(Player Player, String Message) {
+    public void sendPlayerMessageWithoutPrefix(Player Player, String Message) {
       sendPlayerMessage(Player, Message, null, null, null, null);
     }
 
@@ -308,7 +332,7 @@ public class MessageHandler {
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
-    public static void sendPlayerMessageWithoutPrefix(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue) {
+    public void sendPlayerMessageWithoutPrefix(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue) {
       sendPlayerMessage(Player, Message, HoverAction, HoverValue, null, null);
     }
 
@@ -319,7 +343,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendPlayerMessageWithoutPrefix(Player Player, String Message, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendPlayerMessageWithoutPrefix(Player Player, String Message, ClickEvent.Action ClickAction, String ClickValue) {
       sendPlayerMessage(Player, Message, null, null, ClickAction, ClickValue);
     }
 
@@ -332,7 +356,7 @@ public class MessageHandler {
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
-    public static void sendPlayerMessageWithoutPrefix(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
+    public void sendPlayerMessageWithoutPrefix(Player Player, String Message, HoverEvent.Action HoverAction, String HoverValue, ClickEvent.Action ClickAction, String ClickValue) {
       if ((Player != null) && (Message != null)) {
         if (Player.isOnline() && !Message.isEmpty()) {
           TextComponent textcomponent = new TextComponent(Loop(Message));
@@ -353,16 +377,16 @@ public class MessageHandler {
     
   }
 
-  public static class LoggerHandler {
+  public class LoggerHandler {
 
-    private static ArrayList<Level> levels = new ArrayList<Level>();
+    private ArrayList<Level> levels = new ArrayList<Level>();
 
     /**
      * Add a {@link Level} to list.
      * @param Level The Level to add.
      * @return Whether the list changed.
      */
-    public static boolean addLevel(Level Level) {
+    public boolean addLevel(Level Level) {
       return levels.add(Level);
     }
 
@@ -371,11 +395,11 @@ public class MessageHandler {
      * @param Level The Level to add.
      * @return Whether the list changed.
      */
-    public static boolean removeLevel(Level Level) {
+    public boolean removeLevel(Level Level) {
       return levels.remove(Level);
     }
 
-    public static void clearLevels() {
+    public void clearLevels() {
       levels.clear();
     }
 
@@ -384,11 +408,24 @@ public class MessageHandler {
      * @param Level The Level to use.
      * @param Message The Message to sent.
      */
-    public static void log(Level Level, String Message) {
+    public void log(Level Level, String Message) {
       if (levels.contains(Level))
         Bukkit.getLogger().log(Level, Message);
     }
 
+    /**
+     * Log a Message to Console. If {@link Level} is in levels}
+     * @param Level The Level to use.
+     * @param Message The Message to sent.
+     */
+    public void log(Level Level, String Message, Exception e) {
+      if (levels.contains(Level)) {
+        if (e == null)
+          Bukkit.getLogger().log(Level, Message);
+        else
+          Bukkit.getLogger().log(Level, Message, e);
+      }
+    }
   }
 
 }

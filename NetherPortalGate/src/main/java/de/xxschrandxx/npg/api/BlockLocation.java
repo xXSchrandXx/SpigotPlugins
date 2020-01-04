@@ -5,6 +5,8 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import de.xxschrandxx.npg.NetherPortalGate;
+
 public class BlockLocation {
 
 /**
@@ -87,7 +89,7 @@ public class BlockLocation {
       l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
     }
     else {
-      API.Log(true, Level.WARNING, "The world '" + world + "' doesn't exist, returning null.");
+      NetherPortalGate.getLogHandler().log(Level.WARNING, "The world '" + world + "' doesn't exist, returning null.");
     }
     return l;
   }

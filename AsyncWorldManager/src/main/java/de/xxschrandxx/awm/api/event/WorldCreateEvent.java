@@ -4,15 +4,16 @@ import java.util.logging.Level;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.WorldCreator;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
+
+import org.bukkit.WorldCreator;
 
 public class WorldCreateEvent extends Event {
   public WorldCreateEvent(WorldCreator WorldCreator, boolean Async) {
     worldcreator = WorldCreator;
     async = Async;
-    AsyncWorldManager.Log(Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
+    AsyncWorldManager.getLogHandler().log(Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
   }
   private WorldCreator worldcreator;
   public WorldCreator getWorldCreator() {

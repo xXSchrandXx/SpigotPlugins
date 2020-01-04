@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
 import de.xxschrandxx.sss.bukkit.api.bungeeconnector;
@@ -26,7 +26,7 @@ public class onSignUse implements Listener {
             Player p = e.getPlayer();
             if (p.hasPermission(API.config.get().getString("permission.usesign.") + entry.getValue().getServer())) {
               if (entry.getValue().isEnabled()) {
-                MessageHandler.PlayerHandler.sendPlayerMessage(p, API.message.get().getString("signuse.success").replace("%server%", entry.getValue().getServer()));
+                ServerStatusSign.getPlayerHandler().sendPlayerMessage(p, API.message.get().getString("signuse.success").replace("%server%", entry.getValue().getServer()));
                 bungeeconnector.connectToBungeeServer(p, entry.getValue().getServer());
               }
             }

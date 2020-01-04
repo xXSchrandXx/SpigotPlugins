@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.*;
 import de.xxschrandxx.npg.api.event.PlayerCreatePortalEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -23,11 +23,11 @@ public class Creator implements Listener {
   @EventHandler
   public void onPortalCreate(PlayerCreatePortalEvent e) {
     Player p = e.getPlayer();
-    API.Log(true, Level.INFO, "Creator | Entity is Player " + p.getName() + ".");
+    NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Entity is Player " + p.getName() + ".");
     if (API.hasPermission(p, "permissions.listener.create.normal")) {
       if ((p.getInventory().getItemInMainHand().getType() == Material.FIRE_CHARGE) ||
           p.getInventory().getItemInMainHand().getType() == Material.FLINT_AND_STEEL) {
-        API.Log(true, Level.INFO, "Creator | Item is " + p.getInventory().getItemInMainHand().getType().name() + ".");
+        NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Item is " + p.getInventory().getItemInMainHand().getType().name() + ".");
         if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null) {
           if (!p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().isEmpty()) {
             String portalname = p.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
@@ -39,16 +39,16 @@ public class Creator implements Listener {
             }
             ConcurrentHashMap<UUID, Portal> portale = API.listPortalsWithName(portalname);
             if (portale != null) {
-              API.Log(true, Level.INFO, "Creator | " + portale.size() + " Portals existing with that name.");
+              NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | " + portale.size() + " Portals existing with that name.");
               if (portale.size() >= 2) {
                 e.setCancelled(true);
                 return;
               }
             }
-            API.Log(true, Level.INFO, "Creator | Itemname is " + portalname + ".");
+            NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Itemname is " + portalname + ".");
             List<BlockLocation> locations = new ArrayList<BlockLocation>();
             for (BlockState b : e.getBlocks()) {
-              API.Log(true, Level.INFO, "Creator | Adding Block with location " + b.getLocation());
+              NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Adding Block with location " + b.getLocation());
               locations.add(new BlockLocation(b.getLocation()));
             }
             Location exit = API.createExitLocation(p, e.getBlocks());
@@ -56,14 +56,14 @@ public class Creator implements Listener {
               return;
             Portal portal = new Portal(portalname, locations, exit);
             UUID uuid = API.generateUUID();
-            API.Log(true, Level.INFO, "Creator | Adding Portal with UUID is " + uuid + ".");
+            NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Adding Portal with UUID is " + uuid + ".");
             API.setPortal(uuid, portal);
             String linkedportal = "none";
             Entry<UUID, Portal> portal2 = API.getPortalfromPortal(portal);
             if (portal2 != null)
               linkedportal = portal2.getValue().getName();
-            MessageHandler.sendHeader(p);
-            MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
+            NetherPortalGate.getMessageHandler().sendHeader(p);
+            NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
                 .replace("%uuid%", uuid.toString())
                 .replace("%name%", portal.getName())
                 .replace("%world%", portal.getExitWorld())
@@ -73,8 +73,8 @@ public class Creator implements Listener {
                 .replace("%pitch%", Float.toString(portal.getExitPitch()))
                 .replace("%yaw%", Float.toString(portal.getExitYaw()))
                 .replace("%portal%", linkedportal));
-            MessageHandler.PlayerHandler.sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
-            MessageHandler.sendFooter(p);
+            NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
+            NetherPortalGate.getMessageHandler().sendFooter(p);
           }
         }
       }
