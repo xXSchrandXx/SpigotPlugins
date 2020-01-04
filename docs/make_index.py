@@ -89,7 +89,9 @@ def fun(dir,rootdir):
     f.close()
     for subdir in dirnames:
         try:
-            if not equals(subdir, 'apidocs'):
+            if equals(subdir, 'apidocs'):
+              print('Skipping: '+subdir)
+            else:
               fun(dir+subdir+"/",rootdir+'../')
         except:
             pass
