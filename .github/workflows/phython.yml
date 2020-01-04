@@ -20,4 +20,4 @@ jobs:
         BASE_BRANCH: master
         BRANCH: master
         FOLDER: docs/_build/html
-        BUILD_SCRIPT: pip install mako && docs/make_index.py /docs/
+        BUILD_SCRIPT: pip install .[all] && make docs-build && docs/make_index.py /docs/
