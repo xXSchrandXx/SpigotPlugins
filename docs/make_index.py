@@ -89,7 +89,7 @@ def fun(dir,rootdir):
     f.close()
     for subdir in dirnames:
         try:
-            if dir not like 'apidocs'
+            if dir not in 'apidocs'
               fun(dir+subdir+"/",rootdir+'../')
         except:
             pass
