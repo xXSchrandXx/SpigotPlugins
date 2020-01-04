@@ -77,8 +77,6 @@ import argparse
 from mako.template import Template
 
 def fun(dir,rootdir):
-    if "apidocs" in os.path.dirname(dir)
-      pass
     print('Processing: '+dir)
     filenames = [fname for fname in sorted(os.listdir(dir))
               if fname not in EXCLUDED and os.path.isfile(dir+fname)]
@@ -91,7 +89,8 @@ def fun(dir,rootdir):
     f.close()
     for subdir in dirnames:
         try:
-            fun(dir+subdir+"/",rootdir+'../')
+            if dir not like 'apidocs'
+              fun(dir+subdir+"/",rootdir+'../')
         except:
             pass
 
