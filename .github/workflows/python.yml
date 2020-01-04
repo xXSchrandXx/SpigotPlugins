@@ -16,10 +16,12 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: '3.x'
-      - run: pip install mako && python docs/make_index.py docs
+#      - run: pip install mako && python docs/make_index.py docs
       - name: Deploy
         uses: JacksonMaxfield/github-pages-deploy-action-python@master
         env:
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: master
           BRANCH: master
           FOLDER: docs/
+          BUILD_SCRIPT: pip install mako && python docs/make_index.py docs
