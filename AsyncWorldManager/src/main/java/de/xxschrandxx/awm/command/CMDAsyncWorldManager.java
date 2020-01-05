@@ -6,21 +6,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.CommandMinecart;
 
 import net.md_5.bungee.api.chat.*;
 
 public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if (hasPermission(sender, "command.permissions.worldmanager.main")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.main")) {
       if (args.length != 0) {
         if (args[0].equalsIgnoreCase("create")) {
           if (!CMDCreate.createcmd(sender, args)) {
@@ -130,57 +126,34 @@ public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
     return cmdlist;
   }
   private void mainMSG(CommandSender sender) {
-    if (hasPermission(sender, "command.permissions.worldmanager.main")) {
-      sender.sendMessage(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.head")));
-      if (hasPermission(sender, "command.permissions.worldmanager.create"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.create.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm create ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.delete"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.delete.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm delete ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.import"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.import.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm import ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.remove"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.remove.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm remove ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.load"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.load.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm load ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.unload"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.unload.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm unload ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.teleport.main"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.teleport.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm tp ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.info"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.info.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm info ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.list"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.list.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm list")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.modify.main"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.modify.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm modify ")).create());
-      if (hasPermission(sender, "command.permissions.worldmanager.reload"))
-        sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("&8| &7" + AsyncWorldManager.messages.get().getString("command.reload.usage"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"))).create())).event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wm reload")).create());
-      sender.sendMessage(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.head")));
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.main")) {
+      AsyncWorldManager.getMessageHandler().sendHeader(sender);
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.create"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.create.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm create ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.delete"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.delete.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm delete ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.import"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.import.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm import ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.remove"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.remove.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm remove ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.load"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.load.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm load ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.unload"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.unload.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm unload ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.main"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.teleport.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm teleport ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.info"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.info.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm info ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.list"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.list.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm list ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.modify.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm modify ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.reload"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.reload.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm reload ");
+      AsyncWorldManager.getMessageHandler().sendFooter(sender);
     }
     else {
-      sender.spigot().sendMessage(new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop(AsyncWorldManager.messages.get().getString("prefix") + AsyncWorldManager.messages.get().getString("nopermission"))).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(AsyncWorldManager.getMessageHandler().Loop("(Required: &e%perm%&7)").replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.main"))).create())).create());
-    }
-  }
-  public static boolean hasPermission(CommandSender sender, String path) {
-    if (sender instanceof Player) {
-      Player p = (Player) sender;
-      if (p.hasPermission(AsyncWorldManager.config.get().getString(path))) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    else if (sender instanceof ConsoleCommandSender) {
-      return true;
-    }
-    else if (sender instanceof BlockCommandSender) {
-      return true;
-    }
-    else if (sender instanceof CommandMinecart) {
-      return true;
-    }
-    else {
-      return false;
+      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.main")));
     }
   }
 }

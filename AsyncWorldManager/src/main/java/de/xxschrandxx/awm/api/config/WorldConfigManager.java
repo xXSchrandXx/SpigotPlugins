@@ -22,6 +22,7 @@ import de.xxschrandxx.api.spigot.Config;
 import de.xxschrandxx.api.spigot.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.worldcreation.*;
+import de.xxschrandxx.awm.util.Dummy;
 import de.xxschrandxx.awm.util.Utils;
 
 public class WorldConfigManager {
@@ -531,7 +532,7 @@ public class WorldConfigManager {
       worlddata.setSeed(section.getLong("seed"));
     }
     if (section.isString("generator")) {
-      worlddata.setGenerator(WorldCreator.getGeneratorForName(section.getName(), section.getString("generator"), Bukkit.getConsoleSender()));
+      worlddata.setGenerator(WorldCreator.getGeneratorForName(section.getName(), section.getString("generator"), new Dummy()));
     }
     if (section.isString("worldtype")) {
       worlddata.setWorldType(WorldType.valueOf(section.getString("worldtype")));
@@ -723,7 +724,7 @@ public class WorldConfigManager {
       worlddata.setSeed(new Random().nextLong());
     }
     if (section.isString("generator")) {
-      worlddata.setGenerator(WorldCreator.getGeneratorForName(AsyncWorldManager.config.get().getString("mainworld"), section.getString("generator"), Bukkit.getConsoleSender()));
+      worlddata.setGenerator(WorldCreator.getGeneratorForName(AsyncWorldManager.config.get().getString("mainworld"), section.getString("generator"), new Dummy()));
     }
     else {
       worlddata.setGenerator(null);

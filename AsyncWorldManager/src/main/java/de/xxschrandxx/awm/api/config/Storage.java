@@ -18,8 +18,6 @@ import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class Storage {
 
-  private static ArrayList<WorldData> worlddatas = new ArrayList<WorldData>();
-
   public static void start() {
     //Lade config.yml
     AsyncWorldManager.config = new Config(AsyncWorldManager.getInstance(), "config.yml");
@@ -101,7 +99,6 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.spawning.monsterlimit", 70);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.storm", false);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.thundering", false);
-    /* new
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.announceadvancements", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.commandblockoutput", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disableelytramovementcheck", false);
@@ -128,7 +125,6 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.spectatorsgeneratechunks", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.enablecommandblocks", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disabledentitys", new ArrayList<String>());
-    */
     AsyncWorldManager.config.save();
     //Lade messages.yml
     AsyncWorldManager.messages.get().options().copyHeader(true);
@@ -204,7 +200,7 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.modify.world.usage", "Usage: /wm modify %world% %key% [%value%]");
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.alreadyalias", "%value% is already a alias of %key%.");
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.notalias", "%value% is not a alias of %key%.");
-    AsyncWorldManager.messages.get().addDefault("command.reload.usage", "/wm reload");
+    AsyncWorldManager.messages.get().addDefault("command.reload.usage", "Usage: /wm reload");
     AsyncWorldManager.messages.get().addDefault("command.reload.success", "Reloaded AsyncWorldManager.config.yml, AsyncWorldManager.messages.yml and worldconfigs.");
     AsyncWorldManager.messages.get().addDefault("command.plugin.usage", "/wm plugin [info/set] [config/AsyncWorldManager.messages(/worlds)] {path} {value}");
     AsyncWorldManager.messages.get().addDefault("command.plugin.info.head", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
@@ -231,7 +227,7 @@ public class Storage {
     if (!worldconfigfolder.exists())
       worldconfigfolder.mkdir();
   }
-  public static void loadAllWorlddatas() {
+  public static ArrayList<WorldData> loadAllWorlddatas() {
     ArrayList<WorldData> list = new ArrayList<WorldData>();;
     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
     if (!worldconfigfolder.exists())
@@ -241,11 +237,11 @@ public class Storage {
       WorldData worlddata = WorldConfigManager.getWorlddataFromConfig(config);
       list.add(worlddata);
     }
-    worlddatas = list;
+    return list;
   }
   public static WorldData getWorlddataFromName(String name) {
     WorldData worlddata = null;
-    for (WorldData testworlddata : worlddatas) {
+    for (WorldData testworlddata : loadAllWorlddatas()) {
       if (testworlddata.getWorldName().equals(name)) {
         worlddata = testworlddata;
       }
@@ -254,7 +250,7 @@ public class Storage {
   }
   public static WorldData getWorlddataFromAlias(String alias) {
     WorldData worlddata = null;
-    for (WorldData testworlddata : worlddatas) {
+    for (WorldData testworlddata : loadAllWorlddatas()) {
       if (testworlddata.getWorldName().equals(alias))
         worlddata = testworlddata;
       if (testworlddata.getAliases().contains(alias))
@@ -263,7 +259,7 @@ public class Storage {
     return worlddata;
   }
   public static void loadworlds() {
-    for (WorldData worlddata : worlddatas) {
+    for (WorldData worlddata : loadAllWorlddatas()) {
       if (worlddata.getAutoLoad()) {
         AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
         WorldConfigManager.createWorld(worlddata);
