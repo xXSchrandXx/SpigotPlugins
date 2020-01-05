@@ -476,10 +476,10 @@ public class MessageHandler {
      * @param e The Exception to send.
      */
     public void log(boolean debug, Level Level, String Message, Exception e) {
-      if (debug && !showdebug)
-        return;
-      else
+      if (debug && showdebug)
         Message = "Debug: " + Message;
+      else if (debug && !showdebug)
+        return;
       if (levels.contains(Level))
         if (e == null)
           Bukkit.getLogger().log(Level, Message);

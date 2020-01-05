@@ -16,7 +16,7 @@ public class fawe {
    * @param preworlddata The {@link WorldData} to use.
    */
   public static void faweworld(WorldData preworlddata) {
-    Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
+    Bukkit.getScheduler().runTaskAsynchronously(AsyncWorldManager.getInstance(), new Runnable() {
       public void run() {
         WorldCreator preworldcreator = new WorldCreator(preworlddata.getWorldName());
         PreWorldCreateEvent preworldcreateevent = new PreWorldCreateEvent(preworlddata, true);

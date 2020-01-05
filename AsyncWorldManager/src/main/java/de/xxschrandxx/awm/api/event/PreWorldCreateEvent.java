@@ -19,6 +19,7 @@ public class PreWorldCreateEvent extends Event implements Cancellable {
    * @param Async Whether worldcreation is async.
    */
   public PreWorldCreateEvent(WorldData WorldData, boolean Async) {
+    super(Async);
     worlddata = WorldData;
     async = Async;
     AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Creating world " + worlddata.getWorldName() + ". Async: " + async);

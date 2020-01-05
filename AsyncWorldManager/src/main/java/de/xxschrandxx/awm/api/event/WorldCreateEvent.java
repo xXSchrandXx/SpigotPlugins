@@ -19,6 +19,7 @@ public class WorldCreateEvent extends Event  implements Cancellable {
    * @param Async Whether worldcreation is async.
    */
   public WorldCreateEvent(WorldCreator WorldCreator, boolean Async) {
+    super(Async);
     worldcreator = WorldCreator;
     async = Async;
     AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
