@@ -89,7 +89,7 @@ public class BlockLocation {
       l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
     }
     else {
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "The world '" + world + "' doesn't exist, returning null.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "The world '" + world + "' doesn't exist, returning null.");
     }
     return l;
   }

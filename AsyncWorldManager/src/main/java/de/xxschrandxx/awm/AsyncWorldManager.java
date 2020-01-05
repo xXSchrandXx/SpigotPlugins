@@ -70,60 +70,60 @@ public class AsyncWorldManager extends JavaPlugin {
     ph = new PermissionHandler();
 
     if (!Utils.isContainered()) {
-      getLogHandler().log(Level.WARNING, "Error while loading AsynWorldManager! Please setup a WorldContainer in your Bukkit.yml");
+      getLogHandler().log(false, Level.WARNING, "Error while loading AsynWorldManager! Please setup a WorldContainer in your Bukkit.yml");
       setup = true;
       getServer().shutdown();
       return;
     }
-    getLogHandler().log(Level.INFO, "Checking for 'FastAsyncWorldEdit'...");
+    getLogHandler().log(true, Level.INFO, "Checking for 'FastAsyncWorldEdit'...");
     if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null && Utils.isPresent("com.boydti.fawe.bukkit.wrapper.AsyncWorld")) {
-      getLogHandler().log(Level.INFO, "FastAsyncWorldEdit found, using it...");
+      getLogHandler().log(false, Level.INFO, "FastAsyncWorldEdit found, using it...");
       FAWE = Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit");
     }
     else {
-      getLogHandler().log(Level.INFO, "FastAsyncWorldEdit not found. Using it would help the performance! Download: https://github.com/boy0001/FastAsyncWorldedit/wiki");
+      getLogHandler().log(true, Level.INFO, "FastAsyncWorldEdit not found. Using it would help the performance! Download: https://github.com/boy0001/FastAsyncWorldedit/wiki");
       config.get().set("fastasyncworldedit.faweworld", false);
       config.save();
     }
     metrics = new Metrics(this);
     metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> Storage.getAllKnownWorlds().size()));
     if (metrics.isEnabled()) {
-      getLogHandler().log(Level.WARNING, "Starting Metrics. Opt-out using the global bStats config.");
+      getLogHandler().log(true, Level.WARNING, "Starting Metrics. Opt-out using the global bStats config.");
     }
     else {
-      getLogHandler().log(Level.INFO, "Metrics disabled per bStats config.");
+      getLogHandler().log(true, Level.INFO, "Metrics disabled per bStats config.");
     }
-    getLogHandler().log(Level.WARNING, "Loading Commands...");
-    getLogHandler().log(Level.INFO, "Loading Command 'worldmanager'...");
+    getLogHandler().log(false, Level.INFO, "Loading Commands...");
+    getLogHandler().log(false, Level.INFO, "Loading Command 'worldmanager'...");
     getCommand("worldmanager").setExecutor(new CMDAsyncWorldManager());
-    getLogHandler().log(Level.INFO, "Loading Tabcomplete 'worldmanager'...");
+    getLogHandler().log(false, Level.INFO, "Loading Tabcomplete 'worldmanager'...");
     getCommand("worldmanager").setTabCompleter(new CMDAsyncWorldManager());
-    getLogHandler().log(Level.WARNING, "Loading Listener...");
-    getLogHandler().log(Level.INFO, "Loading Listener 'CommandBlockPerformlistener'...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener 'CommandBlockPerformlistener'...");
     Bukkit.getPluginManager().registerEvents(new CommandBlockPerformListener(), this);
-    getLogHandler().log(Level.INFO, "Loading Listener 'CommandPerformlistener'...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener 'CommandPerformlistener'...");
     Bukkit.getPluginManager().registerEvents(new CommandPerformListener(), this);
-    getLogHandler().log(Level.INFO, "Loading Listener 'WorldIntlistener'...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener 'WorldIntlistener'...");
     Bukkit.getPluginManager().registerEvents(new WorldIntListener(), this);
-    getLogHandler().log(Level.INFO, "Loading Listener 'WorldLoadlistener'...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener 'WorldLoadlistener'...");
     Bukkit.getPluginManager().registerEvents(new WorldLoadListener(), this);
-    getLogHandler().log(Level.INFO, "Loading Listener 'WorldTeleportlistener'...");
+    getLogHandler().log(false, Level.INFO, "Loading Listener 'WorldTeleportlistener'...");
     Bukkit.getPluginManager().registerEvents(new WorldTeleportListener(), this);
     if (config.get().getBoolean("Listener.CreatureSpawn")) {
-      getLogHandler().log(Level.INFO, "Loading Listener 'CreatureSpawnListener'...");
+      getLogHandler().log(false, Level.INFO, "Loading Listener 'CreatureSpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new CreatureSpawnListener(), this);
     }
     if (config.get().getBoolean("Listener.EntitySpawn")) {
-      getLogHandler().log(Level.INFO, "Loading Listener 'EntitySpawnListener'...");
+      getLogHandler().log(false, Level.INFO, "Loading Listener 'EntitySpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
     }
-    getLogHandler().log(Level.INFO, "Loading Worlds...");
+    getLogHandler().log(false, Level.INFO, "Loading Worlds...");
     Storage.loadworlds();
   }
   @Override
   public void onDisable() {
     if (setup) {
-      getLogHandler().log(Level.WARNING, "Try to automove your worlds.");
+      getLogHandler().log(false, Level.WARNING, "Try to automove your worlds.");
       File container = new File("worlds");
       if (!container.exists())
         container.mkdirs();
@@ -133,7 +133,7 @@ public class AsyncWorldManager extends JavaPlugin {
         try {
           Files.move(WorldFolder, new File(container + File.separator + WorldFolder));
         } catch (IOException e) {
-          getLogHandler().log(Level.WARNING, "Error while moving your worlds", e);
+          getLogHandler().log(false, Level.WARNING, "Error while moving your worlds", e);
         }
       }
     }

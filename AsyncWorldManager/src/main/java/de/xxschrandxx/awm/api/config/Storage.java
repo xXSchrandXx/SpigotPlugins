@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class Storage {
@@ -30,14 +29,8 @@ public class Storage {
     List<String> logs = new ArrayList<String>();
     logs.add("INFO");
     logs.add("WARNING");
-    AsyncWorldManager.config.get().addDefault("debug-logging", logs);
-    AsyncWorldManager.mh = new MessageHandler();
-    for (String lvl : AsyncWorldManager.config.get().getStringList("debug-logging")) {
-      try {
-        AsyncWorldManager.getLogHandler().addLevel(Level.parse(lvl));
-      }
-      catch (NullPointerException | IllegalArgumentException e) {}
-    }
+    AsyncWorldManager.config.get().addDefault("logging.show", logs);
+    AsyncWorldManager.config.get().addDefault("logging.debug", false);
     String Mainworldname;
     try {
       BufferedReader is = new BufferedReader(new FileReader("server.properties"));
@@ -46,7 +39,7 @@ public class Storage {
       is.close();
       Mainworldname = String.valueOf(props.getProperty("level-name"));
       if (!Boolean.valueOf(props.getProperty("enable-command-block"))) {
-        AsyncWorldManager.getLogHandler().log(Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
+        AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
       }
     } catch (IOException | NullPointerException e) {
     	Mainworldname = "world";
@@ -104,7 +97,7 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.spawning.monsterlimit", 70);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.storm", false);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.thundering", false);
-    /** new
+    /* new
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.announceadvancements", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.commandblockoutput", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disableelytramovementcheck", false);
@@ -138,9 +131,9 @@ public class Storage {
     AsyncWorldManager.messages.get().options().header("Explenation: https://github.com/xXSchrandXx/Async-WorldManager/wiki/Messages\nCommand description:\n  Required arguments: []\n  Additional arguments: {}\nPlaceholder:\n  Permission: %perm%\n  Worldname: %world%\n  Commandsender: %name%\n  Targetplayer: %player%\n  Foldername: %folder%\n  Autoloadvalue: %autoload%\n  Addedname: %addedname%\n  Removedname: %removedname%\n  Worldaliases: %aliases%\n  Seed: %seed%\n  Enviroment: %enviroment%\n  Generator: %generator%\n  WorldType: %worldtype%\n  Generatestructurevalue: %generatestructurs%\n  X: %x%\n  Y: %y%\n  Z: %z%\n  Yaw: %yaw%\n  Pitch: %pitch%\n  Configkey: %key%\n  Configvalue: %value%");
     AsyncWorldManager.messages.get().options().copyDefaults(true);
     AsyncWorldManager.messages.get().addDefault("prefix", "&8[&6WM&8] &7");
-    AsyncWorldManager.getMessageHandler().setPrefix(AsyncWorldManager.messages.get().getString("prefix"));
     AsyncWorldManager.messages.get().addDefault("nopermission", "You don't have permission to use that.");
-    AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.head", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
+    AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.header", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
+    AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.footer", "&8&m[]&6&m--------------------------------------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.hover", "Klick to suggest the command.");
     AsyncWorldManager.messages.get().addDefault("command.create.usage", "Usage: /wm create [worldname] [NORMAL/NETHER/THE_END] {optionals}");
     AsyncWorldManager.messages.get().addDefault("command.create.success.chat", "The world %world% sucsessfully created.");
@@ -257,7 +250,7 @@ public class Storage {
   public static void loadworlds() {
     for (WorldData worlddata : worlddatas) {
       if (worlddata.getAutoLoad()) {
-        AsyncWorldManager.getLogHandler().log(Level.WARNING, "Loading world: " + worlddata.getWorldName());
+        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
         WorldConfigManager.createWorld(worlddata);
       }
     }
@@ -266,7 +259,7 @@ public class Storage {
     for (World world : Bukkit.getWorlds()) {
       WorldData worlddata = getWorlddataFromName(world.getName());
       if (worlddata != null) {
-        AsyncWorldManager.getLogHandler().log(Level.WARNING, "Setting up world: " + worlddata.getWorldName());
+        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Setting up world: " + worlddata.getWorldName());
         WorldConfigManager.setWorldsData(world, worlddata);
       }
     }

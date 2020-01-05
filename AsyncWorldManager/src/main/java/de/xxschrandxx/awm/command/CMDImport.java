@@ -9,6 +9,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
 import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.spigot.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -29,7 +30,7 @@ public class CMDImport {
                 Config config = Storage.getWorldConfig(worldname);
                 if ((worlddata == null) && (config == null)) {
                   if (testValues.isEnviroment(preenviroment)) {
-                    worlddata = WorldConfigManager.getWorlddataFromCommand(worldname, preenviroment, args);
+                    worlddata = WorldConfigManager.getWorlddataFromCommand(sender, worldname, preenviroment, args);
                     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
                     if (!worldconfigfolder.exists())
                       worldconfigfolder.mkdir();

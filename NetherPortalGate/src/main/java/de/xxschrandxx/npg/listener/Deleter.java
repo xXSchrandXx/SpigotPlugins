@@ -20,12 +20,12 @@ public class Deleter implements Listener {
     Player p = e.getPlayer();
     Block b = e.getBlock();
     if ((b.getBlockData().getMaterial() == Material.NETHER_PORTAL) || (b.getBlockData().getMaterial() == Material.OBSIDIAN)) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "Deleter | Material is " + b.getBlockData().getMaterial().name());
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "Deleter | Material is " + b.getBlockData().getMaterial().name());
       Entry<UUID, Portal> pe = API.getPortalfromLocation(b.getLocation());
       if (pe != null) {
-        NetherPortalGate.getLogHandler().log(Level.INFO,  "Deleter | " + pe.getKey() + " exists at Location.");
+        NetherPortalGate.getLogHandler().log(true, Level.INFO,  "Deleter | " + pe.getKey() + " exists at Location.");
         if (API.hasPermission(p, "permissions.listener.break")) {
-          NetherPortalGate.getLogHandler().log(Level.INFO, "Deleter | Removing Portal " + pe.getKey() + ".");
+          NetherPortalGate.getLogHandler().log(true, Level.INFO, "Deleter | Removing Portal " + pe.getKey() + ".");
           API.removePortal(pe);
         }
         else {

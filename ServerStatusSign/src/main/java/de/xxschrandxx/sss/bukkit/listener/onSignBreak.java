@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
+import de.xxschrandxx.sss.bukkit.api.Storage;
 
 public class onSignBreak implements Listener {
   @EventHandler
@@ -21,9 +22,9 @@ public class onSignBreak implements Listener {
       if (entry == null)
         return;
       Player p = e.getPlayer();
-      if (p.hasPermission(API.config.get().getString("permission.destroysign"))) {
+      if (p.hasPermission(Storage.config.get().getString("permission.destroysign"))) {
         API.removeServerStatusSign(entry.getKey());
-        ServerStatusSign.getPlayerHandler().sendPlayerMessage(p, API.message.get().getString("signdestroy.success"));
+        ServerStatusSign.getPlayerHandler().sendPlayerMessage(p, Storage.message.get().getString("signdestroy.success"));
       }
       else {
         e.setCancelled(true);

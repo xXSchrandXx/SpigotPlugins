@@ -44,21 +44,21 @@ public class NetherPortalGate extends JavaPlugin {
   public void onEnable() {
     instance = this;
     Storage.start();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Debug-Logging: " + Storage.config.get().getString("debug-logging"));
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Listener PlayerCreatePortalListener...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Debug-Logging: " + Storage.config.get().getString("debug-logging"));
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Listener PlayerCreatePortalListener...");
     Bukkit.getPluginManager().registerEvents(new PlayerCreatePortalListener(), this);
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Listener Creator...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Listener Creator...");
     Bukkit.getPluginManager().registerEvents(new Creator(), this);
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Listener PigmanDisabler...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Listener PigmanDisabler...");
     Bukkit.getPluginManager().registerEvents(new CreatureSpawnListener(), this);
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Listener Deleter...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Listener Deleter...");
     Bukkit.getPluginManager().registerEvents(new Deleter(), this);
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Listener Teleporter...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Listener Teleporter...");
     Bukkit.getPluginManager().registerEvents(new Teleporter(), this);
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Command NetherPortalGate...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Command NetherPortalGate...");
     getCommand("NetherPortalGate").setExecutor(new CMDNetherPortalGate());
     getCommand("NetherPortalGate").setTabCompleter(new CMDNetherPortalGate());
-    NetherPortalGate.getLogHandler().log(Level.INFO, "NetherPortalGates | Loading Channel to BungeeCord...");
+    NetherPortalGate.getLogHandler().log(false, Level.INFO, "NetherPortalGates | Loading Channel to BungeeCord...");
     Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
   }
   

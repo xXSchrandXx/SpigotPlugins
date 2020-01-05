@@ -14,16 +14,27 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.generator.ChunkGenerator;
 
 import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.spigot.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.worldcreation.*;
 import de.xxschrandxx.awm.util.Utils;
 
 public class WorldConfigManager {
-  public static WorldData getWorlddataFromCommand(String worldname, String preenviroment, String[] args) {
+
+  /**
+   * Gets the {@link WorldData} from the given Command.
+   * @param sender The {@link CommandSender} who performed the Command.
+   * @param worldname The worldname for the {@link WorldData}.
+   * @param preenviroment the Enviroment for the {@link WorldData}.
+   * @param args The Commands Arguments.
+   * @return The created {@link WorldData}.
+   */
+  public static WorldData getWorlddataFromCommand(CommandSender sender, String worldname, String preenviroment, String[] args) {
     WorldData worlddata = getWorlddataFromDefault(worldname);
     worlddata.setWorldName(worldname);
     List<String> aliases = new ArrayList<String>();
@@ -51,8 +62,8 @@ public class WorldConfigManager {
       }
       else if (options.startsWith("-g:")) {
         String pregenerator = options.replace("-g:", "");
-        if (testValues.isGenerator(worldname, pregenerator)) {
-          ChunkGenerator generator = WorldCreator.getGeneratorForName(worldname, pregenerator, testValues.Dummy());
+        if (testValues.isGenerator(worldname, pregenerator, sender)) {
+          ChunkGenerator generator = WorldCreator.getGeneratorForName(worldname, pregenerator, sender);
           worlddata.setGenerator(generator);
         }
       }
@@ -391,6 +402,12 @@ public class WorldConfigManager {
     }
     return worlddata;
   }
+
+  /**
+   * Gets the {@link WorldData} from the given {@link World}.
+   * @param world The world to get the {@link WorldData} from.
+   * @return The created {@link WorldData}.
+   */
   public static WorldData getWorlddataFromWorld(World world) {
     WorldData worlddata = getWorlddataFromDefault(world.getName());
     worlddata.setWorldName(world.getName());
@@ -480,6 +497,12 @@ public class WorldConfigManager {
     worlddata.setSpectatorsGenerateChunks(world.getGameRuleValue(GameRule.SPECTATORS_GENERATE_CHUNKS));
 	  return worlddata;
   }
+
+  /**
+   * Gets the {@link WorldData} from the given Config.
+   * @param config The {@link Config} to get the {@link WorldData} from.
+   * @return The created {@link WorldData}.
+   */
   public static WorldData getWorlddataFromConfig(Config config) {
     WorldData worlddata = getWorlddataFromDefault(config.getFile().getName().replace(".yml", ""));
     ConfigurationSection section = config.get().getConfigurationSection(worlddata.getWorldName());
@@ -508,7 +531,7 @@ public class WorldConfigManager {
       worlddata.setSeed(section.getLong("seed"));
     }
     if (section.isString("generator")) {
-      worlddata.setGenerator(WorldCreator.getGeneratorForName(section.getName(), section.getString("generator"), testValues.Dummy()));
+      worlddata.setGenerator(WorldCreator.getGeneratorForName(section.getName(), section.getString("generator"), Bukkit.getConsoleSender()));
     }
     if (section.isString("worldtype")) {
       worlddata.setWorldType(WorldType.valueOf(section.getString("worldtype")));
@@ -641,6 +664,12 @@ public class WorldConfigManager {
     }
 	return worlddata;
   }
+
+  /**
+   * Gets the {@link WorldData} from the default config.
+   * @param worldname The worldname for the {@link WorldData}
+   * @return The created {@link WorldData}
+   */
   public static WorldData getWorlddataFromDefault(String worldname) {
     WorldData worlddata = new WorldData();
     worlddata.setWorldName(worldname);
@@ -694,7 +723,7 @@ public class WorldConfigManager {
       worlddata.setSeed(new Random().nextLong());
     }
     if (section.isString("generator")) {
-      worlddata.setGenerator(WorldCreator.getGeneratorForName(AsyncWorldManager.config.get().getString("mainworld"), section.getString("generator"), testValues.Dummy()));
+      worlddata.setGenerator(WorldCreator.getGeneratorForName(AsyncWorldManager.config.get().getString("mainworld"), section.getString("generator"), Bukkit.getConsoleSender()));
     }
     else {
       worlddata.setGenerator(null);
@@ -959,6 +988,12 @@ public class WorldConfigManager {
     }
 	return worlddata;
   }
+
+  /**
+   * Sets the {@link WorldData} for the given {@link World}
+   * @param world The {@link World} to change.
+   * @param worlddata The {@link WorldData} to use.
+   */
   public static void setWorldsData(World world, WorldData worlddata) {
     world.setDifficulty(worlddata.getDifficulty());
     world.setPVP(worlddata.getPvP());
@@ -998,8 +1033,14 @@ public class WorldConfigManager {
     world.setGameRule(GameRule.SPAWN_RADIUS, worlddata.getSpawnRadius());
     world.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, worlddata.getSpectatorsGenerateChunks());
   }
+
+  /**
+   * Saves the given {@link WorldData} to the given {@link Config}
+   * @param config The {@link Config} to save to.
+   * @param worlddata The {@link WorldData} to save.
+   */
   public static void save(Config config, WorldData worlddata) {
-    config.get().options().header("Explenation: https://github.com/xXSchrandXx/Async-WorldManager/wiki/Worldconfig");
+    config.get().options().header("Explenation: ");
     config.get().options().copyHeader(true);
     ConfigurationSection section = config.get().createSection(worlddata.getWorldName());
     section.set("aliases", worlddata.getAliases());
@@ -1056,27 +1097,52 @@ public class WorldConfigManager {
     section.set("disabledentitys", worlddata.getDisabledEntitys());
     config.save();
   }
+
+  /**
+   * Unloads the given world.
+   * @param world The {@link World} to unload.
+   * @param save Whether to save the Chunks before unloading.
+   */
   public static void unload(World world, boolean save) {
-    AsyncWorldManager.getLogHandler().log(Level.INFO, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
+    AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Unloading " + world.getName() + ". Save: " + Boolean.toString(save));
     Bukkit.unloadWorld(world, save);
   }
+
+  /**
+   * Removes the given {@link World} and {@link Config}.
+   * This does not delete the WorldFolder, just the Config.
+   * @param world The {@link World} to remove from Config.
+   * @param config The {@link Config} to delete.
+   */
   public static void remove(World world, Config config) {
     unload(world, true);
     if (config.getFile().exists()) {
-      AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }
+
+  /**
+   * Deletes the given {@link World} and {@link Config}
+   * This delets the {@link World} and {@link Config}!
+   * @param world The {@link World} to delete.
+   * @param config The {@link Config} to delete.
+   */
   public static void delete(World world, Config config) {
     unload(world, false);
-    AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting World " + world.getName());
+    AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Deleting World " + world.getName());
     Utils.deleteDirectory(world.getWorldFolder());
     world = null;
     if (config.getFile().exists()) {
-      AsyncWorldManager.getLogHandler().log(Level.INFO, "Deleting " + config.getFile().getName());
+      AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Deleting " + config.getFile().getName());
       config.getFile().delete();
     }
   }
+
+  /**
+   * Creates a {@link World} with given {@link WorldData}
+   * @param worlddata The {@link WorldData} to use for creation.
+   */
   public static void createWorld(WorldData worlddata) {
     if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
       if (worlddata.getFAWEWorld()) {
@@ -1086,4 +1152,5 @@ public class WorldConfigManager {
     }
     normal.normalworld(worlddata);
   }
+
 }

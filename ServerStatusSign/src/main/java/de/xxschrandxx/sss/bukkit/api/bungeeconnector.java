@@ -34,7 +34,7 @@ public class bungeeconnector
     }
     catch (Exception ex) {
       ex.printStackTrace();
-      API.Log(true, Level.WARNING, "Could not handle BungeeCord command from " + player.getName() + ": tried to connect to \"" + server + "\".");
+      ServerStatusSign.getLogHandler().log(true, Level.WARNING, "Could not handle BungeeCord command from " + player.getName() + ": tried to connect to \"" + server + "\".");
       
       return false;
     }

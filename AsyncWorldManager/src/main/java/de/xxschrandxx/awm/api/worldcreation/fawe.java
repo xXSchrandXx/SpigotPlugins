@@ -5,7 +5,6 @@ import org.bukkit.WorldCreator;
 
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 
-import de.xxschrandxx.awm.api.config.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
@@ -23,16 +22,11 @@ public class fawe {
         }
         WorldData worlddata = preworldcreateevent.getWorldData();
         if (Bukkit.getWorld(preworldcreator.name()) == null) {
-          if (testValues.isEnviroment(worlddata.getEnviroment()))
-            preworldcreator.environment(worlddata.getEnviroment());
-          if (testValues.isLong(worlddata.getSeed()))
-            preworldcreator.seed(worlddata.getSeed());
-          if (testValues.isGenerator(worlddata.getWorldName(), worlddata.getGenerator()))
-            preworldcreator.generator(worlddata.getGenerator());
-          if (testValues.isWorldType(worlddata.getWorldType()))
-            preworldcreator.type(worlddata.getWorldType());
-          if (testValues.isBoolean(worlddata.getGenerateStructures()))
-            preworldcreator.generateStructures(worlddata.getGenerateStructures());
+          preworldcreator.environment(worlddata.getEnviroment());
+          preworldcreator.seed(worlddata.getSeed());
+          preworldcreator.generator(worlddata.getGenerator());
+          preworldcreator.type(worlddata.getWorldType());
+          preworldcreator.generateStructures(worlddata.getGenerateStructures());
         }
         WorldCreateEvent worldcreateevent = new WorldCreateEvent(preworldcreator, true);
         Bukkit.getPluginManager().callEvent(worldcreateevent);

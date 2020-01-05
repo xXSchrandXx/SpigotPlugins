@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 import de.xxschrandxx.api.spigot.Config;
 import de.xxschrandxx.api.spigot.MessageHandler;
@@ -42,23 +41,16 @@ public class Storage {
     config.get().addDefault("permissions.listener.break", "cg.portal.break");
     List<String> logs = new ArrayList<String>();
     logs.add("INFO");
-    logs.add("WARNING");    config.get().addDefault("debug-logging", logs);
-    NetherPortalGate.mh = new MessageHandler();
-    for (String lvl : config.get().getStringList("debug-logging")) {
-      try {
-        NetherPortalGate.getLogHandler().addLevel(Level.parse(lvl));
-      }
-      catch (NullPointerException | IllegalArgumentException e) {}
-    }
+    logs.add("WARNING");
+    config.get().addDefault("logging.show", logs);
+    config.get().addDefault("logging.debug", false);
+    
     config.save();
     message = new Config(NetherPortalGate.getInstance(), "message.yml");
     message.reload();
     message.get().options().copyDefaults(true);
     message.get().addDefault("prefix", "&8[&6NetherPortalGate&8]&7");
-    NetherPortalGate.getMessageHandler().setPrefix(message.get().getString("prefix"));
     message.get().addDefault("strich", "&8&m[]&6&m--------------------------------------------------&8&m[]");
-    NetherPortalGate.getMessageHandler().setHeader(message.get().getString("strich"));
-    NetherPortalGate.getMessageHandler().setFooter(message.get().getString("strich"));
     message.get().addDefault("nopermission", "&cYou don't have the permission to do that! &7(&c%permission%&7)");
     message.get().addDefault("command.playneronly", "Only players can execute this command.");
     message.get().addDefault("command.main.usage", "Usage:&c /npg <config/info/list/near/remove/setexit/teleport>");
@@ -123,6 +115,12 @@ public class Storage {
         );
     message.get().addDefault("listener.create.hover", "Click here to change the exit of %uuid% to your location.");
     message.save();
+    NetherPortalGate.mh = new MessageHandler(
+        message.get().getString("prefix"),
+        message.get().getString("strich"),
+        message.get().getString("strich"),
+        config.get().getBoolean("logging.debug"),
+        config.get().getStringList("logging.show"));
     API.loadAllPortals();
   }
 

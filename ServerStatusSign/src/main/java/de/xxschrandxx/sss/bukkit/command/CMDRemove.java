@@ -10,11 +10,12 @@ import org.bukkit.command.CommandSender;
 import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
+import de.xxschrandxx.sss.bukkit.api.Storage;
 
 public class CMDRemove {
 
   public static boolean run(CommandSender sender, Command command, String alias, String[] args) {
-    if (API.hasPermission(sender, "permission.command.remove")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.remove")) {
       if (args.length != 1) {
         UUID uuid = null;
         try {
@@ -25,31 +26,31 @@ public class CMDRemove {
           StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
             API.removeServerStatusSign(uuid);
-            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
+            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.remove.success").replace("%id%", uuid.toString()));
             return true;
           }
           else {
-            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.remove.nosign"));
+            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.remove.nosign"));
             return true;
           }
         }
         else {
-          ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.remove.nouuid"));
+          ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.remove.nouuid"));
           return true;
         }
       }
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.remove.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.remove.usage"));
       return true;
     }
     else {
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.remove")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.nopermission").replace("%permission%", Storage.config.get().getString("permission.command.remove")));
       return true;
     }
   }
 
   public static List<String> list(CommandSender sender, Command command, String alias, String[] args) {
     List<String> list = new ArrayList<String>();
-    if (API.hasPermission(sender, "permission.command.remove")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.remove")) {
       if (args.length == 1) {
         list.add("remove");
       }

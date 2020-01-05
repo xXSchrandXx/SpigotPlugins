@@ -46,51 +46,50 @@ public class ServerStatusSign extends JavaPlugin {
   @Override
   public void onEnable() {
     instance = this;
-    API.loadConfig();
-    API.loadMessage();
+    Storage.start();
     API.loadServerStatusSign();
-    API.Log(false, Level.INFO, "Loaded Configs.");
+    getLogHandler().log(false, Level.INFO, "Loaded Configs.");
     if (getServer().getIp().isEmpty()) {
-      API.Log(false, Level.WARNING, "Please set the server-ip in your server.properties!");
-      API.Log(false, Level.WARNING, "If the server-ip is blank, this plugin won't work.");
+      getLogHandler().log(false, Level.WARNING, "Please set the server-ip in your server.properties!");
+      getLogHandler().log(false, Level.WARNING, "If the server-ip is blank, this plugin won't work.");
       return;
     }
-    API.Log(false, Level.INFO, "Loading SQLAPI...");
+    getLogHandler().log(false, Level.INFO, "Loading SQLAPI...");
     if (!API.isSQLSet()) {
-      API.Log(false, Level.WARNING, "SQL-Login is not set. Disabeling...");
+      getLogHandler().log(false, Level.WARNING, "SQL-Login is not set. Disabeling...");
       return;
     }
     API.setSQLAPI(
-        API.config.get().getString("sql.host"),
-        API.config.get().getString("sql.port"),
-        API.config.get().getString("sql.username"),
-        API.config.get().getString("sql.password"),
-        API.config.get().getString("sql.database"),
-        API.config.get().getString("sql.tableprefix") + "ServerStatusSigns",
-        API.config.get().getBoolean("sql.usessl"),
+        Storage.config.get().getString("sql.host"),
+        Storage.config.get().getString("sql.port"),
+        Storage.config.get().getString("sql.username"),
+        Storage.config.get().getString("sql.password"),
+        Storage.config.get().getString("sql.database"),
+        Storage.config.get().getString("sql.tableprefix") + "ServerStatusSigns",
+        Storage.config.get().getBoolean("sql.usessl"),
         getLogger());
-    API.Log(false, Level.INFO, "Starting SignTask...");
+    getLogHandler().log(false, Level.INFO, "Starting SignTask...");
     API.startSignTask();
-    API.Log(false, Level.INFO, "Registering BungeeCord...");
+    getLogHandler().log(false, Level.INFO, "Registering BungeeCord...");
     getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new bungeeconnector());
-    API.Log(false, Level.INFO, "Registering SignBreak...");
+    getLogHandler().log(false, Level.INFO, "Registering SignBreak...");
     getServer().getPluginManager().registerEvents(new onSignBreak(), this);
-    API.Log(false, Level.INFO, "Registering SignPlace...");
+    getLogHandler().log(false, Level.INFO, "Registering SignPlace...");
     getServer().getPluginManager().registerEvents(new onSignPlace(), this);
-    API.Log(false, Level.INFO, "Registering SignUse...");
+    getLogHandler().log(false, Level.INFO, "Registering SignUse...");
     getServer().getPluginManager().registerEvents(new onSignUse(), this);
-    API.Log(false, Level.INFO, "Registering PlayerJoin...");
+    getLogHandler().log(false, Level.INFO, "Registering PlayerJoin...");
     getServer().getPluginManager().registerEvents(new onPlayerJoin(), this);
-    API.Log(false, Level.INFO, "Registering PlayerLeave...");
+    getLogHandler().log(false, Level.INFO, "Registering PlayerLeave...");
     getServer().getPluginManager().registerEvents(new onPlayerLeave(), this);
-    API.Log(false, Level.INFO, "Registering Command...");
+    getLogHandler().log(false, Level.INFO, "Registering Command...");
     getCommand("serverstatussigns").setExecutor(new SSS());
     getCommand("serverstatussigns").setTabCompleter(new SSS());
     new BukkitRunnable() {
       @Override
       public void run() {
-        API.Log(true, Level.INFO, "Sending first online data...");
+        getLogHandler().log(true, Level.INFO, "Sending first online data...");
         API.getSQLAPI().sendBukkitData(getServer().getIp(), getServer().getPort(), true, getServer().getOnlinePlayers().size(), getServer().getMaxPlayers(), false);
       }
     }.runTaskAsynchronously(this);
@@ -100,7 +99,7 @@ public class ServerStatusSign extends JavaPlugin {
   public void onDisable() {
     API.stopSignTask();
     if (API.isSQLSet()) {
-      API.Log(true, Level.INFO, "Sending offline data...");
+      getLogHandler().log(true, Level.INFO, "Sending offline data...");
       API.getSQLAPI().sendBukkitData(getServer().getIp(), getServer().getPort(), false, 0, 0, restart);
     }
     API.saveServerStatusSign();

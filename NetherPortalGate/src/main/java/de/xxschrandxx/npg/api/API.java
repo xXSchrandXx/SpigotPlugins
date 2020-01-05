@@ -30,12 +30,12 @@ public class API {
   }
 
   public static void saveConfig() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.saveConfig | Saving config.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.saveConfig | Saving config.");
     Storage.config.save();
   }
 
   public static void loadConfig() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.loadConfig | Loading config.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.loadConfig | Loading config.");
     Storage.config.reload();
   }
 
@@ -44,31 +44,31 @@ public class API {
   }
 
   public static void saveMessage() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.saveMessage | Saving messages.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.saveMessage | Saving messages.");
     Storage.message.save();
   }
 
   public static void loadMessage() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.loadMessage | Loading messages.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.loadMessage | Loading messages.");
     Storage.message.reload();
   }
 
   public static ConcurrentHashMap<UUID, Portal> listPortals() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortals | Listing Portals");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortals | Listing Portals");
     return Storage.portale;
   }
 
   public static ConcurrentHashMap<UUID, Portal> listPortalsWithName(String String) {
     ConcurrentHashMap<UUID, Portal> p = new ConcurrentHashMap<UUID, Portal>();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortalsWithName | Listing Portals with Name: " + String);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortalsWithName | Listing Portals with Name: " + String);
     for (Entry<UUID, Portal> po : listPortals().entrySet()) {
       if (po.getValue().getName().equals(String)) {
-        NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortalsWithName | Adding Portal: " + po.getKey());
+        NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortalsWithName | Adding Portal: " + po.getKey());
         p.put(po.getKey(), po.getValue());
       }
     }
     if (p.isEmpty()) {
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.listPortalsWithName | Returns null because List is Empty.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.listPortalsWithName | Returns null because List is Empty.");
       return null;
     }
     return p;
@@ -76,18 +76,18 @@ public class API {
 
   public static ConcurrentHashMap<UUID, Portal> listPortalsWithLocation(Location Location) {
     ConcurrentHashMap<UUID, Portal> p = new ConcurrentHashMap<UUID, Portal>();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortalsWithLocation | List Portals with Location: " + Location);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortalsWithLocation | List Portals with Location: " + Location);
     for (Entry<UUID, Portal> po : listPortals().entrySet()) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortalsWithLocation | Testing: " + po.getKey());
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortalsWithLocation | Testing: " + po.getKey());
       for (BlockLocation bs : po.getValue().getLocations()) {
         if (sameLocations(bs.toLocation(), Location)) {
-          NetherPortalGate.getLogHandler().log(Level.INFO, "API.listPortalsWithLocation | Adding Portal: " + po.getKey());
+          NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listPortalsWithLocation | Adding Portal: " + po.getKey());
           p.put(po.getKey(), po.getValue());
         }
       }
     }
     if (p.isEmpty()) {
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.listPortalsWithLocation | Returns null because List is Empty.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.listPortalsWithLocation | Returns null because List is Empty.");
       return null;
     }
     return p;
@@ -95,27 +95,27 @@ public class API {
 
   public static ConcurrentHashMap<UUID, Portal> listNearbyPortals(Location Location, int Radius) {
     ConcurrentHashMap<UUID, Portal> p = new ConcurrentHashMap<UUID, Portal>();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.listNearbyPortals | Listing Portals " + Radius + " Blocks near Location: " + Location);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listNearbyPortals | Listing Portals " + Radius + " Blocks near Location: " + Location);
     for(int x = Location.getBlockX() - Radius; x <= Location.getBlockX() + Radius; x++) {
       for(int y = Location.getBlockY() - Radius; y <= Location.getBlockY() + Radius; y++) {
         for(int z = Location.getBlockZ() - Radius; z <= Location.getBlockZ() + Radius; z++) {
           Entry<UUID, Portal> pe = getPortalfromLocation(new Location(Location.getWorld(), x, y, z));
           if (pe != null) {
-            NetherPortalGate.getLogHandler().log(Level.INFO, "API.listNearbyPortals | Adding Portal: " + pe.getKey());
+            NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.listNearbyPortals | Adding Portal: " + pe.getKey());
             p.put(pe.getKey(), pe.getValue());
           }
         }
       }
     }
     if (p.isEmpty()) {
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.listNearbyPortals | Returns null beacause List is Empty.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.listNearbyPortals | Returns null beacause List is Empty.");
       return null;
     }
     return p;
   }
 
   public static Entry<UUID, Portal> getPortalfromLocation(Location Location) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalsfromLocation | Getting a Portal with Location: " + Location);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalsfromLocation | Getting a Portal with Location: " + Location);
     Entry<UUID, Portal> p = null;
     ConcurrentHashMap<UUID, Portal> portals = listPortalsWithLocation(Location);
     if (portals != null) {
@@ -129,15 +129,15 @@ public class API {
       }
     }
     if (p == null)
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.getPortalsfromLocation | No Portal found, returns null.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.getPortalsfromLocation | No Portal found, returns null.");
     else
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalsfromLocation | Returning Portal: " + p.getKey());
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalsfromLocation | Returning Portal: " + p.getKey());
     return p;
   }
 
   public static Entry<UUID, Portal> getPortalfromPortal(Portal Portal) {
     Entry<UUID, Portal> p = null;
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalfromPortal | Getting a Portal from: " + Portal);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalfromPortal | Getting a Portal from: " + Portal);
     ConcurrentHashMap<UUID, Portal> portale = listPortalsWithName(Portal.getName());
     if (portale != null) {
       if (!portale.isEmpty()) {
@@ -152,15 +152,15 @@ public class API {
       }
     }
     if (p == null)
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.getPortalfromPortal | No Portal found, returns null.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.getPortalfromPortal | No Portal found, returns null.");
     else
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalfromPortal | Returning Portal: " + p.getKey());
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalfromPortal | Returning Portal: " + p.getKey());
     return p;
   }
 
   public static Portal getPortalfromUUID(UUID UUID) {
     Portal p = null;
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalfromUUID | Getting the Portal with UUID: " + UUID);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalfromUUID | Getting the Portal with UUID: " + UUID);
     ConcurrentHashMap<UUID, Portal> portale = listPortals();
     for (Entry<UUID, Portal> pe : portale.entrySet()) {
       if (pe.getKey().equals(UUID)) {
@@ -169,32 +169,32 @@ public class API {
       }
     }
     if (p == null)
-      NetherPortalGate.getLogHandler().log(Level.WARNING, "API.getPortalfromUUID | No Portal found, returns null.");
+      NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.getPortalfromUUID | No Portal found, returns null.");
     else
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.getPortalfromUUID | Returning Portal: " + UUID);
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.getPortalfromUUID | Returning Portal: " + UUID);
     return p;
   }
 
   public static void setPortal(UUID UUID, Portal Portal) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.setPortal | Adding Portal: " + UUID);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.setPortal | Adding Portal: " + UUID);
     listPortals().put(UUID, Portal);
     savePortal(UUID, Portal);
   }
 
   public static void removePortal(UUID UUID) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.removePortal | Removing Portal: " + UUID);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.removePortal | Removing Portal: " + UUID);
     listPortals().remove(UUID);
     deletePortalConfig(UUID);
   }
 
   public static void removePortal(UUID UUID, Portal Portal) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.removePortal | Removing Portal: " + UUID);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.removePortal | Removing Portal: " + UUID);
     listPortals().remove(UUID, Portal);
     deletePortalConfig(UUID);
   }
 
   public static void removePortal(Entry<UUID, Portal> Entry) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.removePortal | Removing Portal: " + Entry.getKey());
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.removePortal | Removing Portal: " + Entry.getKey());
     removePortal(Entry.getKey(), Entry.getValue());
   }
 
@@ -207,7 +207,7 @@ public class API {
   }
 
   public static boolean sameBlocks(Block Block1, Block Block2) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.sameBlocks | Testing Block " + Block1 + " and " + Block2);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.sameBlocks | Testing Block " + Block1 + " and " + Block2);
     if (Block1 == Block2)
       return true;
     if (Block1.equals(Block2))
@@ -218,7 +218,7 @@ public class API {
   }
 
   public static boolean sameLocations(Location Location1, Location Location2) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.sameLocations | Testing Location " + Location1 + " and " + Location2);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.sameLocations | Testing Location " + Location1 + " and " + Location2);
     if (Location1 == Location2)
       return true;
     if (Location1.equals(Location2))
@@ -227,17 +227,17 @@ public class API {
       double x1 = roundToHalf(Location1.getX());
       double y1 = roundToHalf(Location1.getY());
       double z1 = roundToHalf(Location1.getY());
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.sameLocations | Modified Location1{x=" + x1 + ", y=" + y1 + ", z=" + z1 + "}");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.sameLocations | Modified Location1{x=" + x1 + ", y=" + y1 + ", z=" + z1 + "}");
       double x2 = roundToHalf(Location2.getX());
       double y2 = roundToHalf(Location2.getY());
       double z2 = roundToHalf(Location2.getY());
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.sameLocations | Modified Location2{x=" + x2 + ", y=" + y2 + ", z=" + z2 + "}");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.sameLocations | Modified Location2{x=" + x2 + ", y=" + y2 + ", z=" + z2 + "}");
       if ((x1 == x2) && (y1 == y2) && (z1 == z2)) 
         return true;
       double xd = Math.abs(Location1.getX() - Location2.getX());
       double yd = Math.abs(Location1.getY() - Location2.getY());
       double zd = Math.abs(Location1.getZ() - Location2.getZ());
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.sameLocations | X-Distance=" + xd + ", Y-Distance=" + yd + ", Z-Distance=" + zd);
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.sameLocations | X-Distance=" + xd + ", Y-Distance=" + yd + ", Z-Distance=" + zd);
       if ((1 >= xd) && (1 >= yd) && (1 >= zd))
         return true;
     }
@@ -247,11 +247,11 @@ public class API {
   public static void savePortal(UUID UUID, Portal Portal) {
     File portalconfigfolder = new File(NetherPortalGate.getInstance().getDataFolder(), "portals");
     if (!portalconfigfolder.exists()) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "savePortal | Creating portalfolder");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "savePortal | Creating portalfolder");
       portalconfigfolder.mkdir();
     }
     File cf = new File(portalconfigfolder + File.separator +  UUID.toString() + ".yml");
-    NetherPortalGate.getLogHandler().log(Level.INFO, "savePortal | Saving Portal " + UUID + "...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "savePortal | Saving Portal " + UUID + "...");
     Config c = new Config(cf);
     c.reload();
     c.get().set(UUID.toString() + ".name", Portal.getName());
@@ -270,7 +270,7 @@ public class API {
       i++;
     }
     c.save();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "savePortal | Saved Portal: " + UUID);
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "savePortal | Saved Portal: " + UUID);
   }
 
   public static void savePortal(Entry<UUID, Portal> Entry) {
@@ -278,17 +278,17 @@ public class API {
   }
 
   public static void saveAllPortals() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "saveAllPortals | Saving every Portal...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "saveAllPortals | Saving every Portal...");
     for (Entry<UUID, Portal> entry : listPortals().entrySet()) {
       savePortal(entry);
     }
-    NetherPortalGate.getLogHandler().log(Level.INFO, "saveAllPortals | Saved every Portal.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "saveAllPortals | Saved every Portal.");
   }
 
   public static Portal loadPortal(Config Config) {
     Portal portal = null;
     UUID uuid = UUID.fromString(Config.getFile().getName().replace(".yml", ""));
-    NetherPortalGate.getLogHandler().log(Level.INFO, "Loading " + uuid.toString() + "...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "Loading " + uuid.toString() + "...");
     String name = Config.get().getString(uuid.toString() + ".name");
     String exitworld = Config.get().getString(uuid.toString() + ".exit.world");
     double exitx = Config.get().getDouble(uuid.toString() + ".exit.x");
@@ -306,7 +306,7 @@ public class API {
       locations.add(new BlockLocation(world, x, y, z));
       portal = new Portal(name, locations, exitworld, exitx, exity, exitz, exitpitch, exityaw);
     }
-    NetherPortalGate.getLogHandler().log(Level.INFO, "Loaded " + uuid.toString() + ".");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "Loaded " + uuid.toString() + ".");
     return portal;
   }
 
@@ -329,7 +329,7 @@ public class API {
   }
 
   public static boolean loadAllPortals() {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.loadAllPortals | Loading all Portals...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.loadAllPortals | Loading all Portals...");
     if (getPortalFolder() != null) {
       if (getPortalFolder().listFiles() != null) {
         if (getPortalFolder().listFiles().length > 0) {
@@ -341,27 +341,27 @@ public class API {
       }
     }
     if (listPortals().isEmpty()) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.loadAllPortals | No existing Portals.");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.loadAllPortals | No existing Portals.");
       return false;
     }
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.loadAllPortals | Loaded all Portals.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.loadAllPortals | Loaded all Portals.");
     return true;
   }
 
   public static void deletePortalConfig(UUID uuid) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.deletePortalConfig | Deleting Portal: " + uuid + "...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.deletePortalConfig | Deleting Portal: " + uuid + "...");
     File pfolder = getPortalFolder();
     if (pfolder.listFiles().length != 0) {
       for (File pfile : pfolder.listFiles()) {
         UUID uuid2 = UUID.fromString(pfile.getName().replace(".yml", ""));
-        NetherPortalGate.getLogHandler().log(Level.INFO, "API.deletePortalConfig | Testing Portal: " + uuid2);
+        NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.deletePortalConfig | Testing Portal: " + uuid2);
         if (uuid.equals(uuid2)) {
-          NetherPortalGate.getLogHandler().log(Level.INFO, "API.deletePortalConfig | Deleted Portal: " + uuid + ".");
+          NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.deletePortalConfig | Deleted Portal: " + uuid + ".");
           try {
             pfile.delete();
           }
           catch (SecurityException e) {
-            NetherPortalGate.getLogHandler().log(Level.WARNING, "API.deletePortalConfig | Delettion of Portal: " + uuid + " failed" + e);
+            NetherPortalGate.getLogHandler().log(true, Level.WARNING, "API.deletePortalConfig | Delettion of Portal: " + uuid + " failed" + e);
           }
           break;
         }
@@ -375,7 +375,7 @@ public class API {
       portalconfigfolder.delete();
     }
     if (!portalconfigfolder.exists()) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "savePortal | Creating portalfolder");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "savePortal | Creating portalfolder");
       portalconfigfolder.mkdir();
     }
     return portalconfigfolder;
@@ -443,17 +443,17 @@ public class API {
   }
 
   public static Location createExitLocation(Player Player, List<BlockState> List) {
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Creating Exit...");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Creating Exit...");
     if (Player == null) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Returned null because Player is null.");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Returned null because Player is null.");
       return null;
     }
     if (List == null) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Returned null because List is null.");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Returned null because List is null.");
       return null;
     }
     if (List.isEmpty()) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Returned null because List is Empty.");      
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Returned null because List is Empty.");      
       return null;
     }
     Location pl = Player.getLocation();
@@ -479,11 +479,11 @@ public class API {
     el.add(el.getDirection().multiply(2));
 /*
     if (!isSafeLocation(el)) {
-      NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Returned null because Exit is no safe.");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Returned null because Exit is no safe.");
       return null;
     }
 */
-    NetherPortalGate.getLogHandler().log(Level.INFO, "API.createExitLocation | Created Exit.");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "API.createExitLocation | Created Exit.");
     return el;
   }
 

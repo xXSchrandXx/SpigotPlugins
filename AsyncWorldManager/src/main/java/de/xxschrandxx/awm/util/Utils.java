@@ -35,14 +35,14 @@ public class Utils {
           return true;
         }
       }
-      AsyncWorldManager.getLogHandler().log(Level.INFO, "Try to setup World-Container in bukkit.yml!");
+      AsyncWorldManager.getLogHandler().log(false, Level.INFO, "Try to setup World-Container in bukkit.yml!");
       bukkit.set("settings.world-container", "worlds");
       try {
         bukkit.save(new File("bukkit.yml"));
       } catch (IOException e) {
-        AsyncWorldManager.getLogHandler().log(Level.WARNING, "Something went Wring with the Worldfolder, send me this Issue", e);
+        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Something went wrong with the Worldfolder, send me this Issue", e);
       }
-      AsyncWorldManager.getLogHandler().log(Level.WARNING, "Please insert your Worlds into the Worlds-Folder and restart your Server!");
+      AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Please insert your Worlds into the Worlds-Folder and restart your Server!");
     }
     return false;
   }

@@ -18,11 +18,11 @@ public class WorldIntListener implements Listener {
     String worldname = world.getName();
     WorldData worlddata = Storage.getWorlddataFromName(worldname);
     if (worlddata == null) {
-      AsyncWorldManager.getLogHandler().log(Level.WARNING, world.getName() + " queued for loading without the knowledge of AWM.");
+      AsyncWorldManager.getLogHandler().log(true, Level.WARNING, world.getName() + " queued for loading without the knowledge of AWM.");
     }
     else {
       WorldConfigManager.setWorldsData(world, worlddata);
-      AsyncWorldManager.getLogHandler().log(Level.INFO, world.getName() + " queued for loading...");
+      AsyncWorldManager.getLogHandler().log(true, Level.INFO, world.getName() + " queued for loading...");
     }
   }
 }

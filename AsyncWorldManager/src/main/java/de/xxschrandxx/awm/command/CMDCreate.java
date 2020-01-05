@@ -8,6 +8,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
 import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.spigot.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import net.md_5.bungee.api.chat.*;
@@ -23,12 +24,11 @@ public class CMDCreate {
             WorldData worlddata = Storage.getWorlddataFromName(args[1]);
             Config config = Storage.getWorldConfig(args[1]);
             if ((worlddata == null) && (config == null)) {
-              worlddata = WorldConfigManager.getWorlddataFromCommand(worldname, preenviroment, args);
               File wfile = new File(AsyncWorldManager.getInstance().getServer().getWorldContainer(), worldname);
               if (!wfile.exists()) {
                 if (!preenviroment.isEmpty()) {
                   if (testValues.isEnviroment(preenviroment)) {
-                    worlddata = WorldConfigManager.getWorlddataFromCommand(worldname, preenviroment, args);
+                    worlddata = WorldConfigManager.getWorlddataFromCommand(sender, worldname, preenviroment, args);
                     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
                     if (!worldconfigfolder.exists())
                       worldconfigfolder.mkdir();

@@ -13,7 +13,7 @@ public class PreWorldCreateEvent extends Event {
   public PreWorldCreateEvent(WorldData WorldData, boolean Async) {
     worlddata = WorldData;
     async = Async;
-    AsyncWorldManager.getLogHandler().log(Level.WARNING, "Creating world " + worlddata.getWorldName() + ". Async: " + async);
+    AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Creating world " + worlddata.getWorldName() + ". Async: " + async);
   }
   public WorldData getWorldData() {
     return worlddata;

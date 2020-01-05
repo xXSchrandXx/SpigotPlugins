@@ -1,6 +1,7 @@
 package de.xxschrandxx.api.spigot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -15,10 +16,41 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class MessageHandler {
 
-  public MessageHandler() {
+  public MessageHandler(String Prefix, String Header, String Footer, boolean ShowDebug, List<String> list) {
+    List<Level> lvls = new ArrayList<Level>();
+    for (String lvl : list) {
+      try {
+        lvls.add(Level.parse(lvl));
+      }
+      catch (NullPointerException | IllegalArgumentException e) {}
+    }
+    if (Prefix != null)
+      if (!Prefix.isEmpty() || !Prefix.isBlank())
+        prefix = Prefix;
+    if (Header != null)
+      if (!Header.isEmpty() || !Header.isBlank())
+        header = Header;
+    if (Footer != null)
+      if (!Footer.isEmpty() || !Footer.isBlank())
+        footer = Footer;
     ch = new CommandSenderHandler();
     ph = new PlayerHandler();
-    lh = new LoggerHandler();
+    lh = new LoggerHandler(ShowDebug, lvls);
+  }
+
+  public MessageHandler(String Prefix, String Header, String Footer, boolean ShowDebug, ArrayList<Level> Levels) {
+    if (Prefix != null)
+      if (!Prefix.isEmpty() || !Prefix.isBlank())
+        prefix = Prefix;
+    if (Header != null)
+      if (!Header.isEmpty() || !Header.isBlank())
+        header = Header;
+    if (Footer != null)
+      if (!Footer.isEmpty() || !Footer.isBlank())
+        footer = Footer;
+    ch = new CommandSenderHandler();
+    ph = new PlayerHandler();
+    lh = new LoggerHandler(ShowDebug, Levels);
   }
 
   private CommandSenderHandler ch;
@@ -82,7 +114,7 @@ public class MessageHandler {
 
   /**
    * Send the given CommandSender the Header with ChatColors
-   * @param Sender The CommandSender to which the Message is sent.
+   * @param Sender The CommandSender to which the Message is send.
    */
   public void sendHeader(CommandSender Sender) {
     ch.sendMessageWithoutPrefix(Sender, header);
@@ -108,7 +140,7 @@ public class MessageHandler {
 
   /**
    * Send the given CommandSender the Footer with ChatColors
-   * @param Sender The CommandSender to which the Message is sent.
+   * @param Sender The CommandSender to which the Message is send.
    */
   public void sendFooter(CommandSender Sender) {
     ch.sendMessageWithoutPrefix(Sender, footer);
@@ -127,8 +159,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Prefix and Message with ChatColors
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      */
     public void sendMessage(CommandSender Sender, String Message) {
       sendMessage(Sender, Message, null, null, null, null);
@@ -136,8 +168,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Prefix and Message with ChatColors and the HoverAction
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use. The HoverValue to use.
      */
@@ -147,8 +179,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Message with ChatColors and the ClickEvent
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
@@ -158,8 +190,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Prefix and Message with ChatColors, HoverEvent and ClickEvent
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      * @param ClickAction The ClickAction to use.
@@ -191,8 +223,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Message with ChatColors
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      */
     public void sendMessageWithoutPrefix(CommandSender Sender, String Message) {
       sendMessage(Sender, Message, null, null, null, null);
@@ -200,8 +232,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Message with ChatColors and HoverAction
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
@@ -211,8 +243,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Message with ChatColors and ClickEvent
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use. The ClickValue to use.
      */
@@ -222,8 +254,8 @@ public class MessageHandler {
 
     /**
      * Send the given CommandSender the Message with ChatColors, HoverEvent and ClickEvent
-     * @param Sender The CommandSender to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Sender The CommandSender to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      * @param ClickAction The ClickAction to use.
@@ -259,8 +291,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Prefix and Message with ChatColors
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      */
     public void sendPlayerMessage(Player Player, String Message) {
       sendPlayerMessage(Player, Message, null, null, null, null);
@@ -268,8 +300,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Prefix and Message with ChatColors and HoverEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
@@ -279,8 +311,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Prefix and Message with ChatColors and ClickEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
@@ -290,8 +322,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Prefix and Message with ChatColors, HoverEvent and ClickEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      * @param ClickAction The ClickAction to use.
@@ -318,8 +350,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Message with ChatColors
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      */
     public void sendPlayerMessageWithoutPrefix(Player Player, String Message) {
       sendPlayerMessage(Player, Message, null, null, null, null);
@@ -327,8 +359,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Message with ChatColors and HoverEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      */
@@ -338,8 +370,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Message with ChatColors and ClickEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param ClickAction The ClickAction to use.
      * @param ClickValue The ClickValue to use.
      */
@@ -349,8 +381,8 @@ public class MessageHandler {
 
     /**
      * Send the given Player the Message with ChatColors, HoverEvent and ClickEvent
-     * @param Player The Player to which the Message is sent.
-     * @param Message The Message to sent.
+     * @param Player The Player to which the Message is send.
+     * @param Message The Message to send.
      * @param HoverAction The HoverAction to use.
      * @param HoverValue The HoverValue to use.
      * @param ClickAction The ClickAction to use.
@@ -379,7 +411,30 @@ public class MessageHandler {
 
   public class LoggerHandler {
 
-    private ArrayList<Level> levels = new ArrayList<Level>();
+    public LoggerHandler(boolean ShowDebug, List<Level> Levels) {
+      showdebug = ShowDebug;
+      levels = Levels;
+    }
+
+    private boolean showdebug = false;
+
+    /**
+     * Sets whether debug message should be shown.
+     * @param ShowDebug Whether debug messages should be shown.
+     */
+    public void setShowDebug(Boolean ShowDebug) {
+      showdebug = ShowDebug;
+    }
+
+    /**
+     * Gets whether debug messages should be shown.
+     * @return Returns whether debug messages should be shown.
+     */
+    public boolean doShowDebug() {
+      return showdebug;
+    }
+
+    private List<Level> levels = new ArrayList<Level>();
 
     /**
      * Add a {@link Level} to list.
@@ -405,27 +460,33 @@ public class MessageHandler {
 
     /**
      * Log a Message to Console. If {@link Level} is in levels}
+     * @param debug Whether the log is a debug log.
      * @param Level The Level to use.
-     * @param Message The Message to sent.
+     * @param Message The Message to send.
      */
-    public void log(Level Level, String Message) {
-      if (levels.contains(Level))
-        Bukkit.getLogger().log(Level, Message);
+    public void log(boolean debug, Level Level, String Message) {
+      log(debug, Level, Message, null);
     }
 
     /**
      * Log a Message to Console. If {@link Level} is in levels}
+     * @param debug Whether the log is a debug log.
      * @param Level The Level to use.
-     * @param Message The Message to sent.
+     * @param Message The Message to send.
+     * @param e The Exception to send.
      */
-    public void log(Level Level, String Message, Exception e) {
-      if (levels.contains(Level)) {
+    public void log(boolean debug, Level Level, String Message, Exception e) {
+      if (debug && !showdebug)
+        return;
+      else
+        Message = "Debug: " + Message;
+      if (levels.contains(Level))
         if (e == null)
           Bukkit.getLogger().log(Level, Message);
         else
           Bukkit.getLogger().log(Level, Message, e);
-      }
     }
+
   }
 
 }

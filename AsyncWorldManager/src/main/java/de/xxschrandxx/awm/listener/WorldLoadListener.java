@@ -20,7 +20,7 @@ public class WorldLoadListener implements Listener {
     String worldname = world.getName();
     WorldData worlddata = Storage.getWorlddataFromName(worldname);
     if (worlddata == null) {
-      AsyncWorldManager.getLogHandler().log(Level.WARNING, worldname + " loading without AWM configuration. Creating one from world...");
+      AsyncWorldManager.getLogHandler().log(true, Level.WARNING, worldname + " loading without AWM configuration. Creating one from world...");
       worlddata = WorldConfigManager.getWorlddataFromWorld(world);
       File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
       if (!worldconfigfolder.exists())
@@ -30,7 +30,7 @@ public class WorldLoadListener implements Listener {
       WorldConfigManager.save(config, worlddata);
     }
     else {
-      AsyncWorldManager.getLogHandler().log(Level.INFO, worldname + "'s configuration is setting up...");
+      AsyncWorldManager.getLogHandler().log(true, Level.INFO, worldname + "'s configuration is setting up...");
       WorldConfigManager.setWorldsData(world, worlddata);
     }
   }

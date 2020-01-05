@@ -22,17 +22,17 @@ public class Teleporter implements Listener {
       Location from = e.getFrom();
       Entry<UUID, Portal> portalfrom = API.getPortalfromLocation(from);
       if (portalfrom != null) {
-        NetherPortalGate.getLogHandler().log(Level.INFO, "Teleporter | " + portalfrom.getKey() + " exists at Location.");
+        NetherPortalGate.getLogHandler().log(true, Level.INFO, "Teleporter | " + portalfrom.getKey() + " exists at Location.");
         Entry<UUID, Portal> portalto = API.getPortalfromPortal(portalfrom.getValue());
         if (portalfrom.getValue().getName().startsWith("server:")) {
           if (API.getConfig().getBoolean("teleport.player")) {
             String server = portalfrom.getValue().getName().replaceFirst("server:", "");
-            NetherPortalGate.getLogHandler().log(Level.INFO, "Teleporter | " + portalfrom.getKey() + "is linked to Server " + server);
+            NetherPortalGate.getLogHandler().log(true, Level.INFO, "Teleporter | " + portalfrom.getKey() + "is linked to Server " + server);
             BungeeCord.connectToBungeeServer(e.getPlayer(), server);
           }
         }
         if (portalto != null) {
-          NetherPortalGate.getLogHandler().log(Level.INFO, "Teleporter | " + portalfrom.getKey() + " is linked with " + portalto.getKey() + ".");
+          NetherPortalGate.getLogHandler().log(true, Level.INFO, "Teleporter | " + portalfrom.getKey() + " is linked with " + portalto.getKey() + ".");
           if (Bukkit.getWorld(portalto.getValue().getExitWorld()) != null) {
             Location exit = new Location(
                 Bukkit.getWorld(portalto.getValue().getExitWorld()),
@@ -62,10 +62,10 @@ public class Teleporter implements Listener {
       Location from = e.getFrom();
       Entry<UUID, Portal> portalfrom = API.getPortalfromLocation(from);
       if (portalfrom != null) {
-        NetherPortalGate.getLogHandler().log(Level.INFO, "Teleporter | " + portalfrom.getKey() + " exists at Location.");
+        NetherPortalGate.getLogHandler().log(true, Level.INFO, "Teleporter | " + portalfrom.getKey() + " exists at Location.");
         Entry<UUID, Portal> portalto = API.getPortalfromPortal(portalfrom.getValue());
         if (portalto != null) {
-          NetherPortalGate.getLogHandler().log(Level.INFO, "Teleporter | " + portalfrom.getKey() + " is linked with " + portalto.getKey() + ".");
+          NetherPortalGate.getLogHandler().log(true, Level.INFO, "Teleporter | " + portalfrom.getKey() + " is linked with " + portalto.getKey() + ".");
           if (Bukkit.getWorld(portalto.getValue().getExitWorld()) != null) {
             Location exit = new Location(
                 Bukkit.getWorld(portalto.getValue().getExitWorld()),

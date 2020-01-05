@@ -32,7 +32,7 @@ public class PlayerCreatePortalListener implements Listener {
       interactions.remove(Block);
       reverseInteractions.remove(Player);
       PlayerCreatePortalEvent pcpe = new PlayerCreatePortalEvent(Blocks, Player, Reason);
-      NetherPortalGate.getLogHandler().log(Level.INFO, "PlayerCreatePortalListener | Calling PlayerCreatePortalEvent with " + Player.getName() + ".");
+      NetherPortalGate.getLogHandler().log(true, Level.INFO, "PlayerCreatePortalListener | Calling PlayerCreatePortalEvent with " + Player.getName() + ".");
       Bukkit.getPluginManager().callEvent(pcpe);
       return true;
     }

@@ -23,11 +23,11 @@ public class Creator implements Listener {
   @EventHandler
   public void onPortalCreate(PlayerCreatePortalEvent e) {
     Player p = e.getPlayer();
-    NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Entity is Player " + p.getName() + ".");
+    NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | Entity is Player " + p.getName() + ".");
     if (API.hasPermission(p, "permissions.listener.create.normal")) {
       if ((p.getInventory().getItemInMainHand().getType() == Material.FIRE_CHARGE) ||
           p.getInventory().getItemInMainHand().getType() == Material.FLINT_AND_STEEL) {
-        NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Item is " + p.getInventory().getItemInMainHand().getType().name() + ".");
+        NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | Item is " + p.getInventory().getItemInMainHand().getType().name() + ".");
         if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null) {
           if (!p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().isEmpty()) {
             String portalname = p.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
@@ -39,16 +39,16 @@ public class Creator implements Listener {
             }
             ConcurrentHashMap<UUID, Portal> portale = API.listPortalsWithName(portalname);
             if (portale != null) {
-              NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | " + portale.size() + " Portals existing with that name.");
+              NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | " + portale.size() + " Portals existing with that name.");
               if (portale.size() >= 2) {
                 e.setCancelled(true);
                 return;
               }
             }
-            NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Itemname is " + portalname + ".");
+            NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | Itemname is " + portalname + ".");
             List<BlockLocation> locations = new ArrayList<BlockLocation>();
             for (BlockState b : e.getBlocks()) {
-              NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Adding Block with location " + b.getLocation());
+              NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | Adding Block with location " + b.getLocation());
               locations.add(new BlockLocation(b.getLocation()));
             }
             Location exit = API.createExitLocation(p, e.getBlocks());
@@ -56,7 +56,7 @@ public class Creator implements Listener {
               return;
             Portal portal = new Portal(portalname, locations, exit);
             UUID uuid = API.generateUUID();
-            NetherPortalGate.getLogHandler().log(Level.INFO, "Creator | Adding Portal with UUID is " + uuid + ".");
+            NetherPortalGate.getLogHandler().log(true, Level.INFO, "Creator | Adding Portal with UUID is " + uuid + ".");
             API.setPortal(uuid, portal);
             String linkedportal = "none";
             Entry<UUID, Portal> portal2 = API.getPortalfromPortal(portal);

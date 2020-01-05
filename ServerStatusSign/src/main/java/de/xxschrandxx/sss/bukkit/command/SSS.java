@@ -10,13 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import de.xxschrandxx.sss.bukkit.ServerStatusSign;
-import de.xxschrandxx.sss.bukkit.api.API;
+import de.xxschrandxx.sss.bukkit.api.Storage;
 
 public class SSS implements CommandExecutor, TabCompleter {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (API.hasPermission(sender, "permission.command.main")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.main")) {
       if (args.length != 0) {
         if (args[0].equalsIgnoreCase("config")) {
           return CMDConfig.run(sender, command, label, args);
@@ -34,11 +34,11 @@ public class SSS implements CommandExecutor, TabCompleter {
           return CMDRestart.run(sender, command, label, args);
         }
       }
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.usage"));
       return true;
     }
     else {
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.main")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.nopermission").replace("%permission%", Storage.config.get().getString("permission.command.main")));
       return true;
     }
   }

@@ -13,7 +13,7 @@ public class WorldCreateEvent extends Event {
   public WorldCreateEvent(WorldCreator WorldCreator, boolean Async) {
     worldcreator = WorldCreator;
     async = Async;
-    AsyncWorldManager.getLogHandler().log(Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
+    AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Using creator " + WorldCreator.name() + ". Async: " + async);
   }
   private WorldCreator worldcreator;
   public WorldCreator getWorldCreator() {

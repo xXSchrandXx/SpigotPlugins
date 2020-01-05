@@ -10,11 +10,12 @@ import org.bukkit.command.CommandSender;
 import de.xxschrandxx.sss.bukkit.ServerStatusSign;
 import de.xxschrandxx.sss.bukkit.api.API;
 import de.xxschrandxx.sss.bukkit.api.StatusSign;
+import de.xxschrandxx.sss.bukkit.api.Storage;
 
 public class CMDInfo {
 
   public static boolean run(CommandSender sender, Command command, String alias, String[] args) {
-    if (API.hasPermission(sender, "permission.command.info")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.info")) {
       if (args.length != 1) {
         UUID uuid = null;
         try {
@@ -24,31 +25,31 @@ public class CMDInfo {
         if (uuid != null) {
           StatusSign sign = API.getServerStatusSign(uuid);
           if (sign != null) {
-            ServerStatusSign.getCommandSenderHandler().sendMessageWithoutPrefix(sender, API.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
+            ServerStatusSign.getCommandSenderHandler().sendMessageWithoutPrefix(sender, Storage.message.get().getString("command.info.success").replace("%id%", uuid.toString()).replace("%server%", sign.getServer()).replace("%enabled%", Boolean.toString(sign.isEnabled())).replace("%world%", sign.getWorldName()).replace("%x%", Double.toString(sign.getX())).replace("%y%", Double.toString(sign.getY())).replace("%z%", Double.toString(sign.getZ())));
             return true;
           }
           else {
-            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.nosign"));
+            ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.info.nosign"));
             return true;
           }
         }
         else {
-          ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.nouuid"));
+          ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.info.nouuid"));
           return true;
         }
       }
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.info.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.info.usage"));
       return true;
     }
     else {
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.info")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.nopermission").replace("%permission%", Storage.config.get().getString("permission.command.info")));
       return true;
     }
   }
 
   public static List<String> list(CommandSender sender, Command command, String alias, String[] args) {
     List<String> list = new ArrayList<String>();
-    if (API.hasPermission(sender, "permission.command.info")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.info")) {
       if (args.length == 1) {
         list.add("info");
       }

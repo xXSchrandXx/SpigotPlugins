@@ -12,30 +12,30 @@ import de.xxschrandxx.sss.bukkit.api.*;
 public class CMDConfig {
 
   public static boolean run(CommandSender sender, Command command, String alias, String[] args) {
-    if (API.hasPermission(sender, "permission.command.config")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.config")) {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("load")) {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("config")) {
-              API.loadConfig();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Config"));
+              Storage.config.reload();
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.load")).replace("%config%", "Config"));
               return true;
             }
             if (args[2].equalsIgnoreCase("message")) {
-              API.loadMessage();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Message"));
+              Storage.message.reload();
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.load")).replace("%config%", "Message"));
               return true;
             }
             if (args[2].equalsIgnoreCase("signs")) {
               API.loadServerStatusSign();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "Signs"));
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.load")).replace("%config%", "Signs"));
               return true;
             }
             if (args[2].equalsIgnoreCase("all")) {
-              API.loadConfig();
-              API.loadMessage();
+              Storage.config.reload();
+              Storage.message.reload();
               API.loadServerStatusSign();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.load")).replace("%config%", "All"));
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.load")).replace("%config%", "All"));
               return true;
             }
           }
@@ -43,42 +43,42 @@ public class CMDConfig {
         if (args[1].equalsIgnoreCase("save")) {
           if (args.length != 2) {
             if (args[2].equalsIgnoreCase("config")) {
-              API.saveConfig();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Config"));
+              Storage.config.save();
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.save")).replace("%config%", "Config"));
               return true;
             }
             if (args[2].equalsIgnoreCase("message")) {
-              API.saveMessage();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Message"));
+              Storage.message.save();
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.save")).replace("%config%", "Message"));
               return true;
             }
             if (args[2].equalsIgnoreCase("signs")) {
               API.saveServerStatusSign();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "Signs"));
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.save")).replace("%config%", "Signs"));
               return true;
             }
             if (args[2].equalsIgnoreCase("all")) {
-              API.saveConfig();
-              API.saveMessage();
+              Storage.config.save();
+              Storage.message.save();
               API.saveServerStatusSign();
-              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.success").replace("%do%", API.message.get().getString("command.config.save")).replace("%config%", "All"));
+              ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.success").replace("%do%", Storage.message.get().getString("command.config.save")).replace("%config%", "All"));
               return true;
             }
           }
         }
       }
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.config.usage"));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.config.usage"));
       return true;
     }
     else {
-      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, API.message.get().getString("command.nopermission").replace("%permission%", API.config.get().getString("permission.command.config")));
+      ServerStatusSign.getCommandSenderHandler().sendMessage(sender, Storage.message.get().getString("command.nopermission").replace("%permission%", Storage.config.get().getString("permission.command.config")));
       return true;
     }
   }
 
   public static List<String> list(CommandSender sender, Command command, String alias, String[] args) {
     List<String> list = new ArrayList<String>();
-    if (API.hasPermission(sender, "permission.command.config")) {
+    if (ServerStatusSign.getPermissionHandler().hasPermission(sender, "permission.command.config")) {
       if (args.length == 1) {
         list.add("config");
       }
