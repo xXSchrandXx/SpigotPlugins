@@ -64,9 +64,8 @@
 
   </repositories>
 
-
   <dependencies>
-  
+
     <!-- Bungee-Dependency -->
     <dependency>
       <groupId>net.md-5</groupId>
@@ -88,7 +87,7 @@
 
   <build>
 
-    <defaultGoal>package</defaultGoal>
+    <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
     <directory>${buildDirectory}</directory>
     <resources>
@@ -101,31 +100,36 @@
     <plugins>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-        </configuration>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
+            <phase>compile</phase>
+              <configuration>
+                <source>${maven.compiler.source}</source>
+                <target>${maven.compiler.source}</target>
+            </configuration>
           </execution>
         </executions>
       </plugin>
 
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.source}</target>
-          
-        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <configuration>
+              <source>${maven.compiler.source}</source>
+              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+            </configuration>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
@@ -157,40 +161,16 @@
         <executions>
           <execution>
             <id>copy-resources</id>
-            <phase>package</phase>
+            <phase>install</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/docs/</outputDirectory>
+              <outputDirectory>${basedir}/../docs/</outputDirectory>
               <resources>
                 <resource>
-                  <directory>AsyncWorldManager/target/</directory>
-                  <targetPath>AsyncWorldManager</targetPath>
-                  <includes>
-                    <include>*/*.jar</include>
-                    <include>*/apidocs/</include>
-                  </includes>
-                </resource>
-                <resource>
-                  <directory>NetherPortalGate/target/</directory>
-                  <targetPath>NetherPortalGate</targetPath>
-                  <includes>
-                    <include>*/*.jar</include>
-                    <include>*/apidocs/</include>
-                  </includes>
-                </resource>
-                <resource>
-                  <directory>SchrandAPI/target/</directory>
-                  <targetPath>SchrandAPI</targetPath>
-                  <includes>
-                    <include>*/*.jar</include>
-                    <include>*/apidocs/</include>
-                  </includes>
-                </resource>
-                <resource>
-                  <directory>ServerStatusSign/target/</directory>
-                  <targetPath>ServerStatusSign</targetPath>
+                  <directory>/target/</directory>
+                  <targetPath>${project.artifactId}</targetPath>
                   <includes>
                     <include>*/*.jar</include>
                     <include>*/apidocs/</include>

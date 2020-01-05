@@ -8,6 +8,10 @@ import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
 
 public class normal {
+  /**
+   * Creates a World as normal World.
+   * @param preworlddata The {@link WorldData} to use.
+   */
   public static void normalworld(final WorldData preworlddata) {
 //    new Thread() {
 //    Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {

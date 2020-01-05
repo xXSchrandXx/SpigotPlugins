@@ -10,6 +10,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class Utils {
+
+  /**
+   * Delets a {@link File} and everything under this {@link File}.
+   * @param directory {@link File} The directory to delete.
+   * @return Whether the {@link File} is deleted.
+   */
   public static boolean deleteDirectory(File directory) {
     if(directory.exists()){
       File[] files = directory.listFiles();
@@ -26,7 +32,11 @@ public class Utils {
     }
     return(directory.delete());
   }
-  
+
+  /**
+   * Checks if bukkit does use a worldcontainer.
+   * @return Whether bukkit does use a worldcontainer.
+   */
   public static boolean isContainered() {
     if (YamlConfiguration.loadConfiguration(new File("bukkit.yml")) != null) {
       FileConfiguration bukkit = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
@@ -39,13 +49,20 @@ public class Utils {
       bukkit.set("settings.world-container", "worlds");
       try {
         bukkit.save(new File("bukkit.yml"));
-      } catch (IOException e) {
+      }
+      catch (IOException e) {
         AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Something went wrong with the Worldfolder, send me this Issue", e);
       }
       AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Please insert your Worlds into the Worlds-Folder and restart your Server!");
     }
     return false;
   }
+
+  /**
+   * Checks if a class is loaded.
+   * @param className The classname to check with.
+   * @return Whether a class exists.
+   */
   public static boolean isPresent(String className) {
     try {
       Class.forName(className);

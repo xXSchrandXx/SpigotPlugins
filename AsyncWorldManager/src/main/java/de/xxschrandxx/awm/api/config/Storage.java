@@ -13,12 +13,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.spigot.MessageHandler;
 import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class Storage {
+
   private static ArrayList<WorldData> worlddatas = new ArrayList<WorldData>();
+
   public static void start() {
-//  Lade config.yml
+    //Lade config.yml
     AsyncWorldManager.config = new Config(AsyncWorldManager.getInstance(), "config.yml");
     AsyncWorldManager.messages = new Config(AsyncWorldManager.getInstance(), "messages.yml");
     AsyncWorldManager.config.reload();
@@ -32,16 +35,17 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("logging.show", logs);
     AsyncWorldManager.config.get().addDefault("logging.debug", false);
     String Mainworldname;
+    boolean enablecommandblock;
     try {
       BufferedReader is = new BufferedReader(new FileReader("server.properties"));
       Properties props = new Properties();
       props.load(is);
       is.close();
       Mainworldname = String.valueOf(props.getProperty("level-name"));
-      if (!Boolean.valueOf(props.getProperty("enable-command-block"))) {
-        AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
-      }
-    } catch (IOException | NullPointerException e) {
+      enablecommandblock = Boolean.valueOf(props.getProperty("enable-command-block"));
+    }
+    catch (IOException | NullPointerException e) {
+      enablecommandblock = false;
     	Mainworldname = "world";
     }
     AsyncWorldManager.config.get().addDefault("mainworld", Mainworldname);
@@ -126,7 +130,7 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disabledentitys", new ArrayList<String>());
     */
     AsyncWorldManager.config.save();
-//  Lade messages.yml
+    //Lade messages.yml
     AsyncWorldManager.messages.get().options().copyHeader(true);
     AsyncWorldManager.messages.get().options().header("Explenation: https://github.com/xXSchrandXx/Async-WorldManager/wiki/Messages\nCommand description:\n  Required arguments: []\n  Additional arguments: {}\nPlaceholder:\n  Permission: %perm%\n  Worldname: %world%\n  Commandsender: %name%\n  Targetplayer: %player%\n  Foldername: %folder%\n  Autoloadvalue: %autoload%\n  Addedname: %addedname%\n  Removedname: %removedname%\n  Worldaliases: %aliases%\n  Seed: %seed%\n  Enviroment: %enviroment%\n  Generator: %generator%\n  WorldType: %worldtype%\n  Generatestructurevalue: %generatestructurs%\n  X: %x%\n  Y: %y%\n  Z: %z%\n  Yaw: %yaw%\n  Pitch: %pitch%\n  Configkey: %key%\n  Configvalue: %value%");
     AsyncWorldManager.messages.get().options().copyDefaults(true);
@@ -209,6 +213,17 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.plugin.set.failure", "A error applied while setting %key% to %value%. Please have a look into your console.");
     AsyncWorldManager.messages.get().addDefault("command.plugin.set.usage", "/wm plugin [set] [config/Main.messages] [path] [value]");
     AsyncWorldManager.messages.save();
+    
+    AsyncWorldManager.mh = new MessageHandler(
+        AsyncWorldManager.messages.get().getString("prefix"),
+        AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.header"),
+        AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.footer"),
+        AsyncWorldManager.config.get().getBoolean("logging.debug"),
+        AsyncWorldManager.config.get().getStringList("logging.show"));
+    
+    if (!enablecommandblock) {
+      AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
+    }
     loadAllWorlddatas();
   }
   public static void stop() {

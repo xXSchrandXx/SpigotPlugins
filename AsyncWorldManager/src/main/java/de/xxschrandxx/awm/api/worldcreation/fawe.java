@@ -11,6 +11,10 @@ import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
 
 public class fawe {
+  /**
+   * Creates a World as {@link AsyncWorld}.
+   * @param preworlddata The {@link WorldData} to use.
+   */
   public static void faweworld(WorldData preworlddata) {
     Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
       public void run() {
