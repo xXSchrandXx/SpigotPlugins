@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
+import com.boydti.fawe.util.TaskManager;
 
-import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
@@ -16,7 +16,7 @@ public class fawe {
    * @param preworlddata The {@link WorldData} to use.
    */
   public static void faweworld(WorldData preworlddata) {
-    Bukkit.getScheduler().runTaskAsynchronously(AsyncWorldManager.getInstance(), new Runnable() {
+    TaskManager.IMP.async( new Runnable() {
       public void run() {
         WorldCreator preworldcreator = new WorldCreator(preworlddata.getWorldName());
         PreWorldCreateEvent preworldcreateevent = new PreWorldCreateEvent(preworlddata, true);

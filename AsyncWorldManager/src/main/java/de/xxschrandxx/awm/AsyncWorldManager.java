@@ -21,6 +21,7 @@ import de.xxschrandxx.api.spigot.MessageHandler.LoggerHandler;
 import de.xxschrandxx.api.spigot.MessageHandler.PlayerHandler;
 import de.xxschrandxx.api.spigot.PermissionHandler;
 import de.xxschrandxx.awm.api.config.*;
+import de.xxschrandxx.awm.api.gamerulemanager.GameruleManager;
 import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
 import de.xxschrandxx.awm.listener.*;
 import de.xxschrandxx.awm.util.Utils;
@@ -57,9 +58,12 @@ public class AsyncWorldManager extends JavaPlugin {
   public static Plugin FAWE = null;
   public static Plugin PAPER = null;
   private boolean setup = false;
+
+  GameruleManager gm;
+
   @Override
   public void onLoad() {
-    //Unused
+    GameruleManager.setup();
   }
   @Override
   public void onEnable() {

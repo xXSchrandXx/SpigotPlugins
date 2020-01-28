@@ -10,7 +10,7 @@
   
   <artifactId>AsyncWorldManager</artifactId>
   <groupId>de.xxschrandxx.awm</groupId>
-  <version>0.0.8</version>
+  <version>0.0.9-SNAPSHOT</version>
   
   <dependencies>
 

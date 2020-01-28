@@ -5,10 +5,9 @@ version: ${project.version}
 author: xXSchrandXx
 website: ${project.url}
 database: false
-load: POSTWORLD
+load: STARTUP
 softdepend: [FastAsyncWorldEdit, WorldEdit]
 loadbefore: [PlotSquared]
-api-version: 1.13
 commands:
   worldmanager:
     description: Hauptkommando von WorldSystem.
