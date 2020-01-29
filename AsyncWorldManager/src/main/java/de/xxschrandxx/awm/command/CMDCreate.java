@@ -7,8 +7,8 @@ import java.util.List;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.testValues;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import net.md_5.bungee.api.chat.*;
@@ -29,13 +29,7 @@ public class CMDCreate {
                 if (!preenviroment.isEmpty()) {
                   if (testValues.isEnviroment(preenviroment)) {
                     worlddata = WorldConfigManager.getWorlddataFromCommand(sender, worldname, preenviroment, args);
-                    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-                    if (!worldconfigfolder.exists())
-                      worldconfigfolder.mkdir();
-                    File worldconfigfile = new File(worldconfigfolder, worldname + ".yml");
-                    config = new Config(worldconfigfile);
                     WorldConfigManager.createWorld(worlddata);
-                    WorldConfigManager.save(config, worlddata);
                     AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.create.success.chat").replace("%world%", worldname), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.create.success.hover"), ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname);
                     return true;
                   }

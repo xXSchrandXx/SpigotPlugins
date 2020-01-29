@@ -3,14 +3,12 @@ package de.xxschrandxx.awm.api.gamerulemanager;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.GameRule;
-
 import com.google.common.base.Preconditions;
 
 /**
  * https://hub.spigotmc.org/javadocs/spigot/org/bukkit/GameRule.html
  *
- * @param <T>
+ * @param <T> The class to use as Object
  */
 public class Rule<T> extends v1_15_2 {
   
@@ -24,6 +22,11 @@ public class Rule<T> extends v1_15_2 {
   private final Class<T> type;
   public Class<T> getType() {
     return this.type;
+  }
+  
+  private final Object defaultvalue;
+  public Object getDefaultValue() {
+    return this.defaultvalue;
   }
   
   public boolean equals(Object obj) {
@@ -50,18 +53,18 @@ public class Rule<T> extends v1_15_2 {
     return (Rule[])gameRules.values().toArray(new Rule[gameRules.size()]);
   }
   
-  public Rule(String name, Class<T> clazz) {
-    if (name == null)
-      gameRules.remove(name, this);
+  public Rule(String name, Class<T> clazz, Object defaultvalue, boolean remove) {
+    Preconditions.checkNotNull(name, "Name cannot be null");
     Preconditions.checkNotNull(clazz, "GameRule type cannot be null");
+    Preconditions.checkNotNull(defaultvalue, "DefaultValue type cannot be null");
     Preconditions.checkArgument((clazz != Boolean.class && clazz != Integer.class && clazz != String.class) ? false : true, "Must be of type Boolean, Integer or String. Found %s ", clazz.getName());
+    this.defaultvalue = defaultvalue;
     this.name = name;
     this.type = clazz;
-    gameRules.put(name, this);
-  }
-  
-  public GameRule<?> toGameRule() {
-    return GameRule.getByName(name);
+    if (remove)
+      gameRules.remove(name);
+    else
+      gameRules.put(name, this);
   }
   
 }

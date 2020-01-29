@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.minecraft.Config;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDPlugin {

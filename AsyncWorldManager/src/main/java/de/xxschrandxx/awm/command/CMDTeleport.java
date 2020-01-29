@@ -25,22 +25,22 @@ public class CMDTeleport {
             if (worlddata != null) {
               if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
-                AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName()));
+                AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName()));
                 p.teleport(world.getSpawnLocation());
                 return true;
               }
               else {
-                AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName()));
+                AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName()));
                 return true;
               }
             }
             else {
-              AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1]));
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1]));
               return true;
             }
           }
           else {
-            AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.self")));
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.self")));
             return true;
           }
         }
@@ -53,33 +53,33 @@ public class CMDTeleport {
                 if (Bukkit.getPlayer(args[2]) != null) {
                   Player p2 = Bukkit.getPlayer(args[2]);
                   if (AsyncWorldManager.getPermissionHandler().hasPermission(p2, "command.permissions.worldmanager.teleport.bypass")) {
-                    AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName()));
-                    AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p2, AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", p.getName()).replace("%world%", worlddata.getWorldName()));
+                    AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName()));
+                    AsyncWorldManager.getCommandSenderHandler().sendMessage(p2, AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", p.getName()).replace("%world%", worlddata.getWorldName()));
                     p2.teleport(world.getSpawnLocation());
                     return true;
                   }
                   else {
-                    AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("nopermission"));
+                    AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("nopermission"));
                     return true;
                   }
                 }
                 else {
-                  AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2]));
+                  AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.playernotfound").replace("%player%", args[2]));
                   return true;
                 }
               }
               else {
-               AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName()));
+               AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", worlddata.getWorldName()));
                 return true;
               }
             }
             else {
-              AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1]));
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.worldnotfound").replace("%world%", args[1]));
               return true;
             }
           }
           else {
-            AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.other")));
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.other")));
             return true;
           }
         }
@@ -88,7 +88,7 @@ public class CMDTeleport {
         }
       }
       else {
-        AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.main")));
+        AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", AsyncWorldManager.config.get().getString("command.permissions.worldmanager.teleport.main")));
         return true;
       }
     }
@@ -101,7 +101,7 @@ public class CMDTeleport {
             if (Bukkit.getPlayer(args[2]) != null) {
               Player p2 = Bukkit.getPlayer(args[2]);
               AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.teleport.success.other").replace("%player%", p2.getName()).replace("%world%", worlddata.getWorldName()));
-              AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p2, AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", "Console").replace("%world%", worlddata.getWorldName()));
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(p2, AsyncWorldManager.messages.get().getString("command.teleport.other").replace("%player%", "Console").replace("%world%", worlddata.getWorldName()));
               p2.teleport(world.getSpawnLocation());
               return true;
             }

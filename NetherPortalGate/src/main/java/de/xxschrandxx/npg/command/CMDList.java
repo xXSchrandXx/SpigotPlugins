@@ -25,7 +25,7 @@ public class CMDList {
         NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.list.message"));
         if (sender instanceof Player) {
           for (String le : list) {
-            NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix((Player) sender, API.getMessage().getString("command.list.list.format").replace("%portal%", le), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.list.list.hover").replace("%portal%", le), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + le);
+            NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(sender, API.getMessage().getString("command.list.list.format").replace("%portal%", le), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.list.list.hover").replace("%portal%", le), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + le);
           }
         }
         else {

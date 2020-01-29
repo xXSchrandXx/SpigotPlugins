@@ -1,13 +1,7 @@
 package de.xxschrandxx.awm.api.gamerulemanager;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bukkit.GameRule;
-import org.bukkit.World;
-
-import de.xxschrandxx.api.spigot.ServerVersion;
-import de.xxschrandxx.api.spigot.otherapi.Version;
+import de.xxschrandxx.api.minecraft.ServerVersion;
+import de.xxschrandxx.api.minecraft.otherapi.Version;
 
 public class GameruleManager {
   
@@ -41,57 +35,6 @@ public class GameruleManager {
       v0.setup();
   }
 
-  public static void WorldsetRules(World world, Map<Rule<?>, Object> map) {
-    for (Entry<Rule<?>, Object> e : map.entrySet()) {
-      if (e.getKey().getType() == Boolean.class && e.getValue() instanceof Boolean) {
-        GameRule<Boolean> key = (GameRule<Boolean>) e.getKey().toGameRule();
-        Boolean value = (Boolean) e.getValue();
-        WorldsetRule(world, key, value);
-      }
-      if (e.getKey().getType() == Integer.class && e.getValue() instanceof Integer) {
-        GameRule<Integer> key = (GameRule<Integer>) e.getKey().toGameRule();
-        Integer value = (Integer) e.getValue();
-        WorldsetRule(world, key, value);
-      }
-      if (e.getKey().getType() == String.class && e.getValue() instanceof String) {
-        GameRule<String> key = (GameRule<String>) e.getKey().toGameRule();
-        String value = (String) e.getValue();
-        WorldsetRule(world, key, value);
-      }
-    }
-  }
-
-  @SuppressWarnings("deprecation")
-  public static boolean WorldsetRule(World world, String rule, String value) {
-    if (rule != null && value != null) {
-      world.setGameRuleValue(rule, value);
-      return true;
-    }
-    return false;
-  }
-
-  public static boolean WorldsetRule(World world, GameRule<Boolean> rule, Boolean value) {
-    if (world != null && rule != null && value != null) {
-      world.setGameRule(rule, value);
-      return true;
-    }
-    return false;
-  }
-
-  public static boolean WorldsetRule(World world, GameRule<String> rule, String value) {
-    if (world != null && rule != null && value != null) {
-      world.setGameRule(rule, value);
-      return true;
-    }
-    return false;
-  }
-
-  public static boolean WorldsetRule(World world, GameRule<Integer> rule, Integer value) {
-    if (world != null && rule != null && value != null) {
-      world.setGameRule(rule, value);
-      return true;
-    }
-    return false;
-  }
+  
 
 }

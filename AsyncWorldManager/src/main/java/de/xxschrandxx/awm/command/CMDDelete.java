@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -23,7 +23,7 @@ public class CMDDelete {
           if ((worlddata != null) && (config != null)) {
             if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
-                AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.delete.teleport"));
+                AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.delete.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("mainworld")).getSpawnLocation());
               }
               WorldConfigManager.delete(Bukkit.getWorld(worlddata.getWorldName()), config);

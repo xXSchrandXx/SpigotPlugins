@@ -34,26 +34,26 @@ public class CMDTeleport {
                     po.getExitYaw(),
                     po.getExitPitch()),
                     TeleportCause.COMMAND);
-                NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
+                NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.teleport.message").replace("%uuid%", uuid.toString()));
                 return true;
               }
               else {
-                NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
+                NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.teleport.noworld").replace("%world%", po.getExitWorld()).replace("%uuid%", uuid.toString()));
                 return true;
               }
             }
             else {
-              NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
+              NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.teleport.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.teleport.nouuid"));
+            NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.teleport.nouuid"));
             return true;
           }
         }
         else {
-          NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.teleport.usage"));
+          NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.teleport.usage"));
           return true;
         }
       }

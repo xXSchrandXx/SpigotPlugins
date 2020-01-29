@@ -14,12 +14,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.io.Files;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.MessageHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.CommandSenderHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.LoggerHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.PlayerHandler;
-import de.xxschrandxx.api.spigot.PermissionHandler;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.PermissionHandler;
+import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.api.gamerulemanager.GameruleManager;
 import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
@@ -45,9 +42,6 @@ public class AsyncWorldManager extends JavaPlugin {
   public static CommandSenderHandler getCommandSenderHandler() {
     return mh.getCommandSenderHandler();
   }
-  public static PlayerHandler getPlayerHandler() {
-    return mh.getPlayerHandler();
-  }
   public static LoggerHandler getLogHandler() {
     return mh.getLogHandler();
   }
@@ -59,14 +53,11 @@ public class AsyncWorldManager extends JavaPlugin {
   public static Plugin PAPER = null;
   private boolean setup = false;
 
-  GameruleManager gm;
-
   @Override
   public void onLoad() {
+
     GameruleManager.setup();
-  }
-  @Override
-  public void onEnable() {
+
     instance = this;
     
     Storage.start();
@@ -97,6 +88,10 @@ public class AsyncWorldManager extends JavaPlugin {
     else {
       getLogHandler().log(true, Level.INFO, "Metrics disabled per bStats config.");
     }
+  }
+
+  @Override
+  public void onEnable() {
     getLogHandler().log(false, Level.INFO, "Loading Commands...");
     getLogHandler().log(false, Level.INFO, "Loading Command 'worldmanager'...");
     getCommand("worldmanager").setExecutor(new CMDAsyncWorldManager());
@@ -124,6 +119,7 @@ public class AsyncWorldManager extends JavaPlugin {
     getLogHandler().log(false, Level.INFO, "Loading Worlds...");
     Storage.loadworlds();
   }
+
   @Override
   public void onDisable() {
     if (setup) {
@@ -132,12 +128,12 @@ public class AsyncWorldManager extends JavaPlugin {
       if (!container.exists())
         container.mkdirs();
       for (World f : Bukkit.getWorlds()) {
-        Bukkit.getServer().unloadWorld("world", true);
+        Bukkit.getServer().unloadWorld(f, true);
         File WorldFolder = f.getWorldFolder();
         try {
           Files.move(WorldFolder, new File(container + File.separator + WorldFolder));
         } catch (IOException e) {
-          getLogHandler().log(false, Level.WARNING, "Error while moving your worlds", e);
+          getLogHandler().log(false, Level.WARNING, "Error while moving your world", e);
         }
       }
     }

@@ -5,7 +5,6 @@ version: ${project.version}
 author: xXSchrandXx
 website: ${project.url}
 database: false
-load: STARTUP
 softdepend: [FastAsyncWorldEdit, WorldEdit]
 loadbefore: [PlotSquared]
 commands:

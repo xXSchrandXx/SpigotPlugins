@@ -1,8 +1,13 @@
 package de.xxschrandxx.awm.api.worldcreation;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
@@ -35,6 +40,13 @@ public class normal {
         if (worldcreateevent.isCancelled()) {
           return;
         }
+        File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+        if (!worldconfigfolder.exists())
+          worldconfigfolder.mkdir();
+        File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
+        Config config = new Config(worldconfigfile);
+        WorldConfigManager.save(config, worlddata);
+
         WorldCreator worldcreator = worldcreateevent.getWorldCreator();
         worldcreator.createWorld();
 //      }

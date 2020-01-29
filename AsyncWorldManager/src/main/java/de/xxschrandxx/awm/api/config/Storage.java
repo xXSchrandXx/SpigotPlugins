@@ -12,9 +12,10 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 
 public class Storage {
 
@@ -99,6 +100,14 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.spawning.monsterlimit", 70);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.storm", false);
     AsyncWorldManager.config.get().addDefault("worldsettings.weather.thundering", false);
+    for (Rule<?> r : Rule.values()) {
+      if (r == null)
+        continue;
+      if (r.getType() == null || r.getName() == null)
+        continue;
+      AsyncWorldManager.config.get().addDefault("worldsettings.gamerules." + r.getName(), r.getDefaultValue());
+    }
+/* Old Gamerules
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.announceadvancements", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.commandblockoutput", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disableelytramovementcheck", false);
@@ -125,6 +134,7 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.spectatorsgeneratechunks", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.enablecommandblocks", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disabledentitys", new ArrayList<String>());
+*/
     AsyncWorldManager.config.save();
     //Lade messages.yml
     AsyncWorldManager.messages.get().options().copyHeader(true);
@@ -220,7 +230,6 @@ public class Storage {
     if (!enablecommandblock) {
       AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
     }
-    loadAllWorlddatas();
   }
   public static void stop() {
     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
@@ -228,7 +237,7 @@ public class Storage {
       worldconfigfolder.mkdir();
   }
   public static ArrayList<WorldData> loadAllWorlddatas() {
-    ArrayList<WorldData> list = new ArrayList<WorldData>();;
+    ArrayList<WorldData> list = new ArrayList<WorldData>();
     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
     if (!worldconfigfolder.exists())
       worldconfigfolder.mkdir();
@@ -264,6 +273,21 @@ public class Storage {
         AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
         WorldConfigManager.createWorld(worlddata);
       }
+    }
+    String mainworldname = AsyncWorldManager.config.get().getString("mainworld");
+    World mainworld = Bukkit.getWorld(mainworldname);
+    if (mainworld == null)
+      return;
+    WorldData worlddata = getWorlddataFromName(mainworldname);
+    if (worlddata == null) {
+      worlddata = WorldConfigManager.getWorlddataFromWorld(mainworld);
+    }
+    if (worlddata != null) {
+      WorldConfigManager.setWorldsData(mainworld, worlddata);
+      File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+      File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
+      Config worldconfig = new Config(worldconfigfile);
+      WorldConfigManager.save(worldconfig, worlddata);
     }
   }
   public static void setallworlddatas() {

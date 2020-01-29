@@ -29,30 +29,30 @@ public class CMDNear {
               ConcurrentHashMap<UUID, Portal> pln = API.listNearbyPortals(center, radius);
               if (pln != null) {
                 NetherPortalGate.getMessageHandler().sendHeader(p);
-                NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
+                NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.message"));
                 for (Entry<UUID, Portal> pe : pln.entrySet()) {
-                  NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
+                  NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(p, API.getMessage().getString("command.near.list.format").replace("%portal%", pe.getKey().toString()), HoverEvent.Action.SHOW_TEXT, API.getMessage().getString("command.near.list.hover").replace("%portal%", pe.getKey().toString()), ClickEvent.Action.RUN_COMMAND, "/npg teleport " + pe.getKey());
                 }
                 NetherPortalGate.getMessageHandler().sendFooter(p);
                 return true;
               }
               else {
-                NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.near.list.noportals"));
+                NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.near.list.noportals"));
                 return true;
               }
             }
             else {
-              NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
+              NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.near.maxradius").replace("%radius%", Integer.toString(API.getConfig().getInt("command.maxnearradius"))));
               return true;
             }
           }
           else {
-            NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.near.noint"));
+            NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.near.noint"));
             return true;
           }
         }
         else {
-          NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.near.usage"));
+          NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.near.usage"));
           return true;
         }
       }

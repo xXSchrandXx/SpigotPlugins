@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
-import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -18,9 +17,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.generator.ChunkGenerator;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.testValues;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.gamerulemanager.Rule;
+import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_12_2;
+import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_13;
 import de.xxschrandxx.awm.api.worldcreation.*;
 import de.xxschrandxx.awm.util.Dummy;
 import de.xxschrandxx.awm.util.Utils;
@@ -223,6 +225,32 @@ public class WorldConfigManager {
         }
       }
       else if (options.startsWith("-rule:")) {
+        String prerule = options.replace("-rule:", "").replace(":", "");
+        for (Rule<?> r : Rule.values()) {
+          if (r == null)
+            continue;
+          if (r.getType() == null)
+            continue;
+          if (prerule.equalsIgnoreCase(r.getName())) {
+            String prevalue = options.toLowerCase().replace("-rule:" + r.getName().toLowerCase() + ":", "");
+            if (r.getType() == String.class) {
+              worlddata.setRule(r, prevalue);
+            }
+            if (r.getType() == Boolean.class) {
+              if (testValues.isBoolean(prevalue)) {
+                Boolean value = Boolean.valueOf(prevalue);
+                worlddata.setRule(r, value);
+              }
+            }
+            if (r.getType() == Integer.class) {
+              if (testValues.isInt(prevalue)) {
+                Integer value = Integer.valueOf(prevalue);
+                worlddata.setRule(r, value);
+              }
+            }
+          }
+        }
+/* Old Gamerules
         String prerule = options.replace("-rule:", "");
         if (prerule.startsWith("announceadvancements:")) {
           String preannounceadvancements = prerule.replaceAll("announceadvancements:", "");
@@ -392,6 +420,7 @@ public class WorldConfigManager {
             worlddata.setSpectatorsGenerateChunks(spectatorsgeneratechunks);
           }
         }
+*/
       }
       else if (options.startsWith("-commandblocks:")) {
         String preenablecommandblocks = options.replace("-commandblocks:", "");
@@ -472,6 +501,20 @@ public class WorldConfigManager {
     worlddata.setWaterAnimalSpawnLimit(world.getWaterAnimalSpawnLimit());
     worlddata.setStorm(world.hasStorm());
     worlddata.setThundering(world.isThundering());
+    for (Rule<?> r : Rule.values()) {
+      if (r == null)
+        continue;
+      if (r.getName() == null || r.getName() == null)
+        continue;
+      try {
+        Class.forName("org.spigotmc.GameRule");
+        worlddata = WorldDataEditor_1_13.setRule(worlddata, r, world);
+       }
+       catch (ClassNotFoundException e) {
+         worlddata = WorldDataEditor_1_12_2.setRule(worlddata, r, world);
+       }
+    }
+/* Old Gamerules
     worlddata.setAnnounceAdvancements(world.getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS));
     worlddata.setCommandBlockOutput(world.getGameRuleValue(GameRule.COMMAND_BLOCK_OUTPUT));
     worlddata.setDisableElytraMovementCheck(world.getGameRuleValue(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK));
@@ -496,6 +539,7 @@ public class WorldConfigManager {
     worlddata.setShowDeathMessage(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES));
     worlddata.setSpawnRadius(world.getGameRuleValue(GameRule.SPAWN_RADIUS));
     worlddata.setSpectatorsGenerateChunks(world.getGameRuleValue(GameRule.SPECTATORS_GENERATE_CHUNKS));
+*/
 	  return worlddata;
   }
 
@@ -585,6 +629,28 @@ public class WorldConfigManager {
     if (section.isBoolean("weather.thundering")) {
       worlddata.setThundering(section.getBoolean("weather.thundering"));
     }
+    for (Rule<?> r : Rule.values()) {
+      if (r == null)
+        continue;
+      if (r.getType() == null || r.getName() == null)
+        continue;
+      if (r.getType() == String.class) {
+        if (section.isString("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getString("gamerules." + r.getName()));
+        }
+      }
+      if (r.getType() == Boolean.class) {
+        if (section.isBoolean("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getBoolean("gamerules." + r.getName()));
+        }
+      }
+      if (r.getType() == Integer.class) {
+        if (section.isInt("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getInt("gamerules." + r.getName()));
+        }
+      }
+    }
+/* Old Gamerules
     if (section.isBoolean("gamerules.announceadvancements")) {
       worlddata.setAnnounceAdvancements(section.getBoolean("gamerules.announceadvancements"));
     }
@@ -657,6 +723,7 @@ public class WorldConfigManager {
     if (section.isBoolean("gamerules.spectatorsgeneratechunks")) {
       worlddata.setSpectatorsGenerateChunks(section.getBoolean("gamerules.spectatorsgeneratechunks"));
     }
+*/
     if (section.isBoolean("enablecommandblocks")) {
       worlddata.setEnableCommandBlocks(section.getBoolean("enablecommandblocks"));
     }
@@ -831,6 +898,28 @@ public class WorldConfigManager {
     else {
       worlddata.setThundering(false);
     }
+    for (Rule<?> r : Rule.values()) {
+      if (r == null)
+        continue;
+      if (r.getType() == null || r.getName() == null)
+        continue;
+      if (r.getType() == String.class) {
+        if (section.isString("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getString("gamerules." + r.getName()));
+        }
+      }
+      if (r.getType() == Boolean.class) {
+        if (section.isBoolean("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getBoolean("gamerules." + r.getName()));
+        }
+      }
+      if (r.getType() == Integer.class) {
+        if (section.isInt("gamerules." + r.getName())) {
+          worlddata.setRule(r, section.getInt("gamerules." + r.getName()));
+        }
+      }
+    }
+/* Old Gamerules
     if (section.isBoolean("gamerules.announceadvancements")) {
       worlddata.setAnnounceAdvancements(section.getBoolean("gamerules.announceadvancements"));
     }
@@ -981,6 +1070,7 @@ public class WorldConfigManager {
     else {
       worlddata.setEnableCommandBlocks(true);
     }
+*/
     if (section.isList("disabledentitys")) {
       worlddata.setDisabledEntitys(section.getStringList("disabledentitys"));
     }
@@ -1009,6 +1099,16 @@ public class WorldConfigManager {
     world.setSpawnLocation(loc);
     world.setKeepSpawnInMemory(worlddata.getKeepSpawnInMemory());
     world.setSpawnFlags(worlddata.getAllowMonsterSpawning(), worlddata.getAllowAnimalSpawning());
+    for (Rule<?> r : Rule.values()) {
+      try {
+        Class.forName("org.spigotmc.GameRule");
+        WorldDataEditor_1_13.setGameRule(worlddata, r, world);
+       }
+       catch (ClassNotFoundException e) {
+         WorldDataEditor_1_12_2.setGameRule(worlddata, r, world);
+       }
+    }
+/* Old Gamerules
     world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, worlddata.getAnnounceAdvancements());
     world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, worlddata.getCommandBlockOutput());
     world.setGameRule(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK, worlddata.getDisableElytraMovementCheck());
@@ -1033,6 +1133,7 @@ public class WorldConfigManager {
     world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, worlddata.getShowDeathMessage());
     world.setGameRule(GameRule.SPAWN_RADIUS, worlddata.getSpawnRadius());
     world.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, worlddata.getSpectatorsGenerateChunks());
+*/
   }
 
   /**
@@ -1071,6 +1172,14 @@ public class WorldConfigManager {
     section.set("spawning.monsterlimit", worlddata.getMonsterSpawnLimit());
     section.set("weather.storm", worlddata.getStorm());
     section.set("weather.thundering", worlddata.getThundering());
+    for (Rule<?> r : Rule.values()) {
+      if (r == null)
+        continue;
+      if (r.getType() == null || r.getName() == null)
+        continue;
+      section.set("gamerules." + r.getName(), worlddata.getRuleValue(r));
+    }
+/* Old Gamerules
     section.set("gamerules.announceadvancements", worlddata.getAnnounceAdvancements());
     section.set("gamerules.commandblockoutput", worlddata.getCommandBlockOutput());
     section.set("gamerules.disableelytramovementcheck", worlddata.getDisableElytraMovementCheck());
@@ -1095,6 +1204,7 @@ public class WorldConfigManager {
     section.set("gamerules.showdeathmessages", worlddata.getShowDeathMessage());
     section.set("gamerules.spawnradius", worlddata.getSpawnRadius());
     section.set("gamerules.spectatorsgeneratechunks", worlddata.getSpectatorsGenerateChunks());
+*/
     section.set("disabledentitys", worlddata.getDisabledEntitys());
     config.save();
   }

@@ -29,21 +29,21 @@ public class CMDSetExit {
               po.setExitPitch(p.getLocation().getPitch());
               po.setExitYaw(p.getLocation().getYaw());
               API.setPortal(uuid, po);
-              NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
+              NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.setexit.message").replace("%uuid%", uuid.toString()));
               return true;
             }
             else {
-              NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
+              NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.setexit.noportal").replace("%uuid%", uuid.toString()));
               return true;
             }
           }
           else {
-            NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.setexit.nouuid"));
+            NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.setexit.nouuid"));
             return true;
           }
         }
         else {
-          NetherPortalGate.getPlayerHandler().sendPlayerMessage(p, API.getMessage().getString("command.setexit.usage"));
+          NetherPortalGate.getCommandSenderHandler().sendMessage(p, API.getMessage().getString("command.setexit.usage"));
           return true;
         }
       }

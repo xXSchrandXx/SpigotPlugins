@@ -6,8 +6,8 @@ public class v1_09_0 extends v1_08_1 {
   static Rule<Boolean> DISABLE_ELYTRA_MOVEMENT_CHECK = null;
   static void setup() {
     v1_08_1.setup();
-    SPECTATORS_GENERATE_CHUNKS = new Rule<Boolean>("spectatorsGenerateChunks", Boolean.class);
-    SPAWN_RADIUS = new Rule<Integer>("spawnRadius", Integer.class);
-    DISABLE_ELYTRA_MOVEMENT_CHECK = new Rule<Boolean>("disableElytraMovementCheck", Boolean.class);
+    SPECTATORS_GENERATE_CHUNKS = new Rule<Boolean>("spectatorsGenerateChunks", Boolean.class, true, false);
+    SPAWN_RADIUS = new Rule<Integer>("spawnRadius", Integer.class, 10, false);
+    DISABLE_ELYTRA_MOVEMENT_CHECK = new Rule<Boolean>("disableElytraMovementCheck", Boolean.class, false, false);
   }
 }

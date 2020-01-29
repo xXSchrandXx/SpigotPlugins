@@ -1,12 +1,17 @@
 package de.xxschrandxx.awm.api.config;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
+
+import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 
 public class WorldData {
   private String worldname;
@@ -30,7 +35,7 @@ public class WorldData {
   public void setAutoLoad(boolean AutoLoad) {
     this.autoload = AutoLoad;
   }
-  private List<String> aliases;
+  private List<String> aliases = new ArrayList<String>();
   public List<String> getAliases() {
     return aliases;
   }
@@ -213,7 +218,22 @@ public class WorldData {
     this.keepspawninmemory = KeepSpawnInMemory;
   }
 // Gamerules
+  private Map<Rule<?>, Object> rules = new HashMap<Rule<?>, Object>();
+  public Map<Rule<?>, Object> getRules() {
+    return rules;
+  }
+  public Object getRuleValue(Rule<?> Rule) {
+    return rules.get(Rule);
+  }
+  public void setRule(Rule<?> key, Object value) {
+    rules.put(key, value);
+  }
+  public void setRules(Map<Rule<?>, Object> Rules) {
+    rules = Rules;
+  }
+/*
   private boolean announceadvancements;
+
   public boolean getAnnounceAdvancements() {
     return this.announceadvancements;
   }
@@ -381,19 +401,21 @@ public class WorldData {
   public void setSpectatorsGenerateChunks(boolean SpectatorsGenerateChunks) {
     this.spectatorsgeneratechunks = SpectatorsGenerateChunks;
   }
+*/
+// MobSpawns
+  private List<String> disabledentitys = new ArrayList<String>();
+  public List<String> getDisabledEntitys() {
+    return this.disabledentitys;
+  }
+  public void setDisabledEntitys(List<String> DisabledEntitys) {
+    this.disabledentitys = DisabledEntitys;
+  }
+// CommandBlock
   private boolean enablecommandblocks;
   public boolean getEnableCommandBlocks() {
     return this.enablecommandblocks;
   }
   public void setEnableCommandBlocks(boolean EnableCommandBlocks) {
     this.enablecommandblocks = EnableCommandBlocks;
-  }
-// MobSpawns
-  private List<String> disabledentitys;
-  public List<String> getDisabledEntitys() {
-    return this.disabledentitys;
-  }
-  public void setDisabledEntitys(List<String> DisabledEntitys) {
-    this.disabledentitys = DisabledEntitys;
   }
 }

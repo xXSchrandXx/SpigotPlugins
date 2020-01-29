@@ -21,7 +21,7 @@ public class CMDUnload {
           if (worlddata != null) {
             if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
-                AsyncWorldManager.getPlayerHandler().sendPlayerMessage(p, AsyncWorldManager.messages.get().getString("command.unload.teleport"));
+                AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.unload.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("MainWorld")).getSpawnLocation());
               }
               WorldConfigManager.unload(Bukkit.getWorld(worlddata.getWorldName()), true);

@@ -10,12 +10,12 @@ public class v1_04_2 extends v0 {
   static Rule<Boolean> COMMAND_BLOCK_OUTPUT = null;
   static void setup() {
     v0.setup();
-    DO_FIRE_TICK = new Rule<Boolean>("doFireTick", Boolean.class);
-    MOB_GRIEFING = new Rule<Boolean>("mobGriefing", Boolean.class);
-    KEEP_INVENTORY = new Rule<Boolean>("keepInventory", Boolean.class);
-    DO_MOB_SPAWNING = new Rule<Boolean>("doMobSpawning", Boolean.class);
-    DO_MOB_LOOT = new Rule<Boolean>("doMobLoot", Boolean.class);
-    DO_TILE_DROPS = new Rule<Boolean>("doTileDrops", Boolean.class);
-    COMMAND_BLOCK_OUTPUT = new Rule<Boolean>("commandBlockOutput", Boolean.class);
+    DO_FIRE_TICK = new Rule<Boolean>("doFireTick", Boolean.class, true, false);
+    MOB_GRIEFING = new Rule<Boolean>("mobGriefing", Boolean.class, true, false);
+    KEEP_INVENTORY = new Rule<Boolean>("keepInventory", Boolean.class, false, false);
+    DO_MOB_SPAWNING = new Rule<Boolean>("doMobSpawning", Boolean.class, true, false);
+    DO_MOB_LOOT = new Rule<Boolean>("doMobLoot", Boolean.class, true, false);
+    DO_TILE_DROPS = new Rule<Boolean>("doTileDrops", Boolean.class, true, false);
+    COMMAND_BLOCK_OUTPUT = new Rule<Boolean>("commandBlockOutput", Boolean.class, true, false);
   }
 }

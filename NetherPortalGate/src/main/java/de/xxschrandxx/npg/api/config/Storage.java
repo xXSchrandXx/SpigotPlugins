@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.MessageHandler;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.*;
 

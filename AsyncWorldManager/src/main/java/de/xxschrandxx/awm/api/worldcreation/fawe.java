@@ -1,11 +1,16 @@
 package de.xxschrandxx.awm.api.worldcreation;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 import com.boydti.fawe.util.TaskManager;
 
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
 import de.xxschrandxx.awm.api.event.WorldCreateEvent;
@@ -37,6 +42,13 @@ public class fawe {
         if (worldcreateevent.isCancelled()) {
           return;
         }
+        File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+        if (!worldconfigfolder.exists())
+          worldconfigfolder.mkdir();
+        File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
+        Config config = new Config(worldconfigfile);
+        WorldConfigManager.save(config, worlddata);
+
         WorldCreator worldcreator = worldcreateevent.getWorldCreator();
         if (Bukkit.getWorld(worldcreator.name()) == null) {
           AsyncWorld.create(worldcreator);

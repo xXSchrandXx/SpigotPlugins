@@ -5,7 +5,7 @@ public class v1_15_2 extends v1_15_0 {
   static Rule<Boolean> DO_TRADER_SPAWNING = null;
   static void setup() {
     v1_15_0.setup();
-    DO_PATROL_SPAWNING = new Rule<Boolean>("doPatrolSpawning", Boolean.class);
-    DO_TRADER_SPAWNING = new Rule<Boolean>("doTraderSpawning", Boolean.class);
+    DO_PATROL_SPAWNING = new Rule<Boolean>("doPatrolSpawning", Boolean.class, true, false);
+    DO_TRADER_SPAWNING = new Rule<Boolean>("doTraderSpawning", Boolean.class, true, false);
   }
 }

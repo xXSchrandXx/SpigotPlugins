@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
-import de.xxschrandxx.api.spigot.Config;
-import de.xxschrandxx.api.spigot.testValues;
+import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 

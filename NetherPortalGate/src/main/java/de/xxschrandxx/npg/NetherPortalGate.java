@@ -5,11 +5,8 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.xxschrandxx.api.spigot.MessageHandler;
-import de.xxschrandxx.api.spigot.PermissionHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.CommandSenderHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.LoggerHandler;
-import de.xxschrandxx.api.spigot.MessageHandler.PlayerHandler;
+import de.xxschrandxx.api.minecraft.PermissionHandler;
+import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.npg.api.config.Storage;
 import de.xxschrandxx.npg.command.CMDNetherPortalGate;
 import de.xxschrandxx.npg.listener.*;
@@ -32,9 +29,6 @@ public class NetherPortalGate extends JavaPlugin {
   }
   public static CommandSenderHandler getCommandSenderHandler() {
     return mh.getCommandSenderHandler();
-  }
-  public static PlayerHandler getPlayerHandler() {
-    return mh.getPlayerHandler();
   }
   public static LoggerHandler getLogHandler() {
     return mh.getLogHandler();

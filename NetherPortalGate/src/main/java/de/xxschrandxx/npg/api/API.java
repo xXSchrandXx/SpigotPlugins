@@ -19,7 +19,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
-import de.xxschrandxx.api.spigot.Config;
+import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.npg.NetherPortalGate;
 import de.xxschrandxx.npg.api.config.*;
 

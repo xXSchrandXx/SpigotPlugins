@@ -16,6 +16,7 @@ public class ServerStatusSign extends Plugin {
     return instance;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void onEnable() {
     instance = this;

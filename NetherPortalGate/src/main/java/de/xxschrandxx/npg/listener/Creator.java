@@ -63,7 +63,7 @@ public class Creator implements Listener {
             if (portal2 != null)
               linkedportal = portal2.getValue().getName();
             NetherPortalGate.getMessageHandler().sendHeader(p);
-            NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
+            NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(p, API.getMessage().getString("listener.create.message")
                 .replace("%uuid%", uuid.toString())
                 .replace("%name%", portal.getName())
                 .replace("%world%", portal.getExitWorld())
@@ -73,7 +73,7 @@ public class Creator implements Listener {
                 .replace("%pitch%", Float.toString(portal.getExitPitch()))
                 .replace("%yaw%", Float.toString(portal.getExitYaw()))
                 .replace("%portal%", linkedportal));
-            NetherPortalGate.getPlayerHandler().sendPlayerMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
+            NetherPortalGate.getCommandSenderHandler().sendMessageWithoutPrefix(p, API.getMessage().getString("listener.create.hover").replace("%uuid%", uuid.toString()), ClickEvent.Action.RUN_COMMAND, "/npg setexit " + uuid);
             NetherPortalGate.getMessageHandler().sendFooter(p);
           }
         }

@@ -9,11 +9,11 @@ public class v1_15_0 extends v1_14_3 {
   static Rule<Boolean> FIRE_DAMAGE = null;
   static void setup() {
     v1_14_3.setup();
-    REDUCED_DEBUG_INFO = new Rule<Boolean>("reducedDebugInfo", Boolean.class);
-    DO_INSOMNIA = new Rule<Boolean>("doInsomnia", Boolean.class);
-    DO_IMMEDIATE_RESPAWN = new Rule<Boolean>("doImmediateRespawn", Boolean.class);
-    DROWNING_DAMAGE = new Rule<Boolean>("drowningDamage", Boolean.class);
-    FALL_DAMAGE = new Rule<Boolean>("fallDamage", Boolean.class);
-    FIRE_DAMAGE = new Rule<Boolean>("fireDamage", Boolean.class);
+    REDUCED_DEBUG_INFO = new Rule<Boolean>("reducedDebugInfo", Boolean.class, false, false);
+    DO_INSOMNIA = new Rule<Boolean>("doInsomnia", Boolean.class, true, false);
+    DO_IMMEDIATE_RESPAWN = new Rule<Boolean>("doImmediateRespawn", Boolean.class, false, false);
+    DROWNING_DAMAGE = new Rule<Boolean>("drowningDamage", Boolean.class, true, false);
+    FALL_DAMAGE = new Rule<Boolean>("fallDamage", Boolean.class, true, false);
+    FIRE_DAMAGE = new Rule<Boolean>("fireDamage", Boolean.class, true, false);
   }
 }
