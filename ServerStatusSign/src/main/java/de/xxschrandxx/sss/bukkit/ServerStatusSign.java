@@ -41,6 +41,14 @@ public class ServerStatusSign extends JavaPlugin {
   public void onEnable() {
     instance = this;
     Storage.start();
+    ph = new PermissionHandler();
+    mh = new MessageHandler(
+        Storage.message.get().getString("prefix"),
+        Storage.message.get().getString("strich"),
+        Storage.message.get().getString("strich"),
+        Storage.config.get().getBoolean("logging.debug"),
+        Storage.config.get().getStringList("logging.show")
+        );
     API.loadServerStatusSign();
     getLogHandler().log(false, Level.INFO, "Loaded Configs.");
     if (getServer().getIp().isEmpty()) {

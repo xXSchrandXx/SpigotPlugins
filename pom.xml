@@ -14,7 +14,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.directory>${project.build.directory}\${project.version}\</project.build.directory>
-    <buildDirectory>${project.basedir}/target/${project.version}</buildDirectory>
+    <buildDirectory>${project.basedir}\target\${project.version}</buildDirectory>
   </properties>
 
   <modules>
@@ -71,7 +71,6 @@
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
       <version>1.15-SNAPSHOT</version>
-      <type>jar</type>
       <scope>provided</scope>
     </dependency>
 

@@ -37,6 +37,10 @@
           <groupId>io.netty</groupId>
         </exclusion>
         <exclusion>
+          <artifactId>snakeyaml</artifactId>
+          <groupId>org.yaml</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>guava</artifactId>
           <groupId>com.google.guava</groupId>
         </exclusion>
@@ -57,10 +61,6 @@
           <groupId>com.google.code.gson</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>guava</artifactId>
           <groupId>com.google.guava</groupId>
         </exclusion>
@@ -68,7 +68,18 @@
           <artifactId>bungeecord-chat</artifactId>
           <groupId>net.md-5</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>snakeyaml</artifactId>
+          <groupId>org.yaml</groupId>
+        </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>BungeeCord</groupId>
+      <artifactId>BungeeCord</artifactId>
+      <version>1.15-SNAPSHOT #1477</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}\internalRepo\BungeeCord.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

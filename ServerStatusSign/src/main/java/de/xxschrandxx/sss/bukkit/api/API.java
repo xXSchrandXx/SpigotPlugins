@@ -173,9 +173,11 @@ public class API {
   private static BukkitTask signtask;
 
   public static boolean isSignTaskRunning() {
-    if (signtask != null)
-      if (!signtask.isCancelled())
+    if (signtask != null) {
+      if (!signtask.isCancelled()) {
         return true;
+      }
+    }
     return false;
   }
 

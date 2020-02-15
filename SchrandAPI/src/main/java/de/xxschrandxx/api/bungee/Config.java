@@ -51,6 +51,10 @@ public class Config {
     }
   }
   
+  public File getFile() {
+    return cfgFile;
+  }
+  
   public Configuration get() {
     if ((cfgFile == null) || (cfg == null)) {
       reload();

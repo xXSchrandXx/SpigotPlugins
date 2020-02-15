@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.xxschrandxx.api.bungee.Config;
 import de.xxschrandxx.sss.SQLAPI;
 import de.xxschrandxx.sss.bungee.ServerStatusSign;
 
@@ -80,6 +81,7 @@ public class API {
     defaults.set("sql.database", "");
     defaults.set("sql.tableprefix", "");
     defaults.set("sql.usessl", false);
+    defaults.set("autoreconnect", true);
     defaults.set("permission.bypass", "sss.bypass");
     config = new Config(ServerStatusSign.getInstance(), "config.yml", defaults);
     saveConfig();

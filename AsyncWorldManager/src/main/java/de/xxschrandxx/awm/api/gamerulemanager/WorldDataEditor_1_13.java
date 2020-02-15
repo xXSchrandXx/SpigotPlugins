@@ -24,6 +24,7 @@ public class WorldDataEditor_1_13 {
     return worlddata;
   }
 
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public static boolean setGameRule(WorldData worlddata, Rule<?> r, World world) {
     if (r == null)
       return false;

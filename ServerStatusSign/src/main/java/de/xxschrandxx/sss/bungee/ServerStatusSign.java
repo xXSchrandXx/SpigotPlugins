@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import de.xxschrandxx.sss.bungee.api.API;
 import de.xxschrandxx.sss.bungee.listener.FallbackListener;
+import me.aoelite.bungee.autoreconnect.AutoReconnect;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -15,6 +16,8 @@ public class ServerStatusSign extends Plugin {
   public static ServerStatusSign getInstance() {
     return instance;
   }
+
+  private AutoReconnect autore;
 
   @SuppressWarnings("deprecation")
   @Override
@@ -47,11 +50,17 @@ public class ServerStatusSign extends Plugin {
     }
     API.Log(false, Level.INFO, "Registering FallbackListener...");
     getProxy().getPluginManager().registerListener(this, new FallbackListener());
+    
+    if (API.config.get().getBoolean("autoreconnect")) {
+      autore = new AutoReconnect();
+      autore.onEnable();
+    }
   }
 
   @Override
   public void onDisable() {
-    
+    if (autore != null)
+      autore = null;
   }
 
 }
