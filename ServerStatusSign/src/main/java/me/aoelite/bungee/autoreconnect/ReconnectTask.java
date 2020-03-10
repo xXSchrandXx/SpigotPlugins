@@ -2,17 +2,18 @@ package me.aoelite.bungee.autoreconnect;
 
 import com.google.common.base.Strings;
 
-import de.xxschrandxx.sss.SQLAPI;
-import de.xxschrandxx.sss.bungee.ServerStatusSign;
 import de.xxschrandxx.sss.bungee.api.API;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.util.internal.PlatformDependent;
+
 import me.aoelite.bungee.autoreconnect.net.BasicChannelInitializer;
 import me.aoelite.bungee.autoreconnect.util.Utils;
+
 import net.md_5.bungee.BungeeServerInfo;
 import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.UserConnection;
@@ -167,7 +168,7 @@ public class ReconnectTask {
 
         // Windows is bugged, multi homed users will just have to live with random connecting IPs
         if (user.getPendingConnection().getListener().isSetLocalAddress() && !PlatformDependent.isWindows()) {
-            b.localAddress(user.getPendingConnection().getListener().getHost().getHostString(), 0);
+            b.localAddress(user.getPendingConnection().getListener().getSocketAddress());
         }
         b.connect().addListener(listener);
     }

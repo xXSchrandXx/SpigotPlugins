@@ -1,6 +1,7 @@
 package me.aoelite.bungee.autoreconnect.util;
 
 import me.aoelite.bungee.autoreconnect.AutoReconnect;
+
 import net.md_5.bungee.api.ProxyServer;
 
 import java.util.concurrent.TimeUnit;

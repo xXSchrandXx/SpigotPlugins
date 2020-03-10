@@ -15,16 +15,19 @@ public class Rule<T> extends v1_15_2 {
   private static Map<String, Rule<?>> gameRules = new HashMap<String, Rule<?>>();
 
   private final String name;
+
   public String getName() {
     return this.name;
   }
   
   private final Class<T> type;
+
   public Class<T> getType() {
     return this.type;
   }
   
   private final Object defaultvalue;
+
   public Object getDefaultValue() {
     return this.defaultvalue;
   }
