@@ -20,6 +20,8 @@ public class Storage {
     config.get().addDefault("logging.show", logs);
     config.get().addDefault("logging.debug", false);
 
+    config.get().addDefault("command.asyncworldmanagergui.main", "awmgui.command.awmgui.open");
+
     config.save();
 
     messages = new Config(AsyncWorldManagerGUI.getInstance(), "messages.yml");
@@ -27,7 +29,10 @@ public class Storage {
     messages.get().addDefault("prefix", "&8[&6AWM&7-&cGUI&8] &7");
     messages.get().addDefault("header", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
     messages.get().addDefault("footer", "&8&m[]&6&m--------------------------------------------------&8&m[]");
-    
+
+    messages.get().addDefault("nopermission", "You don't have permission to use that.");
+    messages.get().addDefault("command.asyncworldmanagergui.console", "&cOnly Players can execute this command.");
+    messages.get().addDefault("command.asyncworldmanagergui.open", "Opened %menu%");
 
     messages.save();
 
