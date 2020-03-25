@@ -20,7 +20,14 @@ public class Storage {
     config.get().addDefault("logging.show", logs);
     config.get().addDefault("logging.debug", false);
 
-    config.get().addDefault("command.asyncworldmanagergui.main", "awmgui.command.awmgui.open");
+    config.get().addDefault("command.asyncworldmanagergui.main", "awmgui.command.awmgui.main");
+    config.get().addDefault("command.asyncworldmanagergui.create", "awmgui.command.awmgui.create");
+    config.get().addDefault("command.asyncworldmanagergui.gamerule", "awmgui.command.awmgui.gamerule.%world%");
+    config.get().addDefault("command.asyncworldmanagergui.import", "awmgui.command.awmgui.import");
+    config.get().addDefault("command.asyncworldmanagergui.list", "awmgui.command.awmgui.list");
+    config.get().addDefault("command.asyncworldmanagergui.modify", "awmgui.command.awmgui.modify.%world%");
+    config.get().addDefault("command.asyncworldmanagergui.overview", "awmgui.command.awmgui.overview");
+    config.get().addDefault("command.asyncworldmanagergui.world", "awmgui.command.awmgui.world.%world%");
 
     config.save();
 
