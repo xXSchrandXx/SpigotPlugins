@@ -84,11 +84,11 @@ public class WorldConfigManager {
           worlddata.setGenerateStructures(generagestructurs);
         }
       }
-      else if (options.startsWith("-fawe:")) {
-        String prefaweworld = options.replace("-fawe:", "");
-        if (testValues.isBoolean(prefaweworld)) {
-          boolean faweworld = Boolean.valueOf(prefaweworld);
-          worlddata.setFAWEWorld(faweworld);
+      else if (options.startsWith("-creationtype:")) {
+        String precreationtype = options.replace("-creationtype:", "");
+        if (testValues.isBoolean(precreationtype)) {
+          CreationType creationtype = CreationType.valueOf(precreationtype);
+          worlddata.setCreationType(creationtype);
         }
       }
       else if (options.startsWith("-autoload:")) {
@@ -447,7 +447,7 @@ public class WorldConfigManager {
     worlddata.setAliases(aliases);
     if (world.getName().equals(AsyncWorldManager.config.get().getString("mainworld"))) {
       worlddata.setAutoLoad(false);
-      worlddata.setFAWEWorld(false);
+      worlddata.setCreationType(CreationType.normal);
     }
     else {
       if (AsyncWorldManager.config.get().isBoolean("worldsettings.autoload")) {
@@ -456,16 +456,15 @@ public class WorldConfigManager {
       else {
         worlddata.setAutoLoad(true);
       }
-      if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
-        if (AsyncWorldManager.config.get().isBoolean("worldsettings.faweworld")) {
-          worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("worldsettings.faweworld"));
+      if (AsyncWorldManager.config.get().isString("worldsettings.creationtype")) {
+        worlddata.setCreationType(AsyncWorldManager.config.get().getString("worldsettings.creationtype"));
+        if (worlddata.getCreationType() == CreationType.fawe) {
+          if (!AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
+            if (!AsyncWorldManager.config.get().getBoolean("worldsettings.faweworld")) {
+              worlddata.setCreationType(CreationType.normal);
+            }
+          }
         }
-        else {
-          worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld"));
-        }
-      }
-      else {
-        worlddata.setFAWEWorld(false);
       }
     }
     if (AsyncWorldManager.config.get().isBoolean("worldsettings.autosave")) {
@@ -551,8 +550,11 @@ public class WorldConfigManager {
   public static WorldData getWorlddataFromConfig(Config config) {
     WorldData worlddata = getWorlddataFromDefault(config.getFile().getName().replace(".yml", ""));
     ConfigurationSection section = config.get().getConfigurationSection(worlddata.getWorldName());
-    if (section.isBoolean("faweworld")) {
-      worlddata.setFAWEWorld(section.getBoolean("faweworld"));
+    if (section.isString("creationtype")) {
+      worlddata.setCreationType(section.getString("creationtype"));
+      if (worlddata.getCreationType() == null) {
+        worlddata.setCreationType(CreationType.normal);
+      }
     }
     if (section.isBoolean("autoload")) {
       worlddata.setAutoLoad(section.getBoolean("autoload"));
@@ -745,14 +747,16 @@ public class WorldConfigManager {
     aliases.add(worldname);
     worlddata.setAliases(aliases);
     ConfigurationSection section = AsyncWorldManager.config.get().getConfigurationSection("worldsettings");
-    if (section.isBoolean("faweworld")) {
-      worlddata.setFAWEWorld(section.getBoolean("faweworld"));
-    }
-    else if (AsyncWorldManager.config.get().isBoolean("fastasyncworldedit.faweworld")) {
-      worlddata.setFAWEWorld(AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld"));
-    }
-    else {
-      worlddata.setFAWEWorld(false);
+    if (section.isString("creationtype")) {
+      worlddata.setCreationType(section.getString("creationtype"));
+      if (worlddata.getCreationType() == null) {
+        worlddata.setCreationType(CreationType.normal);
+      }
+      if (worlddata.getCreationType() == CreationType.fawe) {
+        if (!AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
+          worlddata.setCreationType(CreationType.normal);
+        }
+      }
     }
     if (section.isBoolean("autoload")) {
       worlddata.setAutoLoad(section.getBoolean("autoload"));
@@ -1146,7 +1150,7 @@ public class WorldConfigManager {
     config.get().options().copyHeader(true);
     ConfigurationSection section = config.get().createSection(worlddata.getWorldName());
     section.set("aliases", worlddata.getAliases());
-    section.set("faweworld", worlddata.getFAWEWorld());
+    section.set("creationtype", worlddata.getCreationType().name());
     section.set("autoload", worlddata.getAutoLoad());
     section.set("autosave", worlddata.getAutoSave());
     section.set("enablecommandblocks", worlddata.getEnableCommandBlocks());
@@ -1255,8 +1259,12 @@ public class WorldConfigManager {
    * @param worlddata The {@link WorldData} to use for creation.
    */
   public static void createWorld(WorldData worlddata) {
+    if (worlddata.getCreationType() == CreationType.broken) {
+      broken.brokenworld(worlddata);
+      return;
+    }
     if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
-      if (worlddata.getFAWEWorld()) {
+      if (worlddata.getCreationType() == CreationType.fawe) {
         fawe.faweworld(worlddata);
         return;
       }

@@ -75,8 +75,8 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.info", "wm.command.plugin.info");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.set", "wm.command.plugin.set");
     AsyncWorldManager.config.get().addDefault("event.permissions.worldmanager.gamemode.bypass", "wm.event.gamemode.bypass");
-    AsyncWorldManager.config.get().addDefault("worldsettings.faweworld", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.autoload", true);
+    AsyncWorldManager.config.get().addDefault("worldsettings.creationtype", "normal");
     AsyncWorldManager.config.get().addDefault("worldsettings.autosave", true);
     AsyncWorldManager.config.get().addDefault("worldsettings.seed", "none");
     AsyncWorldManager.config.get().addDefault("worldsettings.enviroment", "NORMAL");

@@ -1,0 +1,13 @@
+name: ${project.artifactId}
+main: ${project.groupId}.${project.artifactId}
+description: ${project.name}
+version: ${project.version}
+author: xXSchrandXx
+website: ${project.url}
+database: false
+softdepend: [AsyncWorldManager]
+commands:
+  worldmanagergui:
+    description: Hauptkommando von WorldSystemGUI.
+    aliases: [wmgui]
+    usage: /wmgui <> []

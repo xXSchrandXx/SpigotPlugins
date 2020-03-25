@@ -12,6 +12,7 @@ import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
 
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
+import de.xxschrandxx.awm.api.worldcreation.CreationType;
 
 public class WorldData {
   private String worldname;
@@ -21,12 +22,21 @@ public class WorldData {
   public void setWorldName(String WorldName) {
     this.worldname = WorldName;
   }
-  private boolean faweworld;
-  public boolean getFAWEWorld() {
-    return this.faweworld;
+  private CreationType creationtype;
+  public CreationType getCreationType() {
+    return creationtype;
   }
-  public void setFAWEWorld(boolean FAWEWorld) {
-    this.faweworld = FAWEWorld;
+  public void setCreationType(CreationType CreationType) {
+    creationtype = CreationType;
+  }
+  public boolean setCreationType(String Creationtype) {
+    for (CreationType ct : CreationType.values()) {
+      if (ct.name().equalsIgnoreCase(Creationtype)) {
+        creationtype = CreationType.valueOf(Creationtype);
+        return true;
+      }
+    }
+    return false;
   }
   private boolean autoload;
   public boolean getAutoLoad() {

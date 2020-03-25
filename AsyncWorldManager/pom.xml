@@ -21,6 +21,15 @@
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
+    <!-- Mojang Depemdendy -->
+    <dependency>
+      <groupId>Minecraft-Server</groupId>
+      <artifactId>Minecraft-Server</artifactId>
+      <version>1.15.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}\internalRepo\1.15.2.jar</systemPath>
+    </dependency>
+
     <!-- Metrics Dependency -->
     <dependency>
       <groupId>org.bstats</groupId>

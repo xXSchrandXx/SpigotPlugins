@@ -22,6 +22,7 @@
     <module>SchrandAPI</module>
     <module>NetherPortalGate</module>
     <module>ServerStatusSign</module>
+    <module>AsyncWorldManagerGUI</module>
   </modules>
 
   <repositories>
