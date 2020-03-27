@@ -1,22 +1,30 @@
 package de.xxschrandxx.awm.gui.menus;
 
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
-import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.api.config.WorldData;
 
 public class WorldMenu extends Menu {
 
-  public WorldMenu() {
-    super("WorldName", 9);
+  private WorldData wd;
+
+  public WorldMenu(WorldData data) {
+    super(data.getWorldName(), 9);
+    wd = data;
   }
 
+  public WorldData getWorldData() {
+    return wd;
+  }
+
+  @Override
   public void initializeItems() {
-    inv.setItem(0, AsyncWorldManagerGUI.createGuiItem(Material.GRASS, "Name", ""));
+    
   }
 
   @EventHandler
-  public void onClick() {
+  public void onClick(InventoryClickEvent e) {
 
     
 

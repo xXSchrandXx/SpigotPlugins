@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.xxschrandxx.api.minecraft.Config;
-import de.xxschrandxx.api.minecraft.message.MessageHandler;
 
 public class Storage {
 
@@ -20,14 +19,15 @@ public class Storage {
     config.get().addDefault("logging.show", logs);
     config.get().addDefault("logging.debug", false);
 
-    config.get().addDefault("command.asyncworldmanagergui.main", "awmgui.command.awmgui.main");
-    config.get().addDefault("command.asyncworldmanagergui.create", "awmgui.command.awmgui.create");
-    config.get().addDefault("command.asyncworldmanagergui.gamerule", "awmgui.command.awmgui.gamerule.%world%");
-    config.get().addDefault("command.asyncworldmanagergui.import", "awmgui.command.awmgui.import");
-    config.get().addDefault("command.asyncworldmanagergui.list", "awmgui.command.awmgui.list");
-    config.get().addDefault("command.asyncworldmanagergui.modify", "awmgui.command.awmgui.modify.%world%");
-    config.get().addDefault("command.asyncworldmanagergui.overview", "awmgui.command.awmgui.overview");
-    config.get().addDefault("command.asyncworldmanagergui.world", "awmgui.command.awmgui.world.%world%");
+    config.get().addDefault("permission.command", "awmgui.command");
+    config.get().addDefault("permission.openmenu.create", "awmgui.menu.create");
+    config.get().addDefault("permission.openmenu.gamerule", "awmgui.menu.gamerule.%world%");
+    config.get().addDefault("permission.openmenu.import", "awmgui.menu.import");
+    config.get().addDefault("permission.openmenu.list", "awmgui.menu.list");
+    config.get().addDefault("permission.openmenu.modify", "awmgui.menu.modify.%world%");
+    config.get().addDefault("permission.openmenu.overview", "awmgui.menu.overview");
+    config.get().addDefault("permission.openmenu.search", "awmgui.menu.search");
+    config.get().addDefault("permission.openmenu.world", "awmgui.menu.world.%world%");
 
     config.save();
 
@@ -38,26 +38,32 @@ public class Storage {
     messages.get().addDefault("footer", "&8&m[]&6&m--------------------------------------------------&8&m[]");
 
     messages.get().addDefault("nopermission", "You don't have permission to use that.");
-    messages.get().addDefault("command.asyncworldmanagergui.console", "&cOnly Players can execute this command.");
-    messages.get().addDefault("command.asyncworldmanagergui.open", "Opened %menu%");
+    messages.get().addDefault("command.console", "&cOnly Players can execute this command.");
+    messages.get().addDefault("command.open", "Opened %menu%");
+
+    //Menus
+    //Overview Menu
+    messages.get().addDefault("menu.overview.name", "Overview");
+    //Item Create
+    messages.get().addDefault("menu.overview.create.itemname", "Create World");
+    List<String> createlore = new ArrayList<String>();
+    createlore.add("&7Open the Worldcreation Menu.");
+    messages.get().addDefault("menu.overview.create.itemlore", createlore);
+    //Item Import
+    messages.get().addDefault("menu.overview.import.itemname", "Import World");
+    List<String> importlore = new ArrayList<String>();
+    importlore.add("&7Open the Worldimport Menu.");
+    messages.get().addDefault("menu.overview.import.itemlore", importlore);
+    //Item List
+    messages.get().addDefault("menu.overview.list.itemname", "List Worlds");
+    List<String> listlore = new ArrayList<String>();
+    listlore.add("&7Open the Worldlist Menu.");
+    messages.get().addDefault("menu.overview.list.itemlore", listlore);
 
     messages.save();
 
-    AsyncWorldManagerGUI.mh = new MessageHandler(
-        messages.get().getString("prefix"),
-        messages.get().getString("header"),
-        messages.get().getString("footer"),
-        config.get().getBoolean("logging.show"),
-        config.get().getStringList("logging.debug"));
-
   }
 
-  public static void stop() {
-
-    config.save();
-
-    messages.save();
-
-  }
+  public static void stop() {}
 
 }

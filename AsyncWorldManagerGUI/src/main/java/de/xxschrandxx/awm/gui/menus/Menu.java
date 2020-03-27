@@ -3,16 +3,18 @@ package de.xxschrandxx.awm.gui.menus;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 public class Menu implements InventoryHolder, Listener {
 
-  public Inventory inv;
+  private Inventory inv;
 
-  public String name;
+  private String name;
 
-  public int size;
+  private int size;
 
   public Menu(String Name, int Size) {
     name = Name;
@@ -20,12 +22,23 @@ public class Menu implements InventoryHolder, Listener {
     inv = Bukkit.createInventory(this, Size, name);
   }
 
-  public void openInventory(Player p) {
-    p.openInventory(inv);
+  public String getName() {
+    return name;
+  }
+
+  public int getSize() {
+    return size;
   }
 
   public Inventory getInventory() {
     return inv;
+  }
+
+  public void initializeItems() {}
+
+  public void openInventory(Player p) {
+    initializeItems();
+    p.openInventory(getInventory());
   }
 
 }

@@ -1,7 +1,9 @@
 package de.xxschrandxx.awm.gui.menus;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 
@@ -11,12 +13,16 @@ public class ListMenu extends Menu {
     super("Worlds", 9);
   }
 
+  @Override
   public void initializeItems() {
-    inv.setItem(0, AsyncWorldManagerGUI.createGuiItem(Material.GRASS, "Name", ""));
   }
 
   @EventHandler
-  public void onClick() {
+  public void onClick(InventoryClickEvent e) {
+
+    if (getInventory() != e.getInventory()) {
+      return;
+    }
 
     
 

@@ -18,61 +18,64 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     if (sender instanceof Player) {
       Player p = (Player) sender;
-      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("command.asyncworldmanagergui.main"))) {
-        Menu menu = null;
+      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.command"))) {
+        String menuname = null;
         if (args.length != 0) {
           if (args[0].contentEquals("create")) {
-            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("command.asyncworldmanagergui.create"))) {
-              menu = new CreateMenu();
+            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.create"))) {
+              CreateMenu menu = new CreateMenu();
+              menuname = menu.getName();
+              MenuManager.addCreateMenu(p, menu);
             }
             else {
-              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("command.asyncworldmanagergui.create")));
+              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
               return true;
             }
           }
           else if (args[0].contentEquals("import")) {
-            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("command.asyncworldmanagergui.import"))) {
-              menu = new GameruleMenu();
+            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.import"))) {
+              ImportMenu menu = new ImportMenu();
+              menuname = menu.getName();
+              MenuManager.addImportMenu(p, menu);
             }
             else {
-              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("command.asyncworldmanagergui.import")));
+              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.import")));
               return true;
             }
           }
           else if (args[0].contentEquals("list")) {
-            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("command.asyncworldmanagergui.list"))) {
-              menu = new GameruleMenu();
+            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
+              ListMenu menu = new ListMenu();
+              menuname = menu.getName();
+              MenuManager.addListMenu(p, menu);
             }
             else {
-              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("command.asyncworldmanagergui.list")));
+              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.list")));
               return true;
             }
+          }
+        }
+        if (menuname == null) {
+          if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.overview"))) {
+            Overview menu = new Overview();
+            menuname = menu.getName();
+            MenuManager.addOverview(p, menu);
           }
           else {
-            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("command.asyncworldmanagergui.overview"))) {
-              menu = new Overview();
-            }
-            else {
-              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("command.asyncworldmanagergui.overview")));
-              return true;
-            }
+            AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.overview")));
+            return true;
           }
         }
-        if (menu == null) {
-          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, "&4&lERROR&c, Menu is not set.");
-          return true;
-        }
-        menu.openInventory(p);
-        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.asyncworldmanagergui.open").replace("%menu%", menu.name));
+        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menuname));
         return true;
       }
       else {
-        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("command.asyncworldmanagergui.main")));
+        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.command")));
         return true;
       }
     }
     else {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("command.asyncworldmanagergui.console"));
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("command.console"));
       return true;
     }
   }
