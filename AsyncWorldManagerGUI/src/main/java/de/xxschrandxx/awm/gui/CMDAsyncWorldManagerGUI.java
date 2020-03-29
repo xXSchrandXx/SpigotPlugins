@@ -1,6 +1,7 @@
 package de.xxschrandxx.awm.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -82,9 +83,22 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-    List<String> l = new ArrayList<String>();
-    //Empty
-    return l;
+    List<String> cmdlist = new ArrayList<String>();
+    if (args.length == 1) {
+      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.create"))) {
+        cmdlist.add("create");
+      }
+      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.import"))) {
+        cmdlist.add("import");
+      }
+      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.list"))) {
+        cmdlist.add("list");
+      }
+    }
+    if (cmdlist != null) {
+      Collections.sort(cmdlist);
+    }
+    return cmdlist;
   }
 
 }

@@ -15,13 +15,6 @@ public class ImportMenu extends Menu {
 
   @EventHandler
   public void onClick(InventoryClickEvent e) {
-
-    if (getInventory() != e.getInventory()) {
-      return;
-    }
-
-    
-
   }
 
 }

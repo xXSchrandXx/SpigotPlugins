@@ -2,10 +2,12 @@ package de.xxschrandxx.awm.gui.menus;
 
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldConfigManager.WorldStatus;
+import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -36,8 +39,9 @@ public class ListMenu extends Menu {
 
   @Override
   public void initializeItems() {
-    previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.search.previous.itemname"), Storage.messages.get().getString("menu.search.previous.itemlore"));
-    next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.search.next.itemname"), Storage.messages.get().getString("menu.search.next.itemlore"));
+
+    previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.previous.itemname"), Storage.messages.get().getString("menu.list.previous.itemlore"));
+    next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.next.itemname"), Storage.messages.get().getString("menu.list.next.itemlore"));
 
     ConcurrentHashMap<String, WorldStatus> worldmap = WorldConfigManager.getAllWorlds();
 
@@ -49,20 +53,54 @@ public class ListMenu extends Menu {
       if (entry.getValue() == WorldStatus.BUKKITWORLD) {
         World world = Bukkit.getWorld(entry.getKey());
         Material m = Material.BEDROCK;
-        if (world.getEnvironment() == World.Environment.NORMAL) {
-          m = Material.GRASS;
+        if (world.getEnvironment() == Environment.NORMAL) {
+          m = Material.GRASS_BLOCK;
         }
-        else if (world.getEnvironment() == World.Environment.NETHER) {
+        else if (world.getEnvironment() == Environment.NETHER) {
           m = Material.NETHERRACK;
         }
-        else if (world.getEnvironment() == World.Environment.THE_END) {
+        else if (world.getEnvironment() == Environment.THE_END) {
+          m = Material.END_STONE;
+        }
+        itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.bukkit").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
+      }
+      else if (entry.getValue() == WorldStatus.LOADED) {
+        WorldData worlddata = WorldConfigManager.getWorlddataFromName(entry.getKey());
+        Material m = Material.BEDROCK;
+        if (worlddata.getEnviroment() == Environment.NORMAL) {
+          m = Material.GRASS_BLOCK;
+        }
+        else if (worlddata.getEnviroment() == Environment.NETHER) {
+          m = Material.NETHERRACK;
+        }
+        else if (worlddata.getEnviroment() == Environment.THE_END) {
           m = Material.END_STONE;
         }
         itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.loaded").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
       }
+      else if (entry.getValue() == WorldStatus.UNLOADED) {
+        WorldData worlddata = WorldConfigManager.getWorlddataFromName(entry.getKey());
+        Material m = Material.BEDROCK;
+        if (worlddata.getEnviroment() == Environment.NORMAL) {
+          m = Material.GRASS_BLOCK;
+        }
+        else if (worlddata.getEnviroment() == Environment.NETHER) {
+          m = Material.NETHERRACK;
+        }
+        else if (worlddata.getEnviroment() == Environment.THE_END) {
+          m = Material.END_STONE;
+        }
+        itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.unloaded").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
+      }
+      else {
+        Material m = Material.BARRIER;
+        itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.unknown").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
+      }
       if (itemstack != null)
         worlds.put(entry.getKey(), itemstack);
     }
+
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "" + worlds);
 
     if (worlds.size() < 9*6) {
       //Menu without arrows
@@ -90,6 +128,10 @@ public class ListMenu extends Menu {
 
       Player p = (Player) e.getWhoClicked();
 
+      if (e.getCurrentItem() == null) {
+        return;
+      }
+
       if (e.getCurrentItem().isSimilar(previous)) {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
           MenuManager.removeListMenu(p);
@@ -114,7 +156,7 @@ public class ListMenu extends Menu {
 
       for (Entry<String, ItemStack> entry : worlds.entrySet()) {
         if (e.getCurrentItem().isSimilar(entry.getValue())) {
-          if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
+          if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.world").replace("%world%", entry.getKey()))) {
             MenuManager.removeListMenu(p);
             MenuManager.addWorldMenu(p, new WorldMenu());
           }

@@ -6,6 +6,7 @@ author: xXSchrandXx
 website: ${project.url}
 database: false
 softdepend: [AsyncWorldManager]
+api-version: 1.13
 commands:
   worldmanagergui:
     description: Hauptkommando von WorldSystemGUI.

@@ -1425,24 +1425,27 @@ public class WorldConfigManager {
     LOADED
   }
 
+  /**
+   * Gets a {@link List} of all {@link World}s.
+   * @return A {@link ConcurrentHashMap} with loaded Worldnames and {@link WorldStatus}.
+   */
   public static ConcurrentHashMap<String, WorldStatus> getAllWorlds() {
     ConcurrentHashMap<String, WorldStatus> worlds = new ConcurrentHashMap<String, WorldConfigManager.WorldStatus>();
     for (String world : Bukkit.getWorldContainer().list()) {
       if (getAllKnownWorlds().contains(world)) {
         if (getAllLoadedWorlds().contains(world)) {
           worlds.put(world, WorldStatus.LOADED);
-          continue;
         }
-        if (getAllUnloadedWorlds().contains(world)) {
+        else if (getAllUnloadedWorlds().contains(world)) {
           worlds.put(world, WorldStatus.UNLOADED);
-          continue;
         }
       }
-      if (Bukkit.getWorld(world) != null) {
+      else if (Bukkit.getWorld(world) != null) {
         worlds.put(world, WorldStatus.BUKKITWORLD);
-        continue;
       }
-      worlds.put(world, WorldStatus.UNKNOWN);
+      else {
+        worlds.put(world, WorldStatus.UNKNOWN);
+      }
     }
     return worlds;
   }

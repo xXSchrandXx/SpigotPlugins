@@ -23,7 +23,7 @@ public class Overview extends Menu {
 
   @Override
   public void initializeItems() {
-    icreate = MenuManager.createGuiItem(Material.GRASS,
+    icreate = MenuManager.createGuiItem(Material.GRASS_BLOCK,
         Storage.messages.get().getString("menu.overview.create.itemname"),
         Storage.messages.get().getStringList("menu.overview.create.itemlore"));
     iimport = MenuManager.createGuiItem(Material.STONE,
@@ -33,9 +33,9 @@ public class Overview extends Menu {
         Storage.messages.get().getString("menu.overview.list.itemname"),
         Storage.messages.get().getStringList("menu.overview.list.itemlore"));
 
-    getInventory().setItem(0, icreate);
-    getInventory().setItem(1, iimport);
-    getInventory().setItem(2, ilist);
+    getInventory().setItem(1, icreate);
+    getInventory().setItem(3, iimport);
+    getInventory().setItem(5, ilist);
   }
 
   @EventHandler
@@ -54,6 +54,10 @@ public class Overview extends Menu {
     if (e.getWhoClicked() instanceof Player) {
 
       Player p = (Player) e.getWhoClicked();
+
+      if (e.getCurrentItem() == null) {
+        return;
+      }
 
       AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent is Player " + p.getName());
 
