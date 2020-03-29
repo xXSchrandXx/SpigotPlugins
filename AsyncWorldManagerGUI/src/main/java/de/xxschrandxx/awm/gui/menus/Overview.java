@@ -19,7 +19,7 @@ public class Overview extends Menu {
     super(Storage.messages.get().getString("menu.overview.name"), 9);
   }
 
-  ItemStack icreate, iimport, ilist, isearch;
+  ItemStack icreate, iimport, ilist;
 
   @Override
   public void initializeItems() {
@@ -32,14 +32,10 @@ public class Overview extends Menu {
     ilist = MenuManager.createGuiItem(Material.PAPER,
         Storage.messages.get().getString("menu.overview.list.itemname"),
         Storage.messages.get().getStringList("menu.overview.list.itemlore"));
-    isearch = MenuManager.createGuiItem(Material.ANVIL,
-        Storage.messages.get().getString("menu.overview.search.itemname"),
-        Storage.messages.get().getStringList("menu.overview.search.itemlore"));
 
     getInventory().setItem(0, icreate);
     getInventory().setItem(1, iimport);
     getInventory().setItem(2, ilist);
-    getInventory().setItem(3, isearch);
   }
 
   @EventHandler

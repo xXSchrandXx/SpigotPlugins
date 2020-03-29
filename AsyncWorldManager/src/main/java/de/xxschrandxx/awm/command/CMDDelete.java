@@ -18,10 +18,10 @@ public class CMDDelete {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.delete")) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
-          WorldData worlddata = Storage.getWorlddataFromName(args[1]);
-          Config config = Storage.getWorldConfig(args[1]);
+          WorldData worlddata = WorldConfigManager.getWorlddataFromName(args[1]);
+          Config config = WorldConfigManager.getWorldConfig(args[1]);
           if ((worlddata != null) && (config != null)) {
-            if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+            if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.delete.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("mainworld")).getSpawnLocation());
@@ -60,7 +60,7 @@ public class CMDDelete {
         list.add("delete");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("delete")) {
-        for (String worldname : Storage.getAllLoadedWorlds()) {
+        for (String worldname : WorldConfigManager.getAllLoadedWorlds()) {
           list.add(worldname);
         }
       }

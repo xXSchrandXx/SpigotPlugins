@@ -60,6 +60,27 @@ public class Storage {
     listlore.add("&7Open the Worldlist Menu.");
     messages.get().addDefault("menu.overview.list.itemlore", listlore);
 
+    //List Menu
+    messages.get().addDefault("menu.list.name", "World List");
+    //Item Previous
+    messages.get().addDefault("menu.list.previous.itemname", "Previous Page");
+    List<String> previouslore = new ArrayList<String>();
+    previouslore.add("&7Open previous List page.");
+    messages.get().addDefault("menu.list.previous.itemlore", createlore);
+    //Item Next
+    messages.get().addDefault("menu.list.next.itemname", "Next Page");
+    List<String> nextlore = new ArrayList<String>();
+    nextlore.add("&7Open next List page.");
+    messages.get().addDefault("menu.list.next.itemlore", createlore);
+    //Item World
+    messages.get().addDefault("menu.list.world.itemname.unknown", "&7%world%");
+    messages.get().addDefault("menu.list.world.itemname.loaded", "&a%world%");
+    messages.get().addDefault("menu.list.world.itemname.unloaded", "&c%world%");
+    messages.get().addDefault("menu.list.world.itemname.bukkit", "&e%world%");
+    List<String> worldlore = new ArrayList<String>();
+    worldlore.add("&7Open the menu for this world.");
+    messages.get().addDefault("menu.list.world.itemlore", createlore);
+
     messages.save();
 
   }

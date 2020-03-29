@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Storage;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 
 import net.md_5.bungee.api.chat.*;
@@ -19,19 +19,19 @@ public class CMDInfo {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.info")) {
       WorldData worlddata = null;
       if (args.length == 2) {
-    	  worlddata = Storage.getWorlddataFromAlias(args[1]);
+    	  worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
       }
       else if (sender instanceof Player) {
         Player p = (Player) sender;
-        worlddata = Storage.getWorlddataFromName(p.getWorld().getName());
+        worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
       }
       else if (sender instanceof BlockCommandSender) {
         BlockCommandSender b = (BlockCommandSender) sender;
-        worlddata = Storage.getWorlddataFromName(b.getBlock().getWorld().getName());
+        worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
       }
       else if (sender instanceof CommandMinecart) {
         CommandMinecart m = (CommandMinecart) sender;
-        worlddata = Storage.getWorlddataFromName(m.getWorld().getName());
+        worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
       }
       else {
         AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.info.usage"));
@@ -80,7 +80,7 @@ public class CMDInfo {
         list.add("info");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("info")) {
-        list.addAll(Storage.getAllKnownWorlds());
+        list.addAll(WorldConfigManager.getAllKnownWorlds());
       }
     }
     return list;

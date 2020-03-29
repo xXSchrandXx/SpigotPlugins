@@ -18,7 +18,7 @@ public class WorldLoadListener implements Listener {
   public void onWorldLoad(WorldLoadEvent e) {
     World world = e.getWorld();
     String worldname = world.getName();
-    WorldData worlddata = Storage.getWorlddataFromName(worldname);
+    WorldData worlddata = WorldConfigManager.getWorlddataFromName(worldname);
     if (worlddata == null) {
       AsyncWorldManager.getLogHandler().log(true, Level.WARNING, worldname + " loading without AWM configuration. Creating one from world...");
       worlddata = WorldConfigManager.getWorlddataFromWorld(world);

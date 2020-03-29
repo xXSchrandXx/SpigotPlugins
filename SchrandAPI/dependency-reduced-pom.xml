@@ -40,6 +40,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>Minecraft-Server</groupId>
+      <artifactId>Minecraft-Server</artifactId>
+      <version>1.15.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}\internalRepo\1.15.2.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>
 

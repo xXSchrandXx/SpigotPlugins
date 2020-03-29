@@ -21,8 +21,8 @@ public class CMDCreate {
         if (args.length != 2) {
           String preenviroment = args[2].toUpperCase();
           if (!worldname.isEmpty() && !preenviroment.isEmpty()) {
-            WorldData worlddata = Storage.getWorlddataFromName(args[1]);
-            Config config = Storage.getWorldConfig(args[1]);
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(args[1]);
+            Config config = WorldConfigManager.getWorldConfig(args[1]);
             if ((worlddata == null) && (config == null)) {
               File wfile = new File(AsyncWorldManager.getInstance().getServer().getWorldContainer(), worldname);
               if (!wfile.exists()) {

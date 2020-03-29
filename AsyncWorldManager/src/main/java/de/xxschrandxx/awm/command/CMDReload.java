@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Storage;
-
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDReload {
@@ -15,7 +15,7 @@ public class CMDReload {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.reload")) {
       Storage.stop();
       Storage.start();
-      Storage.setallworlddatas();
+      WorldConfigManager.setallworlddatas();
       AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.reload.success"));
       return true;
     }

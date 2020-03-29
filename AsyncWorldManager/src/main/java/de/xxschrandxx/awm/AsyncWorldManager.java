@@ -81,7 +81,7 @@ public class AsyncWorldManager extends JavaPlugin {
       config.save();
     }
     metrics = new Metrics(this);
-    metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> Storage.getAllKnownWorlds().size()));
+    metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> WorldConfigManager.getAllKnownWorlds().size()));
     if (metrics.isEnabled()) {
       getLogHandler().log(true, Level.WARNING, "Starting Metrics. Opt-out using the global bStats config.");
     }
@@ -117,7 +117,7 @@ public class AsyncWorldManager extends JavaPlugin {
       Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
     }
     getLogHandler().log(false, Level.INFO, "Loading Worlds...");
-    Storage.loadworlds();
+    WorldConfigManager.loadworlds();
   }
 
   @Override

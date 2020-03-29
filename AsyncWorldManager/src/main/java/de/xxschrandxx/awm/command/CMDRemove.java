@@ -19,10 +19,10 @@ public class CMDRemove {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.remove")) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
-          WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
-          Config config = Storage.getWorldConfig(worlddata.getWorldName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
+          Config config = WorldConfigManager.getWorldConfig(worlddata.getWorldName());
           if ((worlddata != null) && (config != null)) {
-            if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+            if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.remove.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("MainWorld")).getSpawnLocation());
@@ -61,7 +61,7 @@ public class CMDRemove {
         list.add("remove");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("remove")) {
-        list.addAll(Storage.getAllLoadedWorlds());
+        list.addAll(WorldConfigManager.getAllLoadedWorlds());
       }
     }
     return list;

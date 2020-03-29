@@ -30,10 +30,10 @@ public class CMDModify {
           }
         }
         else if (args.length == 4) {
-          WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
-          Config config = Storage.getWorldConfig(worlddata.getWorldName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
+          Config config = WorldConfigManager.getWorldConfig(worlddata.getWorldName());
           if ((worlddata != null) && (config != null)) {
-            if (Storage.getAllKnownWorlds().contains(worlddata.getWorldName())) {
+            if (WorldConfigManager.getAllKnownWorlds().contains(worlddata.getWorldName())) {
               String key = args[2];
               String prevalue = args[3];
               if (key.isEmpty() || prevalue.isEmpty())
@@ -802,7 +802,7 @@ public class CMDModify {
         return list;
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("modify")) {
-        list.addAll(Storage.getAllLoadedWorlds());
+        list.addAll(WorldConfigManager.getAllLoadedWorlds());
         return list;
       }
       else if (args[1].equalsIgnoreCase("modify")) {

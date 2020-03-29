@@ -1,8 +1,10 @@
 package de.xxschrandxx.awm.api.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -1270,6 +1272,197 @@ public class WorldConfigManager {
       }
     }
     normal.normalworld(worlddata);
+  }
+
+  /**
+   * Loads every {@link WorldData}
+   * @return All all loaded {@link WorldData}s
+   */
+  public static ArrayList<WorldData> loadAllWorlddatas() {
+    ArrayList<WorldData> list = new ArrayList<WorldData>();
+    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+    if (!worldconfigfolder.exists())
+      worldconfigfolder.mkdir();
+    for (File worldconfigfile : worldconfigfolder.listFiles()) {
+      Config config = new Config(worldconfigfile);
+      WorldData worlddata = WorldConfigManager.getWorlddataFromConfig(config);
+      list.add(worlddata);
+    }
+    return list;
+  }
+
+  /**
+   * Gets the {@link WorldData} from the given name.
+   * @param name The Name from the World.
+   * @return The {@link WorldData} from the World or null if no World is found.
+   */
+  public static WorldData getWorlddataFromName(String name) {
+    WorldData worlddata = null;
+    for (WorldData testworlddata : loadAllWorlddatas()) {
+      if (testworlddata.getWorldName().equals(name)) {
+        worlddata = testworlddata;
+      }
+    }
+    return worlddata;
+  }
+
+  /**
+   * Gets the {@link WorldData} from the given alias.
+   * @param alias The Alias from the World.
+   * @return The {@link WorldData} from the World or null if no World is found.
+   */
+  public static WorldData getWorlddataFromAlias(String alias) {
+    WorldData worlddata = null;
+    for (WorldData testworlddata : loadAllWorlddatas()) {
+      if (testworlddata.getWorldName().equals(alias))
+        worlddata = testworlddata;
+      if (testworlddata.getAliases().contains(alias))
+        worlddata = testworlddata;
+    }
+    return worlddata;
+  }
+
+  /**
+   * Loads every known {@link World}.
+   */
+  public static void loadworlds() {
+    for (WorldData worlddata : loadAllWorlddatas()) {
+      if (worlddata.getAutoLoad()) {
+        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
+        WorldConfigManager.createWorld(worlddata);
+      }
+    }
+    String mainworldname = AsyncWorldManager.config.get().getString("mainworld");
+    World mainworld = Bukkit.getWorld(mainworldname);
+    if (mainworld == null)
+      return;
+    WorldData worlddata = getWorlddataFromName(mainworldname);
+    if (worlddata == null) {
+      worlddata = WorldConfigManager.getWorlddataFromWorld(mainworld);
+    }
+    if (worlddata != null) {
+      WorldConfigManager.setWorldsData(mainworld, worlddata);
+      File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+      File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
+      Config worldconfig = new Config(worldconfigfile);
+      WorldConfigManager.save(worldconfig, worlddata);
+    }
+  }
+
+  /**
+   * Sets the {@link WorldData} for every known {@link World}.
+   */
+  public static void setallworlddatas() {
+    for (World world : Bukkit.getWorlds()) {
+      WorldData worlddata = getWorlddataFromName(world.getName());
+      if (worlddata != null) {
+        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Setting up world: " + worlddata.getWorldName());
+        WorldConfigManager.setWorldsData(world, worlddata);
+      }
+    }
+  }
+
+  /**
+   * Gets a {@link List} of all unknown {@link World}s.
+   * @return A {@link List} with unknown Worldnames.
+   */
+  public static List<String> getAllUnknownWorlds() {
+    List<String> list = new ArrayList<String>();
+    for (String worldname : Bukkit.getWorldContainer().list()) {
+      if (getWorlddataFromName(worldname) == null) {
+        list.add(worldname);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * Gets a {@link List} of all known {@link World}s.
+   * @return A {@link List} with known Worldnames.
+   */
+  public static List<String> getAllKnownWorlds() {
+    List<String> list = new ArrayList<String>();
+    for (String worldname : Bukkit.getWorldContainer().list()) {
+      if (getWorlddataFromName(worldname) != null) {
+        list.add(worldname);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * Gets a {@link List} of all unloaded {@link World}s.
+   * @return A {@link List} with unloaded Worldnames.
+   */
+  public static List<String> getAllUnloadedWorlds() {
+    List<String> list = new ArrayList<String>();
+    for (String worldname : getAllKnownWorlds()) {
+      if (Bukkit.getWorld(worldname) == null) {
+        list.add(worldname);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * Gets a {@link List} of all loaded {@link World}s.
+   * @return A {@link List} with loaded Worldnames.
+   */
+  public static List<String> getAllLoadedWorlds() {
+    List<String> list = new ArrayList<String>();
+    for (String worldname : getAllKnownWorlds()) {
+      if (Bukkit.getWorld(worldname) != null) {
+        list.add(worldname);
+      }
+    }
+    return list;
+  }
+
+  public enum WorldStatus {
+    BUKKITWORLD,
+    UNKNOWN,
+    UNLOADED,
+    LOADED
+  }
+
+  public static ConcurrentHashMap<String, WorldStatus> getAllWorlds() {
+    ConcurrentHashMap<String, WorldStatus> worlds = new ConcurrentHashMap<String, WorldConfigManager.WorldStatus>();
+    for (String world : Bukkit.getWorldContainer().list()) {
+      if (getAllKnownWorlds().contains(world)) {
+        if (getAllLoadedWorlds().contains(world)) {
+          worlds.put(world, WorldStatus.LOADED);
+          continue;
+        }
+        if (getAllUnloadedWorlds().contains(world)) {
+          worlds.put(world, WorldStatus.UNLOADED);
+          continue;
+        }
+      }
+      if (Bukkit.getWorld(world) != null) {
+        worlds.put(world, WorldStatus.BUKKITWORLD);
+        continue;
+      }
+      worlds.put(world, WorldStatus.UNKNOWN);
+    }
+    return worlds;
+  }
+
+  /**
+   * Gets a {@link Config} from a {@link World}.
+   * @param name The name of the {@link World}.
+   * @return The {@link Config} from the name or null if none is found.
+   */
+  public static Config getWorldConfig(String name) {
+    Config worldconfig = null;
+    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
+    if (!worldconfigfolder.exists())
+      worldconfigfolder.mkdir();
+    for (File worldconfigfile : worldconfigfolder.listFiles()) {
+      if (worldconfigfile.getName().equals(name + ".yml")) {
+        worldconfig = new Config(worldconfigfile);
+      }
+    }
+    return worldconfig;
   }
 
 }

@@ -26,8 +26,8 @@ public class CMDImport {
             if (Bukkit.getWorld(worldname) == null) {
               File wfile = new File(Bukkit.getWorldContainer(), worldname);
               if (wfile.exists()) {
-                WorldData worlddata = Storage.getWorlddataFromName(worldname);
-                Config config = Storage.getWorldConfig(worldname);
+                WorldData worlddata = WorldConfigManager.getWorlddataFromName(worldname);
+                Config config = WorldConfigManager.getWorldConfig(worldname);
                 if ((worlddata == null) && (config == null)) {
                   if (testValues.isEnviroment(preenviroment)) {
                     worlddata = WorldConfigManager.getWorlddataFromCommand(sender, worldname, preenviroment, args);
@@ -83,7 +83,7 @@ public class CMDImport {
         list.add("import");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("import")) {
-        list.addAll(Storage.getAllUnknownWorlds());
+        list.addAll(WorldConfigManager.getAllUnknownWorlds());
       }
       else if ((args.length == 3) && args[1].equalsIgnoreCase("import")) {
         for (Environment env : Environment.values()) {

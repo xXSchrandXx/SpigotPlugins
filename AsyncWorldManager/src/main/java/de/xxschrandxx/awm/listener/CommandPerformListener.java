@@ -39,13 +39,13 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = Storage.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
               worlddata.setX(x);
               worlddata.setY(y);
               worlddata.setZ(z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = Storage.getWorldConfig(world.getName());
+              Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
             }
           }
@@ -57,13 +57,13 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = Storage.getWorlddataFromName(p.getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
             if (worlddata != null) {
               worlddata.setX(x);
               worlddata.setY(y);
               worlddata.setZ(z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = Storage.getWorldConfig(world.getName());
+              Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
             }
           }
@@ -75,13 +75,13 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = Storage.getWorlddataFromName(b.getBlock().getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
             if (worlddata != null) {
               worlddata.setX(x);
               worlddata.setY(y);
               worlddata.setZ(z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = Storage.getWorldConfig(world.getName());
+              Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
             }
           }
@@ -93,13 +93,13 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = Storage.getWorlddataFromName(m.getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
             if (worlddata != null) {
               worlddata.setX(x);
               worlddata.setY(y);
               worlddata.setZ(z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = Storage.getWorldConfig(world.getName());
+              Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
             }
           }
@@ -114,7 +114,7 @@ public class CommandPerformListener implements Listener {
           double z = p.getLocation().getZ();
           float yaw = p.getLocation().getYaw();
           float pitch = p.getLocation().getPitch();
-          WorldData worlddata = Storage.getWorlddataFromName(p.getWorld().getName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
           if (worlddata != null) {
             worlddata.setX(x);
             worlddata.setY(y);
@@ -122,7 +122,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setYaw(yaw);
             worlddata.setPitch(pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = Storage.getWorldConfig(world.getName());
+            Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);
           }
         }
@@ -134,7 +134,7 @@ public class CommandPerformListener implements Listener {
           double z = b.getBlock().getLocation().getZ();
           float yaw = b.getBlock().getLocation().getYaw();
           float pitch = b.getBlock().getLocation().getPitch();
-          WorldData worlddata = Storage.getWorlddataFromName(b.getBlock().getWorld().getName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
           if (worlddata != null) {
             worlddata.setX(x);
             worlddata.setY(y);
@@ -142,7 +142,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setYaw(yaw);
             worlddata.setPitch(pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = Storage.getWorldConfig(world.getName());
+            Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);
           }
         }
@@ -154,7 +154,7 @@ public class CommandPerformListener implements Listener {
           double z = m.getLocation().getZ();
           float yaw = m.getLocation().getYaw();
           float pitch = m.getLocation().getPitch();
-          WorldData worlddata = Storage.getWorlddataFromName(m.getWorld().getName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
           if (worlddata != null) {
             worlddata.setX(x);
             worlddata.setY(y);
@@ -162,7 +162,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setYaw(yaw);
             worlddata.setPitch(pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = Storage.getWorldConfig(world.getName());
+            Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);
           }
         }

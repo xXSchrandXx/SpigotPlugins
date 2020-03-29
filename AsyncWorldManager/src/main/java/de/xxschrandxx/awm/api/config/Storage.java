@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.awm.AsyncWorldManager;
@@ -235,116 +232,5 @@ public class Storage {
     File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
     if (!worldconfigfolder.exists())
       worldconfigfolder.mkdir();
-  }
-  public static ArrayList<WorldData> loadAllWorlddatas() {
-    ArrayList<WorldData> list = new ArrayList<WorldData>();
-    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-    if (!worldconfigfolder.exists())
-      worldconfigfolder.mkdir();
-    for (File worldconfigfile : worldconfigfolder.listFiles()) {
-      Config config = new Config(worldconfigfile);
-      WorldData worlddata = WorldConfigManager.getWorlddataFromConfig(config);
-      list.add(worlddata);
-    }
-    return list;
-  }
-  public static WorldData getWorlddataFromName(String name) {
-    WorldData worlddata = null;
-    for (WorldData testworlddata : loadAllWorlddatas()) {
-      if (testworlddata.getWorldName().equals(name)) {
-        worlddata = testworlddata;
-      }
-    }
-    return worlddata;
-  }
-  public static WorldData getWorlddataFromAlias(String alias) {
-    WorldData worlddata = null;
-    for (WorldData testworlddata : loadAllWorlddatas()) {
-      if (testworlddata.getWorldName().equals(alias))
-        worlddata = testworlddata;
-      if (testworlddata.getAliases().contains(alias))
-        worlddata = testworlddata;
-    }
-    return worlddata;
-  }
-  public static void loadworlds() {
-    for (WorldData worlddata : loadAllWorlddatas()) {
-      if (worlddata.getAutoLoad()) {
-        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
-        WorldConfigManager.createWorld(worlddata);
-      }
-    }
-    String mainworldname = AsyncWorldManager.config.get().getString("mainworld");
-    World mainworld = Bukkit.getWorld(mainworldname);
-    if (mainworld == null)
-      return;
-    WorldData worlddata = getWorlddataFromName(mainworldname);
-    if (worlddata == null) {
-      worlddata = WorldConfigManager.getWorlddataFromWorld(mainworld);
-    }
-    if (worlddata != null) {
-      WorldConfigManager.setWorldsData(mainworld, worlddata);
-      File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-      File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
-      Config worldconfig = new Config(worldconfigfile);
-      WorldConfigManager.save(worldconfig, worlddata);
-    }
-  }
-  public static void setallworlddatas() {
-    for (World world : Bukkit.getWorlds()) {
-      WorldData worlddata = getWorlddataFromName(world.getName());
-      if (worlddata != null) {
-        AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Setting up world: " + worlddata.getWorldName());
-        WorldConfigManager.setWorldsData(world, worlddata);
-      }
-    }
-  }
-  public static List<String> getAllUnknownWorlds() {
-    List<String> list = new ArrayList<String>();
-    for (String worldname : Bukkit.getWorldContainer().list()) {
-      if (getWorlddataFromName(worldname) == null) {
-        list.add(worldname);
-      }
-    }
-    return list;
-  }
-  public static List<String> getAllKnownWorlds() {
-    List<String> list = new ArrayList<String>();
-    for (String worldname : Bukkit.getWorldContainer().list()) {
-      if (getWorlddataFromName(worldname) != null) {
-        list.add(worldname);
-      }
-    }
-    return list;
-  }
-  public static List<String> getAllUnloadedWorlds() {
-    List<String> list = new ArrayList<String>();
-    for (String worldname : getAllKnownWorlds()) {
-      if (Bukkit.getWorld(worldname) == null) {
-        list.add(worldname);
-      }
-    }
-    return list;
-  }
-  public static List<String> getAllLoadedWorlds() {
-    List<String> list = new ArrayList<String>();
-    for (String worldname : getAllKnownWorlds()) {
-      if (Bukkit.getWorld(worldname) != null) {
-        list.add(worldname);
-      }
-    }
-    return list;
-  }
-  public static Config getWorldConfig(String name) {
-    Config worldconfig = null;
-    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-    if (!worldconfigfolder.exists())
-      worldconfigfolder.mkdir();
-    for (File worldconfigfile : worldconfigfolder.listFiles()) {
-      if (worldconfigfile.getName().equals(name + ".yml")) {
-        worldconfig = new Config(worldconfigfile);
-      }
-    }
-    return worldconfig;
   }
 }

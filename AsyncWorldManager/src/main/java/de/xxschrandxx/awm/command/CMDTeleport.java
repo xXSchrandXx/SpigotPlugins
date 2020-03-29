@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Storage;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 
 import net.md_5.bungee.api.chat.*;
@@ -21,9 +21,9 @@ public class CMDTeleport {
       if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.main")) {
         if (args.length != 1) {
           if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.self")) {
-            WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
+            WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
-              if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+              if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName()));
                 p.teleport(world.getSpawnLocation());
@@ -46,9 +46,9 @@ public class CMDTeleport {
         }
         else if (args.length != 2) {
           if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.other")) {
-            WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
+            WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
-              if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+              if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 if (Bukkit.getPlayer(args[2]) != null) {
                   Player p2 = Bukkit.getPlayer(args[2]);
@@ -94,9 +94,9 @@ public class CMDTeleport {
     }
     else {
       if (args.length == 3) {
-        WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
+        WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
         if (worlddata != null) {
-          if (Storage.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+          if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
             World world = Bukkit.getWorld(worlddata.getWorldName());
             if (Bukkit.getPlayer(args[2]) != null) {
               Player p2 = Bukkit.getPlayer(args[2]);
@@ -142,7 +142,7 @@ public class CMDTeleport {
         }
       }
       else if ((args.length == 3) && args[1].equalsIgnoreCase("teleport")) {
-        list.addAll(Storage.getAllLoadedWorlds());
+        list.addAll(WorldConfigManager.getAllLoadedWorlds());
       }
     }
     return list;

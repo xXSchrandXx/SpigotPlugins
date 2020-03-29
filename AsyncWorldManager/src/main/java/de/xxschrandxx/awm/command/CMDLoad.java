@@ -16,9 +16,9 @@ public class CMDLoad {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.load") || (sender instanceof BlockCommandSender)) {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
-          WorldData worlddata = Storage.getWorlddataFromAlias(args[1]);
+          WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
           if (worlddata != null) {
-            if (Storage.getAllUnloadedWorlds().contains(worlddata.getWorldName())) {
+            if (WorldConfigManager.getAllUnloadedWorlds().contains(worlddata.getWorldName())) {
               WorldConfigManager.createWorld(worlddata);
               AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.load.success.chat").replace("%world%", worlddata.getWorldName()), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.load.success.hover"), ClickEvent.Action.RUN_COMMAND, "/wm tp " + worlddata.getWorldName());
               return true;
@@ -53,7 +53,7 @@ public class CMDLoad {
         list.add("load");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("load")) {
-        list.addAll(Storage.getAllUnloadedWorlds());
+        list.addAll(WorldConfigManager.getAllUnloadedWorlds());
       }
     }
     return list;
