@@ -21,7 +21,7 @@
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
-    <!-- Mojang Depemdendy -->
+    <!-- Mojang Dependendy -->
     <dependency>
       <groupId>Minecraft-Server</groupId>
       <artifactId>Minecraft-Server</artifactId>
