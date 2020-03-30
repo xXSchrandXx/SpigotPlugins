@@ -22,20 +22,32 @@ public class WorldMenu extends Menu {
     worldname = WorldName;
   }
 
-  ItemStack iimport, imodify, iteleport;
+  ItemStack iload, iunload, iimport, imodify, iteleport, iremove, idelete;
 
   @Override
   public void initializeItems() {
     iimport = MenuManager.createGuiItem(Material.STONE, Storage.messages.get().getString("menu.world.import.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.import.itemlore"));
     imodify = MenuManager.createGuiItem(Material.GRAVEL, Storage.messages.get().getString("menu.world.modify.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.modify.itemlore"));
     iteleport = MenuManager.createGuiItem(Material.ENDER_PEARL, Storage.messages.get().getString("menu.world.teleport.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.teleport.itemlore"));
+    iload = MenuManager.createGuiItem(Material.GREEN_WOOL, Storage.messages.get().getString("menu.world.load.itemname"), Storage.messages.get().getString("menu.world.load.itemlore"));
+    iunload = MenuManager.createGuiItem(Material.RED_WOOL, Storage.messages.get().getString("menu.world.unload.itemname"), Storage.messages.get().getString("menu.world.unload.itemlore"));
+    iremove = MenuManager.createGuiItem(Material.STRUCTURE_VOID, Storage.messages.get().getString("menu.world.remove.itemname"), Storage.messages.get().getString("menu.world.remove.itemlore"));
+    idelete = MenuManager.createGuiItem(Material.BARRIER, Storage.messages.get().getString("menu.world.delete.itemname"), Storage.messages.get().getString("menu.world.delete.itemlore"));
 
     if (WorldConfigManager.getAllKnownWorlds().contains(worldname)) {
-      getInventory().setItem(3, imodify);
+      if(WorldConfigManager.getAllLoadedWorlds().contains(worldname)) {
+        getInventory().setItem(2, iunload);
+      }
+      else {
+        getInventory().setItem(2, iload);
+      }
+      getInventory().setItem(4, imodify);
       getInventory().setItem(5, iteleport);
+      getInventory().setItem(7, iremove);
+      getInventory().setItem(8, idelete);
     }
     else {
-      getInventory().setItem(3, iimport);
+      getInventory().setItem(4, iimport);
     }
 
   }
@@ -70,6 +82,22 @@ public class WorldMenu extends Menu {
 
       if (e.getCurrentItem().isSimilar(iteleport)) {
         p.performCommand("wm tp " + worldname);
+      }
+
+      if (e.getCurrentItem().isSimilar(iload)) {
+        p.performCommand("wm load " + worldname);
+      }
+
+      if (e.getCurrentItem().isSimilar(iunload)) {
+        p.performCommand("wm unload " + worldname);
+      }
+
+      if (e.getCurrentItem().isSimilar(iremove)) {
+        p.performCommand("wm remvoe " + worldname);
+      }
+
+      if (e.getCurrentItem().isSimilar(idelete)) {
+        p.performCommand("wm delete " + worldname);
       }
 
       if (e.getCurrentItem().isSimilar(imodify)) {

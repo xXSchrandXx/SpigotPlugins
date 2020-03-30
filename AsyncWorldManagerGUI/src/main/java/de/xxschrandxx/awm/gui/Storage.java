@@ -94,6 +94,26 @@ public class Storage {
     List<String> teleportlore = new ArrayList<String>();
     teleportlore.add("&7Teleport into this World.");
     messages.get().addDefault("menu.world.teleport.itemlore", teleportlore);
+    //Item Load
+    messages.get().addDefault("menu.world.load.itemname", "Load World");
+    List<String> loadlore = new ArrayList<String>();
+    loadlore.add("&7Load this World.");
+    messages.get().addDefault("menu.world.load.itemlore", loadlore);
+    //Item Unload
+    messages.get().addDefault("menu.world.unload.itemname", "Unload World");
+    List<String> unloadlore = new ArrayList<String>();
+    unloadlore.add("&7Unload this World.");
+    messages.get().addDefault("menu.world.unload.itemlore", unloadlore);
+    //Item Remove
+    messages.get().addDefault("menu.world.remove.itemname", "&4Remove World");
+    List<String> removelore = new ArrayList<String>();
+    removelore.add("&7Remove this World.");
+    messages.get().addDefault("menu.world.remove.itemlore", removelore);
+    //Item Delete
+    messages.get().addDefault("menu.world.delete.itemname", "&4Delete World");
+    List<String> deletelore = new ArrayList<String>();
+    deletelore.add("&7Delete this World.");
+    messages.get().addDefault("menu.world.delete.itemlore", deletelore);
 
     messages.save();
 
