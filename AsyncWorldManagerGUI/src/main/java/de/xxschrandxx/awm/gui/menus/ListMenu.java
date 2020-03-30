@@ -182,7 +182,7 @@ public class ListMenu extends Menu {
         if (e.getCurrentItem().isSimilar(entry.getValue())) {
           if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.world").replace("%world%", entry.getKey()))) {
             MenuManager.removeListMenu(p);
-            MenuManager.addWorldMenu(p, new WorldMenu());
+            MenuManager.addWorldMenu(p, new WorldMenu(entry.getKey()));
           }
           else {
             AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));

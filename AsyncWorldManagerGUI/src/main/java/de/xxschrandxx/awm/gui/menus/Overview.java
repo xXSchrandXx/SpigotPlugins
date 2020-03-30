@@ -19,23 +19,19 @@ public class Overview extends Menu {
     super(Storage.messages.get().getString("menu.overview.name"), 9);
   }
 
-  ItemStack icreate, iimport, ilist;
+  ItemStack icreate, ilist;
 
   @Override
   public void initializeItems() {
     icreate = MenuManager.createGuiItem(Material.GRASS_BLOCK,
         Storage.messages.get().getString("menu.overview.create.itemname"),
         Storage.messages.get().getStringList("menu.overview.create.itemlore"));
-    iimport = MenuManager.createGuiItem(Material.STONE,
-        Storage.messages.get().getString("menu.overview.import.itemname"),
-        Storage.messages.get().getStringList("menu.overview.import.itemlore"));
     ilist = MenuManager.createGuiItem(Material.PAPER,
         Storage.messages.get().getString("menu.overview.list.itemname"),
         Storage.messages.get().getStringList("menu.overview.list.itemlore"));
 
-    getInventory().setItem(1, icreate);
-    getInventory().setItem(3, iimport);
-    getInventory().setItem(5, ilist);
+    getInventory().setItem(2, icreate);
+    getInventory().setItem(6, ilist);
   }
 
   @EventHandler
@@ -71,17 +67,6 @@ public class Overview extends Menu {
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
           AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent Player has no Permission.");
-          MenuManager.removeOverview(p);
-        }
-      }
-
-      else if (e.getCurrentItem().isSimilar(iimport)) {
-        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.import"))) {
-          MenuManager.removeOverview(p);
-          MenuManager.addImportMenu(p, new ImportMenu());
-        }
-        else {
-          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.import")));
           MenuManager.removeOverview(p);
         }
       }

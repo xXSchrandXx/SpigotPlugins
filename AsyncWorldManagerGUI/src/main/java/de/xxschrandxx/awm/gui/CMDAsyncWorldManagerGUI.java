@@ -11,6 +11,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.chat.HoverEvent;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.gui.menus.*;
 
 public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
@@ -22,7 +23,7 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
       if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.command"))) {
         String menuname = null;
         if (args.length != 0) {
-          if (args[0].contentEquals("create")) {
+          if (args[0].equalsIgnoreCase("create")) {
             if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.create"))) {
               CreateMenu menu = new CreateMenu();
               menuname = menu.getName();
@@ -33,18 +34,7 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
               return true;
             }
           }
-          else if (args[0].contentEquals("import")) {
-            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.import"))) {
-              ImportMenu menu = new ImportMenu();
-              menuname = menu.getName();
-              MenuManager.addImportMenu(p, menu);
-            }
-            else {
-              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.import")));
-              return true;
-            }
-          }
-          else if (args[0].contentEquals("list")) {
+          else if (args[0].equalsIgnoreCase("list")) {
             if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
               ListMenu menu = new ListMenu();
               menuname = menu.getName();
@@ -52,6 +42,17 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
             }
             else {
               AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.list")));
+              return true;
+            }
+          }
+          else if (WorldConfigManager.getAllKnownWorlds().contains(args[0])) {
+            if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.world").replace("%world%", args[0].toLowerCase()))) {
+              WorldMenu menu = new WorldMenu(args[0]);
+              menuname = menu.getName();
+              MenuManager.addWorldMenu(p, menu);
+            }
+            else {
+              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(sender, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.world").replace("%world%", args[0].toLowerCase())));
               return true;
             }
           }
@@ -87,11 +88,13 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
       if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.create"))) {
         cmdlist.add("create");
       }
-      if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.import"))) {
-        cmdlist.add("import");
-      }
       if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.list"))) {
         cmdlist.add("list");
+      }
+      for (String worldname : WorldConfigManager.getAllKnownWorlds()) {
+        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(sender, Storage.config.get().getString("permission.openmenu.world").replace("%world%", worldname.toLowerCase()))) {
+          cmdlist.add(worldname);
+        }
       }
     }
     if (cmdlist != null) {

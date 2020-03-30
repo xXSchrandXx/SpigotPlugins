@@ -5,7 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ImportMenu extends Menu {
 
-  public ImportMenu() {
+  public ImportMenu(String worldname) {
     super("Import", 9);
   }
 

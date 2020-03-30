@@ -49,11 +49,6 @@ public class Storage {
     List<String> createlore = new ArrayList<String>();
     createlore.add("&7Open the Worldcreation Menu.");
     messages.get().addDefault("menu.overview.create.itemlore", createlore);
-    //Item Import
-    messages.get().addDefault("menu.overview.import.itemname", "Import World");
-    List<String> importlore = new ArrayList<String>();
-    importlore.add("&7Open the Worldimport Menu.");
-    messages.get().addDefault("menu.overview.import.itemlore", importlore);
     //Item List
     messages.get().addDefault("menu.overview.list.itemname", "List Worlds");
     List<String> listlore = new ArrayList<String>();
@@ -66,12 +61,12 @@ public class Storage {
     messages.get().addDefault("menu.list.previous.itemname", "Previous Page");
     List<String> previouslore = new ArrayList<String>();
     previouslore.add("&7Open previous List page.");
-    messages.get().addDefault("menu.list.previous.itemlore", createlore);
+    messages.get().addDefault("menu.list.previous.itemlore", previouslore);
     //Item Next
     messages.get().addDefault("menu.list.next.itemname", "Next Page");
     List<String> nextlore = new ArrayList<String>();
     nextlore.add("&7Open next List page.");
-    messages.get().addDefault("menu.list.next.itemlore", createlore);
+    messages.get().addDefault("menu.list.next.itemlore", nextlore);
     //Item World
     messages.get().addDefault("menu.list.world.itemname.unknown", "&7%world%");
     messages.get().addDefault("menu.list.world.itemname.loaded", "&a%world%");
@@ -79,7 +74,26 @@ public class Storage {
     messages.get().addDefault("menu.list.world.itemname.bukkit", "&e%world%");
     List<String> worldlore = new ArrayList<String>();
     worldlore.add("&7Open the menu for this world.");
-    messages.get().addDefault("menu.list.world.itemlore", createlore);
+    messages.get().addDefault("menu.list.world.itemlore", worldlore);
+
+    //List World
+    messages.get().addDefault("menu.world.name", "%world%");
+    //Item Import
+    messages.get().addDefault("menu.world.import.itemname", "Import %world%");
+    List<String> importlore = new ArrayList<String>();
+    importlore.add("&7Open the Menu to import this World.");
+    messages.get().addDefault("menu.world.import.itemlore", importlore);
+    //Item Modify
+    messages.get().addDefault("menu.world.modify.itemname", "Modify %world%");
+    List<String> modifylore = new ArrayList<String>();
+    modifylore.add("&7Open the Menu to modify this World.");
+    messages.get().addDefault("menu.world.modify.itemlore", modifylore);
+    messages.get().addDefault("menu.world.modify.error", "&cERROR&7, WorldData not found...");
+    //Item Teleport
+    messages.get().addDefault("menu.world.teleport.itemname", "Teleport into %world%");
+    List<String> teleportlore = new ArrayList<String>();
+    teleportlore.add("&7Teleport into this World.");
+    messages.get().addDefault("menu.world.teleport.itemlore", teleportlore);
 
     messages.save();
 
