@@ -39,7 +39,7 @@ public class Storage {
 
     messages.get().addDefault("nopermission", "You don't have permission to use that.");
     messages.get().addDefault("command.console", "&cOnly Players can execute this command.");
-    messages.get().addDefault("command.open", "Opened %menu%");
+    messages.get().addDefault("command.open", "Opening &e%menu%&7... &8[&cThis can take a while&8]");
 
     //Menus
     //Overview Menu

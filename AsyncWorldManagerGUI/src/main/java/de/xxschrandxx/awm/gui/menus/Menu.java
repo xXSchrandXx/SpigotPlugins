@@ -6,6 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
+
 public class Menu implements InventoryHolder, Listener {
 
   private Inventory inv;
@@ -35,8 +37,18 @@ public class Menu implements InventoryHolder, Listener {
   public void initializeItems() {}
 
   public void openInventory(Player p) {
-    initializeItems();
-    p.openInventory(getInventory());
+    AsyncWorldManagerGUI.scheduleAsync(new Runnable() {
+      @Override
+      public void run() {
+        initializeItems();
+        AsyncWorldManagerGUI.scheduleSync(new Runnable() {
+          @Override
+          public void run() {
+            p.openInventory(getInventory());
+          }
+        });
+      }
+    });
   }
 
 }

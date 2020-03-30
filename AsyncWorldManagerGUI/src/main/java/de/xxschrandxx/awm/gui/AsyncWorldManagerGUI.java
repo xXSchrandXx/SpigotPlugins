@@ -31,6 +31,14 @@ public class AsyncWorldManagerGUI extends JavaPlugin {
     return mh.getLogHandler();
   }
 
+  public static void scheduleAsync(Runnable r) {
+    getInstance().getServer().getScheduler().runTaskAsynchronously(getInstance(), r);
+  }
+
+  public static void scheduleSync(Runnable r) {
+    getInstance().getServer().getScheduler().runTask(getInstance(), r);
+  }
+
   @Override
   public void onLoad() {
 

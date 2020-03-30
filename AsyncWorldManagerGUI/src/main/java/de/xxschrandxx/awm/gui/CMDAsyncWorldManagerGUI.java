@@ -67,7 +67,6 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
             return true;
           }
         }
-        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menuname));
         return true;
       }
       else {

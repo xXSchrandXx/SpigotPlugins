@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.gui.Storage;
 
 public class MenuManager {
 
@@ -40,6 +41,7 @@ public class MenuManager {
   public static boolean addCreateMenu(Player p, CreateMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added CreateMenu for " + p.getName());
     if (!createmenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       createmenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -84,6 +86,7 @@ public class MenuManager {
   public static boolean addGameruleMenu(Player p, GameruleMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added GameruleMenu for " + p.getName());
     if (!gamerulemenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       gamerulemenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -128,6 +131,7 @@ public class MenuManager {
   public static boolean addImportMenu(Player p, ImportMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ImportMenu for " + p.getName());
     if (!importmenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       importmenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -172,6 +176,7 @@ public class MenuManager {
   public static boolean addListMenu(Player p, ListMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ListMenu for " + p.getName());
     if (!listmenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       listmenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -216,6 +221,7 @@ public class MenuManager {
   public static boolean addModifyMenu(Player p, ModifyMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ModifyMenu for " + p.getName());
     if (!modifymenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       modifymenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -260,6 +266,7 @@ public class MenuManager {
   public static boolean addOverview(Player p, Overview menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added Overview for " + p.getName());
     if (!overview.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       overview.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
@@ -304,6 +311,7 @@ public class MenuManager {
   public static boolean addWorldMenu(Player p, WorldMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added WorldMenu for " + p.getName());
     if (!worldmenus.containsKey(p)) {
+      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
       worldmenus.put(p, menu);
       Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
       menu.openInventory(p);
