@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.World.Environment;
 import org.bukkit.generator.ChunkGenerator;
 
+import de.xxschrandxx.api.minecraft.awm.CreationType;
+
 public class testValues {
 
   /**
@@ -157,6 +159,16 @@ public class testValues {
   public static boolean isGameMode(String s) {
     try {
       GameMode.valueOf(s);
+      return true;
+    }
+    catch (IllegalArgumentException | NullPointerException e) {
+      return false;
+    }
+  }
+
+  public static boolean isCreationType(String s) {
+    try {
+      CreationType.valueOf(s);
       return true;
     }
     catch (IllegalArgumentException | NullPointerException e) {

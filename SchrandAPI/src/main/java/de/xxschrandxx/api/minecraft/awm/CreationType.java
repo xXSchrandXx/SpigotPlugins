@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.api.worldcreation;
+package de.xxschrandxx.api.minecraft.awm;
 
 public enum CreationType {
   broken,fawe,normal

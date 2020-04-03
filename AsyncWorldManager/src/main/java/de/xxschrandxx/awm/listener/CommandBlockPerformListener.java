@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 
+import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 
@@ -18,7 +19,7 @@ public class CommandBlockPerformListener implements Listener {
       String name = b.getBlock().getWorld().getName();
       if (WorldConfigManager.getAllKnownWorlds().contains(name)) {
         WorldData worlddata = WorldConfigManager.getWorlddataFromName(name);
-        if (!worlddata.getEnableCommandBlocks())
+        if (!(Boolean) worlddata.getModifierValue(Modifier.enablecommandblocks))
           e.setCancelled(true);
       }
     }
@@ -27,7 +28,7 @@ public class CommandBlockPerformListener implements Listener {
       String name = m.getWorld().getName();
       if (WorldConfigManager.getAllKnownWorlds().contains(name)) {
         WorldData worlddata = WorldConfigManager.getWorlddataFromName(name);
-        if (!worlddata.getEnableCommandBlocks())
+        if (!(Boolean) worlddata.getModifierValue(Modifier.enablecommandblocks))
           e.setCancelled(true);
       }
     }

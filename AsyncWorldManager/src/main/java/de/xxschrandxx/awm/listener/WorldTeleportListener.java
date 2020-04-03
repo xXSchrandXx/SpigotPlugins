@@ -1,5 +1,6 @@
 package de.xxschrandxx.awm.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +18,7 @@ public class WorldTeleportListener implements Listener {
     if (WorldConfigManager.getWorlddataFromName(world.getName()) != null) {
       WorldData worlddata = WorldConfigManager.getWorlddataFromName(world.getName());
       if (!p.hasPermission(AsyncWorldManager.config.get().getString("event.permissions.worldmanager.gamemode.bypass"))) {
-        p.setGameMode(worlddata.getGameMode());
+        p.setGameMode((GameMode) worlddata.getModifierValue(Modifier.gamemode));
       }
     }
   }

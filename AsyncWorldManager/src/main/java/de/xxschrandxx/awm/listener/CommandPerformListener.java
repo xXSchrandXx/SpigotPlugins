@@ -41,9 +41,9 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              worlddata.setX(x);
-              worlddata.setY(y);
-              worlddata.setZ(z);
+              worlddata.setModifier(Modifier.x, x);
+              worlddata.setModifier(Modifier.y, y);
+              worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
               Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
@@ -59,9 +59,9 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
             if (worlddata != null) {
-              worlddata.setX(x);
-              worlddata.setY(y);
-              worlddata.setZ(z);
+              worlddata.setModifier(Modifier.x, x);
+              worlddata.setModifier(Modifier.y, y);
+              worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
               Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
@@ -77,9 +77,9 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
             if (worlddata != null) {
-              worlddata.setX(x);
-              worlddata.setY(y);
-              worlddata.setZ(z);
+              worlddata.setModifier(Modifier.x, x);
+              worlddata.setModifier(Modifier.y, y);
+              worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
               Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
@@ -95,9 +95,9 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
             if (worlddata != null) {
-              worlddata.setX(x);
-              worlddata.setY(y);
-              worlddata.setZ(z);
+              worlddata.setModifier(Modifier.x, x);
+              worlddata.setModifier(Modifier.y, y);
+              worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
               Config config = WorldConfigManager.getWorldConfig(world.getName());
               WorldConfigManager.save(config, worlddata);
@@ -116,11 +116,11 @@ public class CommandPerformListener implements Listener {
           float pitch = p.getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
           if (worlddata != null) {
-            worlddata.setX(x);
-            worlddata.setY(y);
-            worlddata.setZ(z);
-            worlddata.setYaw(yaw);
-            worlddata.setPitch(pitch);
+            worlddata.setModifier(Modifier.x, x);
+            worlddata.setModifier(Modifier.y, y);
+            worlddata.setModifier(Modifier.z, z);
+            worlddata.setModifier(Modifier.yaw, yaw);
+            worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
             Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);
@@ -136,11 +136,11 @@ public class CommandPerformListener implements Listener {
           float pitch = b.getBlock().getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
           if (worlddata != null) {
-            worlddata.setX(x);
-            worlddata.setY(y);
-            worlddata.setZ(z);
-            worlddata.setYaw(yaw);
-            worlddata.setPitch(pitch);
+            worlddata.setModifier(Modifier.x, x);
+            worlddata.setModifier(Modifier.y, y);
+            worlddata.setModifier(Modifier.z, z);
+            worlddata.setModifier(Modifier.yaw, yaw);
+            worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
             Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);
@@ -156,11 +156,11 @@ public class CommandPerformListener implements Listener {
           float pitch = m.getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
           if (worlddata != null) {
-            worlddata.setX(x);
-            worlddata.setY(y);
-            worlddata.setZ(z);
-            worlddata.setYaw(yaw);
-            worlddata.setPitch(pitch);
+            worlddata.setModifier(Modifier.x, x);
+            worlddata.setModifier(Modifier.y, y);
+            worlddata.setModifier(Modifier.z, z);
+            worlddata.setModifier(Modifier.yaw, yaw);
+            worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
             Config config = WorldConfigManager.getWorldConfig(world.getName());
             WorldConfigManager.save(config, worlddata);

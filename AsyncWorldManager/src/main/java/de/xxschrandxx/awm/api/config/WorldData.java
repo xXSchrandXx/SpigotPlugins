@@ -1,20 +1,15 @@
 package de.xxschrandxx.awm.api.config;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
-import org.bukkit.Difficulty;
-import org.bukkit.GameMode;
 import org.bukkit.World.Environment;
-import org.bukkit.WorldType;
-import org.bukkit.generator.ChunkGenerator;
 
-import de.xxschrandxx.awm.api.gamerulemanager.Rule;
-import de.xxschrandxx.awm.api.worldcreation.CreationType;
+import de.xxschrandxx.awm.AsyncWorldManager;
 
 public class WorldData {
+  //WorldName
   private String worldname;
   public String getWorldName() {
     return this.worldname;
@@ -22,6 +17,50 @@ public class WorldData {
   public void setWorldName(String WorldName) {
     this.worldname = WorldName;
   }
+  //Enviroment
+  private Environment enviroment;
+  public Environment getEnviroment() {
+    return this.enviroment;
+  }
+  public void setEnviroment(Environment Environment) {
+    this.enviroment = Environment;
+  }
+  //Modifier
+  private Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
+  public Map<Modifier, Object> getModifier() {
+    return modifier;
+  }
+  public Object getModifierValue(Modifier key) {
+    return modifier.get(key);
+  }
+  public boolean setModifier(Modifier key, Object value) {
+    if (!key.o.isEmpty()) {
+      if (!key.o.contains(value)) {
+        AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldData.setModifier | Modifier used not listet Object " + value);
+        return false;
+      }
+    }
+    modifier.put(key, value);
+    return true;
+  }
+  public void setModifier(Map<Modifier, Object> m) {
+    modifier = m;
+  }
+/*
+  private Map<Rule<?>, Object> rules = new HashMap<Rule<?>, Object>();
+  public Map<Rule<?>, Object> getRules() {
+    return rules;
+  }
+  public Object getRuleValue(Rule<?> Rule) {
+    return rules.get(Rule);
+  }
+  public void setRule(Rule<?> key, Object value) {
+    rules.put(key, value);
+  }
+  public void setRules(Map<Rule<?>, Object> Rules) {
+    rules = Rules;
+  }
+
   private CreationType creationtype;
   public CreationType getCreationType() {
     return creationtype;
@@ -66,30 +105,12 @@ public class WorldData {
       return false;
     }
   }
-  private Environment enviroment;
-  public Environment getEnviroment() {
-    return this.enviroment;
-  }
-  public void setEnviroment(Environment Environment) {
-    this.enviroment = Environment;
-  }
   private long seed;
   public long getSeed() {
     return this.seed;
   }
   public void setSeed(long Seed) {
     this.seed = Seed;
-  }
-  private ChunkGenerator generator;
-  public ChunkGenerator getGenerator() {
-    return this.generator;
-  }
-  public void setGenerator(ChunkGenerator Generator) {
-    this.generator = Generator;
-  }
-  private WorldType worldtype;
-  public WorldType getWorldType() {
-    return this.worldtype;
   }
   public void setWorldType(WorldType WorldType) {
     this.worldtype = WorldType;
@@ -227,21 +248,7 @@ public class WorldData {
   public void setKeepSpawnInMemory(boolean KeepSpawnInMemory) {
     this.keepspawninmemory = KeepSpawnInMemory;
   }
-// Gamerules
-  private Map<Rule<?>, Object> rules = new HashMap<Rule<?>, Object>();
-  public Map<Rule<?>, Object> getRules() {
-    return rules;
-  }
-  public Object getRuleValue(Rule<?> Rule) {
-    return rules.get(Rule);
-  }
-  public void setRule(Rule<?> key, Object value) {
-    rules.put(key, value);
-  }
-  public void setRules(Map<Rule<?>, Object> Rules) {
-    rules = Rules;
-  }
-/*
+
   private boolean announceadvancements;
 
   public boolean getAnnounceAdvancements() {
@@ -411,8 +418,6 @@ public class WorldData {
   public void setSpectatorsGenerateChunks(boolean SpectatorsGenerateChunks) {
     this.spectatorsgeneratechunks = SpectatorsGenerateChunks;
   }
-*/
-// MobSpawns
   private List<String> disabledentitys = new ArrayList<String>();
   public List<String> getDisabledEntitys() {
     return this.disabledentitys;
@@ -420,7 +425,6 @@ public class WorldData {
   public void setDisabledEntitys(List<String> DisabledEntitys) {
     this.disabledentitys = DisabledEntitys;
   }
-// CommandBlock
   private boolean enablecommandblocks;
   public boolean getEnableCommandBlocks() {
     return this.enablecommandblocks;
@@ -428,4 +432,5 @@ public class WorldData {
   public void setEnableCommandBlocks(boolean EnableCommandBlocks) {
     this.enablecommandblocks = EnableCommandBlocks;
   }
+*/
 }

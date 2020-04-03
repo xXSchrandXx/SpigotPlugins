@@ -115,6 +115,14 @@ public class Storage {
     deletelore.add("&7Delete this World.");
     messages.get().addDefault("menu.world.delete.itemlore", deletelore);
 
+    //Menu Modify
+    messages.get().addDefault("menu.modify.name", "Modify %world%");
+    //Item Autoload
+    messages.get().addDefault("menu.modify.change.itemname", "&7Change &e%setting%");
+    List<String> autoloadlore = new ArrayList<String>();
+    autoloadlore.add("&7Change this setting.");
+    messages.get().addDefault("menu.modify.change.itemlore", autoloadlore);
+
     messages.save();
 
   }

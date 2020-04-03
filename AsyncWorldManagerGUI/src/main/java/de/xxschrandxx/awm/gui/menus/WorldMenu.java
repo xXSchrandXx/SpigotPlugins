@@ -26,13 +26,13 @@ public class WorldMenu extends Menu {
 
   @Override
   public void initializeItems() {
-    iimport = MenuManager.createGuiItem(Material.STONE, Storage.messages.get().getString("menu.world.import.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.import.itemlore"));
-    imodify = MenuManager.createGuiItem(Material.GRAVEL, Storage.messages.get().getString("menu.world.modify.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.modify.itemlore"));
-    iteleport = MenuManager.createGuiItem(Material.ENDER_PEARL, Storage.messages.get().getString("menu.world.teleport.itemname").replace("%world%", worldname), Storage.messages.get().getString("menu.world.teleport.itemlore"));
-    iload = MenuManager.createGuiItem(Material.GREEN_WOOL, Storage.messages.get().getString("menu.world.load.itemname"), Storage.messages.get().getString("menu.world.load.itemlore"));
-    iunload = MenuManager.createGuiItem(Material.RED_WOOL, Storage.messages.get().getString("menu.world.unload.itemname"), Storage.messages.get().getString("menu.world.unload.itemlore"));
-    iremove = MenuManager.createGuiItem(Material.STRUCTURE_VOID, Storage.messages.get().getString("menu.world.remove.itemname"), Storage.messages.get().getString("menu.world.remove.itemlore"));
-    idelete = MenuManager.createGuiItem(Material.BARRIER, Storage.messages.get().getString("menu.world.delete.itemname"), Storage.messages.get().getString("menu.world.delete.itemlore"));
+    iimport = MenuManager.createGuiItem(Material.STONE, Storage.messages.get().getString("menu.world.import.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.import.itemlore"));
+    imodify = MenuManager.createGuiItem(Material.GRAVEL, Storage.messages.get().getString("menu.world.modify.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.modify.itemlore"));
+    iteleport = MenuManager.createGuiItem(Material.ENDER_PEARL, Storage.messages.get().getString("menu.world.teleport.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.teleport.itemlore"));
+    iload = MenuManager.createGuiItem(Material.GREEN_WOOL, Storage.messages.get().getString("menu.world.load.itemname"), Storage.messages.get().getStringList("menu.world.load.itemlore"));
+    iunload = MenuManager.createGuiItem(Material.RED_WOOL, Storage.messages.get().getString("menu.world.unload.itemname"), Storage.messages.get().getStringList("menu.world.unload.itemlore"));
+    iremove = MenuManager.createGuiItem(Material.STRUCTURE_VOID, Storage.messages.get().getString("menu.world.remove.itemname"), Storage.messages.get().getStringList("menu.world.remove.itemlore"));
+    idelete = MenuManager.createGuiItem(Material.BARRIER, Storage.messages.get().getString("menu.world.delete.itemname"), Storage.messages.get().getStringList("menu.world.delete.itemlore"));
 
     if (WorldConfigManager.getAllKnownWorlds().contains(worldname)) {
       if(WorldConfigManager.getAllLoadedWorlds().contains(worldname)) {

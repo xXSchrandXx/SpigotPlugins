@@ -4,12 +4,15 @@ import java.io.File;
 
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
+import org.bukkit.generator.ChunkGenerator;
 
 import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
 import com.boydti.fawe.util.TaskManager;
 
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
@@ -32,10 +35,10 @@ public class fawe {
         WorldData worlddata = preworldcreateevent.getWorldData();
         if (Bukkit.getWorld(preworldcreator.name()) == null) {
           preworldcreator.environment(worlddata.getEnviroment());
-          preworldcreator.seed(worlddata.getSeed());
-          preworldcreator.generator(worlddata.getGenerator());
-          preworldcreator.type(worlddata.getWorldType());
-          preworldcreator.generateStructures(worlddata.getGenerateStructures());
+          preworldcreator.seed((Long) worlddata.getModifierValue(Modifier.seed));
+          preworldcreator.generator((ChunkGenerator) worlddata.getModifierValue(Modifier.generator));
+          preworldcreator.type((WorldType) worlddata.getModifierValue(Modifier.worldtype));
+          preworldcreator.generateStructures((Boolean) worlddata.getModifierValue(Modifier.generatestructures));
         }
         WorldCreateEvent worldcreateevent = new WorldCreateEvent(preworldcreator, true);
         Bukkit.getPluginManager().callEvent(worldcreateevent);

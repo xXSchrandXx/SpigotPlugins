@@ -1,11 +1,13 @@
 package de.xxschrandxx.awm.api.gamerulemanager;
 
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.GameRule;
 import org.bukkit.World;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldData;
 
 public class WorldDataEditor_1_13 {
@@ -20,7 +22,9 @@ public class WorldDataEditor_1_13 {
       AsyncWorldManager.getLogHandler().log(true, Level.INFO, "Unknown GameRule: " + r.getName());
       return worlddata;
     }
-    worlddata.setRule(r, world.getGameRuleValue(gr));
+    @SuppressWarnings("unchecked")
+    Map<Rule<?>, Object> rules = (Map<Rule<?>, Object>) worlddata.getModifierValue(Modifier.gamerule);
+    rules.put(r, world.getGameRuleValue(gr));
     return worlddata;
   }
 
@@ -31,7 +35,8 @@ public class WorldDataEditor_1_13 {
     if (r.getType() == null && r.getName() == null)
       return false;
     GameRule rule = GameRule.getByName(r.getName());
-    Object value = worlddata.getRuleValue(r);
+    Map<Rule<?>, Object> rules = (Map<Rule<?>, Object>) worlddata.getModifierValue(Modifier.gamerule);
+    Object value = rules.get(r);
     if (rule == null && value == null)
       return false;
     world.setGameRule(rule, value);

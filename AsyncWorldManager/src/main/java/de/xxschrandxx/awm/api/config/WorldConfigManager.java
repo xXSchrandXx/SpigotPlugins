@@ -2,14 +2,17 @@ package de.xxschrandxx.awm.api.config;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -21,12 +24,13 @@ import org.bukkit.generator.ChunkGenerator;
 
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
+import de.xxschrandxx.api.minecraft.awm.CreationType;
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_12_2;
 import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_13;
 import de.xxschrandxx.awm.api.worldcreation.*;
-import de.xxschrandxx.awm.util.Dummy;
 import de.xxschrandxx.awm.util.Utils;
 
 public class WorldConfigManager {
@@ -40,6 +44,141 @@ public class WorldConfigManager {
    * @return The created {@link WorldData}.
    */
   public static WorldData getWorlddataFromCommand(CommandSender sender, String worldname, String preenviroment, String[] args) {
+    WorldData worlddata = getWorlddataFromDefault(worldname);
+    worlddata.setWorldName(worldname);
+    if (Environment.valueOf(preenviroment.toUpperCase()) != null)
+      worlddata.setEnviroment(Environment.valueOf(preenviroment.toUpperCase()));
+    Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
+    for (String option : args) {
+      String[] ops = option.split(":");
+      String premodifier = ops[0].replaceFirst("-", "");
+      String prevalue = ops[1];
+      Modifier modifier;
+      if ((modifier = Modifier.getModifier(premodifier)) != null) {
+        if (modifier == Modifier.gamerule) {
+          String rulename = prevalue;
+          String prerulevalue = ops[2];
+          Rule<?> rule = Rule.getByName(rulename);
+          if (rule.getType() == String.class) {
+            gamerules.put(rule, prerulevalue);
+          }
+          else if (rule.getType() == Boolean.class) {
+            if (testValues.isBoolean(prerulevalue)) {
+              gamerules.put(rule, Boolean.valueOf(prerulevalue));
+            }
+          }
+          else if (rule.getType() == Integer.class) {
+            if (testValues.isInt(prerulevalue)) {
+              gamerules.put(rule, Integer.valueOf(prerulevalue));
+            }
+          }
+        }
+        else if (modifier.cl == String.class) {
+          if (!prevalue.isEmpty()) {
+            worlddata.setModifier(modifier, prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a String. " + prevalue );
+          }
+        }
+        else if (modifier.cl == List.class) {
+          if (!prevalue.isEmpty()) {
+            List<String> value = List.of(prevalue.split(";"));
+            worlddata.setModifier(modifier, value);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " value was empty.");
+          }
+        }
+        else if (modifier.cl == Boolean.class) {
+          if (testValues.isBoolean(prevalue)) {
+            worlddata.setModifier(modifier, Boolean.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Boolean. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Integer.class) {
+          if (testValues.isInt(prevalue)) {
+            worlddata.setModifier(modifier, Integer.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Integer. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Double.class) {
+          if (testValues.isDouble(prevalue)) {
+            worlddata.setModifier(modifier, Double.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Double. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Float.class) {
+          if (testValues.isFloat(prevalue)) {
+            worlddata.setModifier(modifier, Float.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Float. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Long.class) {
+          if (testValues.isLong(prevalue)) {
+            worlddata.setModifier(modifier, Long.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Long. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Difficulty.class) {
+          if (testValues.isDifficulty(prevalue)) {
+            worlddata.setModifier(modifier, Difficulty.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Difficulty. " + prevalue );
+          }
+        }
+        else if (modifier.cl == ChunkGenerator.class) {
+          if (testValues.isGenerator(worldname, prevalue, sender)) {
+            worlddata.setModifier(modifier, WorldCreator.getGeneratorForName(worldname, prevalue, sender));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a ChunkGenerator. " + prevalue );
+          }
+        }
+        else if (modifier.cl == WorldType.class) {
+          if (testValues.isWorldType(prevalue)) {
+            worlddata.setModifier(modifier, WorldType.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a WorldType. " + prevalue );
+          }
+        }
+        else if (modifier.cl == CreationType.class) {
+          if (testValues.isCreationType(prevalue)) {
+            worlddata.setModifier(modifier, CreationType.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a CreationType. " + prevalue );
+          }
+        }
+        else if (modifier.cl == GameMode.class) {
+          if (testValues.isCreationType(prevalue)) {
+            worlddata.setModifier(modifier, GameMode.valueOf(prevalue));
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a GameMode. " + prevalue );
+          }
+        }
+      }
+    }
+    worlddata.setModifier(Modifier.gamerule, gamerules);
+    return worlddata;
+  }
+
+  /* Old getWorlddataFromCommand
+  @Deprecated
+  public static WorldData OLDgetWorlddataFromCommand(CommandSender sender, String worldname, String preenviroment, String[] args) {
     WorldData worlddata = getWorlddataFromDefault(worldname);
     worlddata.setWorldName(worldname);
     List<String> aliases = new ArrayList<String>();
@@ -252,177 +391,6 @@ public class WorldConfigManager {
             }
           }
         }
-/* Old Gamerules
-        String prerule = options.replace("-rule:", "");
-        if (prerule.startsWith("announceadvancements:")) {
-          String preannounceadvancements = prerule.replaceAll("announceadvancements:", "");
-          if (testValues.isBoolean(preannounceadvancements)) {
-            boolean announceadvancements = Boolean.valueOf(preannounceadvancements);
-            worlddata.setAnnounceAdvancements(announceadvancements);
-          }
-        }
-        else if (prerule.startsWith("commandblockoutput:")) {
-          String precommandblockoutput = prerule.replaceAll("commandblockoutput:", "");
-          if (testValues.isBoolean(precommandblockoutput)) {
-            boolean commandblockoutput = Boolean.valueOf(precommandblockoutput);
-            worlddata.setCommandBlockOutput(commandblockoutput);
-          }
-        }
-        else if (prerule.startsWith("disableelytramovementcheck:")) {
-          String predisableelytramovementcheck = prerule.replaceAll("disableelytramovementcheck:", "");
-          if (testValues.isBoolean(predisableelytramovementcheck)) {
-            boolean disableelytramovementcheck = Boolean.valueOf(predisableelytramovementcheck);
-            worlddata.setDisableElytraMovementCheck(disableelytramovementcheck);
-          }
-        }
-        else if (prerule.startsWith("disableraids:")) {
-          String predisableraids = prerule.replaceAll("disableraids:", "");
-          if (testValues.isBoolean(predisableraids)) {
-            boolean disableraids = Boolean.valueOf(predisableraids);
-            worlddata.setDisableRaids(disableraids);
-          }
-        }
-        else if (prerule.startsWith("dodaylightcycle:")) {
-          String predodaylightcycle = prerule.replaceAll("dodaylightcycle:", "");
-          if (testValues.isBoolean(predodaylightcycle)) {
-            boolean dodaylightcycle = Boolean.valueOf(predodaylightcycle);
-            worlddata.setDoDaylightCycle(dodaylightcycle);
-          }
-        }
-        else if (prerule.startsWith("doentitydrops:")) {
-          String predoentitydrops = prerule.replaceAll("doentitydrops:", "");
-          if (testValues.isBoolean(predoentitydrops)) {
-            boolean doentitydrops = Boolean.valueOf(predoentitydrops);
-            worlddata.setDoEntityDrop(doentitydrops);
-          }
-        }
-        else if (prerule.startsWith("dofiretick:")) {
-          String predofiretick = prerule.replaceAll("dofiretick:", "");
-          if (testValues.isBoolean(predofiretick)) {
-            boolean dofiretick = Boolean.valueOf(predofiretick);
-            worlddata.setDoFireTick(dofiretick);
-          }
-        }
-        else if (prerule.startsWith("dolimitedcrafting:")) {
-          String predolimitedcrafting = prerule.replaceAll("dolimitedcrafting:", "");
-          if (testValues.isBoolean(predolimitedcrafting)) {
-            boolean dolimitedcrafting = Boolean.valueOf(predolimitedcrafting);
-            worlddata.setDoLimitedCrafting(dolimitedcrafting);
-          }
-        }
-        else if (prerule.startsWith("domobloot:")) {
-          String predomobloot = prerule.replaceAll("domobloot:", "");
-          if (testValues.isBoolean(predomobloot)) {
-            boolean domobloot = Boolean.valueOf(predomobloot);
-            worlddata.setDoMobLoot(domobloot);
-          }
-        }
-        else if (prerule.startsWith("domobspawning:")) {
-          String predomobspawning = prerule.replaceAll("domobspawning:", "");
-          if (testValues.isBoolean(predomobspawning)) {
-            boolean domobspawning = Boolean.valueOf(predomobspawning);
-            worlddata.setDoMobSpawning(domobspawning);
-          }
-        }
-        else if (prerule.startsWith("dotiledrops:")) {
-          String predotiledrops = prerule.replaceAll("dotiledrops:", "");
-          if (testValues.isBoolean(predotiledrops)) {
-            boolean dotiledrops = Boolean.valueOf(predotiledrops);
-            worlddata.setDoTileDrops(dotiledrops);
-          }
-        }
-        else if (prerule.startsWith("doweathercycle:")) {
-          String predoweathercycle = prerule.replaceAll("doweathercycle:", "");
-          if (testValues.isBoolean(predoweathercycle)) {
-            boolean doweathercycle = Boolean.valueOf(predoweathercycle);
-            worlddata.setDoWeatherCycle(doweathercycle);
-          }
-        }
-        else if (prerule.startsWith("keepinventory:")) {
-          String prekeepinventory = prerule.replaceAll("keepinventory:", "");
-          if (testValues.isBoolean(prekeepinventory)) {
-            boolean keepinventory = Boolean.valueOf(prekeepinventory);
-            worlddata.setKeepInventory(keepinventory);
-          }
-        }
-        else if (prerule.startsWith("logadmincommands:")) {
-          String prelogadmincommands = prerule.replaceAll("logadmincommands:", "");
-          if (testValues.isBoolean(prelogadmincommands)) {
-            boolean logadmincommands = Boolean.valueOf(prelogadmincommands);
-            worlddata.setLogAdminCommands(logadmincommands);
-          }
-        }
-        else if (prerule.startsWith("maxcommandchainlength:")) {
-          String premaxcommandchainlength = prerule.replaceAll("maxcommandchainlength:", "");
-          if (testValues.isInt(premaxcommandchainlength)) {
-            int maxcommandchainlength = Integer.valueOf(premaxcommandchainlength);
-            worlddata.setMaxCommandChainLength(maxcommandchainlength);
-          }
-        }
-        else if (prerule.startsWith("maxentitycramming:")) {
-          String premaxentitycramming = prerule.replaceAll("maxentitycramming:", "");
-          if (testValues.isInt(premaxentitycramming)) {
-            int maxentitycramming = Integer.valueOf(premaxentitycramming);
-            worlddata.setMaxEntityCramming(maxentitycramming);
-          }
-        }
-        else if (prerule.startsWith("mobgriefing:")) {
-          String premobgriefing = prerule.replaceAll("mobgriefing:", "");
-          if (testValues.isBoolean(premobgriefing)) {
-            boolean mobgriefing = Boolean.valueOf(premobgriefing);
-            worlddata.setMobGriefing(mobgriefing);
-          }
-        }
-        else if (prerule.startsWith("naturalregeneration:")) {
-          String prenaturalregeneration = prerule.replaceAll("naturalregeneration:", "");
-          if (testValues.isBoolean(prenaturalregeneration)) {
-            boolean naturalregeneration = Boolean.valueOf(prenaturalregeneration);
-            worlddata.setNaturalGeneration(naturalregeneration);
-          }
-        }
-        else if (prerule.startsWith("randomtickspeed:")) {
-          String prerandomtickspeed = prerule.replaceAll("randomtickspeed:", "");
-          if (testValues.isInt(prerandomtickspeed)) {
-            int randomtickspeed = Integer.valueOf(prerandomtickspeed);
-            worlddata.setRandomTickSpeed(randomtickspeed);
-          }
-        }
-        else if (prerule.startsWith("reduceddebuginfo:")) {
-          String prereduceddebuginfo = prerule.replaceAll("reduceddebuginfo:", "");
-          if (testValues.isBoolean(prereduceddebuginfo)) {
-            boolean reduceddebuginfo = Boolean.valueOf(prereduceddebuginfo);
-            worlddata.setReducedBugInfo(reduceddebuginfo);
-          }
-        }
-        else if (prerule.startsWith("sendcommandfeedback:")) {
-          String presendcommandfeedback = prerule.replaceAll("sendcommandfeedback:", "");
-          if (testValues.isBoolean(presendcommandfeedback)) {
-            boolean sendcommandfeedback = Boolean.valueOf(presendcommandfeedback);
-            worlddata.setSendCommandFeedback(sendcommandfeedback);
-          }
-        }
-        else if (prerule.startsWith("showdeathmessages:")) {
-          String preshowdeathmessages = prerule.replaceAll("showdeathmessages:", "");
-          if (testValues.isBoolean(preshowdeathmessages)) {
-            boolean showdeathmessages = Boolean.valueOf(preshowdeathmessages);
-            worlddata.setShowDeathMessage(showdeathmessages);
-          }
-        }
-        else if (prerule.startsWith("spawnradius:")) {
-          String prespawnradius = prerule.replaceAll("spawnradius:", "");
-          if (testValues.isInt(prespawnradius)) {
-            int spawnradius = Integer.valueOf(prespawnradius);
-            worlddata.setSpawnRadius(spawnradius);
-          }
-        }
-        else if (prerule.startsWith("spectatorsgeneratechunks:")) {
-          String prespectatorsgeneratechunks = prerule.replaceAll("spectatorsgeneratechunks:", "");
-          if (testValues.isBoolean(prespectatorsgeneratechunks)) {
-            boolean spectatorsgeneratechunks = Boolean.valueOf(prespectatorsgeneratechunks);
-            worlddata.setSpectatorsGenerateChunks(spectatorsgeneratechunks);
-          }
-        }
-*/
       }
       else if (options.startsWith("-commandblocks:")) {
         String preenablecommandblocks = options.replace("-commandblocks:", "");
@@ -434,12 +402,61 @@ public class WorldConfigManager {
     }
     return worlddata;
   }
+*/
 
   /**
    * Gets the {@link WorldData} from the given {@link World}.
    * @param world The world to get the {@link WorldData} from.
    * @return The created {@link WorldData}.
    */
+  public static WorldData getWorlddataFromWorld(World world) {
+    WorldData worlddata = getWorlddataFromDefault(world.getName());
+    worlddata.setWorldName(world.getName());
+    worlddata.setModifier(Modifier.aliases, List.of(world.getName()));
+    if (world.getName().equals(AsyncWorldManager.config.get().getString("mainworld"))) {
+      worlddata.setModifier(Modifier.autoload, false);
+      worlddata.setModifier(Modifier.creationtype, CreationType.normal);
+    }
+    worlddata.setEnviroment(world.getEnvironment());
+    worlddata.setModifier(Modifier.allowanimalspawning, world.getAllowAnimals());
+    worlddata.setModifier(Modifier.allowmonsterspawning, world.getAllowMonsters());
+    worlddata.setModifier(Modifier.ambientlimit, world.getAmbientSpawnLimit());
+    worlddata.setModifier(Modifier.animallimit, world.getAnimalSpawnLimit());
+    worlddata.setModifier(Modifier.difficulty, world.getDifficulty());
+    Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
+    for (GameRule<?> gamerule : GameRule.values()) {
+      Rule<?> rule = Rule.getByName(gamerule.getName());
+      gamerules.put(rule, world.getGameRuleValue(gamerule));
+    }
+    worlddata.setModifier(Modifier.gamerule, gamerules);
+    worlddata.setModifier(Modifier.generator, world.getGenerator());
+    worlddata.setModifier(Modifier.generatestructures, world.canGenerateStructures());
+    worlddata.setModifier(Modifier.hardcore, world.isHardcore());
+    worlddata.setModifier(Modifier.keepspawninmemory, world.getKeepSpawnInMemory());
+    worlddata.setModifier(Modifier.monsterlimit, world.getMonsterSpawnLimit());
+    worlddata.setModifier(Modifier.pitch, world.getSpawnLocation().getPitch());
+    worlddata.setModifier(Modifier.pvp, world.getPVP());
+    worlddata.setModifier(Modifier.seed, world.getSeed());
+    worlddata.setModifier(Modifier.storm, world.hasStorm());
+    worlddata.setModifier(Modifier.thunder, world.isThundering());
+    worlddata.setModifier(Modifier.thunderduration, world.getThunderDuration());
+    worlddata.setModifier(Modifier.ticksperambientspawns, world.getTicksPerAmbientSpawns());
+    worlddata.setModifier(Modifier.ticksperanimalspawns, world.getTicksPerAnimalSpawns());
+    worlddata.setModifier(Modifier.tickspermonsterspawns, world.getTicksPerMonsterSpawns());
+    worlddata.setModifier(Modifier.ticksperwaterspawns, world.getTicksPerWaterSpawns());
+    worlddata.setModifier(Modifier.time, world.getTime());
+    worlddata.setModifier(Modifier.wateranimallimit, world.getWaterAnimalSpawnLimit());
+    worlddata.setModifier(Modifier.weatherduration, world.getWeatherDuration());
+    worlddata.setModifier(Modifier.worldtype, world.getWorldType());
+    worlddata.setModifier(Modifier.x, world.getSpawnLocation().getX());
+    worlddata.setModifier(Modifier.y, world.getSpawnLocation().getY());
+    worlddata.setModifier(Modifier.yaw, world.getSpawnLocation().getYaw());
+    worlddata.setModifier(Modifier.z, world.getSpawnLocation().getZ());
+
+    return worlddata;
+  }
+
+  /*OLD getWorlddataFromWorld
   public static WorldData getWorlddataFromWorld(World world) {
     WorldData worlddata = getWorlddataFromDefault(world.getName());
     worlddata.setWorldName(world.getName());
@@ -515,41 +532,197 @@ public class WorldConfigManager {
          worlddata = WorldDataEditor_1_12_2.setRule(worlddata, r, world);
        }
     }
-/* Old Gamerules
-    worlddata.setAnnounceAdvancements(world.getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS));
-    worlddata.setCommandBlockOutput(world.getGameRuleValue(GameRule.COMMAND_BLOCK_OUTPUT));
-    worlddata.setDisableElytraMovementCheck(world.getGameRuleValue(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK));
-    worlddata.setDisableElytraMovementCheck(world.getGameRuleValue(GameRule.DISABLE_RAIDS));
-    worlddata.setDoDaylightCycle(world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE));
-    worlddata.setDoEntityDrop(world.getGameRuleValue(GameRule.DO_ENTITY_DROPS));
-    worlddata.setDoFireTick(world.getGameRuleValue(GameRule.DO_FIRE_TICK));
-    worlddata.setDoLimitedCrafting(world.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING));
-    worlddata.setDoMobLoot(world.getGameRuleValue(GameRule.DO_MOB_LOOT));
-    worlddata.setDoMobSpawning(world.getGameRuleValue(GameRule.DO_MOB_SPAWNING));
-    worlddata.setDoTileDrops(world.getGameRuleValue(GameRule.DO_TILE_DROPS));
-    worlddata.setDoWeatherCycle(world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE));
-    worlddata.setKeepInventory(world.getGameRuleValue(GameRule.KEEP_INVENTORY));
-    worlddata.setLogAdminCommands(world.getGameRuleValue(GameRule.LOG_ADMIN_COMMANDS));
-    worlddata.setMaxCommandChainLength(world.getGameRuleValue(GameRule.MAX_COMMAND_CHAIN_LENGTH));
-    worlddata.setMaxEntityCramming(world.getGameRuleValue(GameRule.MAX_ENTITY_CRAMMING));
-    worlddata.setMobGriefing(world.getGameRuleValue(GameRule.MOB_GRIEFING));
-    worlddata.setNaturalGeneration(world.getGameRuleValue(GameRule.NATURAL_REGENERATION));
-    worlddata.setRandomTickSpeed(world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED));
-    worlddata.setReducedBugInfo(world.getGameRuleValue(GameRule.REDUCED_DEBUG_INFO));
-    worlddata.setSendCommandFeedback(world.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK));
-    worlddata.setShowDeathMessage(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES));
-    worlddata.setSpawnRadius(world.getGameRuleValue(GameRule.SPAWN_RADIUS));
-    worlddata.setSpectatorsGenerateChunks(world.getGameRuleValue(GameRule.SPECTATORS_GENERATE_CHUNKS));
-*/
 	  return worlddata;
   }
+*/
 
   /**
    * Gets the {@link WorldData} from the given Config.
    * @param config The {@link Config} to get the {@link WorldData} from.
    * @return The created {@link WorldData}.
    */
+  @SuppressWarnings({ "rawtypes", "null" })
   public static WorldData getWorlddataFromConfig(Config config) {
+    String worldname = config.getFile().getName().replace(".yml", "");
+    WorldData worlddata = getWorlddataFromDefault(worldname);
+    ConfigurationSection section = config.get().getConfigurationSection(worlddata.getWorldName());
+    for (String modifiername : section.getKeys(false)) {
+      Modifier modifier;
+      Object prevalue = section.get(modifiername);
+      if ((modifier = Modifier.getModifier(modifiername)) != null) {
+        if (modifier.cl == Map.class) {
+          if (prevalue instanceof Map) {
+            worlddata.setModifier(modifier, (Map) prevalue);
+          }
+          //TODO Test this
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Map. " + prevalue );
+          }
+        }
+        else if (modifier.cl == String.class) {
+          if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            if (!value.isEmpty()) {
+              worlddata.setModifier(modifier, value);
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is empty." );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a String. " + prevalue );
+          }
+        }
+        else if (modifier.cl == List.class) {
+          if (prevalue instanceof List) {
+            worlddata.setModifier(modifier, (List) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " List was empty.");
+          }
+        }
+        else if (modifier.cl == Boolean.class) {
+          if (prevalue instanceof Boolean) {
+            worlddata.setModifier(modifier, (Boolean) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Boolean. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Integer.class) {
+          if (prevalue instanceof Integer) {
+            worlddata.setModifier(modifier, (Integer) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Integer. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Double.class) {
+          if (prevalue instanceof Double) {
+            worlddata.setModifier(modifier, (Double) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Double. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Float.class) {
+          if (prevalue instanceof Float) {
+            worlddata.setModifier(modifier, (Float) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Float. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Long.class) {
+          if (prevalue instanceof Long) {
+            worlddata.setModifier(modifier, (Long) prevalue);
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Long. " + prevalue );
+          }
+        }
+        else if (modifier.cl == Difficulty.class) {
+          if (prevalue instanceof Difficulty) {
+            worlddata.setModifier(modifier, (Difficulty) prevalue);
+          }
+          else if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            if (testValues.isDifficulty(value)) {
+              worlddata.setModifier(modifier, Difficulty.valueOf(value));
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Difficulty-Name. " + prevalue );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Difficulty. " + prevalue );
+          }
+        }
+        else if (modifier.cl == ChunkGenerator.class) {
+          if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            ChunkGenerator cg;
+            if ((cg = WorldCreator.getGeneratorForName(worldname, value, Bukkit.getConsoleSender())) != null) {
+              worlddata.setModifier(modifier, cg);
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a ChunkGenerator. " + prevalue );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | " + modifier.name + " is not a ChunkGenerator-Name. " + prevalue );
+          }
+        }
+        else if (modifier.cl == WorldType.class) {
+          if (prevalue instanceof WorldType) {
+            worlddata.setModifier(modifier, (WorldType) prevalue);
+          }
+          else if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            if (testValues.isWorldType(value)) {
+              worlddata.setModifier(modifier, WorldType.valueOf(value));
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a WorldType-Name. " + prevalue );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a WorldType. " + prevalue );
+          }
+        }
+        else if (modifier.cl == CreationType.class) {
+          if (prevalue instanceof CreationType) {
+            worlddata.setModifier(modifier, (CreationType) prevalue);
+          }
+          else if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            if (testValues.isCreationType(value)) {
+              worlddata.setModifier(modifier, CreationType.valueOf(value));
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a CreationType-Name. " + prevalue );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a CreationType. " + prevalue );
+          }
+        }
+        else if (modifier.cl == GameMode.class) {
+          if (prevalue instanceof GameMode) {
+            worlddata.setModifier(modifier, (GameMode) prevalue);
+          }
+          else if (prevalue instanceof String) {
+            String value = (String) prevalue;
+            if (testValues.isGameMode(value)) {
+              worlddata.setModifier(modifier, GameMode.valueOf(value));
+            }
+            else {
+              AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a GameMode-Name. " + prevalue );
+            }
+          }
+          else {
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a GameMode. " + prevalue );
+          }
+        }
+      }
+      //TODO Enviroment
+      else if (modifiername.equals("Enviroment")) {
+        Environment env;
+        if (prevalue instanceof String) {
+          String value = (String) prevalue;
+          if ((env = Environment.valueOf(value)) != null) {
+            worlddata.setEnviroment(env);
+          }
+        }
+        else {
+          AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + modifier.name + " is not a Environment. " + prevalue );
+        }
+      }
+    }
+    return worlddata;
+  }
+
+  /*OLD getWorlddataFromConfig
     WorldData worlddata = getWorlddataFromDefault(config.getFile().getName().replace(".yml", ""));
     ConfigurationSection section = config.get().getConfigurationSection(worlddata.getWorldName());
     if (section.isString("creationtype")) {
@@ -654,80 +827,6 @@ public class WorldConfigManager {
         }
       }
     }
-/* Old Gamerules
-    if (section.isBoolean("gamerules.announceadvancements")) {
-      worlddata.setAnnounceAdvancements(section.getBoolean("gamerules.announceadvancements"));
-    }
-    if (section.isBoolean("gamerules.commandblockoutput")) {
-      worlddata.setCommandBlockOutput(section.getBoolean("gamerules.commandblockoutput"));
-    }
-    if (section.isBoolean("gamerules.disableelytramovementcheck")) {
-      worlddata.setDisableElytraMovementCheck(section.getBoolean("gamerules.disableelytramovementcheck"));
-    }
-    if (section.isBoolean("gamerules.disableraids")) {
-      worlddata.setDisableRaids(section.getBoolean("gamerules.disableraids"));
-    }
-    if (section.isBoolean("gamerules.dodaylightcycle")) {
-      worlddata.setDoDaylightCycle(section.getBoolean("gamerules.dodaylightcycle"));
-    }
-    if (section.isBoolean("gamerules.doentitydrops")) {
-      worlddata.setDoEntityDrop(section.getBoolean("gamerules.doentitydrops"));
-    }
-    if (section.isBoolean("gamerules.dofiretick")) {
-      worlddata.setDoFireTick(section.getBoolean("gamerules.dofiretick"));
-    }
-    if (section.isBoolean("gamerules.dolimitedcrafting")) {
-      worlddata.setDoLimitedCrafting(section.getBoolean("gamerules.dolimitedcrafting"));
-    }
-    if (section.isBoolean("gamerules.domobloot")) {
-      worlddata.setDoMobLoot(section.getBoolean("gamerules.domobloot"));
-    }
-    if (section.isBoolean("gamerules.domobspawning")) {
-      worlddata.setDoMobSpawning(section.getBoolean("gamerules.domobspawning"));
-    }
-    if (section.isBoolean("gamerules.dotiledrops")) {
-      worlddata.setDoTileDrops(section.getBoolean("gamerules.dotiledrops"));
-    }
-    if (section.isBoolean("gamerules.doweathercycle")) {
-      worlddata.setDoWeatherCycle(section.getBoolean("gamerules.doweathercycle"));
-    }
-    if (section.isBoolean("gamerules.keepinventory")) {
-      worlddata.setKeepInventory(section.getBoolean("gamerules.keepinventory"));
-    }
-    if (section.isBoolean("gamerules.logadmincommands")) {
-      worlddata.setLogAdminCommands(section.getBoolean("gamerules.logadmincommands"));
-    }
-    if (section.isInt("gamerules.maxcommandchainlength")) {
-      worlddata.setMaxCommandChainLength(section.getInt("gamerules.maxcommandchainlength"));
-    }
-    if (section.isInt("gamerules.maxentitycramming")) {
-      worlddata.setMaxEntityCramming(section.getInt("gamerules.maxentitycramming"));
-    }
-    if (section.isBoolean("gamerules.mobgriefing")) {
-      worlddata.setMobGriefing(section.getBoolean("gamerules.mobgriefing"));
-    }
-    if (section.isBoolean("gamerules.naturalregeneration")) {
-      worlddata.setNaturalGeneration(section.getBoolean("gamerules.naturalregeneration"));
-    }
-    if (section.isInt("gamerules.randomtickspeed")) {
-      worlddata.setRandomTickSpeed(section.getInt("gamerules.randomtickspeed"));
-    }
-    if (section.isBoolean("gamerules.reduceddebuginfo")) {
-      worlddata.setReducedBugInfo(section.getBoolean("gamerules.reduceddebuginfo"));
-    }
-    if (section.isBoolean("gamerules.sendcommandfeedback")) {
-      worlddata.setSendCommandFeedback(section.getBoolean("gamerules.sendcommandfeedback"));
-    }
-    if (section.isBoolean("gamerules.showdeathmessages")) {
-      worlddata.setShowDeathMessage(section.getBoolean("gamerules.showdeathmessages"));
-    }
-    if (section.isInt("gamerules.spawnradius")) {
-      worlddata.setSpawnRadius(section.getInt("gamerules.spawnradius"));
-    }
-    if (section.isBoolean("gamerules.spectatorsgeneratechunks")) {
-      worlddata.setSpectatorsGenerateChunks(section.getBoolean("gamerules.spectatorsgeneratechunks"));
-    }
-*/
     if (section.isBoolean("enablecommandblocks")) {
       worlddata.setEnableCommandBlocks(section.getBoolean("enablecommandblocks"));
     }
@@ -736,6 +835,7 @@ public class WorldConfigManager {
     }
 	return worlddata;
   }
+  */
 
   /**
    * Gets the {@link WorldData} from the default config.
@@ -743,6 +843,26 @@ public class WorldConfigManager {
    * @return The created {@link WorldData}
    */
   public static WorldData getWorlddataFromDefault(String worldname) {
+    WorldData worlddata = new WorldData();
+    worlddata.setWorldName(worldname);
+    ConfigurationSection section = AsyncWorldManager.config.get().getConfigurationSection("worldsettings");
+    Environment enviroment = Environment.valueOf(section.getString("enviroment"));
+    if (enviroment == null) {
+      enviroment = Environment.NORMAL;
+    }
+    worlddata.setEnviroment(enviroment);
+    for (Modifier modifier : Modifier.values()) {
+      //TODO Test Gamerules
+      Object value = section.get(modifier.name);
+      if (value == null) {
+        value = modifier.defaultvalue;
+      }
+      worlddata.setModifier(modifier, value);
+    }
+    return worlddata;
+  }
+
+  /*OLD getWorlddataFromDefault
     WorldData worlddata = new WorldData();
     worlddata.setWorldName(worldname);
     List<String> aliases = new ArrayList<String>();
@@ -925,158 +1045,6 @@ public class WorldConfigManager {
         }
       }
     }
-/* Old Gamerules
-    if (section.isBoolean("gamerules.announceadvancements")) {
-      worlddata.setAnnounceAdvancements(section.getBoolean("gamerules.announceadvancements"));
-    }
-    else {
-      worlddata.setAnnounceAdvancements(true);
-    }
-    if (section.isBoolean("gamerules.commandblockoutput")) {
-      worlddata.setCommandBlockOutput(section.getBoolean("gamerules.commandblockoutput"));
-    }
-    else {
-      worlddata.setCommandBlockOutput(true);
-    }
-    if (section.isBoolean("gamerules.disableelytramovementcheck")) {
-      worlddata.setDisableElytraMovementCheck(section.getBoolean("gamerules.disableelytramovementcheck"));
-    }
-    else {
-      worlddata.setDisableElytraMovementCheck(false);
-    }
-    if (section.isBoolean("gamerules.disableraids")) {
-      worlddata.setDisableRaids(section.getBoolean("gamerules.disableraids"));
-    }
-    else {
-      worlddata.setDisableRaids(false);
-    }
-    if (section.isBoolean("gamerules.dodaylightcycle")) {
-      worlddata.setDoDaylightCycle(section.getBoolean("gamerules.dodaylightcycle"));
-    }
-    else {
-      worlddata.setDoDaylightCycle(true);
-    }
-    if (section.isBoolean("gamerules.doentitydrops")) {
-      worlddata.setDoEntityDrop(section.getBoolean("gamerules.doentitydrops"));
-    }
-    else {
-      worlddata.setDoEntityDrop(true);
-    }
-    if (section.isBoolean("gamerules.dofiretick")) {
-      worlddata.setDoFireTick(section.getBoolean("gamerules.dofiretick"));
-    }
-    else {
-      worlddata.setDoFireTick(true);
-    }
-    if (section.isBoolean("gamerules.dolimitedcrafting")) {
-      worlddata.setDoLimitedCrafting(section.getBoolean("gamerules.dolimitedcrafting"));
-    }
-    else {
-      worlddata.setDoLimitedCrafting(false);
-    }
-    if (section.isBoolean("gamerules.domobloot")) {
-      worlddata.setDoMobLoot(section.getBoolean("gamerules.domobloot"));
-    }
-    else {
-      worlddata.setDoMobLoot(true);
-    }
-    if (section.isBoolean("gamerules.domobspawning")) {
-      worlddata.setDoMobSpawning(section.getBoolean("gamerules.domobspawning"));
-    }
-    else {
-      worlddata.setDoMobSpawning(true);
-    }
-    if (section.isBoolean("gamerules.dotiledrops")) {
-      worlddata.setDoTileDrops(section.getBoolean("gamerules.dotiledrops"));
-    }
-    else {
-      worlddata.setDoTileDrops(true);
-    }
-    if (section.isBoolean("gamerules.doweathercycle")) {
-      worlddata.setDoWeatherCycle(section.getBoolean("gamerules.doweathercycle"));
-    }
-    else {
-      worlddata.setDoWeatherCycle(true);
-    }
-    if (section.isBoolean("gamerules.keepinventory")) {
-      worlddata.setKeepInventory(section.getBoolean("gamerules.keepinventory"));
-    }
-    else {
-      worlddata.setKeepInventory(false);
-    }
-    if (section.isBoolean("gamerules.logadmincommands")) {
-      worlddata.setLogAdminCommands(section.getBoolean("gamerules.logadmincommands"));
-    }
-    else {
-      worlddata.setLogAdminCommands(true);
-    }
-    if (section.isInt("gamerules.maxcommandchainlength")) {
-      worlddata.setMaxCommandChainLength(section.getInt("gamerules.maxcommandchainlength"));
-    }
-    else {
-      worlddata.setMaxCommandChainLength(65536);
-    }
-    if (section.isInt("gamerules.maxentitycramming")) {
-      worlddata.setMaxEntityCramming(section.getInt("gamerules.maxentitycramming"));
-    }
-    else {
-      worlddata.setMaxEntityCramming(24);
-    }
-    if (section.isBoolean("gamerules.mobgriefing")) {
-      worlddata.setMobGriefing(section.getBoolean("gamerules.mobgriefing"));
-    }
-    else {
-      worlddata.setMobGriefing(true);
-    }
-    if (section.isBoolean("gamerules.naturalregeneration")) {
-      worlddata.setNaturalGeneration(section.getBoolean("gamerules.naturalregeneration"));
-    }
-    else {
-      worlddata.setNaturalGeneration(true);
-    }
-    if (section.isInt("gamerules.randomtickspeed")) {
-      worlddata.setRandomTickSpeed(section.getInt("gamerules.randomtickspeed"));
-    }
-    else {
-      worlddata.setRandomTickSpeed(3);
-    }
-    if (section.isBoolean("gamerules.reduceddebuginfo")) {
-      worlddata.setReducedBugInfo(section.getBoolean("gamerules.reduceddebuninfo"));
-    }
-    else {
-      worlddata.setReducedBugInfo(true);
-    }
-    if (section.isBoolean("gamerules.sendcommandfeedback")) {
-      worlddata.setSendCommandFeedback(section.getBoolean("gamerules.sendcommandfeedback"));
-    }
-    else {
-      worlddata.setSendCommandFeedback(true);
-    }
-    if (section.isBoolean("gamerules.showdeathmessages")) {
-      worlddata.setShowDeathMessage(section.getBoolean("gamerules.showdeathmessages"));
-    }
-    else {
-      worlddata.setShowDeathMessage(true);
-    }
-    if (section.isInt("gamerules.spawnradius")) {
-      worlddata.setSpawnRadius(section.getInt("gamerules.spawnradius"));
-    }
-    else {
-      worlddata.setSpawnRadius(10);
-    }
-    if (section.isBoolean("gamerules.spectatorsgeneratechunks")) {
-      worlddata.setSpectatorsGenerateChunks(section.getBoolean("gamerules.spectatorsgeneratechunks"));
-    }
-    else {
-      worlddata.setSpectatorsGenerateChunks(true);
-    }
-    if (section.isBoolean("enablecommandblocks")) {
-      worlddata.setEnableCommandBlocks(section.getBoolean("enablecommandblocks"));
-    }
-    else {
-      worlddata.setEnableCommandBlocks(true);
-    }
-*/
     if (section.isList("disabledentitys")) {
       worlddata.setDisabledEntitys(section.getStringList("disabledentitys"));
     }
@@ -1085,6 +1053,7 @@ public class WorldConfigManager {
     }
 	return worlddata;
   }
+  */
 
   /**
    * Sets the {@link WorldData} for the given {@link World}
@@ -1092,6 +1061,43 @@ public class WorldConfigManager {
    * @param worlddata The {@link WorldData} to use.
    */
   public static void setWorldsData(World world, WorldData worlddata) {
+    world.setAmbientSpawnLimit((Integer) worlddata.getModifierValue(Modifier.ambientlimit));
+    world.setAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.animallimit));
+    world.setAutoSave((Boolean) worlddata.getModifierValue(Modifier.autosave));
+    world.setDifficulty((Difficulty) worlddata.getModifierValue(Modifier.difficulty));
+    for (Rule<?> r : Rule.values()) {
+      try {
+        Class.forName("org.spigotmc.GameRule");
+        WorldDataEditor_1_13.setGameRule(worlddata, r, world);
+       }
+       catch (ClassNotFoundException e) {
+         WorldDataEditor_1_12_2.setGameRule(worlddata, r, world);
+       }
+    }
+    world.setHardcore((Boolean) worlddata.getModifierValue(Modifier.hardcore));
+    world.setKeepSpawnInMemory((Boolean) worlddata.getModifierValue(Modifier.keepspawninmemory));
+    world.setMonsterSpawnLimit((Integer) worlddata.getModifierValue(Modifier.monsterlimit));
+    world.setPVP((Boolean) worlddata.getModifierValue(Modifier.pvp));
+    world.setSpawnFlags((Boolean) worlddata.getModifierValue(Modifier.allowmonsterspawning), (Boolean) worlddata.getModifierValue(Modifier.allowanimalspawning));
+    Integer x = (Integer) worlddata.getModifierValue(Modifier.x);
+    Integer y = (Integer) worlddata.getModifierValue(Modifier.y);
+    Integer z = (Integer) worlddata.getModifierValue(Modifier.z);
+    Float yaw = (Float) worlddata.getModifierValue(Modifier.yaw);
+    Float pitch = (Float) worlddata.getModifierValue(Modifier.pitch);
+    world.setSpawnLocation(new Location(world, x, y, z, yaw, pitch));
+    world.setStorm((Boolean) worlddata.getModifierValue(Modifier.storm));
+    world.setThunderDuration((Integer) worlddata.getModifierValue(Modifier.thunderduration));
+    world.setThundering((Boolean) worlddata.getModifierValue(Modifier.thunder));
+    world.setTicksPerAmbientSpawns((Integer) worlddata.getModifierValue(Modifier.ticksperambientspawns));
+    world.setTicksPerAnimalSpawns((Integer) worlddata.getModifierValue(Modifier.ticksperanimalspawns));
+    world.setTicksPerMonsterSpawns((Integer) worlddata.getModifierValue(Modifier.tickspermonsterspawns));
+    world.setTicksPerWaterSpawns((Integer) worlddata.getModifierValue(Modifier.ticksperwaterspawns));
+    world.setTime((Long) worlddata.getModifierValue(Modifier.time));
+    world.setWaterAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.wateranimallimit));
+    world.setWeatherDuration((Integer) worlddata.getModifierValue(Modifier.weatherduration));
+  }
+
+  /*OLD setWorldsData
     world.setDifficulty(worlddata.getDifficulty());
     world.setPVP(worlddata.getPvP());
     world.setAutoSave(worlddata.getAutoSave());
@@ -1114,33 +1120,8 @@ public class WorldConfigManager {
          WorldDataEditor_1_12_2.setGameRule(worlddata, r, world);
        }
     }
-/* Old Gamerules
-    world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, worlddata.getAnnounceAdvancements());
-    world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, worlddata.getCommandBlockOutput());
-    world.setGameRule(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK, worlddata.getDisableElytraMovementCheck());
-    world.setGameRule(GameRule.DISABLE_RAIDS, worlddata.getDisableRaids());
-    world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, worlddata.getDoDaylightCycle());
-    world.setGameRule(GameRule.DO_ENTITY_DROPS, worlddata.getDoEntityDrop());
-    world.setGameRule(GameRule.DO_FIRE_TICK, worlddata.getDoFireTick());
-    world.setGameRule(GameRule.DO_LIMITED_CRAFTING, worlddata.getDoLimitedCrafting());
-    world.setGameRule(GameRule.DO_MOB_LOOT, worlddata.getDoMobLoot());
-    world.setGameRule(GameRule.DO_MOB_SPAWNING, worlddata.getDoMobSpawning());
-    world.setGameRule(GameRule.DO_TILE_DROPS, worlddata.getDoTileDrops());
-    world.setGameRule(GameRule.DO_WEATHER_CYCLE, worlddata.getDoWeatherCycle());
-    world.setGameRule(GameRule.KEEP_INVENTORY, worlddata.getKeepInventory());
-    world.setGameRule(GameRule.LOG_ADMIN_COMMANDS, worlddata.getLogAdminCommands());
-    world.setGameRule(GameRule.MAX_COMMAND_CHAIN_LENGTH, worlddata.getMaxCommandChainLength());
-    world.setGameRule(GameRule.MAX_ENTITY_CRAMMING, worlddata.getMaxEntityCramming());
-    world.setGameRule(GameRule.MOB_GRIEFING, worlddata.getMobGriefing());
-    world.setGameRule(GameRule.NATURAL_REGENERATION, worlddata.getNaturalRegeneration());
-    world.setGameRule(GameRule.RANDOM_TICK_SPEED, worlddata.getRandomTickSpeed());
-    world.setGameRule(GameRule.REDUCED_DEBUG_INFO, worlddata.getReducedBugInfo());
-    world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, worlddata.getSendCommandFeedback());
-    world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, worlddata.getShowDeathMessage());
-    world.setGameRule(GameRule.SPAWN_RADIUS, worlddata.getSpawnRadius());
-    world.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, worlddata.getSpectatorsGenerateChunks());
-*/
   }
+  */
 
   /**
    * Saves the given {@link WorldData} to the given {@link Config}
@@ -1148,6 +1129,16 @@ public class WorldConfigManager {
    * @param worlddata The {@link WorldData} to save.
    */
   public static void save(Config config, WorldData worlddata) {
+    config.get().options().header("Explenation: https://github.com/xXSchrandXx/SpigotPlugins/wiki/AsyncWorldManager#worldconfigs");
+    config.get().options().copyHeader(true);
+    ConfigurationSection section = config.get().createSection(worlddata.getWorldName());
+    for (Entry<Modifier, Object> entry : worlddata.getModifier().entrySet()) {
+      section.set(entry.getKey().name, entry.getValue());
+    }
+    config.save();
+  }
+
+  /*OLD save
     config.get().options().header("Explenation: ");
     config.get().options().copyHeader(true);
     ConfigurationSection section = config.get().createSection(worlddata.getWorldName());
@@ -1185,35 +1176,10 @@ public class WorldConfigManager {
         continue;
       section.set("gamerules." + r.getName(), worlddata.getRuleValue(r));
     }
-/* Old Gamerules
-    section.set("gamerules.announceadvancements", worlddata.getAnnounceAdvancements());
-    section.set("gamerules.commandblockoutput", worlddata.getCommandBlockOutput());
-    section.set("gamerules.disableelytramovementcheck", worlddata.getDisableElytraMovementCheck());
-    section.set("gamerules.disableraids", worlddata.getDisableRaids());
-    section.set("gamerules.dodaylightcycle", worlddata.getDoDaylightCycle());
-    section.set("gamerules.doentitydrops", worlddata.getDoEntityDrop());
-    section.set("gamerules.dofiretick", worlddata.getDoFireTick());
-    section.set("gamerules.dolimitedcrafting", worlddata.getDoLimitedCrafting());
-    section.set("gamerules.domobloot", worlddata.getDoMobLoot());
-    section.set("gamerules.domobspawning", worlddata.getDoMobSpawning());
-    section.set("gamerules.dotiledrops", worlddata.getDoTileDrops());
-    section.set("gamerules.doweathercycle", worlddata.getDoWeatherCycle());
-    section.set("gamerules.keepinventory", worlddata.getKeepInventory());
-    section.set("gamerules.logadmincommands", worlddata.getLogAdminCommands());
-    section.set("gamerules.maxcommandchainlength", worlddata.getMaxCommandChainLength());
-    section.set("gamerules.maxentitycramming", worlddata.getMaxEntityCramming());
-    section.set("gamerules.mobgriefing", worlddata.getMobGriefing());
-    section.set("gamerules.naturalregeneration", worlddata.getNaturalRegeneration());
-    section.set("gamerules.randomtickspeed", worlddata.getRandomTickSpeed());
-    section.set("gamerules.reduceddebuginfo", worlddata.getReducedBugInfo());
-    section.set("gamerules.sendcommandfeedback", worlddata.getSendCommandFeedback());
-    section.set("gamerules.showdeathmessages", worlddata.getShowDeathMessage());
-    section.set("gamerules.spawnradius", worlddata.getSpawnRadius());
-    section.set("gamerules.spectatorsgeneratechunks", worlddata.getSpectatorsGenerateChunks());
-*/
     section.set("disabledentitys", worlddata.getDisabledEntitys());
     config.save();
   }
+  */
 
   /**
    * Unloads the given world.
@@ -1261,12 +1227,12 @@ public class WorldConfigManager {
    * @param worlddata The {@link WorldData} to use for creation.
    */
   public static void createWorld(WorldData worlddata) {
-    if (worlddata.getCreationType() == CreationType.broken) {
+    if (worlddata.getModifierValue(Modifier.creationtype) == CreationType.broken) {
       broken.brokenworld(worlddata);
       return;
     }
     if (AsyncWorldManager.config.get().getBoolean("fastasyncworldedit.faweworld")) {
-      if (worlddata.getCreationType() == CreationType.fawe) {
+      if (worlddata.getModifierValue(Modifier.creationtype) == CreationType.fawe) {
         fawe.faweworld(worlddata);
         return;
       }
@@ -1311,12 +1277,13 @@ public class WorldConfigManager {
    * @param alias The Alias from the World.
    * @return The {@link WorldData} from the World or null if no World is found.
    */
+  @SuppressWarnings("unchecked")
   public static WorldData getWorlddataFromAlias(String alias) {
     WorldData worlddata = null;
     for (WorldData testworlddata : loadAllWorlddatas()) {
       if (testworlddata.getWorldName().equals(alias))
         worlddata = testworlddata;
-      if (testworlddata.getAliases().contains(alias))
+      if (((List<String>) testworlddata.getModifierValue(Modifier.aliases)).contains(alias))
         worlddata = testworlddata;
     }
     return worlddata;
@@ -1327,7 +1294,7 @@ public class WorldConfigManager {
    */
   public static void loadworlds() {
     for (WorldData worlddata : loadAllWorlddatas()) {
-      if (worlddata.getAutoLoad()) {
+      if ((boolean) worlddata.getModifierValue(Modifier.autoload)) {
         AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "Loading world: " + worlddata.getWorldName());
         WorldConfigManager.createWorld(worlddata);
       }
@@ -1418,19 +1385,12 @@ public class WorldConfigManager {
     return list;
   }
 
-  public enum WorldStatus {
-    BUKKITWORLD,
-    UNKNOWN,
-    UNLOADED,
-    LOADED
-  }
-
   /**
    * Gets a {@link List} of all {@link World}s.
    * @return A {@link ConcurrentHashMap} with loaded Worldnames and {@link WorldStatus}.
    */
   public static ConcurrentHashMap<String, WorldStatus> getAllWorlds() {
-    ConcurrentHashMap<String, WorldStatus> worlds = new ConcurrentHashMap<String, WorldConfigManager.WorldStatus>();
+    ConcurrentHashMap<String, WorldStatus> worlds = new ConcurrentHashMap<String, WorldStatus>();
     for (String world : Bukkit.getWorldContainer().list()) {
       if (getAllKnownWorlds().contains(world)) {
         if (getAllLoadedWorlds().contains(world)) {

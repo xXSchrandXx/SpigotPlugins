@@ -6,17 +6,20 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
+import org.bukkit.generator.ChunkGenerator;
 
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
+import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
-
 import net.md_5.bungee.api.chat.*;
 
 public class CMDModify {
-  public static boolean modifycmd (CommandSender sender, String args[]) {
+  public static boolean modifycmd(CommandSender sender, String args[]) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("list")) {
@@ -38,738 +41,127 @@ public class CMDModify {
               String prevalue = args[3];
               if (key.isEmpty() || prevalue.isEmpty())
                 return false;
-              if (key.equalsIgnoreCase("addalias")) {
-                if (!worlddata.getAliases().contains(prevalue)) {
-                  String value = prevalue;
-                  worlddata.addAlias(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+              for (Modifier modifier : Modifier.values()) {
+                if (key.equalsIgnoreCase(modifier.name)) {
+                  if (modifier.cl == String.class) {
+                    if (!prevalue.isEmpty()) {
+                      worlddata.setModifier(modifier, prevalue);
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a string. " + prevalue);
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.alias.alreadyalias").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("removealias")) {
-                if (worlddata.getAliases().contains(prevalue)) {
-                  String value = prevalue;
-                  worlddata.removeAlias(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == List.class) {
+                    if (!prevalue.isEmpty()) {
+                      List<String> value = List.of(prevalue.split(";"));
+                      worlddata.setModifier(modifier, value);
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " value was empty.");
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.alias.notalias").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("autoload")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setAutoLoad(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Boolean.class) {
+                    if (testValues.isBoolean(prevalue)) {
+                      worlddata.setModifier(modifier, Boolean.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a boolean. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("autosave")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setAutoSave(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Integer.class) {
+                    if (testValues.isInt(prevalue)) {
+                      worlddata.setModifier(modifier, Integer.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a int. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("commandblock")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setEnableCommandBlocks(value);
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("difficulty")) {
-                if (testValues.isDifficulty(prevalue)) {
-                  Difficulty value = Difficulty.valueOf(prevalue);
-                  worlddata.setDifficulty(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Double.class) {
+                    if (testValues.isDouble(prevalue)) {
+                      worlddata.setModifier(modifier, Double.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a double. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("allowmonsterspawning")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setAllowMonsterSpawning(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Float.class) {
+                    if (testValues.isFloat(prevalue)) {
+                      worlddata.setModifier(modifier, Float.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a float. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("allowanimalspawning")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setAllowAnimalSpawning(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Long.class) {
+                    if (testValues.isLong(prevalue)) {
+                      worlddata.setModifier(modifier, Long.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a float. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("ambientspawnlimit")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setAmbientSpawnLimit(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == Difficulty.class) {
+                    if (testValues.isDifficulty(prevalue)) {
+                      worlddata.setModifier(modifier, Difficulty.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a difficulty. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("animalspawnlimit")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setAnimalSpawnLimit(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == ChunkGenerator.class) {
+                    if (testValues.isGenerator(worlddata.getWorldName(), prevalue, sender)) {
+                      worlddata.setModifier(modifier, WorldCreator.getGeneratorForName(worlddata.getWorldName(), prevalue, sender));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a difficulty. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("monsterspawnlimit")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setMonsterSpawnLimit(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == WorldType.class) {
+                    if (testValues.isWorldType(prevalue)) {
+                      worlddata.setModifier(modifier, WorldType.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a difficulty. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("pvp")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setPvP(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
+                  else if (modifier.cl == CreationType.class) {
+                    if (testValues.isCreationType(prevalue)) {
+                      worlddata.setModifier(modifier, CreationType.valueOf(prevalue));
+                      break;
+                    }
+                    else {
+                      AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, modifier.name + " is not a difficulty. " + prevalue );
+                      break;
+                    }
                   }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
                 }
               }
-              else if (key.equalsIgnoreCase("storm")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setStorm(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
+              World world;
+              if ((world = Bukkit.getWorld(worlddata.getWorldName())) != null) {
+                WorldConfigManager.setWorldsData(world, worlddata);
               }
-              else if (key.equalsIgnoreCase("thunder")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setThundering(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("keepspawninmemory")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setKeepSpawnInMemory(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("x")) {
-                if (testValues.isDouble(prevalue)) {
-                  double value = Double.valueOf(prevalue);
-                  worlddata.setX(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("y")) {
-                if (testValues.isDouble(prevalue)) {
-                  double value = Double.valueOf(prevalue);
-                  worlddata.setY(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("z")) {
-                if (testValues.isDouble(prevalue)) {
-                  double value = Double.valueOf(prevalue);
-                  worlddata.setZ(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("yaw")) {
-                if (testValues.isFloat(prevalue)) {
-                  float value = Float.valueOf(prevalue);
-                  worlddata.setYaw(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("pitch")) {
-                if (testValues.isFloat(prevalue)) {
-                  float value = Float.valueOf(prevalue);
-                  worlddata.setPitch(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              /*
-              else if (key.equalsIgnoreCase("announceadvancements")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setAnnounceAdvancements(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("commandblockoutput")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setCommandBlockOutput(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("disableelytramovementcheck")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDisableElytraMovementCheck(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("dodaylightcycle")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoDaylightCycle(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("doentitydrops")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoEntityDrop(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("dofiretick")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoFireTick(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("dolimitedcrafting")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoLimitedCrafting(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("domobloot")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoMobLoot(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("domobspawning")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoMobSpawning(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("dotiledrops")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoTileDrops(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("doweathercycle")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setDoWeatherCycle(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("keepinventory")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setKeepInventory(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("logadmincommands")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setLogAdminCommands(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("maxcommandchainlength")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setMaxCommandChainLength(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("maxentitycramming")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setMaxEntityCramming(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("mobgriefing")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setMobGriefing(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("naturalregeneration")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setNaturalGeneration(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("randomtickspeed")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setRandomTickSpeed(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("reduceddebuginfo")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setReducedBugInfo(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("sendcommandfeedback")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setSendCommandFeedback(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("showdeathmessages")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setShowDeathMessage(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("spawnradius")) {
-                if (testValues.isInt(prevalue)) {
-                  int value = Integer.valueOf(prevalue);
-                  worlddata.setSpawnRadius(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "Number"));
-                  return true;
-                }
-              }
-              else if (key.equalsIgnoreCase("spectatorsgeneratechunks")) {
-                if (testValues.isBoolean(prevalue)) {
-                  boolean value = Boolean.valueOf(prevalue);
-                  worlddata.setSpectatorsGenerateChunks(value);
-                  if (Bukkit.getWorld(worlddata.getWorldName()) != null) {
-                    World world = Bukkit.getWorld(worlddata.getWorldName());
-                    WorldConfigManager.setWorldsData(world, worlddata);
-                  }
-                  WorldConfigManager.save(config, worlddata);
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
-                  return true;
-                }
-                else {
-                  AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.usage").replace("%world%", worlddata.getWorldName()).replace("%key%", key).replace("%value%", "true/false"));
-                  return true;
-                }
-              }
-              */
-              else {
-                return false;
-              }
+              WorldConfigManager.save(config, worlddata);
+              return true;
             }
             else {
               AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"), ClickEvent.Action.RUN_COMMAND, "/wm load " + worlddata.getWorldName());
@@ -806,8 +198,8 @@ public class CMDModify {
         return list;
       }
       else if (args[1].equalsIgnoreCase("modify")) {
-        for (String modifier : AsyncWorldManager.modifier()) {
-          list.add(modifier.replaceFirst("-", "").replace(":true", "").replace(":false", "").replace(":", ""));
+        for (Modifier m : Modifier.values()) {
+          list.add("-" + m.name + ":");
         }
       }
     }

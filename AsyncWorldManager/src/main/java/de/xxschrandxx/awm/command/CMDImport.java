@@ -90,8 +90,10 @@ public class CMDImport {
           list.add(env.name());
         }
       }
-      else if (args[1].equalsIgnoreCase("modify")) {
-        list.addAll(AsyncWorldManager.modifier());
+      else if ((args.length < 3) && args[1].equalsIgnoreCase("create")) {
+        for (Modifier m : Modifier.values()) {
+          list.add("-" + m.name + ":");
+        }
       }
     }
     return list;

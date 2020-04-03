@@ -2,8 +2,6 @@ package de.xxschrandxx.awm;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.bstats.bukkit.Metrics;
@@ -141,6 +139,7 @@ public class AsyncWorldManager extends JavaPlugin {
       Storage.stop();
     }
   }
+/*
   public static List<String> modifier() {
     List<String> list = new ArrayList<String>();
     list.add("-aliases:");
@@ -222,4 +221,5 @@ public class AsyncWorldManager extends JavaPlugin {
     list.add("-spectatorsgeneratechunks:false");
     return list;
   }
+*/
 }

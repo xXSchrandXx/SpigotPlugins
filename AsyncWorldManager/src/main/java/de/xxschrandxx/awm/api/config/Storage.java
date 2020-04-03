@@ -72,31 +72,7 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.info", "wm.command.plugin.info");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.set", "wm.command.plugin.set");
     AsyncWorldManager.config.get().addDefault("event.permissions.worldmanager.gamemode.bypass", "wm.event.gamemode.bypass");
-    AsyncWorldManager.config.get().addDefault("worldsettings.autoload", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.creationtype", "normal");
-    AsyncWorldManager.config.get().addDefault("worldsettings.autosave", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.seed", "none");
     AsyncWorldManager.config.get().addDefault("worldsettings.enviroment", "NORMAL");
-    AsyncWorldManager.config.get().addDefault("worldsettings.difficulty", "EASY");
-    AsyncWorldManager.config.get().addDefault("worldsettings.pvp", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.generator", "null");
-    AsyncWorldManager.config.get().addDefault("worldsettings.worldtype", "NORMAL");
-    AsyncWorldManager.config.get().addDefault("worldsettings.generatestructures", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamemode", "SURVIVAL");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.keepinmemory", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.x", "none");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.y", "none");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.z", "none");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.yaw", "none");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawn.pitch", "none");
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.allowanimalspawning", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.allowmonsterspawning", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.ambientlimit", 15);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.animallimit", 15);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.wateranimallimit", 5);
-    AsyncWorldManager.config.get().addDefault("worldsettings.spawning.monsterlimit", 70);
-    AsyncWorldManager.config.get().addDefault("worldsettings.weather.storm", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.weather.thundering", false);
     for (Rule<?> r : Rule.values()) {
       if (r == null)
         continue;
@@ -104,34 +80,6 @@ public class Storage {
         continue;
       AsyncWorldManager.config.get().addDefault("worldsettings.gamerules." + r.getName(), r.getDefaultValue());
     }
-/* Old Gamerules
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.announceadvancements", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.commandblockoutput", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disableelytramovementcheck", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disableraids", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.dodaylightcycle", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.doentitydrops", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.dofiretick", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.dolimitedcrafting", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.domobloot", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.domobspawning", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.dotiledrops", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.doweathercycle", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.keepinventory", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.logadmincommands", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.maxcommandchainlength", 65536);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.maxentitycramming", 24);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.mobgriefing", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.naturalregeneration", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.randomtickspeed", 3);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.reduceddebuginfo", false);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.sendcommandfeedback", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.showdeathmessages", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.spawnradius", 10);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.spectatorsgeneratechunks", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.enablecommandblocks", true);
-    AsyncWorldManager.config.get().addDefault("worldsettings.gamerules.disabledentitys", new ArrayList<String>());
-*/
     AsyncWorldManager.config.save();
     //Lade messages.yml
     AsyncWorldManager.messages.get().options().copyHeader(true);

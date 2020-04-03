@@ -3,12 +3,14 @@ package de.xxschrandxx.awm.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.WorldType;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 
@@ -39,8 +41,9 @@ public class CMDInfo {
       }
       if (worlddata != null) {
         String worldname = worlddata.getWorldName();
-        String autoload = String.valueOf(worlddata.getAutoLoad());
-        List<String> prealiases = worlddata.getAliases();
+        String autoload = String.valueOf(worlddata.getModifierValue(Modifier.autoload));
+        @SuppressWarnings("unchecked")
+        List<String> prealiases = (List<String>) worlddata.getModifierValue(Modifier.aliases);
         String aliases = "";
         for (String alias : prealiases) {
           if (aliases.isEmpty()) {
@@ -51,15 +54,15 @@ public class CMDInfo {
           }
         }
         String enviroment = worlddata.getEnviroment().name();
-        String seed = String.valueOf(worlddata.getSeed());
-        String generator = String.valueOf(worlddata.getGenerator());
-        String worldtype = worlddata.getWorldType().name();
-        String generatestructures = String.valueOf(worlddata.getGenerateStructures());
-        String x = String.valueOf(worlddata.getX());
-        String y = String.valueOf(worlddata.getY());
-        String z = String.valueOf(worlddata.getZ());
-        String yaw = String.valueOf(worlddata.getYaw());
-        String pitch = String.valueOf(worlddata.getPitch());
+        String seed = String.valueOf(worlddata.getModifierValue(Modifier.seed));
+        String generator = String.valueOf(worlddata.getModifierValue(Modifier.generator));
+        String worldtype = ((WorldType) worlddata.getModifierValue(Modifier.worldtype)).name();
+        String generatestructures = String.valueOf(worlddata.getModifierValue(Modifier.generatestructures));
+        String x = String.valueOf(worlddata.getModifierValue(Modifier.x));
+        String y = String.valueOf(worlddata.getModifierValue(Modifier.y));
+        String z = String.valueOf(worlddata.getModifierValue(Modifier.z));
+        String yaw = String.valueOf(worlddata.getModifierValue(Modifier.yaw));
+        String pitch = String.valueOf(worlddata.getModifierValue(Modifier.pitch));
         AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.info.worldinfo").replace("%folder%", worldname).replace("%autoload%", autoload).replace("%aliases%", aliases).replace("%enviroment%", enviroment).replace("%seed%", seed).replace("%generator%", generator).replace("%worldtype%", worldtype).replace("%generatestructurs%", generatestructures).replace("%x%", x).replace("%y%", y).replace("%z%", z).replace("%yaw%", yaw).replace("%pitch%", pitch));
         return true;
       }

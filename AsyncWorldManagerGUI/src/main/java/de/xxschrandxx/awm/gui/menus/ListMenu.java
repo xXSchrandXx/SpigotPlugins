@@ -17,8 +17,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
-import de.xxschrandxx.awm.api.config.WorldConfigManager.WorldStatus;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
@@ -44,8 +44,8 @@ public class ListMenu extends Menu {
   @Override
   public void initializeItems() {
 
-    previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.previous.itemname"), Storage.messages.get().getString("menu.list.previous.itemlore"));
-    next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.next.itemname"), Storage.messages.get().getString("menu.list.next.itemlore"));
+    previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.previous.itemname"), Storage.messages.get().getStringList("menu.list.previous.itemlore"));
+    next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.next.itemname"), Storage.messages.get().getStringList("menu.list.next.itemlore"));
 
     if (worlds == null) {
 
@@ -55,7 +55,7 @@ public class ListMenu extends Menu {
       for (Entry<String, WorldStatus> entry : worldmap.entrySet()) {
         ItemStack itemstack = null;
         if (entry.getValue() == WorldStatus.UNKNOWN) {
-          itemstack = MenuManager.createGuiItem(Material.BEDROCK, Storage.messages.get().getString("menu.list.world.itemname.unknown").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
+          itemstack = MenuManager.createGuiItem(Material.BEDROCK, Storage.messages.get().getString("menu.list.world.itemname.unknown").replace("%world%", entry.getKey()), Storage.messages.get().getStringList("menu.list.world.itemlore"));
         }
         if (entry.getValue() == WorldStatus.BUKKITWORLD) {
           World world = Bukkit.getWorld(entry.getKey());
