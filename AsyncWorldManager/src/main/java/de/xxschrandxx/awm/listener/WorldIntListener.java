@@ -21,8 +21,9 @@ public class WorldIntListener implements Listener {
       AsyncWorldManager.getLogHandler().log(true, Level.WARNING, world.getName() + " queued for loading without the knowledge of AWM.");
     }
     else {
-      WorldConfigManager.setWorldsData(world, worlddata);
       AsyncWorldManager.getLogHandler().log(true, Level.INFO, world.getName() + " queued for loading...");
+      worlddata = WorldConfigManager.replaceNull(worlddata, WorldConfigManager.getWorlddataFromWorld(world));
+      WorldConfigManager.setWorldData(worlddata);
     }
   }
 }

@@ -74,13 +74,13 @@ public class ListMenu extends Menu {
         else if (entry.getValue() == WorldStatus.LOADED) {
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(entry.getKey());
           Material m = Material.BEDROCK;
-          if (worlddata.getEnviroment() == Environment.NORMAL) {
+          if (worlddata.getEnvironment() == Environment.NORMAL) {
             m = Material.GRASS_BLOCK;
           }
-          else if (worlddata.getEnviroment() == Environment.NETHER) {
+          else if (worlddata.getEnvironment() == Environment.NETHER) {
             m = Material.NETHERRACK;
           }
-          else if (worlddata.getEnviroment() == Environment.THE_END) {
+          else if (worlddata.getEnvironment() == Environment.THE_END) {
             m = Material.END_STONE;
           }
           itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.loaded").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));
@@ -88,13 +88,13 @@ public class ListMenu extends Menu {
         else if (entry.getValue() == WorldStatus.UNLOADED) {
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(entry.getKey());
           Material m = Material.BEDROCK;
-          if (worlddata.getEnviroment() == Environment.NORMAL) {
+          if (worlddata.getEnvironment() == Environment.NORMAL) {
             m = Material.GRASS_BLOCK;
           }
-          else if (worlddata.getEnviroment() == Environment.NETHER) {
+          else if (worlddata.getEnvironment() == Environment.NETHER) {
             m = Material.NETHERRACK;
           }
-          else if (worlddata.getEnviroment() == Environment.THE_END) {
+          else if (worlddata.getEnvironment() == Environment.THE_END) {
             m = Material.END_STONE;
           }
           itemstack = MenuManager.createGuiItem(m, Storage.messages.get().getString("menu.list.world.itemname.unloaded").replace("%world%", entry.getKey()), Storage.messages.get().getString("menu.list.world.itemlore"));

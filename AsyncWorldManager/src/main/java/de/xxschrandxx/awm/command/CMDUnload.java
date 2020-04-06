@@ -2,11 +2,13 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -19,7 +21,8 @@ public class CMDUnload {
         if (!args[1].isEmpty()) {
           WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
           if (worlddata != null) {
-            if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+            WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(worlddata.getWorldName());
+            if (worldstatus == WorldStatus.LOADED) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.unload.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("MainWorld")).getSpawnLocation());
@@ -58,7 +61,11 @@ public class CMDUnload {
         list.add("unload");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("unload")) {
-        list.addAll(WorldConfigManager.getAllLoadedWorlds());
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.LOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
     }
     return list;

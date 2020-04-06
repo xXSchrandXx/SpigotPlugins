@@ -1,7 +1,6 @@
 package de.xxschrandxx.awm.api.config;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,12 +8,22 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
+import org.bukkit.WorldType;
+
 import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 
 public class Storage {
+
+  /**
+   * The default {@link WorldData} set in config.yml and {@link Modifier}
+   */
+  protected static WorldData defaultworlddata;
 
   public static void start() {
     //Lade config.yml
@@ -44,7 +53,7 @@ public class Storage {
       enablecommandblock = false;
     	Mainworldname = "world";
     }
-    AsyncWorldManager.config.get().addDefault("mainworld", Mainworldname);
+    AsyncWorldManager.config.get().set("mainworld", Mainworldname);
     AsyncWorldManager.config.get().addDefault("fastasyncworldedit.faweworld", true);
     AsyncWorldManager.config.get().addDefault("Listener.CreatureSpawn", true);
     AsyncWorldManager.config.get().addDefault("Listener.EntitySpawn", true);
@@ -58,7 +67,7 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.teleport.self", "wm.command.teleport.self");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.teleport.other", "wm.command.teleport.other");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.teleport.bypass", "wm.command.teleport.bypass");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.reload", "wm.command.reload");
+    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.configs", "wm.command.configs");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.list", "wm.command.list");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.load", "wm.command.load");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.unload", "wm.command.unload");
@@ -72,13 +81,62 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.info", "wm.command.plugin.info");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.set", "wm.command.plugin.set");
     AsyncWorldManager.config.get().addDefault("event.permissions.worldmanager.gamemode.bypass", "wm.event.gamemode.bypass");
-    AsyncWorldManager.config.get().addDefault("worldsettings.enviroment", "NORMAL");
-    for (Rule<?> r : Rule.values()) {
-      if (r == null)
-        continue;
-      if (r.getType() == null || r.getName() == null)
-        continue;
-      AsyncWorldManager.config.get().addDefault("worldsettings.gamerules." + r.getName(), r.getDefaultValue());
+    AsyncWorldManager.config.get().addDefault("WorldSettings.Environment", "NORMAL");
+    for (Modifier modifier : Modifier.values()) {
+      if (
+          (modifier == Modifier.keepspawninmemory) ||
+          (modifier == Modifier.x) ||
+          (modifier == Modifier.y) ||
+          (modifier == Modifier.z) ||
+          (modifier == Modifier.yaw) ||
+          (modifier == Modifier.pitch)
+          ) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings.Spawn." + modifier.name, modifier.defaultvalue);
+      }
+      else if (
+          (modifier == Modifier.allowanimalspawning) ||
+          (modifier == Modifier.allowmonsterspawning) ||
+          (modifier == Modifier.ambientlimit) ||
+          (modifier == Modifier.animallimit) ||
+          (modifier == Modifier.monsterlimit) ||
+          (modifier == Modifier.wateranimallimit)
+          ) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings.Spawning." + modifier.name, modifier.defaultvalue);
+      }
+      else if (
+          (modifier == Modifier.thunder) ||
+          (modifier == Modifier.thunderduration) ||
+          (modifier == Modifier.storm) ||
+          (modifier == Modifier.weatherduration)
+          ) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings.Weather." + modifier.name, modifier.defaultvalue);
+      }
+      else if (modifier == Modifier.creationtype) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, ((CreationType) modifier.defaultvalue).name());
+      }
+      else if (modifier == Modifier.gamemode) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, ((GameMode) modifier.defaultvalue).name());
+      }
+      else if (modifier == Modifier.worldtype) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, ((WorldType) modifier.defaultvalue).name());
+      }
+      else if (modifier == Modifier.difficulty) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, ((Difficulty) modifier.defaultvalue).name());
+      }
+      else if (modifier == Modifier.gamerule) {
+        Rule<?>[] gamerules = Rule.values();
+        for (Rule<?> rule : gamerules) {
+          if (rule != null) {
+            AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name + "." + rule.getName(), rule.getDefaultValue());
+          }
+        }
+      }
+      else if (modifier.defaultvalue == null) {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, "none");
+      }
+      else {
+        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.name, modifier.defaultvalue);
+      }
     }
     AsyncWorldManager.config.save();
     //Lade messages.yml
@@ -97,6 +155,7 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.create.folderexist.hover", "Click to import the world.");
     AsyncWorldManager.messages.get().addDefault("command.create.worldexist.chat", "The world already exists.");
     AsyncWorldManager.messages.get().addDefault("command.create.worldexist.hover", "Click to teleport into world.");
+    AsyncWorldManager.messages.get().addDefault("command.create.wrongmodifier", "The Modifier %modifier% is wrong! Ingnoring it...");
     AsyncWorldManager.messages.get().addDefault("command.import.usage", "Usage: /wm import [worldname] [NORMAL/NETHER/THE_END] {optionals}");
     AsyncWorldManager.messages.get().addDefault("command.import.success.chat", "The world %world% sucsessfully imported.");
     AsyncWorldManager.messages.get().addDefault("command.import.success.hover", "Click to teleport into world.");
@@ -122,7 +181,7 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.teleport.playernotfound", "The player %player% is not online. (Did you write the name right?)");
     AsyncWorldManager.messages.get().addDefault("command.info.usage", "Usage: /wm info [worldname]");
     AsyncWorldManager.messages.get().addDefault("command.info.worldnotfound", "The world %world% does not exist.");
-    AsyncWorldManager.messages.get().addDefault("command.info.worldnotinconfig.chat", "The world %world% does not exist in the plugins config.");
+    AsyncWorldManager.messages.get().addDefault("command.info.worldnotinconfig.chat", "%world% does not exist in the plugins memory.");
     AsyncWorldManager.messages.get().addDefault("command.info.worldnotinconfig.hover", "Click to suggest the importation of the world.");
     AsyncWorldManager.messages.get().addDefault("command.info.worldinfo", "&8&m[]&6&m-----------------------INFO-----------------------&8&m[]\n&7 | Fodler: &7%folder%\n&7 | Autoload: &7%autoload%\n&7 | Names: &7%aliases%\n&7 | Enviroment: &7%enviroment%\n&7 | Seed: &7%seed%\n&7 | Generator: &7%generator%\n&7 | Worldtype: &7%worldtype%\n&7 | Geneatestructurs: &7%generatestructurs%\n&7 | Spawnlocation:\n&7 |   X: %x%\n&7 |   Y: %y%\n&7 |   Z: %z%\n&7 |   Yaw: %yaw%\n&7 |   Pitch: %pitch%\n&8&m[]&6&m-----------------------INFO-----------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.list.aliases", ", ");
@@ -155,8 +214,11 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.modify.world.usage", "Usage: /wm modify %world% %key% [%value%]");
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.alreadyalias", "%value% is already a alias of %key%.");
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.notalias", "%value% is not a alias of %key%.");
-    AsyncWorldManager.messages.get().addDefault("command.reload.usage", "Usage: /wm reload");
-    AsyncWorldManager.messages.get().addDefault("command.reload.success", "Reloaded AsyncWorldManager.config.yml, AsyncWorldManager.messages.yml and worldconfigs.");
+    AsyncWorldManager.messages.get().addDefault("command.configs.usage", "Usage: /wm configs [save/load] {config}");
+    AsyncWorldManager.messages.get().addDefault("command.configs.load", "&aloeded");
+    AsyncWorldManager.messages.get().addDefault("command.configs.save", "&asaved");
+    AsyncWorldManager.messages.get().addDefault("command.configs.success", "Successfully %done% &e%config%&7.");
+    AsyncWorldManager.messages.get().addDefault("command.configs.notfound", "&c%option%&7 does not exist.");
     AsyncWorldManager.messages.get().addDefault("command.plugin.usage", "/wm plugin [info/set] [config/AsyncWorldManager.messages(/worlds)] {path} {value}");
     AsyncWorldManager.messages.get().addDefault("command.plugin.info.head", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.plugin.info.format", "&7%key%: %value%");
@@ -171,14 +233,21 @@ public class Storage {
         AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.footer"),
         AsyncWorldManager.config.get().getBoolean("logging.debug"),
         AsyncWorldManager.config.get().getStringList("logging.show"));
-    
+
+    //Setze default WorldData
+    defaultworlddata = WorldConfigManager.getWorlddataFromConfigSection(new WorldData(), AsyncWorldManager.config.get().getConfigurationSection("WorldSettings"));
+
     if (!enablecommandblock) {
       AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");
     }
+
+    WorldConfigManager.loadAllWorlddatas();
+
   }
+
   public static void stop() {
-    File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-    if (!worldconfigfolder.exists())
-      worldconfigfolder.mkdir();
+    WorldConfigManager.saveAllWorlddatas();
+    WorldConfigManager.clearWorlddatas();
   }
+
 }

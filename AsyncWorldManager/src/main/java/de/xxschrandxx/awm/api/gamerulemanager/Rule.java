@@ -44,7 +44,7 @@ public class Rule<T> extends v1_15_2 {
   }
   
   public String toString() {
-    return "GameRule{key=" + this.name + ", type=" + this.type + '}';
+    return "Rule{key=" + this.name + ", type=" + this.type + '}';
   }
   
   public static Rule<?> getByName(String rule) {

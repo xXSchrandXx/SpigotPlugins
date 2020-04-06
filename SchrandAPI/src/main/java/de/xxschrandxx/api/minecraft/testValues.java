@@ -166,6 +166,11 @@ public class testValues {
     }
   }
 
+  /**
+   * Test if the given {@link String} is a {@link CreationType}
+   * @param s The {@link String} to check.
+   * @return Whether the given {@link String} is a {@link CreationType}
+   */
   public static boolean isCreationType(String s) {
     try {
       CreationType.valueOf(s);
@@ -174,6 +179,58 @@ public class testValues {
     catch (IllegalArgumentException | NullPointerException e) {
       return false;
     }
+  }
+
+  /**
+   * Turns the given {@link Object} a {@link Double}
+   * @param o The {@link Double} to transform.
+   * @return The {@link Double} for the {@link Object} or null.
+   */
+  public static Double asDouble(Object o) {
+    Double val = null;
+    if (o instanceof Number) {
+        val = ((Number) o).doubleValue();
+    }
+    return val;
+  }
+
+  /**
+   * Turns the given {@link Object} a {@link Float}
+   * @param o The {@link Float} to transform.
+   * @return The {@link Float} for the {@link Object} or null.
+   */
+  public static Float asFloat(Object o) {
+    Float val = null;
+    if (o instanceof Number) {
+        val = ((Number) o).floatValue();
+    }
+    return val;
+  }
+
+  /**
+   * Turns the given {@link Object} a {@link Long}
+   * @param o The {@link Long} to transform.
+   * @return The {@link Long} for the {@link Object} or null.
+   */
+  public static Long asLong(Object o) {
+    Long val = null;
+    if (o instanceof Number) {
+        val = ((Number) o).longValue();
+    }
+    return val;
+  }
+
+  /**
+   * Turns the given {@link Object} a {@link Integer}
+   * @param o The {@link Integer} to transform.
+   * @return The {@link Integer} for the {@link Object} or null.
+   */
+  public static Integer asInteger(Object o) {
+    Integer val = null;
+    if (o instanceof Number) {
+        val = ((Number) o).intValue();
+    }
+    return val;
   }
 
 }

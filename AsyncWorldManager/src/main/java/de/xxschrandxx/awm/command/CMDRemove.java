@@ -2,12 +2,14 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -22,12 +24,13 @@ public class CMDRemove {
           WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
           Config config = WorldConfigManager.getWorldConfig(worlddata.getWorldName());
           if ((worlddata != null) && (config != null)) {
-            if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+            WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
+            if (worldstatus == WorldStatus.LOADED) {
               for (Player p : Bukkit.getWorld(worlddata.getWorldName()).getPlayers()) {
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.remove.teleport"));
                 p.teleport(Bukkit.getWorld(AsyncWorldManager.config.get().getString("MainWorld")).getSpawnLocation());
               }
-              WorldConfigManager.remove(Bukkit.getWorld(worlddata.getWorldName()), config);
+              WorldConfigManager.remove(Bukkit.getWorld(worlddata.getWorldName()), config, worlddata);
               AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.remove.success").replace("%world%", worlddata.getWorldName()));
               return true;
             }
@@ -61,7 +64,11 @@ public class CMDRemove {
         list.add("remove");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("remove")) {
-        list.addAll(WorldConfigManager.getAllLoadedWorlds());
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.LOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
     }
     return list;

@@ -44,7 +44,7 @@ public class CMDPlugin {
             return true;
           }
         }
-        else if (args[1].equalsIgnoreCase("set")){
+        else if (args[1].equalsIgnoreCase("set")) {
           if (args.length == 5) {
             if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.plugin.set")) {
               if (args[2].equalsIgnoreCase("config")) {

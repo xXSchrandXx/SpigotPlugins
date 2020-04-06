@@ -3,6 +3,7 @@ package de.xxschrandxx.awm.command;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World.Environment;
@@ -10,6 +11,7 @@ import org.bukkit.command.CommandSender;
 
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -37,7 +39,7 @@ public class CMDImport {
                     File worldconfigfile = new File(worldconfigfolder, worldname + ".yml");
                     config = new Config(worldconfigfile);
                     WorldConfigManager.createWorld(worlddata);
-                    WorldConfigManager.save(config, worlddata);
+                    WorldConfigManager.setWorldData(worlddata);
                     AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.import.success.chat").replace("%world%", worldname), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.import.success.hover"), ClickEvent.Action.RUN_COMMAND, "/wm tp " + worldname);
                     return true;
                   }
@@ -83,7 +85,11 @@ public class CMDImport {
         list.add("import");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("import")) {
-        list.addAll(WorldConfigManager.getAllUnknownWorlds());
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.UNKNOWN) {
+            list.add(entry.getKey());
+          }
+        }
       }
       else if ((args.length == 3) && args[1].equalsIgnoreCase("import")) {
         for (Environment env : Environment.values()) {

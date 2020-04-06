@@ -2,6 +2,7 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -14,11 +15,13 @@ import org.bukkit.generator.ChunkGenerator;
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDModify {
+  //TODO
   public static boolean modifycmd(CommandSender sender, String args[]) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length != 1) {
@@ -36,7 +39,8 @@ public class CMDModify {
           WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
           Config config = WorldConfigManager.getWorldConfig(worlddata.getWorldName());
           if ((worlddata != null) && (config != null)) {
-            if (WorldConfigManager.getAllKnownWorlds().contains(worlddata.getWorldName())) {
+            WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
+            if (worldstatus == WorldStatus.LOADED) {
               String key = args[2];
               String prevalue = args[3];
               if (key.isEmpty() || prevalue.isEmpty())
@@ -160,7 +164,7 @@ public class CMDModify {
               if ((world = Bukkit.getWorld(worlddata.getWorldName())) != null) {
                 WorldConfigManager.setWorldsData(world, worlddata);
               }
-              WorldConfigManager.save(config, worlddata);
+              WorldConfigManager.setWorldData(worlddata);
               return true;
             }
             else {
@@ -194,8 +198,11 @@ public class CMDModify {
         return list;
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("modify")) {
-        list.addAll(WorldConfigManager.getAllLoadedWorlds());
-        return list;
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.LOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
       else if (args[1].equalsIgnoreCase("modify")) {
         for (Modifier m : Modifier.values()) {

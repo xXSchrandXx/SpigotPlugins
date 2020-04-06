@@ -1,19 +1,12 @@
 package de.xxschrandxx.awm.api.worldcreation;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
 
-import de.xxschrandxx.api.minecraft.Config;
-import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Modifier;
-import de.xxschrandxx.awm.api.config.WorldConfigManager;
-import de.xxschrandxx.awm.api.config.WorldData;
-import de.xxschrandxx.awm.api.event.PreWorldCreateEvent;
-import de.xxschrandxx.awm.api.event.WorldCreateEvent;
+import de.xxschrandxx.awm.api.config.*;
+import de.xxschrandxx.awm.api.event.*;
 
 public class normal {
   /**
@@ -32,10 +25,19 @@ public class normal {
         }
         WorldData worlddata = preworldcreateevent.getWorldData();
         if (Bukkit.getWorld(preworldcreator.name()) == null) {
-          preworldcreator.environment(worlddata.getEnviroment());
-          preworldcreator.seed((Long) worlddata.getModifierValue(Modifier.seed));
-          preworldcreator.generator((ChunkGenerator) worlddata.getModifierValue(Modifier.generator));
-          preworldcreator.type((WorldType) worlddata.getModifierValue(Modifier.worldtype));
+          preworldcreator.environment(worlddata.getEnvironment());
+          Long seed;
+          if ((seed = (Long) worlddata.getModifierValue(Modifier.seed)) != null) {
+            preworldcreator.seed(seed);
+          }
+          ChunkGenerator generator;
+          if ((generator = (ChunkGenerator) worlddata.getModifierValue(Modifier.generator)) != null) {
+            preworldcreator.generator(generator);
+          }
+          WorldType worldtype;
+          if ((worldtype = (WorldType) worlddata.getModifierValue(Modifier.worldtype)) != null) {
+            preworldcreator.type(worldtype);
+          }
           preworldcreator.generateStructures((Boolean) worlddata.getModifierValue(Modifier.generatestructures));
         }
         WorldCreateEvent worldcreateevent = new WorldCreateEvent(preworldcreator, false);
@@ -43,12 +45,7 @@ public class normal {
         if (worldcreateevent.isCancelled()) {
           return;
         }
-        File worldconfigfolder = new File(AsyncWorldManager.getInstance().getDataFolder(), "worldconfigs");
-        if (!worldconfigfolder.exists())
-          worldconfigfolder.mkdir();
-        File worldconfigfile = new File(worldconfigfolder, worlddata.getWorldName() + ".yml");
-        Config config = new Config(worldconfigfile);
-        WorldConfigManager.save(config, worlddata);
+        WorldConfigManager.setWorldData(worlddata);
 
         WorldCreator worldcreator = worldcreateevent.getWorldCreator();
         worldcreator.createWorld();

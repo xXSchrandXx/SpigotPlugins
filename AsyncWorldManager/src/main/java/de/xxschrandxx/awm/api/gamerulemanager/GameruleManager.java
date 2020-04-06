@@ -1,5 +1,8 @@
 package de.xxschrandxx.awm.api.gamerulemanager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.xxschrandxx.api.minecraft.ServerVersion;
 import de.xxschrandxx.api.minecraft.otherapi.Version;
 
@@ -35,6 +38,12 @@ public class GameruleManager {
       v0.setup();
   }
 
-  
+  public static Map<Rule<?>, Object> getDefaults() {
+    Map<Rule<?>, Object> defaults = new HashMap<Rule<?>, Object>();
+    for (Rule<?> rule : Rule.values()) {
+      defaults.put(rule, rule.getDefaultValue());
+    }
+    return defaults;
+  }
 
 }

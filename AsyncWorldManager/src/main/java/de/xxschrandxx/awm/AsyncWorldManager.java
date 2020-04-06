@@ -43,7 +43,7 @@ public class AsyncWorldManager extends JavaPlugin {
   public static LoggerHandler getLogHandler() {
     return mh.getLogHandler();
   }
-  
+
   private static Metrics metrics;
   public static Config config;
   public static Config messages;
@@ -51,6 +51,7 @@ public class AsyncWorldManager extends JavaPlugin {
   public static Plugin PAPER = null;
   private boolean setup = false;
 
+  
   @Override
   public void onLoad() {
 
@@ -77,14 +78,6 @@ public class AsyncWorldManager extends JavaPlugin {
       getLogHandler().log(true, Level.INFO, "FastAsyncWorldEdit not found. Using it would help the performance! Download: https://github.com/boy0001/FastAsyncWorldedit/wiki");
       config.get().set("fastasyncworldedit.faweworld", false);
       config.save();
-    }
-    metrics = new Metrics(this);
-    metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> WorldConfigManager.getAllKnownWorlds().size()));
-    if (metrics.isEnabled()) {
-      getLogHandler().log(true, Level.WARNING, "Starting Metrics. Opt-out using the global bStats config.");
-    }
-    else {
-      getLogHandler().log(true, Level.INFO, "Metrics disabled per bStats config.");
     }
   }
 
@@ -114,8 +107,15 @@ public class AsyncWorldManager extends JavaPlugin {
       getLogHandler().log(false, Level.INFO, "Loading Listener 'EntitySpawnListener'...");
       Bukkit.getPluginManager().registerEvents(new EntitySpawnListener(), this);
     }
-    getLogHandler().log(false, Level.INFO, "Loading Worlds...");
     WorldConfigManager.loadworlds();
+    metrics = new Metrics(this);
+    metrics.addCustomChart(new Metrics.SingleLineChart("managed_worlds", () -> WorldConfigManager.getAllWorlds().size()));
+    if (metrics.isEnabled()) {
+      getLogHandler().log(true, Level.WARNING, "Starting Metrics. Opt-out using the global bStats config.");
+    }
+    else {
+      getLogHandler().log(true, Level.INFO, "Metrics disabled per bStats config.");
+    }
   }
 
   @Override
@@ -135,91 +135,7 @@ public class AsyncWorldManager extends JavaPlugin {
         }
       }
     }
-    else {
-      Storage.stop();
-    }
+    Storage.stop();
   }
-/*
-  public static List<String> modifier() {
-    List<String> list = new ArrayList<String>();
-    list.add("-aliases:");
-    list.add("-autoload:true");
-    list.add("-autoload:false");
-    list.add("-autosave:true");
-    list.add("-autosave:false");
-    list.add("-difficulty:PEACEFUL");
-    list.add("-difficulty:EASY");
-    list.add("-difficulty:NORMAL");
-    list.add("-difficulty:HARD");
-    list.add("-pvp:true");
-    list.add("-pvp:false");
-    list.add("-s:");
-    list.add("-a:true");
-    list.add("-a:false");
-    list.add("-fawe:true");
-    list.add("-fawe:false");
-    list.add("-keepspawninmemory:true");
-    list.add("-keepspawninmemory:false");
-    list.add("-x:");
-    list.add("-y:");
-    list.add("-z:");
-    list.add("-yaw:");
-    list.add("-pitch:");
-    list.add("-allowanimalspawning:true");
-    list.add("-allowanimalspawning:false");
-    list.add("-allowmonsterspawning:true");
-    list.add("-allowmonsterspawning:false");
-    list.add("-ambientlimit:");
-    list.add("-animallimit:");
-    list.add("-wateranimallimit:");
-    list.add("-monsterlimit:");
-    list.add("-storm:true");
-    list.add("-storm:false");
-    list.add("-thunder:true");
-    list.add("-thunder:false");
-    list.add("-announceadvancements:true");
-    list.add("-announceadvancements:false");
-    list.add("-commandblockoutput:true");
-    list.add("-commandblockoutput:false");
-    list.add("-disableelytramovementcheck:true");
-    list.add("-disableelytramovementcheck:false");
-    list.add("-dodaylightcycle:true");
-    list.add("-dodaylightcycle:false");
-    list.add("-doentitydrops:true");
-    list.add("-doentitydrops:false");
-    list.add("-dofiretick:true");
-    list.add("-dofiretick:false");
-    list.add("-dolimitedcrafting:true");
-    list.add("-dolimitedcrafting:false");
-    list.add("-domobloot:true");
-    list.add("-domobloot:false");
-    list.add("-domobspawning:true");
-    list.add("-domobspawning:false");
-    list.add("-dotiledrops:true");
-    list.add("-dotiledrops:false");
-    list.add("-doweathercycle:true");
-    list.add("-doweathercycle:false");
-    list.add("-keepinventory:true");
-    list.add("-keepinventory:false");
-    list.add("-logadmincommands:true");
-    list.add("-logadmincommands:false");
-    list.add("-maxcommandchainlength:");
-    list.add("-maxentitycramming:");
-    list.add("-mobgriefing:true");
-    list.add("-mobgriefing:false");
-    list.add("-naturalregeneration:true");
-    list.add("-naturalregeneration:false");
-    list.add("-randomtickspeed:");
-    list.add("-reduceddebuginfo:true");
-    list.add("-reduceddebuginfo:false");
-    list.add("-sendcommandfeedback:true");
-    list.add("-sendcommandfeedback:false");
-    list.add("-showdeathmessages:true");
-    list.add("-showdeathmessages:false");
-    list.add("-spawnradius:");
-    list.add("-spectatorsgeneratechunks:true");
-    list.add("-spectatorsgeneratechunks:false");
-    return list;
-  }
-*/
+
 }

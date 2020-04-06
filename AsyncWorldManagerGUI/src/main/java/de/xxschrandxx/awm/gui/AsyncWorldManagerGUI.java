@@ -4,8 +4,8 @@ import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.xxschrandxx.api.minecraft.PermissionHandler;
 import de.xxschrandxx.api.minecraft.message.*;
+import de.xxschrandxx.api.minecraft.*;
 import de.xxschrandxx.awm.gui.menus.*;
 
 public class AsyncWorldManagerGUI extends JavaPlugin {
@@ -54,6 +54,7 @@ public class AsyncWorldManagerGUI extends JavaPlugin {
         Storage.messages.get().getString("footer"),
         Storage.config.get().getBoolean("logging.debug"),
         Storage.config.get().getStringList("logging.show"));
+
   }
 
   @Override

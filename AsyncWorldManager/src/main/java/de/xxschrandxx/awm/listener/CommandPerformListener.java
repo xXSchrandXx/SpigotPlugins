@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
@@ -45,8 +44,7 @@ public class CommandPerformListener implements Listener {
               worlddata.setModifier(Modifier.y, y);
               worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = WorldConfigManager.getWorldConfig(world.getName());
-              WorldConfigManager.save(config, worlddata);
+              WorldConfigManager.setWorldData(worlddata);
             }
           }
         }
@@ -63,8 +61,7 @@ public class CommandPerformListener implements Listener {
               worlddata.setModifier(Modifier.y, y);
               worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = WorldConfigManager.getWorldConfig(world.getName());
-              WorldConfigManager.save(config, worlddata);
+              WorldConfigManager.setWorldData(worlddata);
             }
           }
         }
@@ -81,8 +78,7 @@ public class CommandPerformListener implements Listener {
               worlddata.setModifier(Modifier.y, y);
               worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = WorldConfigManager.getWorldConfig(world.getName());
-              WorldConfigManager.save(config, worlddata);
+              WorldConfigManager.setWorldData(worlddata);
             }
           }
         }
@@ -99,8 +95,7 @@ public class CommandPerformListener implements Listener {
               worlddata.setModifier(Modifier.y, y);
               worlddata.setModifier(Modifier.z, z);
               WorldConfigManager.setWorldsData(world, worlddata);
-              Config config = WorldConfigManager.getWorldConfig(world.getName());
-              WorldConfigManager.save(config, worlddata);
+              WorldConfigManager.setWorldData(worlddata);
             }
           }
         }
@@ -122,8 +117,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setModifier(Modifier.yaw, yaw);
             worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = WorldConfigManager.getWorldConfig(world.getName());
-            WorldConfigManager.save(config, worlddata);
+            WorldConfigManager.setWorldData(worlddata);
           }
         }
         else if (sender instanceof BlockCommandSender) {
@@ -142,8 +136,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setModifier(Modifier.yaw, yaw);
             worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = WorldConfigManager.getWorldConfig(world.getName());
-            WorldConfigManager.save(config, worlddata);
+            WorldConfigManager.setWorldData(worlddata);
           }
         }
         else if (sender instanceof CommandMinecart) {
@@ -162,8 +155,7 @@ public class CommandPerformListener implements Listener {
             worlddata.setModifier(Modifier.yaw, yaw);
             worlddata.setModifier(Modifier.pitch, pitch);
             WorldConfigManager.setWorldsData(world, worlddata);
-            Config config = WorldConfigManager.getWorldConfig(world.getName());
-            WorldConfigManager.save(config, worlddata);
+            WorldConfigManager.setWorldData(worlddata);
           }
         }
       }

@@ -2,10 +2,12 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
@@ -18,7 +20,8 @@ public class CMDLoad {
         if (!args[1].isEmpty()) {
           WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
           if (worlddata != null) {
-            if (WorldConfigManager.getAllUnloadedWorlds().contains(worlddata.getWorldName())) {
+            WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(worlddata.getWorldName());
+            if (worldstatus == WorldStatus.UNLOADED) {
               WorldConfigManager.createWorld(worlddata);
               AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.load.success.chat").replace("%world%", worlddata.getWorldName()), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.load.success.hover"), ClickEvent.Action.RUN_COMMAND, "/wm tp " + worlddata.getWorldName());
               return true;
@@ -53,7 +56,11 @@ public class CMDLoad {
         list.add("load");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("load")) {
-        list.addAll(WorldConfigManager.getAllUnloadedWorlds());
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.UNLOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
     }
     return list;

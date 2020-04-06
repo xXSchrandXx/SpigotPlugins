@@ -2,6 +2,7 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.WorldType;
 import org.bukkit.command.BlockCommandSender;
@@ -9,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
@@ -20,8 +22,8 @@ public class CMDInfo {
   public static boolean infocmd(CommandSender sender, String[] args) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.info")) {
       WorldData worlddata = null;
-      if (args.length == 2) {
-    	  worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
+      if (args.length != 1) {
+    	  worlddata = WorldConfigManager.getWorlddataFromName(args[1]);
       }
       else if (sender instanceof Player) {
         Player p = (Player) sender;
@@ -53,7 +55,7 @@ public class CMDInfo {
             aliases = aliases + AsyncWorldManager.messages.get().getString("command.list.aliases") + alias;
           }
         }
-        String enviroment = worlddata.getEnviroment().name();
+        String enviroment = worlddata.getEnvironment().name();
         String seed = String.valueOf(worlddata.getModifierValue(Modifier.seed));
         String generator = String.valueOf(worlddata.getModifierValue(Modifier.generator));
         String worldtype = ((WorldType) worlddata.getModifierValue(Modifier.worldtype)).name();
@@ -83,7 +85,14 @@ public class CMDInfo {
         list.add("info");
       }
       else if ((args.length == 2) && args[1].equalsIgnoreCase("info")) {
-        list.addAll(WorldConfigManager.getAllKnownWorlds());
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.LOADED) {
+            list.add(entry.getKey());
+          }
+          else if (entry.getValue() == WorldStatus.UNLOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
     }
     return list;

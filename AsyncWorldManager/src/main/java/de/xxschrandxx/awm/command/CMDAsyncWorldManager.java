@@ -78,9 +78,9 @@ public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
           }
           return true;
         }
-        else if (args[0].equalsIgnoreCase("reload")) {
-          if (!CMDReload.reloadcmd(sender, args)) {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.reload.usage"));
+        else if (args[0].equalsIgnoreCase("configs")) {
+          if (!CMDConfigs.configscmd(sender, args)) {
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.configs.usage"));
           }
           return true;
         }
@@ -116,7 +116,7 @@ public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
     cmdlist.addAll(CMDLoad.loadlist(args, sender));
     cmdlist.addAll(CMDModify.modifylist(args, sender));
     cmdlist.addAll(CMDPlugin.pluginlist(args, sender));
-    cmdlist.addAll(CMDReload.reloadlist(args, sender));
+    cmdlist.addAll(CMDConfigs.configslist(args, sender));
     cmdlist.addAll(CMDRemove.removelist(args, sender));
     cmdlist.addAll(CMDTeleport.teleportlist(args, sender));
     cmdlist.addAll(CMDUnload.unloadlist(args, sender));
@@ -148,8 +148,8 @@ public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
         AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.list.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm list ");
       if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main"))
         AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.modify.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm modify ");
-      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.reload"))
-        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.reload.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm reload ");
+      if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.configs"))
+        AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, "&8| &7" + AsyncWorldManager.messages.get().getString("command.configs.usage"), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.AsyncWorldManager.hover"), ClickEvent.Action.SUGGEST_COMMAND, "/wm configs ");
       AsyncWorldManager.getMessageHandler().sendFooter(sender);
     }
     else {

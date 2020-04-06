@@ -15,6 +15,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.GameMode;
 
 import de.xxschrandxx.api.minecraft.awm.CreationType;
+import de.xxschrandxx.awm.api.gamerulemanager.GameruleManager;
 
 public enum Modifier {
 
@@ -34,9 +35,7 @@ public enum Modifier {
   allowanimalspawning (
       "AllowAnimalSpawning",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -45,9 +44,7 @@ public enum Modifier {
   allowmonsterspawning (
       "AllowMonsterSpawning",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -76,9 +73,7 @@ public enum Modifier {
   autoload (
       "AutoLoad",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -87,9 +82,7 @@ public enum Modifier {
   autosave (
       "AutoSave",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -99,9 +92,7 @@ public enum Modifier {
       "CreationType",
       CreationType.normal,
       CreationType.class,
-      CreationType.normal,
-      CreationType.fawe,
-      CreationType.broken
+      CreationType.values()
   ),
 
   /**
@@ -111,10 +102,7 @@ public enum Modifier {
       "Difficulty",
       Difficulty.NORMAL,
       Difficulty.class,
-      Difficulty.PEACEFUL,
-      Difficulty.EASY,
-      Difficulty.NORMAL,
-      Difficulty.HARD
+      Difficulty.values()
   ),
 
   /**
@@ -132,19 +120,14 @@ public enum Modifier {
   enablecommandblocks(
       "EnableCommandBlocks",
       false,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   gamemode(
       "GameMode",
       GameMode.SURVIVAL,
       GameMode.class,
-      GameMode.SURVIVAL,
-      GameMode.CREATIVE,
-      GameMode.ADVENTURE,
-      GameMode.SPECTATOR
+      GameMode.values()
   ),
 
   /**
@@ -153,7 +136,7 @@ public enum Modifier {
    */
   gamerule(
       "Gamerule",
-      null,
+      GameruleManager.getDefaults(),
       Map.class
    ),
 
@@ -169,9 +152,7 @@ public enum Modifier {
   generatestructures(
       "generateStructures",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -180,9 +161,7 @@ public enum Modifier {
   hardcore(
       "Hardcore",
       false,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -191,9 +170,7 @@ public enum Modifier {
   keepspawninmemory (
       "KeepSpawninMemory",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -221,9 +198,7 @@ public enum Modifier {
   pvp (
       "PvP",
       true,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -232,7 +207,7 @@ public enum Modifier {
   seed (
       "Seed",
       null,
-      Integer.class
+      Long.class
   ),
 
   /**
@@ -241,9 +216,7 @@ public enum Modifier {
   storm (
       "Storm",
       false,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -252,9 +225,7 @@ public enum Modifier {
   thunder (
       "Thunder",
       false,
-      Boolean.class,
-      true,
-      false
+      Boolean.class
   ),
 
   /**
@@ -280,7 +251,7 @@ public enum Modifier {
   ticksperambientspawns(
       "TicksPerAmbientSpawns",
       -1,
-      Integer.class
+      Long.class
   ),
 
   /**
@@ -297,7 +268,7 @@ public enum Modifier {
   ticksperanimalspawns(
       "TicksPerAnimalSpawns",
       -1,
-      Integer.class
+      Long.class
   ),
 
   /**
@@ -314,7 +285,7 @@ public enum Modifier {
   tickspermonsterspawns(
       "TicksPerMonsterSpawns",
       -1,
-      Integer.class
+      Long.class
   ),
 
   /**
@@ -331,7 +302,7 @@ public enum Modifier {
   ticksperwaterspawns(
       "TicksPerWaterSpawns",
       -1,
-      Integer.class
+      Long.class
   ),
 
   /**
@@ -369,13 +340,7 @@ public enum Modifier {
       "WorldType",
       WorldType.NORMAL,
       WorldType.class,
-      WorldType.NORMAL,
-      WorldType.LARGE_BIOMES,
-      WorldType.FLAT,
-      WorldType.AMPLIFIED,
-      WorldType.BUFFET,
-      WorldType.CUSTOMIZED,
-      WorldType.VERSION_1_1
+      WorldType.values()
   ),
 
   /**
@@ -384,7 +349,7 @@ public enum Modifier {
   x (
       "X",
       0,
-      Integer.class
+      Double.class
   ),
 
   /**
@@ -393,7 +358,7 @@ public enum Modifier {
   y (
       "Y",
       0,
-      Integer.class
+      Double.class
   ),
 
   /**
@@ -411,7 +376,7 @@ public enum Modifier {
   z (
       "Z",
       0,
-      Integer.class
+      Double.class
   )
 
   /*End of enums*/;
@@ -419,7 +384,7 @@ public enum Modifier {
   private static final Map<String, Modifier> MODIFIER = new HashMap<String, Modifier>();
   @SuppressWarnings("rawtypes")
   private static final Map<Modifier, Class> CLASSES = new HashMap<Modifier, Class>();
-  private static final Map<Modifier, List<Object>> VALUES = new HashMap<Modifier, List<Object>>();
+  private static final Map<Modifier, Object[]> VALUES = new HashMap<Modifier, Object[]>();
 
   static {
     for (Modifier m : values()) {
@@ -444,7 +409,7 @@ public enum Modifier {
    * List of {@link Object}s you can put as value for the enum.<br>
    * If this {@link List} is empty, any {@link Object} can be used.
    */
-  public final List<Object> o;
+  public final Object[] o;
 
   /**
    * The default value for the {@link Modifier}.
@@ -461,25 +426,24 @@ public enum Modifier {
   }
 
   @SuppressWarnings("rawtypes")
-  private Modifier(String Name, Object dvalue, Class Cl, Object ... O) {
-    this.name = Name;
-    this.cl = Cl;
-    List<Object> OS = new ArrayList<Object>();
-    for (Object to : O) {
-      if (O != null) {
-        OS.add(to);
-      }
-    }
-    this.o = OS;
-    this.defaultvalue = dvalue;
-  }
-
-  @SuppressWarnings("rawtypes")
-  private Modifier(String Name, Object dvalue, Class CL, List<Object> OL) {
+  private Modifier(String Name, Object dvalue, Class CL) {
     this.name = Name;
     this.cl = CL;
-    this.o = OL;
+    if (CL == Boolean.class) {
+      this.o = new Object[] {true, false};
+    }
+    else {
+      this.o = new Object[] {};
+    }
     this.defaultvalue = dvalue;
   }
 
+
+  @SuppressWarnings("rawtypes")
+  private Modifier(String Name, Object dvalue, Class Cl, Object[] O) {
+    this.name = Name;
+    this.cl = Cl;
+    this.o = O;
+    this.defaultvalue = dvalue;
+  }
 }

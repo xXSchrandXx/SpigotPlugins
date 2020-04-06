@@ -2,12 +2,14 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
@@ -19,11 +21,12 @@ public class CMDTeleport {
     if (sender instanceof Player) {
       Player p = (Player) sender;
       if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.main")) {
-        if (args.length != 1) {
+        if (args.length == 2) {
           if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.self")) {
             WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
-              if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+              WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
+              if (worldstatus == WorldStatus.LOADED || worldstatus == WorldStatus.BUKKITWORLD) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 AsyncWorldManager.getCommandSenderHandler().sendMessage(p, AsyncWorldManager.messages.get().getString("command.teleport.success.self").replace("%world%", worlddata.getWorldName()));
                 p.teleport(world.getSpawnLocation());
@@ -44,11 +47,12 @@ public class CMDTeleport {
             return true;
           }
         }
-        else if (args.length != 2) {
+        else if (args.length == 3) {
           if (AsyncWorldManager.getPermissionHandler().hasPermission(p, "command.permissions.worldmanager.teleport.other")) {
             WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
             if (worlddata != null) {
-              if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+              WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
+              if (worldstatus == WorldStatus.LOADED || worldstatus == WorldStatus.BUKKITWORLD) {
                 World world = Bukkit.getWorld(worlddata.getWorldName());
                 if (Bukkit.getPlayer(args[2]) != null) {
                   Player p2 = Bukkit.getPlayer(args[2]);
@@ -96,7 +100,8 @@ public class CMDTeleport {
       if (args.length == 3) {
         WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
         if (worlddata != null) {
-          if (WorldConfigManager.getAllLoadedWorlds().contains(worlddata.getWorldName())) {
+          WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
+          if (worldstatus == WorldStatus.LOADED || worldstatus == WorldStatus.BUKKITWORLD) {
             World world = Bukkit.getWorld(worlddata.getWorldName());
             if (Bukkit.getPlayer(args[2]) != null) {
               Player p2 = Bukkit.getPlayer(args[2]);
@@ -132,7 +137,14 @@ public class CMDTeleport {
       if (args.length == 1) {
         list.add("teleport");
       }
-      else if ((args.length == 2) && args[1].equalsIgnoreCase("teleport")) {
+      else if (((args.length == 2) && args[1].equalsIgnoreCase("teleport")) || ((args.length == 2) && args[1].equalsIgnoreCase("tp"))) {
+        if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.self")) {
+          for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+            if (entry.getValue() == WorldStatus.LOADED) {
+              list.add(entry.getKey());
+            }
+          }
+        }
         if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.other")) {
           for (Player p : Bukkit.getOnlinePlayers()) {
             if (!AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.teleport.bypass")) {
@@ -141,8 +153,12 @@ public class CMDTeleport {
           }
         }
       }
-      else if ((args.length == 3) && args[1].equalsIgnoreCase("teleport")) {
-        list.addAll(WorldConfigManager.getAllLoadedWorlds());
+      else if (((args.length == 3) && args[1].equalsIgnoreCase("teleport")) || ((args.length == 3) && args[1].equalsIgnoreCase("tp"))) {
+        for (Entry<String, WorldStatus> entry : WorldConfigManager.getAllWorlds().entrySet()) {
+          if (entry.getValue() == WorldStatus.LOADED) {
+            list.add(entry.getKey());
+          }
+        }
       }
     }
     return list;
