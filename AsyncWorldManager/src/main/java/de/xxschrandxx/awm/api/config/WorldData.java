@@ -8,7 +8,22 @@ import org.bukkit.World.Environment;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
 
-public class WorldData extends Object {
+public final class WorldData implements Cloneable {
+
+  public WorldData() {}
+
+  public WorldData(WorldData worlddata) {
+    this.worldname = worlddata.getWorldName();
+    this.environment = worlddata.getEnvironment();
+    this.modifier = worlddata.getModifier();
+  }
+
+  public WorldData(String WorldName, Environment Environment, Map<Modifier, Object> Modifier) {
+    this.worldname = WorldName;
+    this.environment = Environment;
+    this.modifier = Modifier;
+  }
+
   //WorldName
   private String worldname;
   public String getWorldName() {
@@ -17,6 +32,7 @@ public class WorldData extends Object {
   public void setWorldName(String WorldName) {
     this.worldname = WorldName;
   }
+
   //Enviroment
   private Environment environment;
   public Environment getEnvironment() {
@@ -25,6 +41,7 @@ public class WorldData extends Object {
   public void setEnvironment(Environment Environment) {
     this.environment = Environment;
   }
+
   //Modifier
   private Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
   public Map<Modifier, Object> getModifier() {
@@ -52,6 +69,7 @@ public class WorldData extends Object {
     modifier.put(key, value);
     return true;
   }
+
   public void setModifier(Map<Modifier, Object> m) {
     modifier = m;
   }
@@ -64,6 +82,11 @@ public class WorldData extends Object {
     }
     s = s + "}";
     return s;
+  }
+
+  @Override
+  public WorldData clone() {
+    return new WorldData(this);
   }
 
 }

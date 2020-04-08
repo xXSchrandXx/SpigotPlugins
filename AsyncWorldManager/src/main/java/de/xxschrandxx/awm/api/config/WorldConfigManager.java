@@ -361,7 +361,8 @@ public class WorldConfigManager {
    */
   public static WorldData getWorlddataFromDefault(String worldname) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromDefault | Getting default WorldData for: " + worldname);
-    WorldData worlddata = Storage.defaultworlddata;
+    WorldData worlddata = null;
+    worlddata = Storage.defaultworlddata.clone();
     worlddata.setWorldName(worldname);
     return worlddata;
   }
