@@ -2,11 +2,8 @@ package de.xxschrandxx.awm.api.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.World.Environment;
-
-import de.xxschrandxx.awm.AsyncWorldManager;
 
 public final class WorldData implements Cloneable {
 
@@ -33,13 +30,13 @@ public final class WorldData implements Cloneable {
   }
 
   //Enviroment
-  private Environment environment;
+  private final Environment environment;
   public Environment getEnvironment() {
     return this.environment;
   }
 
   //Modifier
-  private Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
+  private final Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
   public Map<Modifier, Object> getModifierMap() {
     return modifier;
   }
