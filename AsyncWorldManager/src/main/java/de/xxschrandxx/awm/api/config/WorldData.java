@@ -10,27 +10,26 @@ import de.xxschrandxx.awm.AsyncWorldManager;
 
 public final class WorldData implements Cloneable {
 
-  public WorldData() {}
+  public WorldData() {
+    this.worldname = null;
+    this.environment = null;
+  }
 
   public WorldData(WorldData worlddata) {
     this.worldname = worlddata.getWorldName();
     this.environment = worlddata.getEnvironment();
-    this.modifier = worlddata.getModifier();
+    this.modifier.putAll(worlddata.getModifierMap());
   }
 
   public WorldData(String WorldName, Environment Environment, Map<Modifier, Object> Modifier) {
     this.worldname = WorldName;
     this.environment = Environment;
-    this.modifier = Modifier;
+    this.modifier.putAll(Modifier);
   }
 
-  //WorldName
-  private String worldname;
+  private final String worldname;
   public String getWorldName() {
     return this.worldname;
-  }
-  public void setWorldName(String WorldName) {
-    this.worldname = WorldName;
   }
 
   //Enviroment
@@ -38,18 +37,16 @@ public final class WorldData implements Cloneable {
   public Environment getEnvironment() {
     return this.environment;
   }
-  public void setEnvironment(Environment Environment) {
-    this.environment = Environment;
-  }
 
   //Modifier
   private Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
-  public Map<Modifier, Object> getModifier() {
+  public Map<Modifier, Object> getModifierMap() {
     return modifier;
   }
   public Object getModifierValue(Modifier key) {
     return modifier.get(key);
   }
+  /*
   public boolean setModifier(Modifier key, Object value) {
     if (key.o.length != 0) {
       Boolean islistet = false;
@@ -73,6 +70,7 @@ public final class WorldData implements Cloneable {
   public void setModifier(Map<Modifier, Object> m) {
     modifier = m;
   }
+  */
 
   @Override
   public String toString() {

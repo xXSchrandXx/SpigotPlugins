@@ -1,5 +1,7 @@
 package de.xxschrandxx.awm.listener;
 
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -40,11 +42,13 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              worlddata.setModifier(Modifier.x, x);
-              worlddata.setModifier(Modifier.y, y);
-              worlddata.setModifier(Modifier.z, z);
-              WorldConfigManager.setWorldsData(world, worlddata);
-              WorldConfigManager.setWorldData(worlddata);
+              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              modifiermap.put(Modifier.x, x);
+              modifiermap.put(Modifier.y, y);
+              modifiermap.put(Modifier.z, z);
+              WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+              WorldConfigManager.setWorldsData(world, nworlddata);
+              WorldConfigManager.setWorldData(nworlddata);
             }
           }
         }
@@ -55,13 +59,15 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              worlddata.setModifier(Modifier.x, x);
-              worlddata.setModifier(Modifier.y, y);
-              worlddata.setModifier(Modifier.z, z);
-              WorldConfigManager.setWorldsData(world, worlddata);
-              WorldConfigManager.setWorldData(worlddata);
+              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              modifiermap.put(Modifier.x, x);
+              modifiermap.put(Modifier.y, y);
+              modifiermap.put(Modifier.z, z);
+              WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+              WorldConfigManager.setWorldsData(world, nworlddata);
+              WorldConfigManager.setWorldData(nworlddata);
             }
           }
         }
@@ -72,13 +78,15 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              worlddata.setModifier(Modifier.x, x);
-              worlddata.setModifier(Modifier.y, y);
-              worlddata.setModifier(Modifier.z, z);
-              WorldConfigManager.setWorldsData(world, worlddata);
-              WorldConfigManager.setWorldData(worlddata);
+              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              modifiermap.put(Modifier.x, x);
+              modifiermap.put(Modifier.y, y);
+              modifiermap.put(Modifier.z, z);
+              WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+              WorldConfigManager.setWorldsData(world, nworlddata);
+              WorldConfigManager.setWorldData(nworlddata);
             }
           }
         }
@@ -89,13 +97,15 @@ public class CommandPerformListener implements Listener {
             int x = Integer.parseInt(args[1]);
             int y = Integer.parseInt(args[2]);
             int z = Integer.parseInt(args[3]);
-            WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
+            WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              worlddata.setModifier(Modifier.x, x);
-              worlddata.setModifier(Modifier.y, y);
-              worlddata.setModifier(Modifier.z, z);
-              WorldConfigManager.setWorldsData(world, worlddata);
-              WorldConfigManager.setWorldData(worlddata);
+              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              modifiermap.put(Modifier.x, x);
+              modifiermap.put(Modifier.y, y);
+              modifiermap.put(Modifier.z, z);
+              WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+              WorldConfigManager.setWorldsData(world, nworlddata);
+              WorldConfigManager.setWorldData(nworlddata);
             }
           }
         }
@@ -109,15 +119,17 @@ public class CommandPerformListener implements Listener {
           double z = p.getLocation().getZ();
           float yaw = p.getLocation().getYaw();
           float pitch = p.getLocation().getPitch();
-          WorldData worlddata = WorldConfigManager.getWorlddataFromName(p.getWorld().getName());
+          WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
           if (worlddata != null) {
-            worlddata.setModifier(Modifier.x, x);
-            worlddata.setModifier(Modifier.y, y);
-            worlddata.setModifier(Modifier.z, z);
-            worlddata.setModifier(Modifier.yaw, yaw);
-            worlddata.setModifier(Modifier.pitch, pitch);
-            WorldConfigManager.setWorldsData(world, worlddata);
-            WorldConfigManager.setWorldData(worlddata);
+            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            modifiermap.put(Modifier.x, x);
+            modifiermap.put(Modifier.y, y);
+            modifiermap.put(Modifier.z, z);
+            modifiermap.put(Modifier.pitch, pitch);
+            modifiermap.put(Modifier.yaw, yaw);
+            WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+            WorldConfigManager.setWorldsData(world, nworlddata);
+            WorldConfigManager.setWorldData(nworlddata);
           }
         }
         else if (sender instanceof BlockCommandSender) {
@@ -130,13 +142,15 @@ public class CommandPerformListener implements Listener {
           float pitch = b.getBlock().getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
           if (worlddata != null) {
-            worlddata.setModifier(Modifier.x, x);
-            worlddata.setModifier(Modifier.y, y);
-            worlddata.setModifier(Modifier.z, z);
-            worlddata.setModifier(Modifier.yaw, yaw);
-            worlddata.setModifier(Modifier.pitch, pitch);
-            WorldConfigManager.setWorldsData(world, worlddata);
-            WorldConfigManager.setWorldData(worlddata);
+            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            modifiermap.put(Modifier.x, x);
+            modifiermap.put(Modifier.y, y);
+            modifiermap.put(Modifier.z, z);
+            modifiermap.put(Modifier.pitch, pitch);
+            modifiermap.put(Modifier.yaw, yaw);
+            WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+            WorldConfigManager.setWorldsData(world, nworlddata);
+            WorldConfigManager.setWorldData(nworlddata);
           }
         }
         else if (sender instanceof CommandMinecart) {
@@ -149,13 +163,15 @@ public class CommandPerformListener implements Listener {
           float pitch = m.getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
           if (worlddata != null) {
-            worlddata.setModifier(Modifier.x, x);
-            worlddata.setModifier(Modifier.y, y);
-            worlddata.setModifier(Modifier.z, z);
-            worlddata.setModifier(Modifier.yaw, yaw);
-            worlddata.setModifier(Modifier.pitch, pitch);
-            WorldConfigManager.setWorldsData(world, worlddata);
-            WorldConfigManager.setWorldData(worlddata);
+            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            modifiermap.put(Modifier.x, x);
+            modifiermap.put(Modifier.y, y);
+            modifiermap.put(Modifier.z, z);
+            modifiermap.put(Modifier.pitch, pitch);
+            modifiermap.put(Modifier.yaw, yaw);
+            WorldData nworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
+            WorldConfigManager.setWorldsData(world, nworlddata);
+            WorldConfigManager.setWorldData(nworlddata);
           }
         }
       }

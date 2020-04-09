@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -23,7 +25,7 @@ public class Storage {
   /**
    * The default {@link WorldData} set in config.yml and {@link Modifier}
    */
-  protected static WorldData defaultworlddata;
+  protected static Map<Modifier, Object> defaultmodifiermap = new HashMap<Modifier, Object>();
 
   public static void start() {
     //Lade config.yml
@@ -235,7 +237,7 @@ public class Storage {
         AsyncWorldManager.config.get().getStringList("logging.show"));
 
     //Setze default WorldData
-    defaultworlddata = WorldConfigManager.getWorlddataFromConfigSection(new WorldData(), AsyncWorldManager.config.get().getConfigurationSection("WorldSettings"));
+    defaultmodifiermap = WorldConfigManager.getWorlddataFromConfigSection("WorldSettings", AsyncWorldManager.config.get().getConfigurationSection("WorldSettings")).getModifierMap();
 
     if (!enablecommandblock) {
       AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");

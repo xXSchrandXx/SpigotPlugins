@@ -45,11 +45,9 @@ public class WorldConfigManager {
    * @return The created {@link WorldData}.
    */
   public static WorldData getWorlddataFromCommand(CommandSender sender, String worldname, String preenviroment, String[] args) {
-    WorldData worlddata = getWorlddataFromDefault(worldname);
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromCommand | Getting WorldData for: " + worldname + ", " + sender.getName());
-    worlddata.setWorldName(worldname);
-    if (Environment.valueOf(preenviroment.toUpperCase()) != null)
-      worlddata.setEnvironment(Environment.valueOf(preenviroment.toUpperCase()));
+    Environment environment = ((environment = Environment.valueOf(preenviroment)) != null) ? environment : null;
+    Map<Modifier, Object> modifiermap = getDefaultModifierMap(worldname);
     Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
     List<String> options = new ArrayList<String>();
     for (String arg : args) {
@@ -87,7 +85,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == String.class) {
           if (!prevalue.isEmpty()) {
-            worlddata.setModifier(modifier, prevalue);
+            modifiermap.put(modifier, prevalue);
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a String. " + prevalue );
@@ -96,7 +94,7 @@ public class WorldConfigManager {
         else if (modifier.cl == List.class) {
           if (!prevalue.isEmpty()) {
             List<String> value = List.of(prevalue.split(";"));
-            worlddata.setModifier(modifier, value);
+            modifiermap.put(modifier, value);
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " value was empty.");
@@ -104,7 +102,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Boolean.class) {
           if (testValues.isBoolean(prevalue)) {
-            worlddata.setModifier(modifier, Boolean.valueOf(prevalue));
+            modifiermap.put(modifier, Boolean.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Boolean. " + prevalue );
@@ -112,7 +110,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Integer.class) {
           if (testValues.isInt(prevalue)) {
-            worlddata.setModifier(modifier, Integer.valueOf(prevalue));
+            modifiermap.put(modifier, Integer.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Integer. " + prevalue );
@@ -120,7 +118,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Double.class) {
           if (testValues.isDouble(prevalue)) {
-            worlddata.setModifier(modifier, Double.valueOf(prevalue));
+            modifiermap.put(modifier, Double.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Double. " + prevalue );
@@ -128,7 +126,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Float.class) {
           if (testValues.isFloat(prevalue)) {
-            worlddata.setModifier(modifier, Float.valueOf(prevalue));
+            modifiermap.put(modifier, Float.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Float. " + prevalue );
@@ -136,7 +134,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Long.class) {
           if (testValues.isLong(prevalue)) {
-            worlddata.setModifier(modifier, Long.valueOf(prevalue));
+            modifiermap.put(modifier, Long.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Long. " + prevalue );
@@ -144,7 +142,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == Difficulty.class) {
           if (testValues.isDifficulty(prevalue)) {
-            worlddata.setModifier(modifier, Difficulty.valueOf(prevalue));
+            modifiermap.put(modifier, Difficulty.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Difficulty. " + prevalue );
@@ -152,7 +150,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == ChunkGenerator.class) {
           if (testValues.isGenerator(worldname, prevalue, sender)) {
-            worlddata.setModifier(modifier, WorldCreator.getGeneratorForName(worldname, prevalue, sender));
+            modifiermap.put(modifier, WorldCreator.getGeneratorForName(worldname, prevalue, sender));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a ChunkGenerator. " + prevalue );
@@ -160,7 +158,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == WorldType.class) {
           if (testValues.isWorldType(prevalue)) {
-            worlddata.setModifier(modifier, WorldType.valueOf(prevalue));
+            modifiermap.put(modifier, WorldType.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a WorldType. " + prevalue );
@@ -168,7 +166,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == CreationType.class) {
           if (testValues.isCreationType(prevalue)) {
-            worlddata.setModifier(modifier, CreationType.valueOf(prevalue));
+            modifiermap.put(modifier, CreationType.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a CreationType. " + prevalue );
@@ -176,7 +174,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == GameMode.class) {
           if (testValues.isCreationType(prevalue)) {
-            worlddata.setModifier(modifier, GameMode.valueOf(prevalue));
+            modifiermap.put(modifier, GameMode.valueOf(prevalue));
           }
           else {
             AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a GameMode. " + prevalue );
@@ -184,8 +182,8 @@ public class WorldConfigManager {
         }
       }
     }
-    worlddata.setModifier(Modifier.gamerule, gamerules);
-    return worlddata;
+    modifiermap.put(Modifier.gamerule, gamerules);
+    return new WorldData(worldname, environment, modifiermap);
   }
 
   /**
@@ -194,52 +192,48 @@ public class WorldConfigManager {
    * @return The created {@link WorldData}.
    */
   public static WorldData getWorlddataFromWorld(World world) {
-    WorldData worlddata = getWorlddataFromDefault(world.getName());
+    Map<Modifier, Object> modifiermap = getDefaultModifierMap(world.getName());
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromWorld | Getting WorldData for: " + world.getName());
-    worlddata.setWorldName(world.getName());
-    List<String> aliases = new ArrayList<String>();
-    worlddata.setModifier(Modifier.aliases, aliases);
     if (world.getName().equalsIgnoreCase(AsyncWorldManager.config.get().getString("mainworld"))) {
-      worlddata.setModifier(Modifier.autoload, false);
-      worlddata.setModifier(Modifier.creationtype, CreationType.normal);
+      modifiermap.put(Modifier.autoload, false);
+      modifiermap.put(Modifier.creationtype, CreationType.normal);
     }
-    worlddata.setEnvironment(world.getEnvironment());
-    worlddata.setModifier(Modifier.allowanimalspawning, world.getAllowAnimals());
-    worlddata.setModifier(Modifier.allowmonsterspawning, world.getAllowMonsters());
-    worlddata.setModifier(Modifier.ambientlimit, world.getAmbientSpawnLimit());
-    worlddata.setModifier(Modifier.animallimit, world.getAnimalSpawnLimit());
-    worlddata.setModifier(Modifier.difficulty, world.getDifficulty());
+    modifiermap.put(Modifier.allowanimalspawning, world.getAllowAnimals());
+    modifiermap.put(Modifier.allowmonsterspawning, world.getAllowMonsters());
+    modifiermap.put(Modifier.ambientlimit, world.getAmbientSpawnLimit());
+    modifiermap.put(Modifier.animallimit, world.getAnimalSpawnLimit());
+    modifiermap.put(Modifier.difficulty, world.getDifficulty());
     Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
     for (GameRule<?> gamerule : GameRule.values()) {
       Rule<?> rule = Rule.getByName(gamerule.getName());
       gamerules.put(rule, world.getGameRuleValue(gamerule));
     }
-    worlddata.setModifier(Modifier.gamerule, gamerules);
-    worlddata.setModifier(Modifier.generator, world.getGenerator());
-    worlddata.setModifier(Modifier.generatestructures, world.canGenerateStructures());
-    worlddata.setModifier(Modifier.hardcore, world.isHardcore());
-    worlddata.setModifier(Modifier.keepspawninmemory, world.getKeepSpawnInMemory());
-    worlddata.setModifier(Modifier.monsterlimit, world.getMonsterSpawnLimit());
-    worlddata.setModifier(Modifier.pitch, world.getSpawnLocation().getPitch());
-    worlddata.setModifier(Modifier.pvp, world.getPVP());
-    worlddata.setModifier(Modifier.seed, world.getSeed());
-    worlddata.setModifier(Modifier.storm, world.hasStorm());
-    worlddata.setModifier(Modifier.thunder, world.isThundering());
-    worlddata.setModifier(Modifier.thunderduration, world.getThunderDuration());
-    worlddata.setModifier(Modifier.ticksperambientspawns, world.getTicksPerAmbientSpawns());
-    worlddata.setModifier(Modifier.ticksperanimalspawns, world.getTicksPerAnimalSpawns());
-    worlddata.setModifier(Modifier.tickspermonsterspawns, world.getTicksPerMonsterSpawns());
-    worlddata.setModifier(Modifier.ticksperwaterspawns, world.getTicksPerWaterSpawns());
-    worlddata.setModifier(Modifier.time, world.getTime());
-    worlddata.setModifier(Modifier.wateranimallimit, world.getWaterAnimalSpawnLimit());
-    worlddata.setModifier(Modifier.weatherduration, world.getWeatherDuration());
-    worlddata.setModifier(Modifier.worldtype, world.getWorldType());
-    worlddata.setModifier(Modifier.x, world.getSpawnLocation().getX());
-    worlddata.setModifier(Modifier.y, world.getSpawnLocation().getY());
-    worlddata.setModifier(Modifier.yaw, world.getSpawnLocation().getYaw());
-    worlddata.setModifier(Modifier.z, world.getSpawnLocation().getZ());
+    modifiermap.put(Modifier.gamerule, gamerules);
+    modifiermap.put(Modifier.generator, world.getGenerator());
+    modifiermap.put(Modifier.generatestructures, world.canGenerateStructures());
+    modifiermap.put(Modifier.hardcore, world.isHardcore());
+    modifiermap.put(Modifier.keepspawninmemory, world.getKeepSpawnInMemory());
+    modifiermap.put(Modifier.monsterlimit, world.getMonsterSpawnLimit());
+    modifiermap.put(Modifier.pitch, world.getSpawnLocation().getPitch());
+    modifiermap.put(Modifier.pvp, world.getPVP());
+    modifiermap.put(Modifier.seed, world.getSeed());
+    modifiermap.put(Modifier.storm, world.hasStorm());
+    modifiermap.put(Modifier.thunder, world.isThundering());
+    modifiermap.put(Modifier.thunderduration, world.getThunderDuration());
+    modifiermap.put(Modifier.ticksperambientspawns, world.getTicksPerAmbientSpawns());
+    modifiermap.put(Modifier.ticksperanimalspawns, world.getTicksPerAnimalSpawns());
+    modifiermap.put(Modifier.tickspermonsterspawns, world.getTicksPerMonsterSpawns());
+    modifiermap.put(Modifier.ticksperwaterspawns, world.getTicksPerWaterSpawns());
+    modifiermap.put(Modifier.time, world.getTime());
+    modifiermap.put(Modifier.wateranimallimit, world.getWaterAnimalSpawnLimit());
+    modifiermap.put(Modifier.weatherduration, world.getWeatherDuration());
+    modifiermap.put(Modifier.worldtype, world.getWorldType());
+    modifiermap.put(Modifier.x, world.getSpawnLocation().getX());
+    modifiermap.put(Modifier.y, world.getSpawnLocation().getY());
+    modifiermap.put(Modifier.yaw, world.getSpawnLocation().getYaw());
+    modifiermap.put(Modifier.z, world.getSpawnLocation().getZ());
 
-    return worlddata;
+    return new WorldData(world.getName(), world.getEnvironment(), modifiermap);
   }
 
   /**
@@ -250,18 +244,18 @@ public class WorldConfigManager {
    public static WorldData getWorlddataFromConfig(Config config) {
      String worldname = config.getFile().getName().replace(".yml", "");
      ConfigurationSection section = config.get().getConfigurationSection(worldname);
-     WorldData worlddata = getWorlddataFromDefault(worldname);
      AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfig | Getting WorldData for: " + config.getFile().getName());
-     return getWorlddataFromConfigSection(worlddata, section);
+     return getWorlddataFromConfigSection(worldname, section);
    }
 
    /**
     * Gets the {@link WorldData} from the given {@link ConfigurationSection}.
-    * @param worlddata The {@link WorldData} to update.
-    * @param section The {@link ConfigurationSection} to get the {@link WorldData} from.
+    * @param worldname The world name to update.
+    * @param section The {@link ConfigurationSection} to get the world name from.
     * @return The created {@link WorldData}.
     */
-  public static WorldData getWorlddataFromConfigSection(WorldData worlddata, ConfigurationSection section) {
+  public static WorldData getWorlddataFromConfigSection(String worldname, ConfigurationSection section) {
+    Map<Modifier, Object> modifiermap = getDefaultModifierMap(worldname);
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | Getting WorldData for: " + section.getName());
     for (Modifier modifier : Modifier.values()) {
       if (section.isString(modifier.name)) {
@@ -278,7 +272,7 @@ public class WorldConfigManager {
           (modifier == Modifier.yaw) ||
           (modifier == Modifier.pitch)
           ) {
-        worlddata.setModifier(modifier, section.get("Spawn." + modifier.name));
+        modifiermap.put(modifier, section.get("Spawn." + modifier.name));
       }
       else if (
           (modifier == Modifier.allowanimalspawning) ||
@@ -288,7 +282,7 @@ public class WorldConfigManager {
           (modifier == Modifier.monsterlimit) ||
           (modifier == Modifier.wateranimallimit)
           ) {
-        worlddata.setModifier(modifier, section.get("Spawning." + modifier.name));
+        modifiermap.put(modifier, section.get("Spawning." + modifier.name));
       }
       else if (
           (modifier == Modifier.thunder) ||
@@ -296,23 +290,23 @@ public class WorldConfigManager {
           (modifier == Modifier.storm) ||
           (modifier == Modifier.weatherduration)
           ) {
-        worlddata.setModifier(modifier, section.get("Weather." + modifier.name));
+        modifiermap.put(modifier, section.get("Weather." + modifier.name));
       }
       else if (modifier == Modifier.creationtype) {
         CreationType creationtype = CreationType.valueOf(section.getString(modifier.name));
-        worlddata.setModifier(modifier, creationtype);
+        modifiermap.put(modifier, creationtype);
       }
       else if (modifier == Modifier.gamemode) {
         GameMode gamemode = GameMode.valueOf(section.getString(modifier.name));
-        worlddata.setModifier(modifier, gamemode);
+        modifiermap.put(modifier, gamemode);
       }
       else if (modifier == Modifier.worldtype) {
         WorldType worldtype = WorldType.valueOf(section.getString(modifier.name));
-        worlddata.setModifier(modifier, worldtype);
+        modifiermap.put(modifier, worldtype);
       }
       else if (modifier == Modifier.difficulty) {
         Difficulty difficulty = Difficulty.valueOf(section.getString(modifier.name));
-        worlddata.setModifier(modifier, difficulty);
+        modifiermap.put(modifier, difficulty);
       }
       else if (modifier == Modifier.gamerule) {
         ConfigurationSection gamerulesec = section.getConfigurationSection(modifier.name);
@@ -335,23 +329,21 @@ public class WorldConfigManager {
             }
           }
         }
-        worlddata.setModifier(modifier, gamerules);
+        modifiermap.put(modifier, gamerules);
       }
       else {
-        worlddata.setModifier(modifier, section.get(modifier.name));
+        modifiermap.put(modifier, section.get(modifier.name));
       }
     }
+    Environment environment = null;
     if (section.isString("Environment")) {
       String envname = section.getString("Environment");
-      Environment env;
-      if ((env = Environment.valueOf(envname)) != null) {
-        worlddata.setEnvironment(env);
-      }
+      environment = ((environment = Environment.valueOf(envname)) != null) ? environment : null;
     }
     else {
-      AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfig | \n" + section.get("Environment") + " is not a Environment.");
+      AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfigSection | \n" + section.get("Environment") + " is not a Environment.");
     }
-    return worlddata;
+    return new WorldData(worldname, environment, modifiermap);
   }
 
   /**
@@ -359,12 +351,9 @@ public class WorldConfigManager {
    * @param worldname The worldname for the {@link WorldData}
    * @return The created {@link WorldData}
    */
-  public static WorldData getWorlddataFromDefault(String worldname) {
+  public static Map<Modifier, Object> getDefaultModifierMap(String worldname) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromDefault | Getting default WorldData for: " + worldname);
-    WorldData worlddata = null;
-    worlddata = Storage.defaultworlddata.clone();
-    worlddata.setWorldName(worldname);
-    return worlddata;
+    return Storage.defaultmodifiermap;
   }
 
   /**
@@ -375,12 +364,13 @@ public class WorldConfigManager {
    */
   public static WorldData replaceNull(WorldData toupdate, WorldData update) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.replaceNull | Replacing Null in WorldData: " + toupdate.getWorldName());
+    Map<Modifier, Object> modifiermap = toupdate.getModifierMap();
     for (Modifier modifier : Modifier.values()) {
       if (toupdate.getModifierValue(modifier) == null) {
-        toupdate.setModifier(modifier, update.getModifierValue(modifier));
+        modifiermap.put(modifier, update.getModifierValue(modifier));
       }
     }
-    return toupdate;
+    return new WorldData(toupdate.getWorldName(), toupdate.getEnvironment(), modifiermap);
   }
 
   /**
@@ -522,6 +512,19 @@ public class WorldConfigManager {
    */
   protected static ConcurrentHashMap<String, WorldData> worlddatas = new ConcurrentHashMap<String, WorldData>();
 
+  public static boolean setWorldData(String WorldName, Modifier modifier, Object object) {
+    if (Modifier.getModifier(modifier.name) != null) {
+      WorldData worlddata;
+      if ((worlddata = getWorlddataFromName(WorldName)) != null) {
+        Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+        modifiermap.put(modifier, object);
+        setWorldData(new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap));
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Sets the given {@link WorldData} into Memory.
    * @param worlddata The {@link WorldData} to set.
@@ -643,7 +646,7 @@ public class WorldConfigManager {
       config.get().options().copyHeader(true);
       ConfigurationSection section = config.get().createSection(entry.getValue().getWorldName());
       section.set("Environment", entry.getValue().getEnvironment().name());
-      for (Entry<Modifier, Object> mentry : entry.getValue().getModifier().entrySet()) {
+      for (Entry<Modifier, Object> mentry : entry.getValue().getModifierMap().entrySet()) {
         if (mentry.getValue() == null) {
           AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "Setting Key: " + mentry.getKey() + ", Value: 'none'");
           section.set(mentry.getKey().name, "none");

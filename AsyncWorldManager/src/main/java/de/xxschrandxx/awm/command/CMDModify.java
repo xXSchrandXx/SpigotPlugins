@@ -2,6 +2,7 @@ package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -12,7 +13,6 @@ import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.generator.ChunkGenerator;
 
-import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
@@ -36,9 +36,9 @@ public class CMDModify {
           }
         }
         else if (args.length == 4) {
-          WorldData worlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
-          Config config = WorldConfigManager.getWorldConfig(worlddata.getWorldName());
-          if ((worlddata != null) && (config != null)) {
+          WorldData wd = WorldConfigManager.getWorlddataFromAlias(args[1]);
+          if (wd != null) {
+            Map<Modifier, Object> modifiermap = wd.getModifierMap();
             WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
             if (worldstatus == WorldStatus.LOADED) {
               String key = args[2];
@@ -49,7 +49,7 @@ public class CMDModify {
                 if (key.equalsIgnoreCase(modifier.name)) {
                   if (modifier.cl == String.class) {
                     if (!prevalue.isEmpty()) {
-                      worlddata.setModifier(modifier, prevalue);
+                      modifiermap.put(modifier, prevalue);
                       break;
                     }
                     else {
@@ -60,7 +60,7 @@ public class CMDModify {
                   else if (modifier.cl == List.class) {
                     if (!prevalue.isEmpty()) {
                       List<String> value = List.of(prevalue.split(";"));
-                      worlddata.setModifier(modifier, value);
+                      modifiermap.put(modifier, value);
                       break;
                     }
                     else {
@@ -70,7 +70,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Boolean.class) {
                     if (testValues.isBoolean(prevalue)) {
-                      worlddata.setModifier(modifier, Boolean.valueOf(prevalue));
+                      modifiermap.put(modifier, Boolean.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -80,7 +80,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Integer.class) {
                     if (testValues.isInt(prevalue)) {
-                      worlddata.setModifier(modifier, Integer.valueOf(prevalue));
+                      modifiermap.put(modifier, Integer.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -90,7 +90,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Double.class) {
                     if (testValues.isDouble(prevalue)) {
-                      worlddata.setModifier(modifier, Double.valueOf(prevalue));
+                      modifiermap.put(modifier, Double.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -100,7 +100,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Float.class) {
                     if (testValues.isFloat(prevalue)) {
-                      worlddata.setModifier(modifier, Float.valueOf(prevalue));
+                      modifiermap.put(modifier, Float.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -110,7 +110,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Long.class) {
                     if (testValues.isLong(prevalue)) {
-                      worlddata.setModifier(modifier, Long.valueOf(prevalue));
+                      modifiermap.put(modifier, Long.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -120,7 +120,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == Difficulty.class) {
                     if (testValues.isDifficulty(prevalue)) {
-                      worlddata.setModifier(modifier, Difficulty.valueOf(prevalue));
+                      modifiermap.put(modifier, Difficulty.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -129,8 +129,8 @@ public class CMDModify {
                     }
                   }
                   else if (modifier.cl == ChunkGenerator.class) {
-                    if (testValues.isGenerator(worlddata.getWorldName(), prevalue, sender)) {
-                      worlddata.setModifier(modifier, WorldCreator.getGeneratorForName(worlddata.getWorldName(), prevalue, sender));
+                    if (testValues.isGenerator(wd.getWorldName(), prevalue, sender)) {
+                      modifiermap.put(modifier, WorldCreator.getGeneratorForName(wd.getWorldName(), prevalue, sender));
                       break;
                     }
                     else {
@@ -140,7 +140,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == WorldType.class) {
                     if (testValues.isWorldType(prevalue)) {
-                      worlddata.setModifier(modifier, WorldType.valueOf(prevalue));
+                      modifiermap.put(modifier, WorldType.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -150,7 +150,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == CreationType.class) {
                     if (testValues.isCreationType(prevalue)) {
-                      worlddata.setModifier(modifier, CreationType.valueOf(prevalue));
+                      modifiermap.put(modifier, CreationType.valueOf(prevalue));
                       break;
                     }
                     else {
@@ -161,14 +161,14 @@ public class CMDModify {
                 }
               }
               World world;
-              if ((world = Bukkit.getWorld(worlddata.getWorldName())) != null) {
-                WorldConfigManager.setWorldsData(world, worlddata);
+              if ((world = Bukkit.getWorld(wd.getWorldName())) != null) {
+                WorldConfigManager.setWorldsData(world, wd);
               }
-              WorldConfigManager.setWorldData(worlddata);
+              WorldConfigManager.setWorldData(wd);
               return true;
             }
             else {
-              AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"), ClickEvent.Action.RUN_COMMAND, "/wm load " + worlddata.getWorldName());
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"), ClickEvent.Action.RUN_COMMAND, "/wm load " + wd.getWorldName());
               return true;
             }
           }
