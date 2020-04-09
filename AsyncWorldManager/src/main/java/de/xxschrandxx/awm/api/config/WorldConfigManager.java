@@ -512,19 +512,6 @@ public class WorldConfigManager {
    */
   protected static ConcurrentHashMap<String, WorldData> worlddatas = new ConcurrentHashMap<String, WorldData>();
 
-  public static boolean setWorldData(String WorldName, Modifier modifier, Object object) {
-    if (Modifier.getModifier(modifier.name) != null) {
-      WorldData worlddata;
-      if ((worlddata = getWorlddataFromName(WorldName)) != null) {
-        Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
-        modifiermap.put(modifier, object);
-        setWorldData(new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap));
-        return true;
-      }
-    }
-    return false;
-  }
-
   /**
    * Sets the given {@link WorldData} into Memory.
    * @param worlddata The {@link WorldData} to set.
