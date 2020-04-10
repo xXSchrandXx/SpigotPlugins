@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -21,13 +22,16 @@ import de.xxschrandxx.awm.api.config.*;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDModify {
-  //TODO
   public static boolean modifycmd(CommandSender sender, String args[]) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length != 1) {
         if (args[1].equalsIgnoreCase("list")) {
           if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.list")) {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.list"));
+            AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, AsyncWorldManager.messages.get().getString("command.modify.list.head"));
+            for (Modifier modifier : Modifier.values()) {
+              AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, AsyncWorldManager.messages.get().getString("command.modify.list.format").replace("%modifier%", modifier.name));
+            }
+            AsyncWorldManager.getCommandSenderHandler().sendMessageWithoutPrefix(sender, AsyncWorldManager.messages.get().getString("command.modify.list.footer"));
             return true;
           }
           else {
@@ -36,9 +40,9 @@ public class CMDModify {
           }
         }
         else if (args.length == 4) {
-          WorldData wd = WorldConfigManager.getWorlddataFromAlias(args[1]);
-          if (wd != null) {
-            Map<Modifier, Object> modifiermap = wd.getModifierMap();
+          WorldData oldworlddata = WorldConfigManager.getWorlddataFromAlias(args[1]);
+          if (oldworlddata != null) {
+            Map<Modifier, Object> modifiermap = oldworlddata.getModifierMap();
             WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(args[1]);
             if (worldstatus == WorldStatus.LOADED) {
               String key = args[2];
@@ -129,8 +133,9 @@ public class CMDModify {
                     }
                   }
                   else if (modifier.cl == ChunkGenerator.class) {
-                    if (testValues.isGenerator(wd.getWorldName(), prevalue, sender)) {
-                      modifiermap.put(modifier, WorldCreator.getGeneratorForName(wd.getWorldName(), prevalue, sender));
+                    ChunkGenerator generator;
+                    if ((generator = WorldCreator.getGeneratorForName(oldworlddata.getWorldName(), prevalue, sender)) != null) {
+                      modifiermap.put(modifier, generator);
                       break;
                     }
                     else {
@@ -160,15 +165,20 @@ public class CMDModify {
                   }
                 }
               }
+              WorldData newworlddata = new WorldData(oldworlddata.getWorldName(), oldworlddata.getEnvironment(), modifiermap);
               World world;
-              if ((world = Bukkit.getWorld(wd.getWorldName())) != null) {
-                WorldConfigManager.setWorldsData(world, wd);
+              if ((world = Bukkit.getWorld(newworlddata.getWorldName())) != null) {
+                WorldConfigManager.setWorldsData(world, newworlddata);
               }
-              WorldConfigManager.setWorldData(wd);
+              else {
+                AsyncWorldManager.getLogHandler().log(false, Level.WARNING, "modifycmd | World was flagged as loaded but isn't.");
+              }
+              WorldConfigManager.setWorldData(newworlddata);
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.world.success").replace("%key%", key).replace("%value%", prevalue));
               return true;
             }
             else {
-              AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"), ClickEvent.Action.RUN_COMMAND, "/wm load " + wd.getWorldName());
+              AsyncWorldManager.getCommandSenderHandler().sendMessage(sender, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.chat").replace("%world%", args[1]), HoverEvent.Action.SHOW_TEXT, AsyncWorldManager.messages.get().getString("command.modify.worldnotload.hover"), ClickEvent.Action.RUN_COMMAND, "/wm load " + oldworlddata.getWorldName());
               return true;
             }
           }
@@ -192,7 +202,7 @@ public class CMDModify {
   }
   public static List<String> modifylist(String[] args, CommandSender sender) {
     List<String> list = new ArrayList<String>();
-    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify")) {
+    if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length == 1) {
         list.add("modify");
         return list;
@@ -204,9 +214,65 @@ public class CMDModify {
           }
         }
       }
-      else if (args[1].equalsIgnoreCase("modify")) {
+      else if ((args.length == 3) && args[1].equalsIgnoreCase("modify")) {
         for (Modifier m : Modifier.values()) {
-          list.add("-" + m.name + ":");
+          list.add(m.name);
+        }
+      }
+      else if ((args.length == 4) && args[1].equalsIgnoreCase("modify")) {
+        Modifier modifier = Modifier.getModifier(args[2]);
+        if (modifier != null) {
+          Object[] os = modifier.o;
+          if (os != null) {
+            for (Object o : os) {
+              if (modifier.cl == String.class) {
+                if (o instanceof String) {
+                  list.add((String) o);
+                }
+              }
+              else if (modifier.cl == Boolean.class) {
+                if (o instanceof Boolean) {
+                  list.add("true");
+                  list.add("false");
+                }
+              }
+              else if (modifier.cl == Integer.class) {
+                if (o instanceof Integer) {
+                  list.add(String.valueOf((Integer) o));
+                }
+              }
+              else if (modifier.cl == Double.class) {
+                if (o instanceof Double) {
+                  list.add(String.valueOf((Double) o));
+                }
+              }
+              else if (modifier.cl == Float.class) {
+                if (o instanceof Float) {
+                  list.add(String.valueOf((Float) o));
+                }
+              }
+              else if (modifier.cl == Long.class) {
+                if (o instanceof Long) {
+                  list.add(String.valueOf((Long) o));
+                }
+              }
+              else if (modifier.cl == Difficulty.class) {
+                if (o instanceof Difficulty) {
+                  list.add(((Difficulty) o).name());
+                }
+              }
+              else if (modifier.cl == WorldType.class) {
+                if (o instanceof WorldType) {
+                  list.add(((WorldType) o).name());
+                }
+              }
+              else if (modifier.cl == CreationType.class) {
+                if (o instanceof CreationType) {
+                  list.add(((CreationType) o).name());
+                }
+              }
+            }
+          }
         }
       }
     }

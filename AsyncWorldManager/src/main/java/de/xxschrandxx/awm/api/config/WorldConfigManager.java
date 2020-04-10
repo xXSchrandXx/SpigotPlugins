@@ -286,8 +286,10 @@ public class WorldConfigManager {
       }
       else if (
           (modifier == Modifier.thunder) ||
+          (modifier == Modifier.setthunderduration) ||
           (modifier == Modifier.thunderduration) ||
           (modifier == Modifier.storm) ||
+          (modifier == Modifier.setweatherduration) ||
           (modifier == Modifier.weatherduration)
           ) {
         modifiermap.put(modifier, section.get("Weather." + modifier.name));
@@ -408,15 +410,18 @@ public class WorldConfigManager {
         Float pitch = testValues.asFloat(worlddata.getModifierValue(Modifier.pitch));
         world.setSpawnLocation(new Location(world, x, y, z, yaw, pitch));
         world.setStorm((Boolean) worlddata.getModifierValue(Modifier.storm));
-        world.setThunderDuration((Integer) worlddata.getModifierValue(Modifier.thunderduration));
+        if ((Boolean) worlddata.getModifierValue(Modifier.setthunderduration))
+          world.setThunderDuration((Integer) worlddata.getModifierValue(Modifier.thunderduration));
         world.setThundering((Boolean) worlddata.getModifierValue(Modifier.thunder));
         world.setTicksPerAmbientSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperambientspawns)));
         world.setTicksPerAnimalSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperanimalspawns)));
         world.setTicksPerMonsterSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.tickspermonsterspawns)));
         world.setTicksPerWaterSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperwaterspawns)));
-        world.setTime(testValues.asLong(worlddata.getModifierValue(Modifier.time)));
+        if ((Boolean) worlddata.getModifierValue(Modifier.settime))
+          world.setTime(testValues.asLong(worlddata.getModifierValue(Modifier.time)));
         world.setWaterAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.wateranimallimit));
-        world.setWeatherDuration((Integer) worlddata.getModifierValue(Modifier.weatherduration));
+        if ((Boolean) worlddata.getModifierValue(Modifier.setweatherduration))
+          world.setWeatherDuration((Integer) worlddata.getModifierValue(Modifier.weatherduration));
       }
     });
   }
@@ -661,8 +666,10 @@ public class WorldConfigManager {
         }
         else if (
             (mentry.getKey() == Modifier.thunder) ||
+            (mentry.getKey() == Modifier.setthunderduration) ||
             (mentry.getKey() == Modifier.thunderduration) ||
             (mentry.getKey() == Modifier.storm) ||
+            (mentry.getKey() == Modifier.setweatherduration) ||
             (mentry.getKey() == Modifier.weatherduration)
             ) {
           section.set("Weather." + mentry.getKey().name, mentry.getValue());

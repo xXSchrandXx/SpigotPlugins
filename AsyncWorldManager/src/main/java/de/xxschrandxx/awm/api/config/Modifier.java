@@ -211,6 +211,33 @@ public enum Modifier {
   ),
 
   /**
+   * Weather the {@link Modifier#thunderduration} should be set.
+   */
+  setthunderduration(
+      "setThunderDuration",
+      false,
+      Boolean.class
+  ),
+
+  /**
+   * Weather the {@link Modifier#time} should be set.
+   */
+  settime(
+      "setTime",
+      false,
+      Boolean.class
+  ),
+
+  /**
+   * Weather the {@link Modifier#weatherduration} should be set.
+   */
+  setweatherduration(
+      "setWeatherDuration",
+      false,
+      Boolean.class
+  ),
+
+  /**
    * Whether the world has an ongoing storm.
    */
   storm (

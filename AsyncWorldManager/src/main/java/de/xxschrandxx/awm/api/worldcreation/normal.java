@@ -5,18 +5,19 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
 
+import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.api.event.*;
 
 public class normal {
+
   /**
    * Creates a World as normal World.
    * @param preworlddata The {@link WorldData} to use.
    */
   public static void normalworld(final WorldData preworlddata) {
-//    new Thread() {
-//    Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
-//      public void run() {
+    Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
+      public void run() {
         WorldCreator preworldcreator = new WorldCreator(preworlddata.getWorldName());
         PreWorldCreateEvent preworldcreateevent = new PreWorldCreateEvent(preworlddata, false);
         Bukkit.getPluginManager().callEvent(preworldcreateevent);
@@ -49,8 +50,7 @@ public class normal {
 
         WorldCreator worldcreator = worldcreateevent.getWorldCreator();
         worldcreator.createWorld();
-//      }
-//    });
-//    };
+      }
+    });
   }
 }

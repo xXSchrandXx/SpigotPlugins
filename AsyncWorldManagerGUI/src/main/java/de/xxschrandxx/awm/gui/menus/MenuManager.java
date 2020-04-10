@@ -6,8 +6,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -18,6 +20,126 @@ import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
 
 public class MenuManager {
+
+  public enum MenuForm {
+    /**{@link CreateMenu}*/
+    CreateMenu,
+    /**{@link GameruleMenu}*/
+    GameruleMenu,
+    /**{@link ImportMenu}*/
+    ImportMenu,
+    /**{@link ListMenu}*/
+    ListMenu,
+    /**{@link ModifyMenu}*/
+    ModifyMenu,
+    /**{@link Overview}*/
+    Overview,
+    /**{@link WorldMenu}*/
+    WorldMenu
+  }
+
+  /**
+   * Closes every open {@link Menu}
+   */
+  public static void closeAll() {
+    for (Entry<Player, Menu> entry : menus.entrySet()) {
+      entry.getKey().closeInventory();
+    }
+  }
+
+  /**
+   * {@link ConcurrentHashMap} of {@link Player}s and {@link Menu}s.
+   */
+  protected static ConcurrentHashMap<Player, Menu> menus = new ConcurrentHashMap<Player, Menu>();
+
+  /**
+   * Add a {@link Menu} for given Player.
+   * @param p The {@link Player} for opening the menu.
+   * @param menu The {@link Menu} to open.
+   * @return Weather the {@link Menu} could get opened.
+   */
+  public static boolean addMenu(Player p, Menu menu) {
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added Menu for " + p.getName());
+    if (!menus.containsKey(p)) {
+      if (menu != null) {
+        if (menu.getForm() != null) {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
+          menus.put(p, menu);
+          Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
+          menu.openInventory(p);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Gets the Player which has open the given {@link Menu}.
+   * @param menu The {@link Menu} to check with.
+   * @return The {@link Player} who has the {@link Menu} open or {@link Null} if none is given.
+   */
+  public static Player getPlayer(Menu menu) {
+    Player p = null;
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
+    for (Entry<Player, Menu> entry : menus.entrySet()) {
+      if (menu == entry.getValue()) {
+        p = entry.getKey();
+        break;
+      }
+    }
+    if (p == null) {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
+    }
+    else {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
+    }
+    return p;
+  }
+
+  /**
+   * Gets the Player which has open the given {@link MenuForm}.
+   * @param menuform The {@link MenuForm} to check with.
+   * @return The {@link Player} who has the {@link Menu} open or {@link Null} if none is given.
+   */
+  public static Player getPlayer(MenuForm menuform) {
+    Player p = null;
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menuform.name());
+    for (Entry<Player, Menu> entry : menus.entrySet()) {
+      if (menuform == entry.getValue().getForm()) {
+        p = entry.getKey();
+        break;
+      }
+    }
+    if (p == null) {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menuform.name());
+    }
+    else {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menuform.name());
+    }
+    return p;
+  }
+
+  /**
+   * Removes the {@link Player}s {@link Menu}.
+   * @param p The {@link Player} to remove the {@link Menu} from.
+   * @return Weather the {@link Player} had open a {@link Menu}.
+   */
+  public static boolean removeMenu(Player p) {
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed Menu for " + p.getName());
+    if (menus.containsKey(p)) {
+      InventoryClickEvent.getHandlerList().unregister(menus.get(p));
+      InventoryCloseEvent.getHandlerList().unregister(menus.get(p));
+      menus.remove(p);
+      p.closeInventory();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /*
 
   public static void closeAll() {
     for (Player p : createmenus.keySet())
@@ -38,6 +160,7 @@ public class MenuManager {
 
   //CreateMenu
   private static ConcurrentHashMap<Player, CreateMenu> createmenus = new ConcurrentHashMap<Player, CreateMenu>();
+
   public static boolean addCreateMenu(Player p, CreateMenu menu) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added CreateMenu for " + p.getName());
     if (!createmenus.containsKey(p)) {
@@ -51,6 +174,7 @@ public class MenuManager {
       return false;
     }
   }
+
   public static Player getPlayer(CreateMenu menu) {
     Player p = null;
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
@@ -67,6 +191,7 @@ public class MenuManager {
     }
     return p;
   }
+
   public static boolean removeCreateMenu(Player p) {
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed CreateMenu for " + p.getName());
     if (createmenus.containsKey(p)) {
@@ -350,8 +475,16 @@ public class MenuManager {
       return false;
     }
   }
+  */
 
   //ItemStack Generator
+  /**
+   * Create an {@link ItemStack} with 1 {@link Item} in Stack.
+   * @param material The {@link Material} to use.
+   * @param name The {@link String} name to use.
+   * @param lore The {@link String}s lore to use.
+   * @return The created {@link ItemStack}. 
+   */
   public static ItemStack createGuiItem(Material material, String name, String...lore) {
     List<String> lores = new ArrayList<String>();
     if (lore != null) {
@@ -363,6 +496,14 @@ public class MenuManager {
     return createGuiItem(material, 1, name, lores);
   }
   
+  /**
+   * Create an {@link ItemStack} with x amount of {@link Item}s in Stack.
+   * @param material The {@link Material} to use.
+   * @param amount The {@link Integer} amount to use.
+   * @param name The {@link String} name to use.
+   * @param lore The {@link String}s lore to use.
+   * @return The created {@link ItemStack}. 
+   */
   public static ItemStack createGuiItem(Material material, int amount, String name, String...lore) {
     List<String> lores = new ArrayList<String>();
     if (lore != null) {
@@ -374,10 +515,25 @@ public class MenuManager {
     return createGuiItem(material, amount, name, lores);
   }
 
+  /**
+   * Create an {@link ItemStack} with 1 {@link Item} in Stack.
+   * @param material The {@link Material} to use.
+   * @param name The {@link String} name to use.
+   * @param lore The {@link List}s lore to use.
+   * @return The created {@link ItemStack}. 
+   */
   public static ItemStack createGuiItem(Material material, String name, List<String> lore) {
     return createGuiItem(material, 1, name, lore);
   }
 
+  /**
+   * Create an {@link ItemStack} with 1 {@link Item} in Stack.
+   * @param material The {@link Material} to use.
+   * @param amount The {@link Integer} amount to use.
+   * @param name The {@link String} name to use.
+   * @param lore The {@link List}s lore to use.
+   * @return The created {@link ItemStack}. 
+   */
   public static ItemStack createGuiItem(Material material, int amount, String name, List<String> lore) {
     ItemStack item = new ItemStack(material, amount);
     ItemMeta meta = item.getItemMeta();
@@ -392,4 +548,5 @@ public class MenuManager {
     item.setItemMeta(meta);
     return item;
   }
+
 }

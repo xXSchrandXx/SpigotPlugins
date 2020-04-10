@@ -4,16 +4,16 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
+import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
 import net.md_5.bungee.api.chat.HoverEvent;
 
-public class WorldMenu extends Menu {
+public final class WorldMenu extends Menu {
 
   private String worldname;
 
@@ -22,7 +22,12 @@ public class WorldMenu extends Menu {
     worldname = WorldName;
   }
 
-  ItemStack iload, iunload, iimport, imodify, iteleport, iremove, idelete;
+  protected ItemStack iload, iunload, iimport, imodify, iteleport, iremove, idelete;
+
+  @Override
+  public MenuForm getForm() {
+    return MenuForm.WorldMenu;
+  }
 
   @Override
   public void initializeItems() {
@@ -34,6 +39,7 @@ public class WorldMenu extends Menu {
     iremove = MenuManager.createGuiItem(Material.STRUCTURE_VOID, Storage.messages.get().getString("menu.world.remove.itemname"), Storage.messages.get().getStringList("menu.world.remove.itemlore"));
     idelete = MenuManager.createGuiItem(Material.BARRIER, Storage.messages.get().getString("menu.world.delete.itemname"), Storage.messages.get().getStringList("menu.world.delete.itemlore"));
 
+    //TODO change getAllKnownWorlds()
     if (WorldConfigManager.getAllKnownWorlds().contains(worldname)) {
       if(WorldConfigManager.getAllLoadedWorlds().contains(worldname)) {
         getInventory().setItem(2, iunload);
@@ -71,12 +77,12 @@ public class WorldMenu extends Menu {
 
       if (e.getCurrentItem().isSimilar(iimport)) {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.import"))) {
-          MenuManager.removeWorldMenu(p);
-          MenuManager.addImportMenu(p, new ImportMenu(worldname));
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ImportMenu(worldname));
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.import")));
-          MenuManager.removeWorldMenu(p);
+          MenuManager.removeMenu(p);
         }
       }
 
@@ -104,32 +110,22 @@ public class WorldMenu extends Menu {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worldname.toLowerCase()))) {
           WorldData wd;
           if ((wd = WorldConfigManager.getWorlddataFromName(worldname)) != null) {
-            MenuManager.removeWorldMenu(p);
-            MenuManager.addModifyMenu(p, new ModifyMenu(wd));
+            MenuManager.removeMenu(p);
+            MenuManager.addMenu(p, new ModifyMenu(wd));
           }
           else {
             AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.world.modify.error"));
-            MenuManager.removeWorldMenu(p);
+            MenuManager.removeMenu(p);
           }
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worldname.toLowerCase())));
-          MenuManager.removeWorldMenu(p);
+          MenuManager.removeMenu(p);
         }
       }
 
     }
 
-  }
-
-  @EventHandler
-  public void onClose(InventoryCloseEvent e) {
-    if (e.getPlayer() instanceof Player) {
-      Player p = (Player) e.getPlayer();
-      if (MenuManager.getPlayer(this) == p) {
-        MenuManager.removeWorldMenu(p);
-      }
-    }
   }
 
 }

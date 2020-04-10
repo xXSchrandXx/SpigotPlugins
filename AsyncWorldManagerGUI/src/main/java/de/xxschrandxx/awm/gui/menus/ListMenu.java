@@ -14,7 +14,6 @@ import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
@@ -22,9 +21,10 @@ import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
+import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
 import net.md_5.bungee.api.chat.HoverEvent;
 
-public class ListMenu extends Menu {
+public final class ListMenu extends Menu {
 
   public ListMenu() {
     super(Storage.messages.get().getString("menu.list.name"), 9*6);
@@ -37,9 +37,15 @@ public class ListMenu extends Menu {
     worlds = Worlds;
   }
 
-  int page, maxpage = 0;
-  ItemStack previous, next;
-  ConcurrentHashMap<String, ItemStack> worlds = null;
+  protected int page, maxpage = 0;
+  protected ItemStack previous, next;
+  protected ConcurrentHashMap<String, ItemStack> worlds = null;
+
+  @Override
+  public MenuForm getForm() {
+    return MenuForm.ListMenu;
+  }
+
 
   @Override
   public void initializeItems() {
@@ -158,51 +164,41 @@ public class ListMenu extends Menu {
 
       if (e.getCurrentItem().isSimilar(previous)) {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
-          MenuManager.removeListMenu(p);
-          MenuManager.addListMenu(p, new ListMenu(page-1, maxpage, worlds));
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ListMenu(page-1, maxpage, worlds));
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
-          MenuManager.removeListMenu(p);
+          MenuManager.removeMenu(p);
         }
       }
 
       if (e.getCurrentItem().isSimilar(next)) {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
-          MenuManager.removeListMenu(p);
-          MenuManager.addListMenu(p, new ListMenu(page+1, maxpage, worlds));
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ListMenu(page+1, maxpage, worlds));
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
-          MenuManager.removeListMenu(p);
+          MenuManager.removeMenu(p);
         }
       }
 
       for (Entry<String, ItemStack> entry : worlds.entrySet()) {
         if (e.getCurrentItem().isSimilar(entry.getValue())) {
           if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.world").replace("%world%", entry.getKey()))) {
-            MenuManager.removeListMenu(p);
-            MenuManager.addWorldMenu(p, new WorldMenu(entry.getKey()));
+            MenuManager.removeMenu(p);
+            MenuManager.addMenu(p, new WorldMenu(entry.getKey()));
           }
           else {
             AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
-            MenuManager.removeListMenu(p);
+            MenuManager.removeMenu(p);
           }
         }
       }
 
     }
 
-  }
-
-  @EventHandler
-  public void onClose(InventoryCloseEvent e) {
-    if (e.getPlayer() instanceof Player) {
-      Player p = (Player) e.getPlayer();
-      if (MenuManager.getPlayer(this) == p) {
-        MenuManager.removeListMenu(p);
-      }
-    }
   }
 
 }

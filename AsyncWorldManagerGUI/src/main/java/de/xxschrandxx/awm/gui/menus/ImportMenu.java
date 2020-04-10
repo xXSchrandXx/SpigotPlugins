@@ -2,12 +2,25 @@ package de.xxschrandxx.awm.gui.menus;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class ImportMenu extends Menu {
+import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+
+public final class ImportMenu extends Menu {
+
+  //TODO Create ImportMenu
 
   public ImportMenu(String worldname) {
     super("Import", 9);
   }
+
+  protected ItemStack i;
+
+  @Override
+  public MenuForm getForm() {
+    return MenuForm.ImportMenu;
+  }
+
 
   @Override
   public void initializeItems() {

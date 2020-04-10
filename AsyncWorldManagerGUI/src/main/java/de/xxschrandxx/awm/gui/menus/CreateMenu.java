@@ -2,12 +2,25 @@ package de.xxschrandxx.awm.gui.menus;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class CreateMenu extends Menu {
+import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+
+public final class CreateMenu extends Menu {
+
+  //TODO Make CreateMenu
 
   public CreateMenu() {
     super("Create", 9);
   }
+
+  protected ItemStack i;
+
+  @Override
+  public MenuForm getForm() {
+    return MenuForm.CreateMenu;
+  }
+
 
   @Override
   public void initializeItems() {

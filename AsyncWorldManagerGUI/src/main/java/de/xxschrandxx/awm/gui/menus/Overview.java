@@ -6,20 +6,25 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
+import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
 import net.md_5.bungee.api.chat.HoverEvent;
 
-public class Overview extends Menu {
+public final class Overview extends Menu {
 
   public Overview() {
     super(Storage.messages.get().getString("menu.overview.name"), 9);
   }
 
-  ItemStack icreate, ilist;
+  protected ItemStack icreate, ilist;
+
+  @Override
+  public MenuForm getForm() {
+    return MenuForm.Overview;
+  }
 
   @Override
   public void initializeItems() {
@@ -61,39 +66,29 @@ public class Overview extends Menu {
         AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent ItemStack is " + icreate.getItemMeta().getDisplayName());
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.create"))) {
           AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent Player has Permission.");
-          MenuManager.removeOverview(p);
-          MenuManager.addCreateMenu(p, new CreateMenu());
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new CreateMenu());
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.create")));
           AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent Player has no Permission.");
-          MenuManager.removeOverview(p);
+          MenuManager.removeMenu(p);
         }
       }
 
       else if (e.getCurrentItem().isSimilar(ilist)) {
         if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.list"))) {
-          MenuManager.removeOverview(p);
-          MenuManager.addListMenu(p, new ListMenu());
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ListMenu());
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.list")));
-          MenuManager.removeOverview(p);
+          MenuManager.removeMenu(p);
         }
       }
 
     }
       
-  }
-
-  @EventHandler
-  public void onClose(InventoryCloseEvent e) {
-    if (e.getPlayer() instanceof Player) {
-      Player p = (Player) e.getPlayer();
-      if (MenuManager.getPlayer(this) == p) {
-        MenuManager.removeOverview(p);
-      }
-    }
   }
 
 }

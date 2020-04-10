@@ -73,12 +73,8 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.list", "wm.command.list");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.load", "wm.command.load");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.unload", "wm.command.unload");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.main", "wm.command.modify");
+    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.main", "wm.command.modify.%world%");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.list", "wm.command.modify.list");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.autoload", "wm.command.modify.autoload");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.addname", "wm.command.modify.addname");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.removename", "wm.command.modify.removename");
-    AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.modify.setspawn", "wm.command.modify.setspawn");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.main", "wm.command.plugin.main");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.info", "wm.command.plugin.info");
     AsyncWorldManager.config.get().addDefault("command.permissions.worldmanager.plugin.set", "wm.command.plugin.set");
@@ -107,8 +103,10 @@ public class Storage {
       }
       else if (
           (modifier == Modifier.thunder) ||
+          (modifier == Modifier.setthunderduration) ||
           (modifier == Modifier.thunderduration) ||
           (modifier == Modifier.storm) ||
+          (modifier == Modifier.setweatherduration) ||
           (modifier == Modifier.weatherduration)
           ) {
         AsyncWorldManager.config.get().addDefault("WorldSettings.Weather." + modifier.name, modifier.defaultvalue);
@@ -207,7 +205,9 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.unload.failed.chat", "%world% does not exist.");
     AsyncWorldManager.messages.get().addDefault("command.unload.failed.hover", "Click to list all worlds.");
     AsyncWorldManager.messages.get().addDefault("command.modify.usage", "Usage: /wm modify [list/world] [modifier] [value]");
-    AsyncWorldManager.messages.get().addDefault("command.modify.list", "&8&m[]&6&m-----------------------LIST-----------------------&8&m[]\n&7 | Usage:\n&7 | - /wm modify [world] addalias [alias]\n&7 | - /wm modify [world] removealias [alis]\n&7 | - wm modify [world] autoload [true/false]\n&7 | - wm modify [world] autosave [true/false]\n&7 | - wm modify [world] difficulty [PEACEFUL/EASY/NORMAL/HARD]\n&7 | - wm modify [world] allowmonsterspawning [true/false]\n&7 | - wm modify [world] allowanimalspawning [true/false]\n&7 |  -/wm modify [world] ambientspawnlimit [Number]\n&7 |  -/wm modify [world] animalspawnlimit [Number]\n&7 |  -/wm modify [world] monsterspawnlimit [Number]\n&7 |  -/wm modify [world] wateranimalspawnlimit [Number]\n&7 | - wm modify [world] storm [true/false]\n&7 | - wm modify [world] thunder [true/false]\n&7 | - wm modify [world] keepspawninmemory [true/false]\n&7 |  -/wm modify [world] x [Number]\n&7 |  -/wm modify [world] y [Number]\n&7 |  -/wm modify [world] z [Number]\n&7 |  -/wm modify [world] yaw [Number]\n&7 |  -/wm modify [world] pitch [Number]\n&7 | - wm modify [world] announceadvancements [true/false]\n&7 | - wm modify [world] commandblockoutput [true/false]\n&7 | - wm modify [world] disableelytramovementcheck [true/false]\n&7 | - wm modify [world] dodaylightcycle [true/false]\n&7 | - wm modify [world] doentitydrops [true/false]\n&7 | - wm modify [world] dofiretick [true/false]\n&7 | - wm modify [world] dolimitedcrafting [true/false]\n&7 | - wm modify [world] domobloot [true/false]\n&7 | - wm modify [world] domobspawning [true/false]\n&7 | - wm modify [world] dotiledrops [true/false]\n&7 | - wm modify [world] doweatherchange [true/false]\n&7 | - wm modify [world] keepinventory [true/false]\n&7 | - wm modify [world] logadmincommands [true/false]\n&7 | - wm modify [world] maxcommandchainlength [Number]\n&7 | - wm modify [world] maxentitycramming [Number]\n&7 | - wm modify [world] naturalregeneration [true/false]\n&7 | - wm modify [world] randomtickspeed [Number]\n&7 | - wm modify [world] reduceddebuginfo [true/false]\n&7 | - wm modify [world] sendcommandfeedback [true/false]\n&7 | - wm modify [world] showdeathmessages [true/false]\n&7 | - wm modify [world] spawnradius [Number]\n&7 | - wm modify [world] spectatorsgeneratechunks [true/false]\n&8&m[]&6&m-----------------------LIST-----------------------&8&m[]");
+    AsyncWorldManager.messages.get().addDefault("command.modify.list.head", "&8&m[]&6&m---------------------Modifier---------------------&8&m[]");
+    AsyncWorldManager.messages.get().addDefault("command.modify.list.format", "&7- %modifier%");
+    AsyncWorldManager.messages.get().addDefault("command.modify.list.footer", "&8&m[]&6&m--------------------------------------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.modify.worldnotfound.chat", "The world %world% doesn't exist.");
     AsyncWorldManager.messages.get().addDefault("command.modify.worldnotfound.hover", "Click to import world.");
     AsyncWorldManager.messages.get().addDefault("command.modify.worldnotload.chat", "The world %world% isn't laoded.");

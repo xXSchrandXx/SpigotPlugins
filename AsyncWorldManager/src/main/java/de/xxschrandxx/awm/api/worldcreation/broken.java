@@ -17,7 +17,6 @@ public class broken {
    */
   public static void brokenworld(WorldData preworlddata) {
     Bukkit.getServer().getScheduler().runTaskAsynchronously(AsyncWorldManager.getInstance(), new Runnable() {
-      @SuppressWarnings("unused")
       @Override
       public void run() {
         WorldCreator preworldcreator = new WorldCreator(preworlddata.getWorldName());
@@ -50,9 +49,10 @@ public class broken {
         }
         WorldConfigManager.setWorldData(worlddata);
 
+        @SuppressWarnings("unused")
         WorldCreator creator = worldcreateevent.getWorldCreator();
         
-        //ToDo
+        //TODO Create world async and load afterwards
         
       }
     });
