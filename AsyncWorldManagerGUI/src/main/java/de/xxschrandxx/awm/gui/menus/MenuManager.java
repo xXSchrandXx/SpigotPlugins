@@ -8,14 +8,22 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang.ObjectUtils.Null;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import de.xxschrandxx.api.minecraft.testValues;
+import de.xxschrandxx.api.minecraft.awm.CreationType;
+import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
 
@@ -30,6 +38,8 @@ public class MenuManager {
     ImportMenu,
     /**{@link ListMenu}*/
     ListMenu,
+    /**{@link ModifierMenu}*/
+    ModifierMenu,
     /**{@link ModifyMenu}*/
     ModifyMenu,
     /**{@link Overview}*/
@@ -64,9 +74,9 @@ public class MenuManager {
       if (menu != null) {
         if (menu.getForm() != null) {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-          menus.put(p, menu);
           Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
           menu.openInventory(p);
+          menus.put(p, menu);
           return true;
         }
       }
@@ -121,6 +131,16 @@ public class MenuManager {
   }
 
   /**
+   * Gets the {@link Menu} from the given {@link Player} or {@link Null}.
+   * @param p The {@link Player} to check.
+   * @return The {@link Menu} from the given {@link Player} or {@link Null}.
+   */
+  public static Menu getMenu(Player p) {
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Menu for " + p.getName());
+    return menus.get(p);
+  }
+
+  /**
    * Removes the {@link Player}s {@link Menu}.
    * @param p The {@link Player} to remove the {@link Menu} from.
    * @return Weather the {@link Player} had open a {@link Menu}.
@@ -130,8 +150,8 @@ public class MenuManager {
     if (menus.containsKey(p)) {
       InventoryClickEvent.getHandlerList().unregister(menus.get(p));
       InventoryCloseEvent.getHandlerList().unregister(menus.get(p));
+      p.closeInventory();
       menus.remove(p);
-      p.closeInventory();
       return true;
     }
     else {
@@ -139,343 +159,31 @@ public class MenuManager {
     }
   }
 
-  /*
-
-  public static void closeAll() {
-    for (Player p : createmenus.keySet())
-      removeCreateMenu(p);
-    for (Player p : gamerulemenus.keySet())
-      removeGameruleMenu(p);
-    for (Player p : importmenus.keySet())
-      removeImportMenu(p);
-    for (Player p : listmenus.keySet())
-      removeListMenu(p);
-    for (Player p : modifymenus.keySet())
-      removeModifyMenu(p);
-    for (Player p : overview.keySet())
-      removeOverview(p);
-    for (Player p : worldmenus.keySet())
-      removeWorldMenu(p);
-  }
-
-  //CreateMenu
-  private static ConcurrentHashMap<Player, CreateMenu> createmenus = new ConcurrentHashMap<Player, CreateMenu>();
-
-  public static boolean addCreateMenu(Player p, CreateMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added CreateMenu for " + p.getName());
-    if (!createmenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      createmenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  public static Player getPlayer(CreateMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, CreateMenu> entry : createmenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
+  /**
+   * Changes the {@link Player}s {@link Menu}.
+   * @param p The {@link Player} to remove the {@link Menu} from.
+   * @param menu The {@link Menu} to open.
+   * @return Weather the {@link Player} opened a {@link Menu}.
+   */
+  public static boolean changeMenu(Player p, Menu menu) {
+    if (menus.containsKey(p)) {
+      if (menu != null) {
+        if (menu.getForm() != null) {
+          AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Changing Menu for " + p.getName() + " into " + menu.getName());
+          InventoryClickEvent.getHandlerList().unregister(menus.get(p));
+          InventoryCloseEvent.getHandlerList().unregister(menus.get(p));
+          p.closeInventory();
+          menus.remove(p);
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
+          Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
+          menu.openInventory(p);
+          menus.put(p, menu);
+          return true;
+        }
       }
     }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
+    return false;
   }
-
-  public static boolean removeCreateMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed CreateMenu for " + p.getName());
-    if (createmenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(createmenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(createmenus.get(p));
-      createmenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //GameruleMenu
-  private static ConcurrentHashMap<Player, GameruleMenu> gamerulemenus = new ConcurrentHashMap<Player, GameruleMenu>();
-  public static boolean addGameruleMenu(Player p, GameruleMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added GameruleMenu for " + p.getName());
-    if (!gamerulemenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      gamerulemenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(GameruleMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, GameruleMenu> entry : gamerulemenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeGameruleMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed GameruleMenu for " + p.getName());
-    if (gamerulemenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(gamerulemenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(gamerulemenus.get(p));
-      gamerulemenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //ImportMenu
-  private static ConcurrentHashMap<Player, ImportMenu> importmenus = new ConcurrentHashMap<Player, ImportMenu>();
-  public static boolean addImportMenu(Player p, ImportMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ImportMenu for " + p.getName());
-    if (!importmenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      importmenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(ImportMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, ImportMenu> entry : importmenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeImportMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed ImportMenu for " + p.getName());
-    if (importmenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(importmenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(importmenus.get(p));
-      importmenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //ListMenu
-  private static ConcurrentHashMap<Player, ListMenu> listmenus = new ConcurrentHashMap<Player, ListMenu>();
-  public static boolean addListMenu(Player p, ListMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ListMenu for " + p.getName());
-    if (!listmenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      listmenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(ListMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, ListMenu> entry : listmenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeListMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed ListMenu for " + p.getName());
-    if (listmenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(listmenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(listmenus.get(p));
-      listmenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //ModifyMenu
-  private static ConcurrentHashMap<Player, ModifyMenu> modifymenus = new ConcurrentHashMap<Player, ModifyMenu>();
-  public static boolean addModifyMenu(Player p, ModifyMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added ModifyMenu for " + p.getName());
-    if (!modifymenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      modifymenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(ModifyMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, ModifyMenu> entry : modifymenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeModifyMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed ModifyMenu for " + p.getName());
-    if (modifymenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(modifymenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(modifymenus.get(p));
-      modifymenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //Overview
-  private static ConcurrentHashMap<Player, Overview> overview = new ConcurrentHashMap<Player, Overview>();
-  public static boolean addOverview(Player p, Overview menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added Overview for " + p.getName());
-    if (!overview.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      overview.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(Overview menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, Overview> entry : overview.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeOverview(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed Overview for " + p.getName());
-    if (overview.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(overview.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(overview.get(p));
-      overview.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  //WorldMenu
-  private static ConcurrentHashMap<Player, WorldMenu> worldmenus = new ConcurrentHashMap<Player, WorldMenu>();
-  public static boolean addWorldMenu(Player p, WorldMenu menu) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Added WorldMenu for " + p.getName());
-    if (!worldmenus.containsKey(p)) {
-      AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("command.open").replace("%menu%", menu.getName()));
-      worldmenus.put(p, menu);
-      Bukkit.getPluginManager().registerEvents(menu, AsyncWorldManagerGUI.getInstance());
-      menu.openInventory(p);
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  public static Player getPlayer(WorldMenu menu) {
-    Player p = null;
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Getting Player for " + menu.getName());
-    for (Entry<Player, WorldMenu> entry : worldmenus.entrySet()) {
-      if (menu == entry.getValue()) {
-        p = entry.getKey();
-      }
-    }
-    if (p == null) {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "MenuManager | Got no Player for " + menu.getName());
-    }
-    else {
-      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Got " + p.getName() + " for " + menu.getName());
-    }
-    return p;
-  }
-  public static boolean removeWorldMenu(Player p) {
-    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "MenuManager | Removed WorldMenu for " + p.getName());
-    if (worldmenus.containsKey(p)) {
-      InventoryClickEvent.getHandlerList().unregister(worldmenus.get(p));
-      InventoryCloseEvent.getHandlerList().unregister(worldmenus.get(p));
-      worldmenus.remove(p);
-      p.closeInventory();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  */
 
   //ItemStack Generator
   /**
@@ -547,6 +255,82 @@ public class MenuManager {
     }
     item.setItemMeta(meta);
     return item;
+  }
+
+  @SuppressWarnings("unchecked")
+  public static ItemStack createModifyItem(Modifier modifier, WorldData worlddata, WorldData oldworlddata) {
+    List<String> lore1 = Storage.messages.get().getStringList("menu.modify.change.itemlore");
+    List<String> lore2 = new ArrayList<String>();
+    for (String lore : lore1) {
+      if (modifier.cl == String.class) {
+        lore2.add(lore.replace("%savedvalue%", (String) oldworlddata.getModifierValue(modifier)).replace("%value%", (String) worlddata.getModifierValue(modifier)));
+      }
+      else if (modifier.cl == List.class) {
+        String oldl = "";
+        for (String line : ((List<String>) oldworlddata.getModifierValue(modifier))) {
+          if (oldl.isEmpty()) {
+            oldl = line;
+          }
+          else {
+            oldl = oldl + ";" + line;
+          }
+        }
+        String newl = "";
+        for (String line : ((List<String>) worlddata.getModifierValue(modifier))) {
+          if (newl.isEmpty()) {
+            newl = line;
+          }
+          else {
+            newl = newl + ";" + line;
+          }
+        }
+        lore2.add(lore.replace("%savedvalue%", oldl).replace("%value%", newl));
+      }
+      else if (modifier.cl == Boolean.class) {
+        lore2.add(lore.replace("%savedvalue%", ((Boolean) oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", ((Boolean) worlddata.getModifierValue(modifier)).toString()));
+      }
+      else if (modifier.cl == Integer.class) {
+        lore2.add(lore.replace("%savedvalue%", testValues.asInteger(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asInteger(worlddata.getModifierValue(modifier)).toString()));
+      }
+      else if (modifier.cl == Double.class) {
+        lore2.add(lore.replace("%savedvalue%", testValues.asDouble(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asDouble(worlddata.getModifierValue(modifier)).toString()));
+      }
+      else if (modifier.cl == Float.class) {
+        lore2.add(lore.replace("%savedvalue%", testValues.asFloat(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asFloat(worlddata.getModifierValue(modifier)).toString()));
+      }
+      else if (modifier.cl == Long.class) {
+        lore2.add(lore.replace("%savedvalue%", testValues.asLong(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asLong(worlddata.getModifierValue(modifier)).toString()));
+      }
+      else if (modifier.cl == Difficulty.class) {
+        lore2.add(lore.replace("%savedvalue%", ((Difficulty) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((Difficulty) worlddata.getModifierValue(modifier)).name()));
+      }
+      else if (modifier.cl == ChunkGenerator.class) {
+        String oldg = "none";
+        ChunkGenerator oldgen;
+        if ((oldgen = ((ChunkGenerator) oldworlddata.getModifierValue(modifier))) != null) {
+          oldg = oldgen.toString();
+        }
+        String newg = "none";
+        ChunkGenerator newgen;
+        if ((newgen = ((ChunkGenerator) worlddata.getModifierValue(modifier))) != null) {
+          newg = newgen.toString();
+        }
+        lore2.add(lore.replace("%savedvalue%", oldg).replace("%value%", newg));
+      }
+      else if (modifier.cl == WorldType.class) {
+        lore2.add(lore.replace("%savedvalue%", ((WorldType) oldworlddata.getModifierValue(modifier)).getName()).replace("%value%", ((WorldType) worlddata.getModifierValue(modifier)).getName()));
+      }
+      else if (modifier.cl == CreationType.class) {
+        lore2.add(lore.replace("%savedvalue%", ((CreationType) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((CreationType) worlddata.getModifierValue(modifier)).name()));
+      }
+      else if (modifier.cl == GameMode.class) {
+        lore2.add(lore.replace("%savedvalue%", ((GameMode) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((GameMode) worlddata.getModifierValue(modifier)).name()));
+      }
+    }
+    return MenuManager.createGuiItem(
+        Material.GRAY_STAINED_GLASS_PANE,
+        Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", modifier.name),
+        lore2);
   }
 
 }

@@ -117,11 +117,41 @@ public class Storage {
 
     //Menu Modify
     messages.get().addDefault("menu.modify.name", "Modify %world%");
-    //Item Autoload
+    //Item Previous
+    messages.get().addDefault("menu.modify.previous.itemname", "Previous Page");
+    List<String> previouslore2 = new ArrayList<String>();
+    previouslore2.add("&7Open previous page.");
+    messages.get().addDefault("menu.modify.previous.itemlore", previouslore2);
+    //Item Next
+    messages.get().addDefault("menu.modify.next.itemname", "Next Page");
+    List<String> nextlore2 = new ArrayList<String>();
+    nextlore2.add("&7Open next page.");
+    messages.get().addDefault("menu.modify.next.itemlore", nextlore2);
+    //Item Save
+    messages.get().addDefault("menu.modify.save.success", "Successfully saved modification of %world%.");
+    messages.get().addDefault("menu.modify.save.itemname", "Save Changes");
+    List<String> savelore = new ArrayList<String>();
+    savelore.add("&7Save the Changes.");
+    messages.get().addDefault("menu.modify.save.itemlore", savelore);
+    //Item Cancel
+    messages.get().addDefault("menu.modify.cancel.success", "Cancelled the modification.");
+    messages.get().addDefault("menu.modify.cancel.itemname", "Cancel");
+    List<String> cancellore = new ArrayList<String>();
+    cancellore.add("&7Close the menu and delete the Changes.");
+    messages.get().addDefault("menu.modify.cancel.itemlore", cancellore);
+    //Item Modifier
+    messages.get().addDefault("menu.modify.change.error", "&cThis Setting doesn't exist.");
     messages.get().addDefault("menu.modify.change.itemname", "&7Change &e%setting%");
     List<String> autoloadlore = new ArrayList<String>();
     autoloadlore.add("&7Change this setting.");
+    autoloadlore.add("&7Current saved value: &e%savedvalue%");
+    autoloadlore.add("&7Current value: &e%value%");
     messages.get().addDefault("menu.modify.change.itemlore", autoloadlore);
+
+    //Menu Modifier
+    messages.get().addDefault("menu.modifier.name", "Modify %world% - %modifier%");
+    messages.get().addDefault("menu.modifier.error", "&cError while changing this modifier. Returning to list.");
+    messages.get().addDefault("menu.modifier.success", "Succesfully set &a%modifier%&7 to &e%value%");
 
     messages.save();
 

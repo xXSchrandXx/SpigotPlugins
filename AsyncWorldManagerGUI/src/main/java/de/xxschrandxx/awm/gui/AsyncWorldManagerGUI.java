@@ -2,6 +2,7 @@ package de.xxschrandxx.awm.gui;
 
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.xxschrandxx.api.minecraft.message.*;
@@ -63,6 +64,9 @@ public class AsyncWorldManagerGUI extends JavaPlugin {
     getLogHandler().log(false, Level.INFO, "Loading Command...");
     getCommand("worldmanagergui").setExecutor(new CMDAsyncWorldManagerGUI());
     getCommand("worldmanagergui").setTabCompleter(new CMDAsyncWorldManagerGUI());
+
+    getLogHandler().log(false, Level.INFO, "Loading Listener...");
+    Bukkit.getPluginManager().registerEvents(new DisconnectListener(), this);
 
   }
 

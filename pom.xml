@@ -64,6 +64,12 @@
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
 
+    <!-- Jitpack Repo -->
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+
   </repositories>
 
   <dependencies>
@@ -154,9 +160,9 @@
               </relocations>
               <artifactSet>
                 <includes>
-                  <include>org.bstats:</include>
                   <include>de.xxschrandxx.api:SchrandAPI</include>
-              <include>org.bstats:bstats-bukkit</include>
+                  <include>org.bstats:bstats-bukkit</include>
+                  <include>com.github.WesJD.AnvilGUI</include>
                 </includes>
               </artifactSet>
             </configuration>

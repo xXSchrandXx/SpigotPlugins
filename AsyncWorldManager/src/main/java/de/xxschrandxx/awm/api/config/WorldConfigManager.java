@@ -2,6 +2,7 @@ package de.xxschrandxx.awm.api.config;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class WorldConfigManager {
         }
         else if (modifier.cl == List.class) {
           if (!prevalue.isEmpty()) {
-            List<String> value = List.of(prevalue.split(";"));
+            List<String> value = Arrays.asList(prevalue.split(";"));
             modifiermap.put(modifier, value);
           }
           else {

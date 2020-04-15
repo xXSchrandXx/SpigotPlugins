@@ -1,6 +1,7 @@
 package de.xxschrandxx.awm.command;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,7 +64,7 @@ public class CMDModify {
                   }
                   else if (modifier.cl == List.class) {
                     if (!prevalue.isEmpty()) {
-                      List<String> value = List.of(prevalue.split(";"));
+                      List<String> value = Arrays.asList(prevalue.split(";"));
                       modifiermap.put(modifier, value);
                       break;
                     }

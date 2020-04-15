@@ -1,25 +1,49 @@
 package de.xxschrandxx.awm.gui.menus;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
+import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
 import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+import net.md_5.bungee.api.chat.HoverEvent;
 
 public final class ModifyMenu extends Menu {
 
-  private WorldData wd;
-
-  public ModifyMenu(WorldData worlddata) {
-    super(Storage.messages.get().getString("menu.modify.name").replace("%world%", worlddata.getWorldName()), 9*6);
-    wd = worlddata;
+  public ModifyMenu(WorldData WorldData) {
+    super(Storage.messages.get().getString("menu.modify.name").replace("%world%", WorldData.getWorldName()), 9*6);
+    worlddata = WorldData;
+    oldworlddata = WorldData;
   }
 
-  protected ItemStack iautoload;
+  public ModifyMenu(WorldData WorldData, WorldData OldWorldData, int Page, int Maxpage, ConcurrentHashMap<String, ItemStack> Modifier) {
+    super(Storage.messages.get().getString("menu.modify.name").replace("%world%", WorldData.getWorldName()), 9*6);
+    worlddata = WorldData;
+    oldworlddata = OldWorldData;
+    page = Page;
+    maxpage = Maxpage;
+    imodifier = Modifier;
+  }
+
+  protected int page, maxpage = 0;
+  protected ItemStack previous, next, save, cancel;
+  protected ConcurrentHashMap<String, ItemStack> imodifier = null;
+  protected WorldData worlddata, oldworlddata;
 
   @Override
   public MenuForm getForm() {
@@ -29,8 +53,55 @@ public final class ModifyMenu extends Menu {
 
   @Override
   public void initializeItems() {
-    iautoload = MenuManager.createGuiItem(Material.GRASS_BLOCK, Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", "Autoload"), Storage.messages.get().getStringList("menu.modify.change.itemlore"));
-    getInventory().setItem(0, iautoload);
+
+    previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.modify.previous.itemname"), Storage.messages.get().getStringList("menu.modify.previous.itemlore"));
+    next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.modify.next.itemname"), Storage.messages.get().getStringList("menu.modify.next.itemlore"));
+
+    save = MenuManager.createGuiItem(Material.GREEN_WOOL, Storage.messages.get().getString("menu.modify.save.itemname"), Storage.messages.get().getStringList("menu.modify.save.itemlore"));
+    cancel = MenuManager.createGuiItem(Material.RED_WOOL, Storage.messages.get().getString("menu.modify.cancel.itemname"), Storage.messages.get().getStringList("menu.modify.cancel.itemlore"));
+
+    if (imodifier == null) {
+      imodifier = new ConcurrentHashMap<String, ItemStack>();
+      for (Modifier modifier : Modifier.values()) {
+        if (modifier != null) {
+          AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "ModifyMenu | Setting " + modifier.name);
+          ItemStack istack = MenuManager.createModifyItem(modifier, worlddata, oldworlddata);
+          imodifier.put(modifier.name, istack);
+        }
+      }
+    }
+
+    List<String> keys = imodifier.keySet().stream().collect(Collectors.toList());
+    Collections.sort(keys);
+
+    if (imodifier.size() < 9*5) {
+      for (int i = 0; i < keys.size(); i++) {
+        getInventory().setItem(i, imodifier.get(keys.get(i)));
+      }
+      getInventory().setItem(48, save);
+      getInventory().setItem(50, cancel);
+    }
+    else {
+      maxpage = (int) Math.ceil(imodifier.size()/44);
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "ListMenu | MaxPage is " + maxpage);
+      int inv = 0;
+      for (int i = page*44; i < keys.size(); i++) {
+        if (inv > 44) {
+          break;
+        }
+        getInventory().setItem(inv, imodifier.get(keys.get(i)));
+        inv++;
+      }
+    }
+    AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "ListMenu | Page is " + page);
+    if (page > 0) {
+      getInventory().setItem(45, previous);
+    }
+    if (page < maxpage) {
+      getInventory().setItem(53, next);
+    }
+    getInventory().setItem(48, save);
+    getInventory().setItem(50, cancel);
   }
 
   @EventHandler
@@ -50,9 +121,72 @@ public final class ModifyMenu extends Menu {
         return;
       }
 
-      if (e.getCurrentItem().isSimilar(iautoload)) {
-        MenuManager.removeMenu(p);
-        p.chat("/wm modify " + wd.getWorldName() + " autoload ");
+      if (e.getCurrentItem().isSimilar(previous)) {
+        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ModifyMenu(worlddata, oldworlddata, page-1, maxpage, imodifier));
+        }
+        else {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify")));
+          MenuManager.removeMenu(p);
+        }
+      }
+
+      if (e.getCurrentItem().isSimilar(next)) {
+        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
+          MenuManager.removeMenu(p);
+          MenuManager.addMenu(p, new ModifyMenu(worlddata, oldworlddata, page+1, maxpage, imodifier));
+        }
+        else {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify")));
+          MenuManager.removeMenu(p);
+        }
+      }
+
+      if (e.getCurrentItem().isSimilar(save)) {
+        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
+          WorldConfigManager.setWorldData(worlddata);
+          World world;
+          if ((world = Bukkit.getWorld(worlddata.getWorldName())) != null) {
+            WorldConfigManager.setWorldsData(world, worlddata);
+          }
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modify.save.success").replace("%world%", worlddata.getWorldName()));
+          MenuManager.removeMenu(p);
+        }
+        else {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify")));
+          MenuManager.removeMenu(p);
+        }
+      }
+
+      if (e.getCurrentItem().isSimilar(cancel)) {
+        if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modify.cancel.success"));
+          MenuManager.removeMenu(p);
+        }
+        else {
+          AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify")));
+          MenuManager.removeMenu(p);
+        }
+      }
+
+      for (Entry<String, ItemStack> entry : imodifier.entrySet()) {
+        if (e.getCurrentItem().isSimilar(entry.getValue())) {
+          if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
+            Modifier modifier = Modifier.getModifier(entry.getKey());
+            if (modifier != null) {
+              MenuManager.changeMenu(p, new ModifierMenu(worlddata, oldworlddata, page, maxpage, imodifier, modifier));
+            }
+            else {
+              AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modify.change.error"));
+              MenuManager.removeMenu(p);
+            }
+          }
+          else {
+            AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("nopermission"), HoverEvent.Action.SHOW_TEXT, "(Required: &e%perm%&7)".replace("%perm%", Storage.config.get().getString("permission.openmenu.modify")));
+            MenuManager.removeMenu(p);
+          }
+        }
       }
 
     }

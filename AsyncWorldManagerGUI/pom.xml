@@ -27,6 +27,13 @@
       <version>0.1.0-SNAPSHOT</version>
   	</dependency>
 
+    <!-- AnvilGUI Dependency  -->
+    <dependency>
+        <groupId>com.github.WesJD</groupId>
+        <artifactId>AnvilGUI</artifactId>
+        <version>master-SNAPSHOT</version>
+    </dependency>
+
   </dependencies>
 
 </project>
