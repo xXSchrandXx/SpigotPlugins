@@ -33,10 +33,9 @@ import net.wesjd.anvilgui.AnvilGUI.Response;
 
 public class ModifierMenu extends Menu {
 
-  public ModifierMenu(WorldData WorldData, WorldData OldWorldData, int Page, int Maxpage, ConcurrentHashMap<String, ItemStack> Modifiers, Modifier Modifier) {
+  public ModifierMenu(WorldData WorldData, int Page, int Maxpage, ConcurrentHashMap<String, ItemStack> Modifiers, Modifier Modifier) {
     super(Storage.messages.get().getString("menu.modifier.name").replace("%world%", WorldData.getWorldName()).replace("%modifier%", Modifier.name), 9*6);
     worlddata = WorldData;
-    oldworlddata = OldWorldData;
     page = Page;
     maxpage = Maxpage;
     modifiers = Modifiers;
@@ -45,7 +44,7 @@ public class ModifierMenu extends Menu {
 
   private Builder builder;
   private Integer page, maxpage;
-  private WorldData worlddata, oldworlddata;
+  private WorldData worlddata;
   private ConcurrentHashMap<String, ItemStack> modifiers;
   private Modifier modifier;
 
@@ -208,18 +207,16 @@ public class ModifierMenu extends Menu {
       }
       else {
         AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.error"));
-        MenuManager.changeMenu(p, new ModifyMenu(worlddata, oldworlddata, page, maxpage, modifiers));
+        MenuManager.changeMenu(p, new ModifyMenu(worlddata, page, maxpage, modifiers));
       }
       AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.success").replace("%modifier%", modifier.name).replace("%value%", prevalue));
       WorldData newworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
-      ConcurrentHashMap<String, ItemStack> newmodifiers = modifiers;
-      ItemStack istack = MenuManager.createModifyItem(modifier, worlddata, oldworlddata);
-      newmodifiers.put(modifier.name, istack);
-      MenuManager.changeMenu(p, new ModifyMenu(newworlddata, oldworlddata, page, maxpage, newmodifiers));
+
+      MenuManager.changeMenu(p, new ModifyMenu(newworlddata, page, maxpage, null));
     }
     else {
       AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.error"));
-      MenuManager.changeMenu(p, new ModifyMenu(worlddata, oldworlddata, page, maxpage, modifiers));
+      MenuManager.changeMenu(p, new ModifyMenu(worlddata, page, maxpage, modifiers));
     }
     return Response.close();
   }
@@ -231,7 +228,7 @@ public class ModifierMenu extends Menu {
       Player p = (Player) e.getPlayer();
       if (MenuManager.getPlayer(this) == p) {
         e.getInventory().remove(Material.PAPER);
-        MenuManager.changeMenu(p, new ModifyMenu(worlddata, oldworlddata, page, maxpage, modifiers));
+        MenuManager.changeMenu(p, new ModifyMenu(worlddata, page, maxpage, modifiers));
       }
     }
   }

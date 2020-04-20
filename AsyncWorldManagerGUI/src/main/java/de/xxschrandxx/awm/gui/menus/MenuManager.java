@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
@@ -257,80 +258,138 @@ public class MenuManager {
     return item;
   }
 
-  @SuppressWarnings("unchecked")
-  public static ItemStack createModifyItem(Modifier modifier, WorldData worlddata, WorldData oldworlddata) {
-    List<String> lore1 = Storage.messages.get().getStringList("menu.modify.change.itemlore");
-    List<String> lore2 = new ArrayList<String>();
-    for (String lore : lore1) {
-      if (modifier.cl == String.class) {
-        lore2.add(lore.replace("%savedvalue%", (String) oldworlddata.getModifierValue(modifier)).replace("%value%", (String) worlddata.getModifierValue(modifier)));
-      }
-      else if (modifier.cl == List.class) {
-        String oldl = "";
-        for (String line : ((List<String>) oldworlddata.getModifierValue(modifier))) {
-          if (oldl.isEmpty()) {
-            oldl = line;
+  public static ItemStack createModifyItem(Modifier modifier, WorldData worlddata) {
+    List<String> lore = new ArrayList<String>();
+    WorldData savedworlddata = WorldConfigManager.getWorlddataFromName(worlddata.getWorldName());
+    if (savedworlddata == null) {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "createModifyItem | Saved WorldData is NULL!");
+      return null;
+    }
+    for (Modifier tmpmodifier : Modifier.values()) {
+      if (modifier == tmpmodifier) {
+        for (String line : Storage.messages.get().getStringList("menu.modify.change.itemlore")) {
+
+          if (modifier.cl == String.class) {
+            lore.add(line
+                .replace("%savedvalue%", (String) savedworlddata.getModifierValue(modifier))
+                .replace("%value%", (String) worlddata.getModifierValue(modifier)));
           }
-          else {
-            oldl = oldl + ";" + line;
+
+          else if (modifier.cl == List.class) {
+            String oldl = "";
+            for (String l : ((List<String>) savedworlddata.getModifierValue(modifier))) {
+              if (oldl.isEmpty()) {
+                oldl = l;
+              }
+              else {
+                oldl = oldl + ";" + l;
+              }
+            }
+            String newl = "";
+            for (String l : ((List<String>) worlddata.getModifierValue(modifier))) {
+              if (newl.isEmpty()) {
+                newl = l;
+              }
+              else {
+                newl = newl + ";" + l;
+              }
+            }
+            lore.add(line
+                .replace("%savedvalue%", oldl)
+                .replace("%value%", newl)
+                );
           }
-        }
-        String newl = "";
-        for (String line : ((List<String>) worlddata.getModifierValue(modifier))) {
-          if (newl.isEmpty()) {
-            newl = line;
+
+          else if (modifier.cl == Boolean.class) {
+            lore.add(line
+                .replace("%savedvalue%", ((Boolean) savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", ((Boolean) worlddata.getModifierValue(modifier)).toString())
+                );
           }
-          else {
-            newl = newl + ";" + line;
+
+          else if (modifier.cl == Integer.class) {
+            lore.add(line
+                .replace("%savedvalue%", testValues.asInteger(savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", testValues.asInteger(worlddata.getModifierValue(modifier)).toString())
+                );
           }
+
+          else if (modifier.cl == Double.class) {
+            lore.add(line
+                .replace("%savedvalue%", testValues.asDouble(savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", testValues.asDouble(worlddata.getModifierValue(modifier)).toString())
+                );
+          }
+
+          else if (modifier.cl == Float.class) {
+            lore.add(line
+                .replace("%savedvalue%", testValues.asFloat(
+                    savedworlddata.getModifierValue(modifier)
+                    ).toString())
+                .replace("%value%", testValues.asFloat(worlddata.getModifierValue(modifier)).toString())
+                );
+          }
+
+          else if (modifier.cl == Long.class) {
+            lore.add(line
+                .replace("%savedvalue%", testValues.asLong(savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", testValues.asLong(worlddata.getModifierValue(modifier)).toString())
+                );
+          }
+
+          else if (modifier.cl == Difficulty.class) {
+            lore.add(line
+                .replace("%savedvalue%", ((Difficulty) savedworlddata.getModifierValue(modifier)).name())
+                .replace("%value%", ((Difficulty) worlddata.getModifierValue(modifier)).name())
+                );
+          }
+
+          else if (modifier.cl == ChunkGenerator.class) {
+            String oldg = "none";
+            ChunkGenerator oldgen;
+            if ((oldgen = ((ChunkGenerator) savedworlddata.getModifierValue(modifier))) != null) {
+              oldg = oldgen.toString();
+            }
+            String newg = "none";
+            ChunkGenerator newgen;
+            if ((newgen = ((ChunkGenerator) worlddata.getModifierValue(modifier))) != null) {
+              newg = newgen.toString();
+            }
+            lore.add(line
+                .replace("%savedvalue%", oldg)
+                .replace("%value%", newg)
+                );
+          }
+
+          else if (modifier.cl == WorldType.class) {
+            lore.add(line
+                .replace("%savedvalue%", ((WorldType) savedworlddata.getModifierValue(modifier)).getName())
+                .replace("%value%", ((WorldType) worlddata.getModifierValue(modifier)).getName())
+                );
+          }
+
+          else if (modifier.cl == CreationType.class) {
+            lore.add(line
+                .replace("%savedvalue%", ((CreationType) savedworlddata.getModifierValue(modifier)).name())
+                .replace("%value%", ((CreationType) worlddata.getModifierValue(modifier)).name())
+                );
+          }
+
+          else if (modifier.cl == GameMode.class) {
+            lore.add(line
+                .replace("%savedvalue%", ((GameMode) savedworlddata.getModifierValue(modifier)).name())
+                .replace("%value%", ((GameMode) worlddata.getModifierValue(modifier)).name())
+                );
+          }
+
         }
-        lore2.add(lore.replace("%savedvalue%", oldl).replace("%value%", newl));
-      }
-      else if (modifier.cl == Boolean.class) {
-        lore2.add(lore.replace("%savedvalue%", ((Boolean) oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", ((Boolean) worlddata.getModifierValue(modifier)).toString()));
-      }
-      else if (modifier.cl == Integer.class) {
-        lore2.add(lore.replace("%savedvalue%", testValues.asInteger(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asInteger(worlddata.getModifierValue(modifier)).toString()));
-      }
-      else if (modifier.cl == Double.class) {
-        lore2.add(lore.replace("%savedvalue%", testValues.asDouble(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asDouble(worlddata.getModifierValue(modifier)).toString()));
-      }
-      else if (modifier.cl == Float.class) {
-        lore2.add(lore.replace("%savedvalue%", testValues.asFloat(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asFloat(worlddata.getModifierValue(modifier)).toString()));
-      }
-      else if (modifier.cl == Long.class) {
-        lore2.add(lore.replace("%savedvalue%", testValues.asLong(oldworlddata.getModifierValue(modifier)).toString()).replace("%value%", testValues.asLong(worlddata.getModifierValue(modifier)).toString()));
-      }
-      else if (modifier.cl == Difficulty.class) {
-        lore2.add(lore.replace("%savedvalue%", ((Difficulty) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((Difficulty) worlddata.getModifierValue(modifier)).name()));
-      }
-      else if (modifier.cl == ChunkGenerator.class) {
-        String oldg = "none";
-        ChunkGenerator oldgen;
-        if ((oldgen = ((ChunkGenerator) oldworlddata.getModifierValue(modifier))) != null) {
-          oldg = oldgen.toString();
-        }
-        String newg = "none";
-        ChunkGenerator newgen;
-        if ((newgen = ((ChunkGenerator) worlddata.getModifierValue(modifier))) != null) {
-          newg = newgen.toString();
-        }
-        lore2.add(lore.replace("%savedvalue%", oldg).replace("%value%", newg));
-      }
-      else if (modifier.cl == WorldType.class) {
-        lore2.add(lore.replace("%savedvalue%", ((WorldType) oldworlddata.getModifierValue(modifier)).getName()).replace("%value%", ((WorldType) worlddata.getModifierValue(modifier)).getName()));
-      }
-      else if (modifier.cl == CreationType.class) {
-        lore2.add(lore.replace("%savedvalue%", ((CreationType) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((CreationType) worlddata.getModifierValue(modifier)).name()));
-      }
-      else if (modifier.cl == GameMode.class) {
-        lore2.add(lore.replace("%savedvalue%", ((GameMode) oldworlddata.getModifierValue(modifier)).name()).replace("%value%", ((GameMode) worlddata.getModifierValue(modifier)).name()));
       }
     }
+
     return MenuManager.createGuiItem(
         Material.GRAY_STAINED_GLASS_PANE,
         Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", modifier.name),
-        lore2);
+        lore);
   }
 
 }
