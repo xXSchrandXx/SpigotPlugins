@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.github.WesJD</groupId>
       <artifactId>AnvilGUI</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>d90bb229c2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

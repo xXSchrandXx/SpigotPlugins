@@ -15,7 +15,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 
 public final class WorldMenu extends Menu {
 
-  private String worldname;
+  private final String worldname;
 
   public WorldMenu(String WorldName) {
     super(Storage.messages.get().getString("menu.world.name").replace("%world%", WorldName), 9);
@@ -25,12 +25,12 @@ public final class WorldMenu extends Menu {
   protected ItemStack iload, iunload, iimport, imodify, iteleport, iremove, idelete;
 
   @Override
-  public MenuForm getForm() {
+  public final MenuForm getForm() {
     return MenuForm.WorldMenu;
   }
 
   @Override
-  public void initializeItems() {
+  public final void initializeItems() {
     iimport = MenuManager.createGuiItem(Material.STONE, Storage.messages.get().getString("menu.world.import.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.import.itemlore"));
     imodify = MenuManager.createGuiItem(Material.GRAVEL, Storage.messages.get().getString("menu.world.modify.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.modify.itemlore"));
     iteleport = MenuManager.createGuiItem(Material.ENDER_PEARL, Storage.messages.get().getString("menu.world.teleport.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.teleport.itemlore"));
@@ -59,7 +59,7 @@ public final class WorldMenu extends Menu {
   }
 
   @EventHandler
-  public void onClick(InventoryClickEvent e) {
+  public final void onClick(InventoryClickEvent e) {
 
     if (e.getInventory() != getInventory()) {
       return;

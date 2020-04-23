@@ -142,16 +142,49 @@ public class Storage {
     //Item Modifier
     messages.get().addDefault("menu.modify.change.error", "&cThis Setting doesn't exist.");
     messages.get().addDefault("menu.modify.change.itemname", "&7Change &e%setting%");
-    List<String> autoloadlore = new ArrayList<String>();
-    autoloadlore.add("&7Change this setting.");
-    autoloadlore.add("&7Current saved value: &e%savedvalue%");
-    autoloadlore.add("&7Current value: &e%value%");
-    messages.get().addDefault("menu.modify.change.itemlore", autoloadlore);
+    List<String> changelore = new ArrayList<String>();
+    changelore.add("&7Change this setting.");
+    changelore.add("&7Current saved value: &e%savedvalue%");
+    changelore.add("&7Current value: &e%value%");
+    messages.get().addDefault("menu.modify.change.itemlore", changelore);
 
     //Menu Modifier
     messages.get().addDefault("menu.modifier.name", "Modify %world% - %modifier%");
     messages.get().addDefault("menu.modifier.error", "&cError while changing this modifier. Returning to list.");
     messages.get().addDefault("menu.modifier.success", "Succesfully set &a%modifier%&7 to &e%value%");
+
+    //Menu Gamerule
+    messages.get().addDefault("menu.gamerule.name", "Modify Gamerules %world%");
+    //Item Previous
+    messages.get().addDefault("menu.gamerule.previous.itemname", "Previous Page");
+    List<String> previouslore3 = new ArrayList<String>();
+    previouslore3.add("&7Open previous page.");
+    messages.get().addDefault("menu.gamerule.previous.itemlore", previouslore3);
+    //Item Next
+    messages.get().addDefault("menu.gamerule.next.itemname", "Next Page");
+    List<String> nextlore3 = new ArrayList<String>();
+    nextlore3.add("&7Open next page.");
+    messages.get().addDefault("menu.gamerule.next.itemlore", nextlore3);
+    //Item Save
+    messages.get().addDefault("menu.gamerule.save.success", "Successfully saved gamerule modification of %world%.");
+    messages.get().addDefault("menu.gamerule.save.itemname", "Save Changes");
+    List<String> savelore2 = new ArrayList<String>();
+    savelore2.add("&7Save the Changes.");
+    messages.get().addDefault("menu.gamerule.save.itemlore", savelore2);
+    //Item Cancel
+    messages.get().addDefault("menu.gamerule.cancel.success", "Cancelled the gamerule modification.");
+    messages.get().addDefault("menu.gamerule.cancel.itemname", "Cancel");
+    List<String> cancellore2 = new ArrayList<String>();
+    cancellore2.add("&7Close the menu and delete the Changes.");
+    messages.get().addDefault("menu.gamerule.cancel.itemlore", cancellore2);
+    //Item Modifier
+    messages.get().addDefault("menu.gamerule.change.error", "&cThis Setting doesn't exist.");
+    messages.get().addDefault("menu.gamerule.change.itemname", "&7Change &e%setting%");
+    List<String> autoloadlore = new ArrayList<String>();
+    autoloadlore.add("&7Change this setting.");
+    autoloadlore.add("&7Current saved value: &e%savedvalue%");
+    autoloadlore.add("&7Current value: &e%value%");
+    messages.get().addDefault("menu.gamerule.change.itemlore", autoloadlore);
 
     messages.save();
 

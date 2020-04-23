@@ -266,34 +266,46 @@ public class WorldConfigManager {
         }
       }
       if (
-          (modifier == Modifier.keepspawninmemory) ||
+          (modifier == Modifier.keepspawninmemory)
+          ) {
+        modifiermap.put(modifier, section.get("Spawn." + modifier.name));
+      }
+      else if (
           (modifier == Modifier.x) ||
           (modifier == Modifier.y) ||
           (modifier == Modifier.z) ||
           (modifier == Modifier.yaw) ||
           (modifier == Modifier.pitch)
-          ) {
-        modifiermap.put(modifier, section.get("Spawn." + modifier.name));
+          ){
+        modifiermap.put(modifier, getObject(modifier, section, "Spawn"));
       }
       else if (
           (modifier == Modifier.allowanimalspawning) ||
-          (modifier == Modifier.allowmonsterspawning) ||
+          (modifier == Modifier.allowmonsterspawning)
+          ) {
+        modifiermap.put(modifier, section.get("Spawning." + modifier.name));
+      }
+      else if (
           (modifier == Modifier.ambientlimit) ||
           (modifier == Modifier.animallimit) ||
           (modifier == Modifier.monsterlimit) ||
           (modifier == Modifier.wateranimallimit)
           ) {
-        modifiermap.put(modifier, section.get("Spawning." + modifier.name));
+        modifiermap.put(modifier, getObject(modifier, section, "Spawning"));
       }
       else if (
           (modifier == Modifier.thunder) ||
           (modifier == Modifier.setthunderduration) ||
-          (modifier == Modifier.thunderduration) ||
           (modifier == Modifier.storm) ||
-          (modifier == Modifier.setweatherduration) ||
-          (modifier == Modifier.weatherduration)
+          (modifier == Modifier.setweatherduration)
           ) {
         modifiermap.put(modifier, section.get("Weather." + modifier.name));
+      }
+      else if (
+          (modifier == Modifier.thunderduration) ||
+          (modifier == Modifier.weatherduration)
+          ) {
+        modifiermap.put(modifier, getObject(modifier, section, "Weather"));
       }
       else if (modifier == Modifier.creationtype) {
         CreationType creationtype = CreationType.valueOf(section.getString(modifier.name));
@@ -334,6 +346,14 @@ public class WorldConfigManager {
         }
         modifiermap.put(modifier, gamerules);
       }
+      else if (
+          (modifier.cl == Integer.class) ||
+          (modifier.cl == Double.class) ||
+          (modifier.cl == Long.class) ||
+          (modifier.cl == Float.class)
+          ) {
+        modifiermap.put(modifier, getObject(modifier, section, "Weather"));
+      }
       else {
         modifiermap.put(modifier, section.get(modifier.name));
       }
@@ -347,6 +367,44 @@ public class WorldConfigManager {
       AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromConfigSection | \n" + section.get("Environment") + " is not a Environment.");
     }
     return new WorldData(worldname, environment, modifiermap);
+  }
+
+  @Deprecated
+  public static Object getObject(Modifier modifier, ConfigurationSection section) {
+    return getObject(modifier, section, "");
+  }
+
+  /**
+   * Gets an {@link Object} from the given {@link ConfigurationSection} with the given {@link String} as path.
+   * @param modifier The {@link Modifier} to use.
+   * @param section The {@link ConfigurationSection} to use.
+   * @param path The path to look in.
+   * @return The {@link Number} under the given path.
+   */
+  public static Object getObject(Modifier modifier, ConfigurationSection section, String path) {
+    Object o = null;
+    String finalpath = "";
+    if (path != null) {
+      if (!path.isEmpty()) {
+        finalpath = "." + path;
+      }
+    }
+    if (modifier.cl == Integer.class) {
+      o = section.getInt(finalpath + modifier.name);
+    }
+    else if (modifier.cl == Double.class) {
+      o = section.getDouble(finalpath + modifier.name);
+    }
+    else if (modifier.cl == Long.class) {
+      o = section.getLong(finalpath + modifier.name);
+    }
+    else if (modifier.cl == Float.class) {
+      Double d = section.getDouble(finalpath + modifier.name);
+      Float f = d.floatValue();
+      o = f;
+//      o = section.getDouble(finalpath + modifier.name).;
+    }
+    return o;
   }
 
   /**

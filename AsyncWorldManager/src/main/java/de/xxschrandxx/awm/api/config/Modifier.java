@@ -448,7 +448,7 @@ public enum Modifier {
    * @param Name The name of the {@link Modifier}.
    * @return The {@link Modifier} with the given name.
    */
-  public static Modifier getModifier(String Name) {
+  public final static Modifier getModifier(String Name) {
     return MODIFIER.get(Name);
   }
 

@@ -22,12 +22,12 @@ public final class Overview extends Menu {
   protected ItemStack icreate, ilist;
 
   @Override
-  public MenuForm getForm() {
+  public final MenuForm getForm() {
     return MenuForm.Overview;
   }
 
   @Override
-  public void initializeItems() {
+  public final void initializeItems() {
     icreate = MenuManager.createGuiItem(Material.GRASS_BLOCK,
         Storage.messages.get().getString("menu.overview.create.itemname"),
         Storage.messages.get().getStringList("menu.overview.create.itemlore"));
@@ -40,7 +40,7 @@ public final class Overview extends Menu {
   }
 
   @EventHandler
-  public void onClick(InventoryClickEvent e) {
+  public final void onClick(InventoryClickEvent e) {
 
     AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "Overview | InventoryClickEvent triggerred");
 

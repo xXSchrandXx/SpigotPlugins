@@ -186,6 +186,7 @@ public class testValues {
    * @param o The {@link Double} to transform.
    * @return The {@link Double} for the {@link Object} or null.
    */
+  @Deprecated
   public static Double asDouble(Object o) {
     Double val = null;
     if (o instanceof Number) {
@@ -199,6 +200,7 @@ public class testValues {
    * @param o The {@link Float} to transform.
    * @return The {@link Float} for the {@link Object} or null.
    */
+  @Deprecated
   public static Float asFloat(Object o) {
     Float val = null;
     if (o instanceof Number) {
@@ -212,6 +214,7 @@ public class testValues {
    * @param o The {@link Long} to transform.
    * @return The {@link Long} for the {@link Object} or null.
    */
+  @Deprecated
   public static Long asLong(Object o) {
     Long val = null;
     if (o instanceof Number) {
@@ -225,6 +228,7 @@ public class testValues {
    * @param o The {@link Integer} to transform.
    * @return The {@link Integer} for the {@link Object} or null.
    */
+  @Deprecated
   public static Integer asInteger(Object o) {
     Integer val = null;
     if (o instanceof Number) {

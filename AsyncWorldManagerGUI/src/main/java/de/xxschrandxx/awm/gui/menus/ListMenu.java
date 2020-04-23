@@ -42,13 +42,13 @@ public final class ListMenu extends Menu {
   protected ConcurrentHashMap<String, ItemStack> worlds = null;
 
   @Override
-  public MenuForm getForm() {
+  public final MenuForm getForm() {
     return MenuForm.ListMenu;
   }
 
 
   @Override
-  public void initializeItems() {
+  public final void initializeItems() {
 
     previous = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.previous.itemname"), Storage.messages.get().getStringList("menu.list.previous.itemlore"));
     next = MenuManager.createGuiItem(Material.ARROW, Storage.messages.get().getString("menu.list.next.itemname"), Storage.messages.get().getStringList("menu.list.next.itemlore"));
@@ -146,7 +146,7 @@ public final class ListMenu extends Menu {
   }
 
   @EventHandler
-  public void onClick(InventoryClickEvent e) {
+  public final void onClick(InventoryClickEvent e) {
 
     if (e.getInventory() != getInventory()) {
       return;

@@ -1,6 +1,7 @@
 package de.xxschrandxx.awm.gui.menus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,11 +21,11 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
+import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
 import de.xxschrandxx.awm.gui.Storage;
 
@@ -309,31 +310,29 @@ public class MenuManager {
 
           else if (modifier.cl == Integer.class) {
             lore.add(line
-                .replace("%savedvalue%", testValues.asInteger(savedworlddata.getModifierValue(modifier)).toString())
-                .replace("%value%", testValues.asInteger(worlddata.getModifierValue(modifier)).toString())
+                .replace("%savedvalue%", ((Integer) savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", ((Integer) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
           else if (modifier.cl == Double.class) {
             lore.add(line
-                .replace("%savedvalue%", testValues.asDouble(savedworlddata.getModifierValue(modifier)).toString())
-                .replace("%value%", testValues.asDouble(worlddata.getModifierValue(modifier)).toString())
+                .replace("%savedvalue%", ((Double) savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", ((Double) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
           else if (modifier.cl == Float.class) {
             lore.add(line
-                .replace("%savedvalue%", testValues.asFloat(
-                    savedworlddata.getModifierValue(modifier)
-                    ).toString())
-                .replace("%value%", testValues.asFloat(worlddata.getModifierValue(modifier)).toString())
+                .replace("%savedvalue%", ((Float) savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", ((Float) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
           else if (modifier.cl == Long.class) {
             lore.add(line
-                .replace("%savedvalue%", testValues.asLong(savedworlddata.getModifierValue(modifier)).toString())
-                .replace("%value%", testValues.asLong(worlddata.getModifierValue(modifier)).toString())
+                .replace("%savedvalue%", ((Long) savedworlddata.getModifierValue(modifier)).toString())
+                .replace("%value%", ((Long) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
@@ -389,6 +388,49 @@ public class MenuManager {
     return MenuManager.createGuiItem(
         Material.GRAY_STAINED_GLASS_PANE,
         Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", modifier.name),
+        lore);
+  }
+
+  public static ItemStack createGameruleItem(Rule<?> rule, WorldData worlddata) {
+    List<String> lore = new ArrayList<String>();
+    WorldData savedworlddata = WorldConfigManager.getWorlddataFromName(worlddata.getWorldName());
+    if (savedworlddata == null) {
+      AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "createModifyItem | Saved WorldData is NULL!");
+      return null;
+    }
+    if (rule == null) {
+      return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    HashMap<Rule<?>, Object> savedrules = (HashMap<Rule<?>, Object>) savedworlddata.getModifierValue(Modifier.gamerule);
+    @SuppressWarnings("unchecked")
+    HashMap<Rule<?>, Object> currentrules = (HashMap<Rule<?>, Object>) worlddata.getModifierValue(Modifier.gamerule);
+
+    for (String line : Storage.messages.get().getStringList("menu.gamerule.change.itemlore")) {
+      if (rule.getType() == String.class) {
+        lore.add(line
+            .replace("%savedvalue%", (String) savedrules.get(rule))
+            .replace("%value%", (String) currentrules.get(rule))
+            );
+      }
+      else if (rule.getType() == Boolean.class) {
+        lore.add(line
+            .replace("%savedvalue%", ((Boolean) savedrules.get(rule)).toString())
+            .replace("%value%", ((Boolean) currentrules.get(rule)).toString())
+            );
+      }
+      else if (rule.getType() == Integer.class) {
+        lore.add(line
+            .replace("%savedvalue%", ((Integer) savedrules.get(rule)).toString())
+            .replace("%value%", ((Integer) currentrules.get(rule)).toString())
+            );
+      }
+    }
+
+    return MenuManager.createGuiItem(
+        Material.GRAY_STAINED_GLASS_PANE,
+        Storage.messages.get().getString("menu.gamerule.change.itemname").replace("%setting%", rule.getName()),
         lore);
   }
 

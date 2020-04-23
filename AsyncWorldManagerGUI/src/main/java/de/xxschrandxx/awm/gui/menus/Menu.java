@@ -13,11 +13,11 @@ import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
 
 public class Menu implements InventoryHolder, Listener {
 
-  private Inventory inv;
+  private final Inventory inv;
 
-  private String name;
+  private final String name;
 
-  private int size;
+  private final int size;
 
   public Menu(String Name, int Size) {
     name = Name;
@@ -29,15 +29,15 @@ public class Menu implements InventoryHolder, Listener {
     return null;
   }
 
-  public String getName() {
+  public final String getName() {
     return name;
   }
 
-  public int getSize() {
+  public final int getSize() {
     return size;
   }
 
-  public Inventory getInventory() {
+  public final Inventory getInventory() {
     return inv;
   }
 

@@ -40,37 +40,12 @@ public final class WorldData implements Cloneable {
   public Map<Modifier, Object> getModifierMap() {
     return modifier;
   }
-  public Object getModifierValue(Modifier key) {
+  public final Object getModifierValue(Modifier key) {
     return modifier.get(key);
   }
-  /*
-  public boolean setModifier(Modifier key, Object value) {
-    if (key.o.length != 0) {
-      Boolean islistet = false;
-      String list = "";
-      for (Object o : key.o) {
-        if (value.toString().contentEquals(o.toString())) {
-          islistet = true;
-          break;
-        }
-        list = list + " " + o.toString();
-      }
-      if (!islistet) {
-        AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldData.setModifier | " + key.name + " has not listet " + value.toString() + "\nListet Values:" + list);
-        return false;
-      }
-    }
-    modifier.put(key, value);
-    return true;
-  }
-
-  public void setModifier(Map<Modifier, Object> m) {
-    modifier = m;
-  }
-  */
 
   @Override
-  public String toString() {
+  public final String toString() {
     String s = "WorldData{WorldName=" + getWorldName() + ", Environment=" + getEnvironment();
     for (Modifier modifier : Modifier.values()) {
       s = s + ", " + modifier.name + "=" + getModifierValue(modifier);
@@ -80,7 +55,7 @@ public final class WorldData implements Cloneable {
   }
 
   @Override
-  public WorldData clone() {
+  public final WorldData clone() {
     return new WorldData(this);
   }
 
