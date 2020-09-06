@@ -10,7 +10,9 @@ public class GameruleManager {
   
   public static void setup() {
     Version v = ServerVersion.getVersion();
-    if (v == Version.v1_14_4 || v == Version.v1_15 || v == Version.v1_15_1 || v == Version.v1_15_2)
+    if (v == Version.v1_16 || v == Version.v1_16_1 || v == Version.v1_16_2)
+      v1_16_0.setup();
+    else if (v == Version.v1_14_4 || v == Version.v1_15 || v == Version.v1_15_1 || v == Version.v1_15_2)
       v1_15_0.setup();
     else if (v == Version.v1_14 || v == Version.v1_14_1 || v == Version.v1_14_2 || v == Version.v1_14_3)
       v1_14_3.setup();

@@ -114,5 +114,7 @@ public enum Version {
     v1_15_1,
     v1_15_2,
   //1.16 https://minecraft.gamepedia.com/1.16#Java_Edition
-    v1_16
+    v1_16,
+    v1_16_1,
+    v1_16_2
   }

@@ -225,6 +225,10 @@ public class ServerVersion {
       //1.16
       if (bukkit.startsWith("1.16-"))
         return Version.v1_16;
+      if (bukkit.startsWith("1.16.1-"))
+        return Version.v1_16_1;
+      if (bukkit.startsWith("1.16.2-"))
+        return Version.v1_16_2;
     return Version.UNKNOWN;
   }
   

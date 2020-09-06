@@ -8,6 +8,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Config {
+
+  //TODO Add HOCON config option 
+
   JavaPlugin plugin;
   private String name = null;
   private FileConfiguration cfg = null;
