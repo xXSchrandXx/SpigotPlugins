@@ -25,10 +25,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.generator.ChunkGenerator;
 
 import de.xxschrandxx.api.minecraft.Config;
+import de.xxschrandxx.api.minecraft.ServerVersion;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
+import de.xxschrandxx.api.minecraft.otherapi.Version;
 import de.xxschrandxx.awm.AsyncWorldManager;
+import de.xxschrandxx.awm.api.config.Modifier;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_12_2;
 import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_13;
@@ -212,7 +215,11 @@ public class WorldConfigManager {
     modifiermap.put(Modifier.gamerule, gamerules);
     modifiermap.put(Modifier.generator, world.getGenerator());
     modifiermap.put(Modifier.generatestructures, world.canGenerateStructures());
-    modifiermap.put(Modifier.hardcore, world.isHardcore());
+    if ((ServerVersion.getVersion() == Version.v1_16) ||
+        (ServerVersion.getVersion() == Version.v1_16_1) ||
+        (ServerVersion.getVersion() == Version.v1_16_2)) {
+      modifiermap.put(Modifier.hardcore, world.isHardcore());
+    }
     modifiermap.put(Modifier.keepspawninmemory, world.getKeepSpawnInMemory());
     modifiermap.put(Modifier.monsterlimit, world.getMonsterSpawnLimit());
     modifiermap.put(Modifier.pitch, world.getSpawnLocation().getPitch());
@@ -457,7 +464,11 @@ public class WorldConfigManager {
              WorldDataEditor_1_12_2.setGameRule(worlddata, r, world);
            }
         }
-        world.setHardcore((Boolean) worlddata.getModifierValue(Modifier.hardcore));
+        if ((ServerVersion.getVersion() == Version.v1_16) ||
+            (ServerVersion.getVersion() == Version.v1_16_1) ||
+            (ServerVersion.getVersion() == Version.v1_16_2)) {
+          world.setHardcore((Boolean) worlddata.getModifierValue(Modifier.hardcore));
+        }
         world.setKeepSpawnInMemory((Boolean) worlddata.getModifierValue(Modifier.keepspawninmemory));
         world.setMonsterSpawnLimit((Integer) worlddata.getModifierValue(Modifier.monsterlimit));
         world.setPVP((Boolean) worlddata.getModifierValue(Modifier.pvp));
