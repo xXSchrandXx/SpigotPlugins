@@ -49,7 +49,8 @@ public class WorldConfigManager {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromCommand | Getting WorldData for: " + worldname + ", " + sender.getName());
     Environment environment = ((environment = Environment.valueOf(preenviroment)) != null) ? environment : null;
     Map<Modifier<?>, Object> modifiermap = getDefaultModifierMap(worldname);
-    Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
+    @SuppressWarnings("unchecked")
+    Map<Rule<?>, Object> gamerules = (Map<Rule<?>, Object>) modifiermap.get(Modifier.gamerule);
     List<String> options = new ArrayList<String>();
     for (String arg : args) {
       if (!arg.equalsIgnoreCase("create") && !arg.equalsIgnoreCase(worldname) && !arg.equalsIgnoreCase(preenviroment)) {
@@ -184,7 +185,9 @@ public class WorldConfigManager {
       }
     }
     modifiermap.put(Modifier.gamerule, gamerules);
-    return new WorldData(worldname, environment, modifiermap);
+    WorldData worlddata = new WorldData(worldname, environment, modifiermap);
+    AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromCommand | WorldData for: " + worldname + ", " + sender.getName() + "\n" + worlddata);
+    return worlddata;
   }
 
   /**
@@ -535,7 +538,7 @@ public class WorldConfigManager {
    * @param worlddata The {@link WorldData} to use for creation.
    */
   public static void createWorld(WorldData worlddata) {
-    AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.createWorld | Creating world: " + worlddata.getWorldName());
+    AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.createWorld | Creating world: " + worlddata.getWorldName() + "\n" + worlddata);
     if (worlddata.getModifierValue(Modifier.creationtype) == CreationType.broken) {
       broken.brokenworld(worlddata);
       return;

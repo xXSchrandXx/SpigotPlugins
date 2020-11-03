@@ -59,7 +59,6 @@ public class Modifier<T> extends v1_15_2 {
     return (Modifier[])worldmethods.values().toArray(new Modifier[worldmethods.size()]);
   }
   
-
   /**
    * Create a new WorldMethod.
    * @param name The Name of the Method.
@@ -69,9 +68,8 @@ public class Modifier<T> extends v1_15_2 {
    */
   public Modifier(String name, Object defaultvalue, Class<T> clazz, boolean remove) {
     Preconditions.checkNotNull(name, "Name cannot be null");
-    Preconditions.checkNotNull(clazz, "GameRule type cannot be null");
-    Preconditions.checkNotNull(defaultvalue, "DefaultValue type cannot be null");
-    Preconditions.checkArgument((clazz != Boolean.class && clazz != Integer.class && clazz != String.class) ? false : true, "Must be of type Boolean, Integer or String. Found %s ", clazz.getName());
+    Preconditions.checkNotNull(clazz, "Class type cannot be null");;
+    Preconditions.checkNotNull(remove, "Remove type cannot be null");
     this.name = name;
     this.type = clazz;
     this.defaultvalue = defaultvalue;
@@ -92,9 +90,8 @@ public class Modifier<T> extends v1_15_2 {
    */
   public Modifier(String name, Object defaultvalue, Class<T> clazz, boolean remove, Object[] validvalues) {
     Preconditions.checkNotNull(name, "Name cannot be null");
-    Preconditions.checkNotNull(clazz, "GameRule type cannot be null");
-    Preconditions.checkNotNull(defaultvalue, "DefaultValue type cannot be null");
-    Preconditions.checkArgument((clazz != Boolean.class && clazz != Integer.class && clazz != String.class) ? false : true, "Must be of type Boolean, Integer or String. Found %s ", clazz.getName());
+    Preconditions.checkNotNull(clazz, "Class type cannot be null");;
+    Preconditions.checkNotNull(remove, "Remove type cannot be null");
     this.name = name;
     this.type = clazz;
     this.defaultvalue = defaultvalue;

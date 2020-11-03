@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.GameRule;
 import org.bukkit.World;
 
 import de.xxschrandxx.api.minecraft.awm.CreationType;
@@ -21,6 +20,7 @@ public class WorldDataEditor_0 {
    * @param world The world to get the {@link WorldData} from.
    * @return The created {@link WorldData}.
    */
+  @SuppressWarnings("deprecation")
   public static WorldData getWorlddataFromWorld(World world) {
     Map<Modifier<?>, Object> modifiermap = WorldConfigManager.getDefaultModifierMap(world.getName());
     if (world.getName().equalsIgnoreCase(AsyncWorldManager.config.get().getString("mainworld"))) {
@@ -29,9 +29,9 @@ public class WorldDataEditor_0 {
     }
 
     Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
-    for (GameRule<?> gamerule : GameRule.values()) {
+    for (Rule<?> gamerule : Rule.values()) {
       Rule<?> rule = Rule.getByName(gamerule.getName());
-      gamerules.put(rule, world.getGameRuleValue(gamerule));
+      gamerules.put(rule, world.getGameRuleValue(gamerule.getName()));
     }
     modifiermap.put(Modifier.gamerule, gamerules);
 

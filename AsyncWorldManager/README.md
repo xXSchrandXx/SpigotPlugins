@@ -22,4 +22,13 @@ Versions:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0-SNAPSHOT/apidocs/)
     * [AsyncWorldManager-javadoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0-SNAPSHOT/AsyncWorldManager-0.1.0-SNAPSHOT-javadoc.jar)
     * [AsyncWorldManager](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0-SNAPSHOT/AsyncWorldManager-0.1.0-SNAPSHOT.jar)
+  * 0.1.0:
+    * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0/apidocs/)
+    * [AsyncWorldManager-javadoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0/AsyncWorldManager-0.1.0-javadoc.jar)
+    * [AsyncWorldManager](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.0/AsyncWorldManager-0.1.0.jar)
+  * 0.1.1-SNAPSHOT:
+    * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.1-SNAPSHOT/apidocs/)
+    * [AsyncWorldManager-javadoc](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.1-SNAPSHOT/AsyncWorldManager-0.1.1-SNAPSHOT-javadoc.jar)
+    * [AsyncWorldManager](https://xxschrandxx.github.io/SpigotPlugins/AsyncWorldManager/0.1.1-SNAPSHOT/AsyncWorldManager-0.1.1-SNAPSHOT.jar)
+
     

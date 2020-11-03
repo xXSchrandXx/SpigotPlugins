@@ -21,6 +21,7 @@ public class CMDDelete {
       if (args.length != 1) {
         if (!args[1].isEmpty()) {
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(args[1]);
+          WorldConfigManager.saveAllWorlddatas();
           Config config = WorldConfigManager.getWorldConfig(args[1]);
           if ((worlddata != null) && (config != null)) {
             WorldStatus worldstatus = WorldConfigManager.getAllWorlds().get(worlddata.getWorldName());

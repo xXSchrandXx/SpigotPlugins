@@ -82,61 +82,63 @@ public class Storage {
     AsyncWorldManager.config.get().addDefault("event.permissions.worldmanager.gamemode.bypass", "wm.event.gamemode.bypass");
     AsyncWorldManager.config.get().addDefault("WorldSettings.Environment", "NORMAL");
     for (Modifier<?> modifier : Modifier.values()) {
-      if (
-          (modifier == Modifier.keepspawninmemory) ||
-          (modifier == Modifier.x) ||
-          (modifier == Modifier.y) ||
-          (modifier == Modifier.z) ||
-          (modifier == Modifier.yaw) ||
-          (modifier == Modifier.pitch)
-          ) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings.Spawn." + modifier.getName(), modifier.getDefaultValue());
-      }
-      else if (
-          (modifier == Modifier.allowanimalspawning) ||
-          (modifier == Modifier.allowmonsterspawning) ||
-          (modifier == Modifier.ambientlimit) ||
-          (modifier == Modifier.animallimit) ||
-          (modifier == Modifier.monsterlimit) ||
-          (modifier == Modifier.wateranimallimit)
-          ) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings.Spawning." + modifier.getName(), modifier.getDefaultValue());
-      }
-      else if (
-          (modifier == Modifier.thunder) ||
-          (modifier == Modifier.setthunderduration) ||
-          (modifier == Modifier.thunderduration) ||
-          (modifier == Modifier.storm) ||
-          (modifier == Modifier.setweatherduration) ||
-          (modifier == Modifier.weatherduration)
-          ) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings.Weather." + modifier.getName(), modifier.getDefaultValue());
-      }
-      else if (modifier == Modifier.creationtype) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((CreationType) modifier.getDefaultValue()).name());
-      }
-      else if (modifier == Modifier.gamemode) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((GameMode) modifier.getDefaultValue()).name());
-      }
-      else if (modifier == Modifier.worldtype) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((WorldType) modifier.getDefaultValue()).name());
-      }
-      else if (modifier == Modifier.difficulty) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((Difficulty) modifier.getDefaultValue()).name());
-      }
-      else if (modifier == Modifier.gamerule) {
-        Rule<?>[] gamerules = Rule.values();
-        for (Rule<?> rule : gamerules) {
-          if (rule != null) {
-            AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName() + "." + rule.getName(), rule.getDefaultValue());
+      if (modifier != null) {
+        if (
+            (modifier == Modifier.keepspawninmemory) ||
+            (modifier == Modifier.x) ||
+            (modifier == Modifier.y) ||
+            (modifier == Modifier.z) ||
+            (modifier == Modifier.yaw) ||
+            (modifier == Modifier.pitch)
+            ) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings.Spawn." + modifier.getName(), modifier.getDefaultValue());
+        }
+        else if (
+            (modifier == Modifier.allowanimalspawning) ||
+            (modifier == Modifier.allowmonsterspawning) ||
+            (modifier == Modifier.ambientlimit) ||
+            (modifier == Modifier.animallimit) ||
+            (modifier == Modifier.monsterlimit) ||
+            (modifier == Modifier.wateranimallimit)
+            ) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings.Spawning." + modifier.getName(), modifier.getDefaultValue());
+        }
+        else if (
+            (modifier == Modifier.thunder) ||
+            (modifier == Modifier.setthunderduration) ||
+            (modifier == Modifier.thunderduration) ||
+            (modifier == Modifier.storm) ||
+            (modifier == Modifier.setweatherduration) ||
+            (modifier == Modifier.weatherduration)
+            ) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings.Weather." + modifier.getName(), modifier.getDefaultValue());
+        }
+        else if (modifier == Modifier.creationtype) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((CreationType) modifier.getDefaultValue()).name());
+        }
+        else if (modifier == Modifier.gamemode) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((GameMode) modifier.getDefaultValue()).name());
+        }
+        else if (modifier == Modifier.worldtype) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((WorldType) modifier.getDefaultValue()).name());
+        }
+        else if (modifier == Modifier.difficulty) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), ((Difficulty) modifier.getDefaultValue()).name());
+        }
+        else if (modifier == Modifier.gamerule) {
+          Rule<?>[] gamerules = Rule.values();
+          for (Rule<?> rule : gamerules) {
+            if (rule != null) {
+              AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName() + "." + rule.getName(), rule.getDefaultValue());
+            }
           }
         }
-      }
-      else if (modifier.getDefaultValue() == null) {
-        AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), "none");
-      }
-      else {
+        else if (modifier.getDefaultValue() == null) {
+          AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), "none");
+        }
+        else {
         AsyncWorldManager.config.get().addDefault("WorldSettings." + modifier.getName(), modifier.getDefaultValue());
+        }
       }
     }
     AsyncWorldManager.config.save();
@@ -221,7 +223,7 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.configs.load", "&aloeded");
     AsyncWorldManager.messages.get().addDefault("command.configs.save", "&asaved");
     AsyncWorldManager.messages.get().addDefault("command.configs.success", "Successfully %done% &e%config%&7.");
-    AsyncWorldManager.messages.get().addDefault("command.configs.notfound", "&c%option%&7 does not exist.");
+    AsyncWorldManager.messages.get().addDefault("command.configs.notfound", "&c%config%&7 does not exist.");
     AsyncWorldManager.messages.get().addDefault("command.plugin.usage", "/wm plugin [info/set] [config/AsyncWorldManager.messages(/worlds)] {path} {value}");
     AsyncWorldManager.messages.get().addDefault("command.plugin.info.head", "&8&m[]&6&m------------------------WM------------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.plugin.info.format", "&7%key%: %value%");
@@ -239,6 +241,7 @@ public class Storage {
 
     //Setze default WorldData
     defaultmodifiermap = WorldConfigManager.getWorlddataFromConfigSection("WorldSettings", AsyncWorldManager.config.get().getConfigurationSection("WorldSettings")).getModifierMap();
+    AsyncWorldManager.getLogHandler().log(true, Level.INFO, "Default Modifiermap:\n" + defaultmodifiermap);
 
     if (!enablecommandblock) {
       AsyncWorldManager.getLogHandler().log(false, Level.INFO, "EnableCommandBlocks will not work if 'enable-command-block' in server.properties is on 'false'.");

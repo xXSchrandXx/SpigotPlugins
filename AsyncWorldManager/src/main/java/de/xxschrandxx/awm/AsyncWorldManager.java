@@ -17,6 +17,7 @@ import de.xxschrandxx.api.minecraft.PermissionHandler;
 import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.api.gamerulemanager.GameruleManager;
+import de.xxschrandxx.awm.api.modifier.ModifierManager;
 import de.xxschrandxx.awm.command.CMDAsyncWorldManager;
 import de.xxschrandxx.awm.listener.*;
 import de.xxschrandxx.awm.util.Utils;
@@ -56,6 +57,8 @@ public class AsyncWorldManager extends JavaPlugin {
   public void onLoad() {
 
     GameruleManager.setup();
+    
+    ModifierManager.setup();
 
     instance = this;
     

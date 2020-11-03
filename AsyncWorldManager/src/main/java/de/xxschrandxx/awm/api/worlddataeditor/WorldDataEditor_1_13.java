@@ -79,7 +79,7 @@ public class WorldDataEditor_1_13 {
     world.setAutoSave((Boolean) worlddata.getModifierValue(Modifier.autosave));
     world.setDifficulty((Difficulty) worlddata.getModifierValue(Modifier.difficulty));
     for (Rule<?> r : Rule.values()) {
-        setGameRule(worlddata, r, world);
+      setGameRule(worlddata, r, world);
     }
     world.setKeepSpawnInMemory((Boolean) worlddata.getModifierValue(Modifier.keepspawninmemory));
     world.setMonsterSpawnLimit((Integer) worlddata.getModifierValue(Modifier.monsterlimit));
@@ -129,7 +129,7 @@ public class WorldDataEditor_1_13 {
     GameRule rule = GameRule.getByName(r.getName());
     Map<Rule<?>, Object> rules = (Map<Rule<?>, Object>) worlddata.getModifierValue(Modifier.gamerule);
     Object value = rules.get(r);
-    if (rule == null && value == null)
+    if (rule == null || value == null)
       return false;
     world.setGameRule(rule, value);
     return true;
