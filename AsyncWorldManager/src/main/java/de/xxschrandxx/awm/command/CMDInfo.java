@@ -12,7 +12,7 @@ import org.bukkit.entity.minecart.CommandMinecart;
 
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 

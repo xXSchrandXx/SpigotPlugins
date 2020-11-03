@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 
 public class WorldTeleportListener implements Listener {
   @EventHandler

@@ -17,6 +17,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 
 public class CommandPerformListener implements Listener {
   @EventHandler
@@ -42,7 +43,7 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
               modifiermap.put(Modifier.x, x);
               modifiermap.put(Modifier.y, y);
               modifiermap.put(Modifier.z, z);
@@ -61,7 +62,7 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
               modifiermap.put(Modifier.x, x);
               modifiermap.put(Modifier.y, y);
               modifiermap.put(Modifier.z, z);
@@ -80,7 +81,7 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
               modifiermap.put(Modifier.x, x);
               modifiermap.put(Modifier.y, y);
               modifiermap.put(Modifier.z, z);
@@ -99,7 +100,7 @@ public class CommandPerformListener implements Listener {
             int z = Integer.parseInt(args[3]);
             WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
             if (worlddata != null) {
-              Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+              Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
               modifiermap.put(Modifier.x, x);
               modifiermap.put(Modifier.y, y);
               modifiermap.put(Modifier.z, z);
@@ -121,7 +122,7 @@ public class CommandPerformListener implements Listener {
           float pitch = p.getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(AsyncWorldManager.config.get().getString("mainworld"));
           if (worlddata != null) {
-            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
             modifiermap.put(Modifier.x, x);
             modifiermap.put(Modifier.y, y);
             modifiermap.put(Modifier.z, z);
@@ -142,7 +143,7 @@ public class CommandPerformListener implements Listener {
           float pitch = b.getBlock().getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(b.getBlock().getWorld().getName());
           if (worlddata != null) {
-            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
             modifiermap.put(Modifier.x, x);
             modifiermap.put(Modifier.y, y);
             modifiermap.put(Modifier.z, z);
@@ -163,7 +164,7 @@ public class CommandPerformListener implements Listener {
           float pitch = m.getLocation().getPitch();
           WorldData worlddata = WorldConfigManager.getWorlddataFromName(m.getWorld().getName());
           if (worlddata != null) {
-            Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+            Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
             modifiermap.put(Modifier.x, x);
             modifiermap.put(Modifier.y, y);
             modifiermap.put(Modifier.z, z);

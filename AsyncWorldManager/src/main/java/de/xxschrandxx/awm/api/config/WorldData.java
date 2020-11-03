@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.bukkit.World.Environment;
 
+import de.xxschrandxx.awm.api.modifier.Modifier;
+
 public final class WorldData implements Cloneable {
 
   public WorldData() {
@@ -18,7 +20,7 @@ public final class WorldData implements Cloneable {
     this.modifier.putAll(worlddata.getModifierMap());
   }
 
-  public WorldData(String WorldName, Environment Environment, Map<Modifier, Object> Modifier) {
+  public WorldData(String WorldName, Environment Environment, Map<Modifier<?>, Object> Modifier) {
     this.worldname = WorldName;
     this.environment = Environment;
     this.modifier.putAll(Modifier);
@@ -36,19 +38,19 @@ public final class WorldData implements Cloneable {
   }
 
   //Modifier
-  private final Map<Modifier, Object> modifier = new HashMap<Modifier, Object>();
-  public Map<Modifier, Object> getModifierMap() {
+  private final Map<Modifier<?>, Object> modifier = new HashMap<Modifier<?>, Object>();
+  public Map<Modifier<?>, Object> getModifierMap() {
     return modifier;
   }
-  public final Object getModifierValue(Modifier key) {
+  public final Object getModifierValue(Modifier<?> key) {
     return modifier.get(key);
   }
 
   @Override
   public final String toString() {
     String s = "WorldData{WorldName=" + getWorldName() + ", Environment=" + getEnvironment();
-    for (Modifier modifier : Modifier.values()) {
-      s = s + ", " + modifier.name + "=" + getModifierValue(modifier);
+    for (Modifier<?> modifier : Modifier.values()) {
+      s = s + ", " + modifier.getName() + "=" + getModifierValue(modifier);
     }
     s = s + "}";
     return s;

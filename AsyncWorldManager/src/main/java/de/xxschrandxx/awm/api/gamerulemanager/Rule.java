@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  *
  * @param <T> The class to use as Object
  */
-public class Rule<T> extends v1_15_2 {
+public class Rule<T> extends v1_16_0 {
   
   private static Map<String, Rule<?>> gameRules = new HashMap<String, Rule<?>>();
 

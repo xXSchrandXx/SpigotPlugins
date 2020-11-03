@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
 import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
@@ -35,8 +35,8 @@ import net.wesjd.anvilgui.AnvilGUI.Response;
 
 public final class ModifierMenu extends Menu {
 
-  public ModifierMenu(WorldData WorldData, int Page, int Maxpage, ConcurrentHashMap<String, ItemStack> Modifiers, ConcurrentHashMap<String, ItemStack> Gamerules, Modifier Modifier) {
-    super(Storage.messages.get().getString("menu.modifier.name").replace("%world%", WorldData.getWorldName()).replace("%modifier%", Modifier.name), 9*6);
+  public ModifierMenu(WorldData WorldData, int Page, int Maxpage, ConcurrentHashMap<String, ItemStack> Modifiers, ConcurrentHashMap<String, ItemStack> Gamerules, Modifier<?> Modifier) {
+    super(Storage.messages.get().getString("menu.modifier.name").replace("%world%", WorldData.getWorldName()).replace("%modifier%", Modifier.getName()), 9*6);
     worlddata = WorldData;
     page = Page;
     maxpage = Maxpage;
@@ -59,7 +59,7 @@ public final class ModifierMenu extends Menu {
   private final Integer page, maxpage;
   private final WorldData worlddata;
   private final ConcurrentHashMap<String, ItemStack> modifiers, gamerules;
-  private Modifier modifier;
+  private Modifier<?> modifier;
   private Rule<?> rule;
 
   @Override
@@ -71,7 +71,7 @@ public final class ModifierMenu extends Menu {
   public final void initializeItems() {
     builder = new Builder()
       .plugin(AsyncWorldManagerGUI.getInstance())
-      .title(Storage.messages.get().getString("menu.modifier.name").replace("%world%", worlddata.getWorldName()).replace("%modifier%", modifier.name))
+      .title(Storage.messages.get().getString("menu.modifier.name").replace("%world%", worlddata.getWorldName()).replace("%modifier%", modifier.getName()))
       .item(new ItemStack(Material.PAPER))
       .text(" ")
       .onClose((p) -> {})
@@ -122,109 +122,109 @@ public final class ModifierMenu extends Menu {
   private final Response finish(Player p, String prevalue) {
     if (!prevalue.isEmpty()) {
       if (modifier != null) {
-        Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
-        if (modifier.cl == String.class) {
+        Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
+        if (modifier.getType() == String.class) {
           if (!prevalue.isEmpty()) {
             modifiermap.put(modifier, prevalue);
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a string. " + prevalue);
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a string. " + prevalue);
           }
         }
-        else if (modifier.cl == List.class) {
+        else if (modifier.getType() == List.class) {
           if (!prevalue.isEmpty()) {
             modifiermap.put(modifier, Arrays.asList(prevalue.split(";")));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " value was empty.");
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " value was empty.");
           }
         }
-        else if (modifier.cl == Boolean.class) {
+        else if (modifier.getType() == Boolean.class) {
           if (testValues.isBoolean(prevalue)) {
             modifiermap.put(modifier, Boolean.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a boolean. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a boolean. " + prevalue );
           }
         }
-        else if (modifier.cl == Integer.class) {
+        else if (modifier.getType() == Integer.class) {
           if (testValues.isInt(prevalue)) {
             modifiermap.put(modifier, Integer.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a int. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a int. " + prevalue );
           }
         }
-        else if (modifier.cl == Double.class) {
+        else if (modifier.getType() == Double.class) {
           if (testValues.isDouble(prevalue)) {
             modifiermap.put(modifier, Double.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a double. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a double. " + prevalue );
           }
         }
-        else if (modifier.cl == Float.class) {
+        else if (modifier.getType() == Float.class) {
           if (testValues.isFloat(prevalue)) {
             modifiermap.put(modifier, Float.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a float. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a float. " + prevalue );
           }
         }
-        else if (modifier.cl == Long.class) {
+        else if (modifier.getType() == Long.class) {
           if (testValues.isLong(prevalue)) {
             modifiermap.put(modifier, Long.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a float. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a float. " + prevalue );
           }
         }
-        else if (modifier.cl == Difficulty.class) {
+        else if (modifier.getType() == Difficulty.class) {
           if (testValues.isDifficulty(prevalue)) {
             modifiermap.put(modifier, Difficulty.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a difficulty. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a difficulty. " + prevalue );
           }
         }
-        else if (modifier.cl == ChunkGenerator.class) {
+        else if (modifier.getType() == ChunkGenerator.class) {
           ChunkGenerator generator;
           if ((generator = WorldCreator.getGeneratorForName(worlddata.getWorldName(), prevalue, p)) != null) {
             modifiermap.put(modifier, generator);
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a difficulty. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a difficulty. " + prevalue );
           }
         }
-        else if (modifier.cl == WorldType.class) {
+        else if (modifier.getType() == WorldType.class) {
           if (testValues.isWorldType(prevalue)) {
             modifiermap.put(modifier, WorldType.getByName(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a difficulty. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a difficulty. " + prevalue );
           }
         }
-        else if (modifier.cl == CreationType.class) {
+        else if (modifier.getType() == CreationType.class) {
           if (testValues.isCreationType(prevalue)) {
             modifiermap.put(modifier, CreationType.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a difficulty. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a difficulty. " + prevalue );
           }
         }
-        else if (modifier.cl == GameMode.class) {
+        else if (modifier.getType() == GameMode.class) {
           if (testValues.isGameMode(prevalue)) {
             modifiermap.put(modifier, GameMode.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.name + " is not a difficulty. " + prevalue );
+            AsyncWorldManager.getCommandSenderHandler().sendMessage(p, modifier.getName() + " is not a difficulty. " + prevalue );
           }
         }
         else {
           AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.error"));
           MenuManager.changeMenu(p, new ModifyMenu(worlddata, page, maxpage, modifiers, gamerules));
         }
-        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.success").replace("%modifier%", modifier.name).replace("%value%", prevalue));
+        AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.success").replace("%modifier%", modifier.getName()).replace("%value%", prevalue));
         WorldData newworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
 
         MenuManager.changeMenu(p, new ModifyMenu(newworlddata, page, maxpage, null, null));
@@ -257,7 +257,7 @@ public final class ModifierMenu extends Menu {
         MenuManager.changeMenu(p, new ModifyMenu(worlddata, page, maxpage, modifiers, gamerules));
       }
       AsyncWorldManagerGUI.getCommandSenderHandler().sendMessage(p, Storage.messages.get().getString("menu.modifier.success").replace("%modifier%", rule.getName()).replace("%value%", prevalue));
-      Map<Modifier, Object> modifiermap = worlddata.getModifierMap();
+      Map<Modifier<?>, Object> modifiermap = worlddata.getModifierMap();
       modifiermap.put(Modifier.gamerule, rulemap);
       WorldData newworlddata = new WorldData(worlddata.getWorldName(), worlddata.getEnvironment(), modifiermap);
       MenuManager.changeMenu(p, new ModifyMenu(newworlddata, page, maxpage, null, null));

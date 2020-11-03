@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
@@ -65,12 +65,12 @@ public final class ModifyMenu extends Menu {
 
     if (imodifier == null) {
       imodifier = new ConcurrentHashMap<String, ItemStack>();
-      for (Modifier modifier : Modifier.values()) {
+      for (Modifier<?> modifier : Modifier.values()) {
         if (modifier != null) {
           if (modifier != Modifier.gamerule) {
-            AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "ModifyMenu | Setting " + modifier.name);
+            AsyncWorldManagerGUI.getLogHandler().log(true, Level.INFO, "ModifyMenu | Setting " + modifier.getName());
             ItemStack istack = MenuManager.createModifyItem(modifier, worlddata);
-            imodifier.put(modifier.name, istack);
+            imodifier.put(modifier.getName(), istack);
           }
         }
       }
@@ -218,7 +218,7 @@ public final class ModifyMenu extends Menu {
       for (Entry<String, ItemStack> entry : imodifier.entrySet()) {
         if (e.getCurrentItem().isSimilar(entry.getValue())) {
           if (AsyncWorldManagerGUI.getPermissionHandler().hasPermission(p, Storage.config.get().getString("permission.openmenu.modify").replace("%world%", worlddata.getWorldName()))) {
-            Modifier modifier = Modifier.getModifier(entry.getKey());
+            Modifier<?> modifier = Modifier.getModifier(entry.getKey());
             if (modifier != null) {
               MenuManager.changeMenu(p, new ModifierMenu(worlddata, page, maxpage, imodifier, igamerule, modifier));
               return;

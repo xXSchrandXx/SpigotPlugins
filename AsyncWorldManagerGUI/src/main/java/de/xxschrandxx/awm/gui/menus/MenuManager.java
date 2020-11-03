@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.xxschrandxx.api.minecraft.awm.CreationType;
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
@@ -259,24 +259,24 @@ public class MenuManager {
     return item;
   }
 
-  public static ItemStack createModifyItem(Modifier modifier, WorldData worlddata) {
+  public static ItemStack createModifyItem(Modifier<?> modifier, WorldData worlddata) {
     List<String> lore = new ArrayList<String>();
     WorldData savedworlddata = WorldConfigManager.getWorlddataFromName(worlddata.getWorldName());
     if (savedworlddata == null) {
       AsyncWorldManagerGUI.getLogHandler().log(true, Level.WARNING, "createModifyItem | Saved WorldData is NULL!");
       return null;
     }
-    for (Modifier tmpmodifier : Modifier.values()) {
+    for (Modifier<?> tmpmodifier : Modifier.values()) {
       if (modifier == tmpmodifier) {
         for (String line : Storage.messages.get().getStringList("menu.modify.change.itemlore")) {
 
-          if (modifier.cl == String.class) {
+          if (modifier.getType() == String.class) {
             lore.add(line
                 .replace("%savedvalue%", (String) savedworlddata.getModifierValue(modifier))
                 .replace("%value%", (String) worlddata.getModifierValue(modifier)));
           }
 
-          else if (modifier.cl == List.class) {
+          else if (modifier.getType() == List.class) {
             String oldl = "";
             for (String l : ((List<String>) savedworlddata.getModifierValue(modifier))) {
               if (oldl.isEmpty()) {
@@ -301,49 +301,49 @@ public class MenuManager {
                 );
           }
 
-          else if (modifier.cl == Boolean.class) {
+          else if (modifier.getType() == Boolean.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Boolean) savedworlddata.getModifierValue(modifier)).toString())
                 .replace("%value%", ((Boolean) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
-          else if (modifier.cl == Integer.class) {
+          else if (modifier.getType() == Integer.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Integer) savedworlddata.getModifierValue(modifier)).toString())
                 .replace("%value%", ((Integer) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
-          else if (modifier.cl == Double.class) {
+          else if (modifier.getType() == Double.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Double) savedworlddata.getModifierValue(modifier)).toString())
                 .replace("%value%", ((Double) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
-          else if (modifier.cl == Float.class) {
+          else if (modifier.getType() == Float.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Float) savedworlddata.getModifierValue(modifier)).toString())
                 .replace("%value%", ((Float) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
-          else if (modifier.cl == Long.class) {
+          else if (modifier.getType() == Long.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Long) savedworlddata.getModifierValue(modifier)).toString())
                 .replace("%value%", ((Long) worlddata.getModifierValue(modifier)).toString())
                 );
           }
 
-          else if (modifier.cl == Difficulty.class) {
+          else if (modifier.getType() == Difficulty.class) {
             lore.add(line
                 .replace("%savedvalue%", ((Difficulty) savedworlddata.getModifierValue(modifier)).name())
                 .replace("%value%", ((Difficulty) worlddata.getModifierValue(modifier)).name())
                 );
           }
 
-          else if (modifier.cl == ChunkGenerator.class) {
+          else if (modifier.getType() == ChunkGenerator.class) {
             String oldg = "none";
             ChunkGenerator oldgen;
             if ((oldgen = ((ChunkGenerator) savedworlddata.getModifierValue(modifier))) != null) {
@@ -360,21 +360,21 @@ public class MenuManager {
                 );
           }
 
-          else if (modifier.cl == WorldType.class) {
+          else if (modifier.getType() == WorldType.class) {
             lore.add(line
                 .replace("%savedvalue%", ((WorldType) savedworlddata.getModifierValue(modifier)).getName())
                 .replace("%value%", ((WorldType) worlddata.getModifierValue(modifier)).getName())
                 );
           }
 
-          else if (modifier.cl == CreationType.class) {
+          else if (modifier.getType() == CreationType.class) {
             lore.add(line
                 .replace("%savedvalue%", ((CreationType) savedworlddata.getModifierValue(modifier)).name())
                 .replace("%value%", ((CreationType) worlddata.getModifierValue(modifier)).name())
                 );
           }
 
-          else if (modifier.cl == GameMode.class) {
+          else if (modifier.getType() == GameMode.class) {
             lore.add(line
                 .replace("%savedvalue%", ((GameMode) savedworlddata.getModifierValue(modifier)).name())
                 .replace("%value%", ((GameMode) worlddata.getModifierValue(modifier)).name())
@@ -387,7 +387,7 @@ public class MenuManager {
 
     return MenuManager.createGuiItem(
         Material.GRAY_STAINED_GLASS_PANE,
-        Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", modifier.name),
+        Storage.messages.get().getString("menu.modify.change.itemname").replace("%setting%", modifier.getName()),
         lore);
   }
 

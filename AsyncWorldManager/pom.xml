@@ -21,7 +21,7 @@
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
-    <!-- Mojang Dependendy -->
+    <!-- Mojang Dependendy
     <dependency>
       <groupId>Minecraft-Server</groupId>
       <artifactId>Minecraft-Server</artifactId>
@@ -29,6 +29,7 @@
       <scope>system</scope>
       <systemPath>${project.basedir}\internalRepo\patched_1.16.2.jar</systemPath>
     </dependency>
+    -->
 
     <!-- Metrics Dependency -->
     <dependency>

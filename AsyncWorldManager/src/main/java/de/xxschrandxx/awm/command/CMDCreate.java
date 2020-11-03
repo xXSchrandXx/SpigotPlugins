@@ -11,6 +11,7 @@ import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.testValues;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDCreate {
@@ -80,8 +81,8 @@ public class CMDCreate {
         }
       }
       else if ((args.length < 3) && args[1].equalsIgnoreCase("create")) {
-        for (Modifier m : Modifier.values()) {
-          list.add("-" + m.name + ":");
+        for (Modifier<?> m : Modifier.values()) {
+          list.add("-" + m.getName() + ":");
         }
       }
     }

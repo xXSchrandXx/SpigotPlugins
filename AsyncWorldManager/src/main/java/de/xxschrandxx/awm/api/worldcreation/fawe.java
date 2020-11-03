@@ -10,6 +10,7 @@ import com.boydti.fawe.util.TaskManager;
 
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.api.event.*;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 
 public class fawe {
   /**

@@ -1,15 +1,53 @@
-package de.xxschrandxx.awm.api.gamerulemanager;
+package de.xxschrandxx.awm.api.worlddataeditor;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.GameRule;
 import org.bukkit.World;
 
+import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
+import de.xxschrandxx.awm.api.gamerulemanager.Rule;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 
-public class WorldDataEditor_1_12_2 {
+public class WorldDataEditor_0 {
+
+  /**
+   * Gets the {@link WorldData} from the given {@link World}.
+   * @param world The world to get the {@link WorldData} from.
+   * @return The created {@link WorldData}.
+   */
+  public static WorldData getWorlddataFromWorld(World world) {
+    Map<Modifier<?>, Object> modifiermap = WorldConfigManager.getDefaultModifierMap(world.getName());
+    if (world.getName().equalsIgnoreCase(AsyncWorldManager.config.get().getString("mainworld"))) {
+      modifiermap.put(Modifier.autoload, false);
+      modifiermap.put(Modifier.creationtype, CreationType.normal);
+    }
+
+    Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
+    for (GameRule<?> gamerule : GameRule.values()) {
+      Rule<?> rule = Rule.getByName(gamerule.getName());
+      gamerules.put(rule, world.getGameRuleValue(gamerule));
+    }
+    modifiermap.put(Modifier.gamerule, gamerules);
+
+    return new WorldData(world.getName(), world.getEnvironment(), modifiermap);
+  }
+
+  /**
+   * Sets the {@link WorldData} for the given {@link World}
+   * @param world The {@link World} to change.
+   * @param worlddata The {@link WorldData} to use.
+   */
+  public static void setWorldsData(World world, WorldData worlddata) {
+    for (Rule<?> r : Rule.values()) {
+      setGameRule(worlddata, r, world);
+    }
+  }
 
   @SuppressWarnings("deprecation")
   public static WorldData setRule(WorldData worlddata, Rule<?> r, World world) {

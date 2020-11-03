@@ -14,8 +14,6 @@ import org.apache.commons.lang.ObjectUtils.Null;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
@@ -31,10 +29,9 @@ import de.xxschrandxx.api.minecraft.awm.CreationType;
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.api.minecraft.otherapi.Version;
 import de.xxschrandxx.awm.AsyncWorldManager;
-import de.xxschrandxx.awm.api.config.Modifier;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
-import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_12_2;
-import de.xxschrandxx.awm.api.gamerulemanager.WorldDataEditor_1_13;
+import de.xxschrandxx.awm.api.worlddataeditor.*;
 import de.xxschrandxx.awm.api.worldcreation.*;
 import de.xxschrandxx.awm.util.Utils;
 
@@ -51,7 +48,7 @@ public class WorldConfigManager {
   public static WorldData getWorlddataFromCommand(CommandSender sender, String worldname, String preenviroment, String[] args) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromCommand | Getting WorldData for: " + worldname + ", " + sender.getName());
     Environment environment = ((environment = Environment.valueOf(preenviroment)) != null) ? environment : null;
-    Map<Modifier, Object> modifiermap = getDefaultModifierMap(worldname);
+    Map<Modifier<?>, Object> modifiermap = getDefaultModifierMap(worldname);
     Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
     List<String> options = new ArrayList<String>();
     for (String arg : args) {
@@ -67,7 +64,7 @@ public class WorldConfigManager {
       }
       String premodifier = ops[0].replaceFirst("-", "");
       String prevalue = ops[1];
-      Modifier modifier;
+      Modifier<?> modifier;
       if ((modifier = Modifier.getModifier(premodifier)) != null) {
         if (modifier == Modifier.gamerule) {
           String rulename = prevalue;
@@ -87,101 +84,101 @@ public class WorldConfigManager {
             }
           }
         }
-        else if (modifier.cl == String.class) {
+        else if (modifier.getType() == String.class) {
           if (!prevalue.isEmpty()) {
             modifiermap.put(modifier, prevalue);
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a String. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a String. " + prevalue );
           }
         }
-        else if (modifier.cl == List.class) {
+        else if (modifier.getType() == List.class) {
           if (!prevalue.isEmpty()) {
             List<String> value = Arrays.asList(prevalue.split(";"));
             modifiermap.put(modifier, value);
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " value was empty.");
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " value was empty.");
           }
         }
-        else if (modifier.cl == Boolean.class) {
+        else if (modifier.getType() == Boolean.class) {
           if (testValues.isBoolean(prevalue)) {
             modifiermap.put(modifier, Boolean.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Boolean. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Boolean. " + prevalue );
           }
         }
-        else if (modifier.cl == Integer.class) {
+        else if (modifier.getType() == Integer.class) {
           if (testValues.isInt(prevalue)) {
             modifiermap.put(modifier, Integer.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Integer. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Integer. " + prevalue );
           }
         }
-        else if (modifier.cl == Double.class) {
+        else if (modifier.getType() == Double.class) {
           if (testValues.isDouble(prevalue)) {
             modifiermap.put(modifier, Double.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Double. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Double. " + prevalue );
           }
         }
-        else if (modifier.cl == Float.class) {
+        else if (modifier.getType() == Float.class) {
           if (testValues.isFloat(prevalue)) {
             modifiermap.put(modifier, Float.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Float. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Float. " + prevalue );
           }
         }
-        else if (modifier.cl == Long.class) {
+        else if (modifier.getType() == Long.class) {
           if (testValues.isLong(prevalue)) {
             modifiermap.put(modifier, Long.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Long. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Long. " + prevalue );
           }
         }
-        else if (modifier.cl == Difficulty.class) {
+        else if (modifier.getType() == Difficulty.class) {
           if (testValues.isDifficulty(prevalue)) {
             modifiermap.put(modifier, Difficulty.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a Difficulty. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a Difficulty. " + prevalue );
           }
         }
-        else if (modifier.cl == ChunkGenerator.class) {
+        else if (modifier.getType() == ChunkGenerator.class) {
           if (testValues.isGenerator(worldname, prevalue, sender)) {
             modifiermap.put(modifier, WorldCreator.getGeneratorForName(worldname, prevalue, sender));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a ChunkGenerator. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a ChunkGenerator. " + prevalue );
           }
         }
-        else if (modifier.cl == WorldType.class) {
+        else if (modifier.getType() == WorldType.class) {
           if (testValues.isWorldType(prevalue)) {
             modifiermap.put(modifier, WorldType.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a WorldType. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a WorldType. " + prevalue );
           }
         }
-        else if (modifier.cl == CreationType.class) {
+        else if (modifier.getType() == CreationType.class) {
           if (testValues.isCreationType(prevalue)) {
             modifiermap.put(modifier, CreationType.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a CreationType. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a CreationType. " + prevalue );
           }
         }
-        else if (modifier.cl == GameMode.class) {
+        else if (modifier.getType() == GameMode.class) {
           if (testValues.isCreationType(prevalue)) {
             modifiermap.put(modifier, GameMode.valueOf(prevalue));
           }
           else {
-            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.name + " is not a GameMode. " + prevalue );
+            AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "WorldConfigManager.getWorlddataFromCommand | \n" + modifier.getName() + " is not a GameMode. " + prevalue );
           }
         }
       }
@@ -196,52 +193,35 @@ public class WorldConfigManager {
    * @return The created {@link WorldData}.
    */
   public static WorldData getWorlddataFromWorld(World world) {
-    Map<Modifier, Object> modifiermap = getDefaultModifierMap(world.getName());
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromWorld | Getting WorldData for: " + world.getName());
-    if (world.getName().equalsIgnoreCase(AsyncWorldManager.config.get().getString("mainworld"))) {
-      modifiermap.put(Modifier.autoload, false);
-      modifiermap.put(Modifier.creationtype, CreationType.normal);
+    Version v = ServerVersion.getVersion();
+    if (
+        v == Version.v1_16 || v == Version.v1_16_1 || v == Version.v1_16_2 || v == Version.v1_16_3 || v == Version.v1_16_4 ||
+        v == Version.v1_15_2
+        )
+      return WorldDataEditor_1_15_2.getWorlddataFromWorld(world);
+    else if (
+        v == Version.v1_15_1 
+        )
+      return WorldDataEditor_1_15_1.getWorlddataFromWorld(world);
+    else if (
+        v == Version.v1_15 ||
+        v == Version.v1_14 || v == Version.v1_14_1 || v == Version.v1_14_2 || v == Version.v1_14_3 ||
+        v == Version.v1_13 || v == Version.v1_13_1 || v == Version.v1_13_2 
+        )
+      return WorldDataEditor_1_13.getWorlddataFromWorld(world);
+    else if (
+        v == Version.v1_12 || v == Version.v1_12_1 || v == Version.v1_12_2 || 
+        v == Version.v1_11 || v == Version.v1_11_1 || v == Version.v1_11_2 ||
+        v == Version.v1_10 || v == Version.v1_10_1 || v == Version.v1_10_2 ||
+        v == Version.v1_9 || v == Version.v1_9_1 || v == Version.v1_9_2 || v == Version.v1_9_3 || v == Version.v1_9_4 ||
+        v == Version.v1_8 || v == Version.v1_8_1 || v == Version.v1_8_2 || v == Version.v1_8_3 || v == Version.v1_8_4 || v == Version.v1_8_5 || v == Version.v1_8_6 || v == Version.v1_8_7 || v == Version.v1_8_8 || v == Version.v1_8_9 ||
+        v == Version.v1_7_10
+        )
+      return WorldDataEditor_1_07_10.getWorlddataFromWorld(world);
+    else {
+      return WorldDataEditor_0.getWorlddataFromWorld(world);
     }
-    modifiermap.put(Modifier.allowanimalspawning, world.getAllowAnimals());
-    modifiermap.put(Modifier.allowmonsterspawning, world.getAllowMonsters());
-    modifiermap.put(Modifier.ambientlimit, world.getAmbientSpawnLimit());
-    modifiermap.put(Modifier.animallimit, world.getAnimalSpawnLimit());
-    modifiermap.put(Modifier.difficulty, world.getDifficulty());
-    Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
-    for (GameRule<?> gamerule : GameRule.values()) {
-      Rule<?> rule = Rule.getByName(gamerule.getName());
-      gamerules.put(rule, world.getGameRuleValue(gamerule));
-    }
-    modifiermap.put(Modifier.gamerule, gamerules);
-    modifiermap.put(Modifier.generator, world.getGenerator());
-    modifiermap.put(Modifier.generatestructures, world.canGenerateStructures());
-    if ((ServerVersion.getVersion() == Version.v1_16) ||
-        (ServerVersion.getVersion() == Version.v1_16_1) ||
-        (ServerVersion.getVersion() == Version.v1_16_2)) {
-      modifiermap.put(Modifier.hardcore, world.isHardcore());
-    }
-    modifiermap.put(Modifier.keepspawninmemory, world.getKeepSpawnInMemory());
-    modifiermap.put(Modifier.monsterlimit, world.getMonsterSpawnLimit());
-    modifiermap.put(Modifier.pitch, world.getSpawnLocation().getPitch());
-    modifiermap.put(Modifier.pvp, world.getPVP());
-    modifiermap.put(Modifier.seed, world.getSeed());
-    modifiermap.put(Modifier.storm, world.hasStorm());
-    modifiermap.put(Modifier.thunder, world.isThundering());
-    modifiermap.put(Modifier.thunderduration, world.getThunderDuration());
-    modifiermap.put(Modifier.ticksperambientspawns, world.getTicksPerAmbientSpawns());
-    modifiermap.put(Modifier.ticksperanimalspawns, world.getTicksPerAnimalSpawns());
-    modifiermap.put(Modifier.tickspermonsterspawns, world.getTicksPerMonsterSpawns());
-    modifiermap.put(Modifier.ticksperwaterspawns, world.getTicksPerWaterSpawns());
-    modifiermap.put(Modifier.time, world.getTime());
-    modifiermap.put(Modifier.wateranimallimit, world.getWaterAnimalSpawnLimit());
-    modifiermap.put(Modifier.weatherduration, world.getWeatherDuration());
-    modifiermap.put(Modifier.worldtype, world.getWorldType());
-    modifiermap.put(Modifier.x, world.getSpawnLocation().getX());
-    modifiermap.put(Modifier.y, world.getSpawnLocation().getY());
-    modifiermap.put(Modifier.yaw, world.getSpawnLocation().getYaw());
-    modifiermap.put(Modifier.z, world.getSpawnLocation().getZ());
-
-    return new WorldData(world.getName(), world.getEnvironment(), modifiermap);
   }
 
   /**
@@ -263,19 +243,19 @@ public class WorldConfigManager {
     * @return The created {@link WorldData}.
     */
   public static WorldData getWorlddataFromConfigSection(String worldname, ConfigurationSection section) {
-    Map<Modifier, Object> modifiermap = getDefaultModifierMap(worldname);
+    Map<Modifier<?>, Object> modifiermap = getDefaultModifierMap(worldname);
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | Getting WorldData for: " + section.getName());
-    for (Modifier modifier : Modifier.values()) {
-      if (section.isString(modifier.name)) {
-        if (section.getString(modifier.name).equalsIgnoreCase("none")) {
-          AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | No Value given for " + modifier.name + " skipping...");
+    for (Modifier<?> modifier : Modifier.values()) {
+      if (section.isString(modifier.getName())) {
+        if (section.getString(modifier.getName()).equalsIgnoreCase("none")) {
+          AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | No Value given for " + modifier.getName() + " skipping...");
           continue;
         }
       }
       if (
           (modifier == Modifier.keepspawninmemory)
           ) {
-        modifiermap.put(modifier, section.get("Spawn." + modifier.name));
+        modifiermap.put(modifier, section.get("Spawn." + modifier.getName()));
       }
       else if (
           (modifier == Modifier.x) ||
@@ -290,7 +270,7 @@ public class WorldConfigManager {
           (modifier == Modifier.allowanimalspawning) ||
           (modifier == Modifier.allowmonsterspawning)
           ) {
-        modifiermap.put(modifier, section.get("Spawning." + modifier.name));
+        modifiermap.put(modifier, section.get("Spawning." + modifier.getName()));
       }
       else if (
           (modifier == Modifier.ambientlimit) ||
@@ -306,7 +286,7 @@ public class WorldConfigManager {
           (modifier == Modifier.storm) ||
           (modifier == Modifier.setweatherduration)
           ) {
-        modifiermap.put(modifier, section.get("Weather." + modifier.name));
+        modifiermap.put(modifier, section.get("Weather." + modifier.getName()));
       }
       else if (
           (modifier == Modifier.thunderduration) ||
@@ -315,25 +295,25 @@ public class WorldConfigManager {
         modifiermap.put(modifier, getObject(modifier, section, "Weather"));
       }
       else if (modifier == Modifier.creationtype) {
-        CreationType creationtype = CreationType.valueOf(section.getString(modifier.name));
+        CreationType creationtype = CreationType.valueOf(section.getString(modifier.getName()));
         modifiermap.put(modifier, creationtype);
       }
       else if (modifier == Modifier.gamemode) {
-        GameMode gamemode = GameMode.valueOf(section.getString(modifier.name));
+        GameMode gamemode = GameMode.valueOf(section.getString(modifier.getName()));
         modifiermap.put(modifier, gamemode);
       }
       else if (modifier == Modifier.worldtype) {
-        WorldType worldtype = WorldType.valueOf(section.getString(modifier.name));
+        WorldType worldtype = WorldType.valueOf(section.getString(modifier.getName()));
         modifiermap.put(modifier, worldtype);
       }
       else if (modifier == Modifier.difficulty) {
-        Difficulty difficulty = Difficulty.valueOf(section.getString(modifier.name));
+        Difficulty difficulty = Difficulty.valueOf(section.getString(modifier.getName()));
         modifiermap.put(modifier, difficulty);
       }
       else if (modifier == Modifier.gamerule) {
-        ConfigurationSection gamerulesec = section.getConfigurationSection(modifier.name);
+        ConfigurationSection gamerulesec = section.getConfigurationSection(modifier.getName());
         if (gamerulesec == null) {
-          AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | No Value given for " + modifier.name + " skipping...");
+          AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromConfigSection | No Value given for " + modifier.getName() + " skipping...");
           continue;
         }
         Map<Rule<?>, Object> gamerules = new HashMap<Rule<?>, Object>();
@@ -354,15 +334,15 @@ public class WorldConfigManager {
         modifiermap.put(modifier, gamerules);
       }
       else if (
-          (modifier.cl == Integer.class) ||
-          (modifier.cl == Double.class) ||
-          (modifier.cl == Long.class) ||
-          (modifier.cl == Float.class)
+          (modifier.getType() == Integer.class) ||
+          (modifier.getType() == Double.class) ||
+          (modifier.getType() == Long.class) ||
+          (modifier.getType() == Float.class)
           ) {
         modifiermap.put(modifier, getObject(modifier, section, "Weather"));
       }
       else {
-        modifiermap.put(modifier, section.get(modifier.name));
+        modifiermap.put(modifier, section.get(modifier.getName()));
       }
     }
     Environment environment = null;
@@ -377,7 +357,7 @@ public class WorldConfigManager {
   }
 
   @Deprecated
-  public static Object getObject(Modifier modifier, ConfigurationSection section) {
+  public static Object getObject(Modifier<?> modifier, ConfigurationSection section) {
     return getObject(modifier, section, "");
   }
 
@@ -388,7 +368,7 @@ public class WorldConfigManager {
    * @param path The path to look in.
    * @return The {@link Number} under the given path.
    */
-  public static Object getObject(Modifier modifier, ConfigurationSection section, String path) {
+  public static Object getObject(Modifier<?> modifier, ConfigurationSection section, String path) {
     Object o = null;
     String finalpath = "";
     if (path != null) {
@@ -396,17 +376,17 @@ public class WorldConfigManager {
         finalpath = "." + path;
       }
     }
-    if (modifier.cl == Integer.class) {
-      o = section.getInt(finalpath + modifier.name);
+    if (modifier.getType() == Integer.class) {
+      o = section.getInt(finalpath + modifier.getName());
     }
-    else if (modifier.cl == Double.class) {
-      o = section.getDouble(finalpath + modifier.name);
+    else if (modifier.getType() == Double.class) {
+      o = section.getDouble(finalpath + modifier.getName());
     }
-    else if (modifier.cl == Long.class) {
-      o = section.getLong(finalpath + modifier.name);
+    else if (modifier.getType() == Long.class) {
+      o = section.getLong(finalpath + modifier.getName());
     }
-    else if (modifier.cl == Float.class) {
-      Double d = section.getDouble(finalpath + modifier.name);
+    else if (modifier.getType() == Float.class) {
+      Double d = section.getDouble(finalpath + modifier.getName());
       Float f = d.floatValue();
       o = f;
 //      o = section.getDouble(finalpath + modifier.name).;
@@ -419,7 +399,7 @@ public class WorldConfigManager {
    * @param worldname The worldname for the {@link WorldData}
    * @return The created {@link WorldData}
    */
-  public static Map<Modifier, Object> getDefaultModifierMap(String worldname) {
+  public static Map<Modifier<?>, Object> getDefaultModifierMap(String worldname) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.getWorlddataFromDefault | Getting default WorldData for: " + worldname);
     return Storage.defaultmodifiermap;
   }
@@ -432,8 +412,8 @@ public class WorldConfigManager {
    */
   public static WorldData replaceNull(WorldData toupdate, WorldData update) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.replaceNull | Replacing Null in WorldData: " + toupdate.getWorldName());
-    Map<Modifier, Object> modifiermap = toupdate.getModifierMap();
-    for (Modifier modifier : Modifier.values()) {
+    Map<Modifier<?>, Object> modifiermap = toupdate.getModifierMap();
+    for (Modifier<?> modifier : Modifier.values()) {
       if (toupdate.getModifierValue(modifier) == null) {
         modifiermap.put(modifier, update.getModifierValue(modifier));
       }
@@ -451,47 +431,34 @@ public class WorldConfigManager {
     Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {
       @Override
       public void run() {
-        world.setAmbientSpawnLimit((Integer) worlddata.getModifierValue(Modifier.ambientlimit));
-        world.setAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.animallimit));
-        world.setAutoSave((Boolean) worlddata.getModifierValue(Modifier.autosave));
-        world.setDifficulty((Difficulty) worlddata.getModifierValue(Modifier.difficulty));
-        for (Rule<?> r : Rule.values()) {
-          try {
-            Class.forName("org.spigotmc.GameRule");
-            WorldDataEditor_1_13.setGameRule(worlddata, r, world);
-           }
-           catch (ClassNotFoundException e) {
-             WorldDataEditor_1_12_2.setGameRule(worlddata, r, world);
-           }
+        Version v = ServerVersion.getVersion();
+        if (
+            v == Version.v1_16 || v == Version.v1_16_1 || v == Version.v1_16_2 || v == Version.v1_16_3 || v == Version.v1_16_4 ||
+            v == Version.v1_15_2
+            )
+          WorldDataEditor_1_15_2.setWorldsData(world, worlddata);
+        else if (
+            v == Version.v1_15_1 
+            )
+          WorldDataEditor_1_15_1.setWorldsData(world, worlddata);
+        else if (
+            v == Version.v1_15 ||
+            v == Version.v1_14 || v == Version.v1_14_1 || v == Version.v1_14_2 || v == Version.v1_14_3 ||
+            v == Version.v1_13 || v == Version.v1_13_1 || v == Version.v1_13_2 
+            )
+          WorldDataEditor_1_13.setWorldsData(world, worlddata);
+        else if (
+            v == Version.v1_12 || v == Version.v1_12_1 || v == Version.v1_12_2 || 
+            v == Version.v1_11 || v == Version.v1_11_1 || v == Version.v1_11_2 ||
+            v == Version.v1_10 || v == Version.v1_10_1 || v == Version.v1_10_2 ||
+            v == Version.v1_9 || v == Version.v1_9_1 || v == Version.v1_9_2 || v == Version.v1_9_3 || v == Version.v1_9_4 ||
+            v == Version.v1_8 || v == Version.v1_8_1 || v == Version.v1_8_2 || v == Version.v1_8_3 || v == Version.v1_8_4 || v == Version.v1_8_5 || v == Version.v1_8_6 || v == Version.v1_8_7 || v == Version.v1_8_8 || v == Version.v1_8_9 ||
+            v == Version.v1_7_10
+            )
+          WorldDataEditor_1_07_10.setWorldsData(world, worlddata);
+        else {
+          WorldDataEditor_0.setWorldsData(world, worlddata);
         }
-        if ((ServerVersion.getVersion() == Version.v1_16) ||
-            (ServerVersion.getVersion() == Version.v1_16_1) ||
-            (ServerVersion.getVersion() == Version.v1_16_2)) {
-          world.setHardcore((Boolean) worlddata.getModifierValue(Modifier.hardcore));
-        }
-        world.setKeepSpawnInMemory((Boolean) worlddata.getModifierValue(Modifier.keepspawninmemory));
-        world.setMonsterSpawnLimit((Integer) worlddata.getModifierValue(Modifier.monsterlimit));
-        world.setPVP((Boolean) worlddata.getModifierValue(Modifier.pvp));
-        world.setSpawnFlags((Boolean) worlddata.getModifierValue(Modifier.allowmonsterspawning), (Boolean) worlddata.getModifierValue(Modifier.allowanimalspawning));
-        Double x = testValues.asDouble(worlddata.getModifierValue(Modifier.x));
-        Double y = testValues.asDouble(worlddata.getModifierValue(Modifier.y));
-        Double z = testValues.asDouble(worlddata.getModifierValue(Modifier.z));
-        Float yaw = testValues.asFloat(worlddata.getModifierValue(Modifier.yaw));
-        Float pitch = testValues.asFloat(worlddata.getModifierValue(Modifier.pitch));
-        world.setSpawnLocation(new Location(world, x, y, z, yaw, pitch));
-        world.setStorm((Boolean) worlddata.getModifierValue(Modifier.storm));
-        if ((Boolean) worlddata.getModifierValue(Modifier.setthunderduration))
-          world.setThunderDuration((Integer) worlddata.getModifierValue(Modifier.thunderduration));
-        world.setThundering((Boolean) worlddata.getModifierValue(Modifier.thunder));
-        world.setTicksPerAmbientSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperambientspawns)));
-        world.setTicksPerAnimalSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperanimalspawns)));
-        world.setTicksPerMonsterSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.tickspermonsterspawns)));
-        world.setTicksPerWaterSpawns(testValues.asInteger(worlddata.getModifierValue(Modifier.ticksperwaterspawns)));
-        if ((Boolean) worlddata.getModifierValue(Modifier.settime))
-          world.setTime(testValues.asLong(worlddata.getModifierValue(Modifier.time)));
-        world.setWaterAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.wateranimallimit));
-        if ((Boolean) worlddata.getModifierValue(Modifier.setweatherduration))
-          world.setWeatherDuration((Integer) worlddata.getModifierValue(Modifier.weatherduration));
       }
     });
   }
@@ -708,10 +675,10 @@ public class WorldConfigManager {
       config.get().options().copyHeader(true);
       ConfigurationSection section = config.get().createSection(entry.getValue().getWorldName());
       section.set("Environment", entry.getValue().getEnvironment().name());
-      for (Entry<Modifier, Object> mentry : entry.getValue().getModifierMap().entrySet()) {
+      for (Entry<Modifier<?>, Object> mentry : entry.getValue().getModifierMap().entrySet()) {
         if (mentry.getValue() == null) {
           AsyncWorldManager.getLogHandler().log(true, Level.WARNING, "Setting Key: " + mentry.getKey() + ", Value: 'none'");
-          section.set(mentry.getKey().name, "none");
+          section.set(mentry.getKey().getName(), "none");
           continue;
         }
         if (
@@ -722,7 +689,7 @@ public class WorldConfigManager {
             (mentry.getKey() == Modifier.yaw) ||
             (mentry.getKey() == Modifier.pitch)
             ) {
-          section.set("Spawn." + mentry.getKey().name, mentry.getValue());
+          section.set("Spawn." + mentry.getKey().getName(), mentry.getValue());
         }
         else if (
             (mentry.getKey() == Modifier.allowanimalspawning) ||
@@ -732,7 +699,7 @@ public class WorldConfigManager {
             (mentry.getKey() == Modifier.monsterlimit) ||
             (mentry.getKey() == Modifier.wateranimallimit)
             ) {
-          section.set("Spawning." + mentry.getKey().name, mentry.getValue());
+          section.set("Spawning." + mentry.getKey().getName(), mentry.getValue());
         }
         else if (
             (mentry.getKey() == Modifier.thunder) ||
@@ -742,31 +709,31 @@ public class WorldConfigManager {
             (mentry.getKey() == Modifier.setweatherduration) ||
             (mentry.getKey() == Modifier.weatherduration)
             ) {
-          section.set("Weather." + mentry.getKey().name, mentry.getValue());
+          section.set("Weather." + mentry.getKey().getName(), mentry.getValue());
         }
         else if (mentry.getKey() == Modifier.creationtype) {
-          section.set(mentry.getKey().name, ((CreationType) mentry.getValue()).name());
+          section.set(mentry.getKey().getName(), ((CreationType) mentry.getValue()).name());
         }
         else if (mentry.getKey() == Modifier.gamemode) {
-          section.set(mentry.getKey().name, ((GameMode) mentry.getValue()).name());
+          section.set(mentry.getKey().getName(), ((GameMode) mentry.getValue()).name());
         }
         else if (mentry.getKey() == Modifier.worldtype) {
-          section.set(mentry.getKey().name, ((WorldType) mentry.getValue()).name());
+          section.set(mentry.getKey().getName(), ((WorldType) mentry.getValue()).name());
         }
         else if (mentry.getKey() == Modifier.difficulty) {
-          section.set(mentry.getKey().name, ((Difficulty) mentry.getValue()).name());
+          section.set(mentry.getKey().getName(), ((Difficulty) mentry.getValue()).name());
         }
         else if (mentry.getKey() == Modifier.gamerule) {
           @SuppressWarnings("unchecked")
           Map<Rule<?>, Object> gamerules = (Map<Rule<?>, Object>) mentry.getValue();
           for (Entry<Rule<?>, Object> gentry : gamerules.entrySet()) {
             if (gentry.getKey() != null) {
-              section.set(mentry.getKey().name + "." + gentry.getKey().getName(), gentry.getValue());
+              section.set(mentry.getKey().getName() + "." + gentry.getKey().getName(), gentry.getValue());
             }
           }
         }
         else {
-          section.set(mentry.getKey().name, mentry.getValue());
+          section.set(mentry.getKey().getName(), mentry.getValue());
         }
       }
       config.save();

@@ -8,6 +8,7 @@ import org.bukkit.generator.ChunkGenerator;
 import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 import de.xxschrandxx.awm.api.event.*;
+import de.xxschrandxx.awm.api.modifier.Modifier;
 
 public class broken {
 
