@@ -152,15 +152,15 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.footer", "&8&m[]&6&m--------------------------------------------------&8&m[]");
     AsyncWorldManager.messages.get().addDefault("command.AsyncWorldManager.hover", "Klick to suggest the command.");
     AsyncWorldManager.messages.get().addDefault("command.create.usage", "Usage: /wm create [worldname] [NORMAL/NETHER/THE_END] {optionals}");
-    AsyncWorldManager.messages.get().addDefault("command.create.success.chat", "The world %world% sucsessfully created.");
-    AsyncWorldManager.messages.get().addDefault("command.create.success.hover", "Click to teleport into world.");
+    AsyncWorldManager.messages.get().addDefault("command.create.success.chat", "The world %world% successfully created.");
+    AsyncWorldManager.messages.get().addDefault("command.create.success.hover", "Click to teleport to world.");
     AsyncWorldManager.messages.get().addDefault("command.create.folderexist.chat", "The worldfolder already exists.");
     AsyncWorldManager.messages.get().addDefault("command.create.folderexist.hover", "Click to import the world.");
     AsyncWorldManager.messages.get().addDefault("command.create.worldexist.chat", "The world already exists.");
     AsyncWorldManager.messages.get().addDefault("command.create.worldexist.hover", "Click to teleport into world.");
     AsyncWorldManager.messages.get().addDefault("command.create.wrongmodifier", "The Modifier %modifier% is wrong! Ingnoring it...");
     AsyncWorldManager.messages.get().addDefault("command.import.usage", "Usage: /wm import [worldname] [NORMAL/NETHER/THE_END] {optionals}");
-    AsyncWorldManager.messages.get().addDefault("command.import.success.chat", "The world %world% sucsessfully imported.");
+    AsyncWorldManager.messages.get().addDefault("command.import.success.chat", "The world %world% successfully imported.");
     AsyncWorldManager.messages.get().addDefault("command.import.success.hover", "Click to teleport into world.");
     AsyncWorldManager.messages.get().addDefault("command.import.foldernotexist", "The worldfolder does not exists.");
     AsyncWorldManager.messages.get().addDefault("command.import.alreadyimport.chat", "The worldfolder is already imported.");
@@ -220,7 +220,7 @@ public class Storage {
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.alreadyalias", "%value% is already a alias of %key%.");
     AsyncWorldManager.messages.get().addDefault("command.modify.world.alias.notalias", "%value% is not a alias of %key%.");
     AsyncWorldManager.messages.get().addDefault("command.configs.usage", "Usage: /wm configs [save/load] {config}");
-    AsyncWorldManager.messages.get().addDefault("command.configs.load", "&aloeded");
+    AsyncWorldManager.messages.get().addDefault("command.configs.load", "&aloaded");
     AsyncWorldManager.messages.get().addDefault("command.configs.save", "&asaved");
     AsyncWorldManager.messages.get().addDefault("command.configs.success", "Successfully %done% &e%config%&7.");
     AsyncWorldManager.messages.get().addDefault("command.configs.notfound", "&c%config%&7 does not exist.");
