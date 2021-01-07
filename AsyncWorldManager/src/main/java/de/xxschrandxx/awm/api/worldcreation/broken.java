@@ -1,6 +1,7 @@
 package de.xxschrandxx.awm.api.worldcreation;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;

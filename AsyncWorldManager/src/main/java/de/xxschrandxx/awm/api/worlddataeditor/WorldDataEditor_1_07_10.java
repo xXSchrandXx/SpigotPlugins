@@ -56,6 +56,7 @@ public class WorldDataEditor_1_07_10 {
    * @param world The {@link World} to change.
    * @param worlddata The {@link WorldData} to use.
    */
+  @Deprecated
   public static void setWorldsData(World world, WorldData worlddata) {
     WorldDataEditor_0.setWorldsData(world, worlddata);
     

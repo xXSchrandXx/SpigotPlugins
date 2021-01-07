@@ -1,0 +1,7 @@
+name: ${project.artifactId}Bukkit
+main: ${project.groupId}.bukkit.BungeeCordAuthenticatorBukkit
+version: ${project.version}
+author: xXSchrandXx
+description: ${project.artifactId}Bukkit
+softdepend: []
+api-version: 1.13

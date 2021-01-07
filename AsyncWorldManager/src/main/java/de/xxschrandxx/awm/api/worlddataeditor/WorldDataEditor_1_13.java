@@ -73,6 +73,7 @@ public class WorldDataEditor_1_13 {
    * @param world The {@link World} to change.
    * @param worlddata The {@link WorldData} to use.
    */
+  @Deprecated
   public static void setWorldsData(World world, WorldData worlddata) {
     world.setAmbientSpawnLimit((Integer) worlddata.getModifierValue(Modifier.ambientlimit));
     world.setAnimalSpawnLimit((Integer) worlddata.getModifierValue(Modifier.animallimit));

@@ -16,6 +16,7 @@ import de.xxschrandxx.awm.gui.menus.*;
 
 public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
 
+  @Deprecated
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     if (sender instanceof Player) {
@@ -82,6 +83,7 @@ public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
     }
   }
 
+  @Deprecated
   @Override
   public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
     List<String> cmdlist = new ArrayList<String>();

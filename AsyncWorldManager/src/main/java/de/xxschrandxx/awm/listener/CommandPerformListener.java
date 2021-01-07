@@ -32,6 +32,7 @@ public class CommandPerformListener implements Listener {
     String[] args = e.getMessage().replaceFirst("/", "").split(" ");
     CommandPerform(sender, args);
   }
+  @Deprecated
   private void CommandPerform(CommandSender sender, String[] args) {
     if (args[0].equalsIgnoreCase("setworldspawn") || args[0].equalsIgnoreCase("minecraft:setworldspawn") || args[0].equalsIgnoreCase("spawnpoint") || args[0].equalsIgnoreCase("minecraft:spawnpoint")) {
       if (args.length == 4) {

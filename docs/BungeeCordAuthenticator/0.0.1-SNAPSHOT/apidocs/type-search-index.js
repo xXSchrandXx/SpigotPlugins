@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"de.xxschrandxx.bca.bukkit","l":"BungeeCordAuthenticatorBukkit"},{"p":"de.xxschrandxx.bca.bungee","l":"BungeeCordAuthenticatorBungee"}];updateSearchResults();

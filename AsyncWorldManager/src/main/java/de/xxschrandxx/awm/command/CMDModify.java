@@ -24,6 +24,7 @@ import de.xxschrandxx.awm.api.modifier.Modifier;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDModify {
+  @Deprecated
   public static boolean modifycmd(CommandSender sender, String args[]) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.modify.main")) {
       if (args.length != 1) {

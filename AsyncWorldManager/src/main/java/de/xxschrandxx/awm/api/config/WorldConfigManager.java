@@ -429,6 +429,7 @@ public class WorldConfigManager {
    * @param world The {@link World} to change.
    * @param worlddata The {@link WorldData} to use.
    */
+  @Deprecated
   public static void setWorldsData(World world, WorldData worlddata) {
     AsyncWorldManager.getLogHandler().log(true, Level.INFO, "WorldConfigManager.setWorldsData | Setting WorldData for: " + world.getName());
     Bukkit.getScheduler().runTask(AsyncWorldManager.getInstance(), new Runnable() {

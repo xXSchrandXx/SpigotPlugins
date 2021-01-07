@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>de.xxschrandxx</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>BungeeCordAuthenticator</artifactId>
+  <groupId>de.xxschrandxx.bca</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <dependencies>
+
+    <!-- API Dependency -->
+  	<dependency>
+      <groupId>de.xxschrandxx.api</groupId>
+      <artifactId>SchrandAPI</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+
+    <!-- Metrics Dependency -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- HikariCP -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>3.4.5</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <relocations>
+            <relocation>
+              <pattern>com.zaxxer</pattern>
+              <shadedPattern>de.xxschrandxx.lib.com.zaxxer</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.bstats</pattern>
+              <shadedPattern>de.xxschrandxx</shadedPattern>
+            </relocation>
+          </relocations>
+          <artifactSet>
+            <includes>
+              <include>de.xxschrandxx.api:SchrandAPI:jar:*</include>
+              <include>org.bstats:bstats-bukkit:jar:*</include>
+              <include>com.zaxxer:HikariCP:jar:*</include>
+            </includes>
+          </artifactSet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

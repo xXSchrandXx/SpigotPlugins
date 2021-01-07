@@ -14,6 +14,7 @@ import org.bukkit.command.TabCompleter;
 import net.md_5.bungee.api.chat.*;
 
 public class CMDAsyncWorldManager implements CommandExecutor, TabCompleter {
+  @Deprecated
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     if (AsyncWorldManager.getPermissionHandler().hasPermission(sender, "command.permissions.worldmanager.main")) {

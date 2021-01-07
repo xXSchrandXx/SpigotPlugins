@@ -27,6 +27,7 @@ public class WorldDataEditor_1_15_1 {
    * @param world The {@link World} to change.
    * @param worlddata The {@link WorldData} to use.
    */
+  @Deprecated
   public static void setWorldsData(World world, WorldData worlddata) {
     WorldDataEditor_1_13.setWorldsData(world, worlddata);
     world.setHardcore((Boolean)worlddata.getModifierValue(Modifier.hardcore));

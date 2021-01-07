@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>SpigotPlugins-Parent</name>
-  <artifactId>parent</artifactId>
+  <artifactId>spigotplugins-parent</artifactId>
   <groupId>de.xxschrandxx</groupId>
   <version>0.0.1-SNAPSHOT</version>
   <url>https://github.com/xXSchrandXx/SchrandAPI</url>
@@ -21,6 +21,7 @@
   <modules>
     <module>AsyncWorldManager</module>
     <module>AsyncWorldManagerGUI</module>
+    <module>BungeeCordAuthenticator</module>
     <module>SchrandAPI</module>
     <module>NetherPortalGate</module>
     <module>ServerStatusSign</module>
@@ -86,7 +87,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.16.2-R0.1-SNAPSHOT</version>
+      <version>1.16.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 

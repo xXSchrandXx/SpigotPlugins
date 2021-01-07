@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.bca.bukkit"},{"l":"de.xxschrandxx.bca.bungee"}];updateSearchResults();

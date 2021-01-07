@@ -12,6 +12,7 @@ import de.xxschrandxx.awm.AsyncWorldManager;
 import de.xxschrandxx.awm.api.config.*;
 
 public class WorldLoadListener implements Listener {
+  @Deprecated
   @EventHandler(priority=EventPriority.HIGHEST)
   public void onWorldLoad(WorldLoadEvent e) {
     World world = e.getWorld();

@@ -29,6 +29,7 @@ public final class WorldMenu extends Menu {
     return MenuForm.WorldMenu;
   }
 
+  @Deprecated
   @Override
   public final void initializeItems() {
     iimport = MenuManager.createGuiItem(Material.STONE, Storage.messages.get().getString("menu.world.import.itemname").replace("%world%", worldname), Storage.messages.get().getStringList("menu.world.import.itemlore"));

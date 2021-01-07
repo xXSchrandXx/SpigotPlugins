@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"de.xxschrandxx.bca.bukkit","c":"BungeeCordAuthenticatorBukkit","l":"BungeeCordAuthenticatorBukkit()","u":"%3Cinit%3E()"},{"p":"de.xxschrandxx.bca.bungee","c":"BungeeCordAuthenticatorBungee","l":"BungeeCordAuthenticatorBungee()","u":"%3Cinit%3E()"}];updateSearchResults();
