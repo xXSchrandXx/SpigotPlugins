@@ -1,5 +1,7 @@
 de.xxschrandxx.bca.bukkit
 de.xxschrandxx.bca.bukkit.api
+de.xxschrandxx.bca.bukkit.api.events
+de.xxschrandxx.bca.bukkit.listeners
 de.xxschrandxx.bca.bungee
 de.xxschrandxx.bca.bungee.api
 de.xxschrandxx.bca.bungee.api.event

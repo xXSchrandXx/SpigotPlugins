@@ -94,13 +94,14 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setAuthenticated | UUID is null, skipping");
       return;
     }
+    //Setting SQL first because of the SQLException
+    getSQL().setStatus(uuid, OnlineStatus.authenticated);
     //Remove OpenSession
     if (opensessions.contains(uuid))
       unsetOpenSession(uuid);
     //Set authenticated Status
     if (!authenticated.contains(uuid))
       authenticated.add(uuid);
-    getSQL().setStatus(uuid, OnlineStatus.authenticated);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new LoginEvent(uuid));
     //Sending PluginMessage
@@ -135,13 +136,14 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetAuthenticated | UUID is null, skipping");
       return;
     }
+    //Setting SQL first because of the SQLException
+    getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
     //Remove OpenSession
     if (opensessions.contains(uuid))
       unsetOpenSession(uuid);
     //Setting unauthenticated Status
     if (authenticated.contains(uuid))
       authenticated.remove(uuid);
-    getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new LogoutEvent(uuid));
     //Sending PluginMessage
@@ -150,6 +152,19 @@ public class BungeeCordAuthenticatorBungeeAPI {
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
       si.getValue().sendData("bca:logout", out.toByteArray());
     }
+  }
+
+  /**
+   * {@linkplain #setOpenSession(UUID)}
+   * @param player The {@link ProxiedPlayer} for the {@link UUID}
+   * @throws SQLException {@link SQLException}
+   */
+  public void setOpenSession(ProxiedPlayer player) throws SQLException {
+    if (player == null) {
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setOpensession | ProxiedPlayer is null, skipping");
+      return;
+    }
+    setOpenSession(player.getUniqueId());
   }
 
   /**
@@ -163,13 +178,14 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setOpensession | UUID is null, skipping");
       return;
     }
+    //Setting SQL first because of the SQLException
+    getSQL().setStatus(uuid, OnlineStatus.opensession);
     //Remove Authenticated
     if (authenticated.contains(uuid))
       authenticated.remove(uuid);
     //Setting opensession Status
     if (!opensessions.contains(uuid))
       opensessions.put(uuid, new SessionTask(bcab,uuid));
-    getSQL().setStatus(uuid, OnlineStatus.opensession);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new OpenSessionEvent(uuid));
   }
@@ -193,6 +209,8 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetOpensession | UUID is null, skipping");
       return;
     }
+    //Setting SQL first because of the SQLException
+    getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
     //Remove Authenticated
     if (authenticated.contains(uuid))
       authenticated.remove(uuid);
@@ -201,7 +219,6 @@ public class BungeeCordAuthenticatorBungeeAPI {
       opensessions.get(uuid).cancel();
       opensessions.remove(uuid);
     }
-    getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new CloseSessionEvent(uuid));
   }
@@ -233,19 +250,8 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.sync | ProxiedPlayer is null, skipping");
       return;
     }
-    List<UUID> uuidlist = new ArrayList<UUID>();
-    for (UUID tmpuuid : getOpenSessions().keySet()) {
-      if (!uuidlist.contains(tmpuuid)) {
-        uuidlist.add(tmpuuid);
-      }
-    }
-    for (UUID tmpuuid : getAuthenticated()) {
-      if (!uuidlist.contains(tmpuuid)) {
-        uuidlist.add(tmpuuid);
-      }
-    }
     String uuidlistString = null;
-    for (UUID uuid : uuidlist) {
+    for (UUID uuid : getAuthenticated()) {
       if (uuidlistString == null) {
         uuidlistString =  uuid.toString();
       }

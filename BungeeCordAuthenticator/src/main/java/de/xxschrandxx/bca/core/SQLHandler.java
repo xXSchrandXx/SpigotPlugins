@@ -56,6 +56,15 @@ public class SQLHandler {
     if (database == null)
       logger.warning("Error with " + SQLProperties.toString() + " dataSource.databaseName not given");
     hikari = new HikariDataSource(config);
+    try {
+      if (!existsTable()) {
+        logger.warning("Table does not exists. Creating it.");
+        createTable();
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
   private final Connection getConnection() throws SQLException {

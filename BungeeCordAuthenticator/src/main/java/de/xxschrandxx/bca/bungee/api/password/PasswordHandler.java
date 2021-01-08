@@ -11,6 +11,12 @@ import java.util.UUID;
 import de.xxschrandxx.bca.bungee.api.SQLHandlerBungee;
 
 /*
+Source: https://github.com/vik1395/BungeeAuth-Minecraft/blob/master/src/me/vik1395/BungeeAuth/Password/PasswordHandler.java
+
+Indication if changes were made: yes, changes are marked with: //Modified
+*/
+
+/*
 
 Author: Vik1395
 Project: BungeeAuth
@@ -23,7 +29,8 @@ You may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 You may find an abridged version of the License at http://creativecommons.org/licenses/by-sa/4.0/
- */
+
+*/
 
 /*
  * xAuth for Bukkit
@@ -47,17 +54,26 @@ You may find an abridged version of the License at http://creativecommons.org/li
 
 public class PasswordHandler {
 
+    //Modified added SQHandlerBungee
     public PasswordHandler(SQLHandlerBungee sqlhb) {
         t = sqlhb;
     }
 
+    //Modified changed from Tables to SQLHandlerBungee
     protected SQLHandlerBungee t;
 
+    //Modified added method
     public int getMaxTypes() {
         return 7;
     }
+
+    //Modified removed SecureRandom
+
+    //Modified removed type and changed to uuid
+    //Modified changed type to Integer
     public boolean checkPassword(String checkPass, UUID uuid) throws SQLException {
         String realPass = t.getPassword(uuid);
+        //Modified added getting Type directly from database
         Integer type = t.getType(uuid);
         boolean pwCheck = false;
         String checkPassHash = "";
@@ -139,6 +155,7 @@ public class PasswordHandler {
         return hash.substring(0, saltPos) + salt + hash.substring(saltPos);
     }
 
+    //Modified changed type from String to Integer
     public String newHash(String toHash, Integer type) {
         String result="";
         if(type.equals(0))

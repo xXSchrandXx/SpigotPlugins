@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -19,37 +20,41 @@ public class ChangePassword extends Command {
   @Override
   public void execute(CommandSender sender, String[] args) {
     if (!(sender instanceof ProxiedPlayer)) {
-      //TODO Message:Only ProxiedPlayer
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().PlayerOnly));
       return;
     }
-    if (args.length > 1) {
-      //TODO Message:Usage
+    if (args.length > 2) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordUsage));
       return;
     }
-    if (args.length < 1) {
-      //TODO Message:Usage
+    if (args.length < 2) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordUsage));
+      return;
+    }
+    if (args[1].length() < bcab.getAPI().getConfigHandler().MinCharacters) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordNotEnoughCharacters.replaceAll("%minchars%", bcab.getAPI().getConfigHandler().MinCharacters.toString())));
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
     try {
       if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
-        //TODO Message:Not registered
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordNotRegistered));
         return;
       }
     }
     catch (SQLException e) {
-      //TODO Message:Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
       if (!bcab.getAPI().checkPassword(player.getUniqueId(), args[0])) {
-        //TODO Message:Wrong password
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordWrongPassword));
         return;
       }
     }
     catch (SQLException e) {
-      //TODO Message:Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
@@ -57,11 +62,11 @@ public class ChangePassword extends Command {
       bcab.getAPI().setPassword(player, args[1]);;
     }
     catch (SQLException e) {
-      //TODO Message:Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
-    //TODO Message:New Password
+    sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordSuccessful));
   }
 
 }

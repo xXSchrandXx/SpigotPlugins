@@ -9,6 +9,12 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 /*
+Source: https://github.com/vik1395/BungeeAuth-Minecraft/blob/master/src/me/vik1395/BungeeAuth/Password/PBKDF2Hash.java
+
+Indication if changes were made: yes, changes are marked with: //Modified
+*/
+
+/*
 
 Author: Vik1395
 Project: BungeeAuth
@@ -21,7 +27,8 @@ You may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 You may find an abridged version of the License at http://creativecommons.org/licenses/by-sa/4.0/
- */
+
+*/
 
 public class PBKDF2Hash 
 {

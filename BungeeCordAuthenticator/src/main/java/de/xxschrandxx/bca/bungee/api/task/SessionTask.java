@@ -1,5 +1,6 @@
 package de.xxschrandxx.bca.bungee.api.task;
 
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -8,16 +9,27 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class SessionTask {
 
-    private ScheduledTask task;
+  private final ScheduledTask task;
+  private Integer sessionlength = 0;
 
   public SessionTask(BungeeCordAuthenticatorBungee bcab, UUID uuid) {
+    Integer maxsessionlength = bcab.getAPI().getConfigHandler().SessionLength;
     task = bcab.getProxy().getScheduler().schedule(bcab, new Runnable() {
       @Override
       public void run() {
-        Integer sessionlength = bcab.getAPI().getConfigHandler().SessionLength;
-        //TODO task
+        if (sessionlength <= maxsessionlength) {
+          try {
+            bcab.getAPI().unsetOpenSession(uuid);
+          }
+          catch (SQLException e) {
+            e.printStackTrace();
+          }
+        }
+        else {
+          sessionlength++;
+        }
       }
-    }, 10, 5, TimeUnit.SECONDS);
+    }, 0, 1, TimeUnit.MINUTES);
   }
 
   public void cancel() {

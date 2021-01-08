@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -19,57 +20,57 @@ public class Register extends Command {
   @Override
   public void execute(CommandSender sender, String[] args) {
     if (!(sender instanceof ProxiedPlayer)) {
-      //TODO Message: Only ProxiedPlayer
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().PlayerOnly));
       return;
     }
     if (args.length > 2) {
-      //TODO Message:Usage
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterUsage));
       return;
     }
     if (args.length < 2) {
-      //TODO Message:Usage
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterUsage));
       return;
     }
     if (!args[0].equals(args[1])) {
-      //TODO Message:Use same password
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterSamePassword));
       return;
     }
     if (args[0].length() < bcab.getAPI().getConfigHandler().MinCharacters) {
-      //TODO Message:Not enough charracters
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterNotEnoughCharacters.replaceAll("%minchars%", bcab.getAPI().getConfigHandler().MinCharacters.toString())));
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
     try {
       if (bcab.getAPI().getSQL().checkPlayerEntry(player)) {
-        //TODO Message:Already registered
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterAlreadyRegistered));
         return;
       }
     }
     catch (SQLException e) {
-      //TODO Message:ERROR
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     String ip = player.getAddress().getAddress().getHostAddress();
     try {
       if (bcab.getAPI().getSQL().getRegisteredIPCount(ip) > bcab.getAPI().getConfigHandler().MaxAccountsPerIP) {
-        //TODO Message:Max accounts for ip
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterMaxAccountsPerIP));
         return;
       }
     }
     catch (SQLException e) {
-      //TODO Message; Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
       if (!bcab.getAPI().createNewPlayerEntry(player, args[0])) {
-        //TODO Message:Not Registered?
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterError));
         return;
       }
     }
     catch (SQLException e) {
-      //TODO Message:Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
@@ -77,11 +78,11 @@ public class Register extends Command {
       bcab.getAPI().setAuthenticated(player);
     }
     catch (SQLException e) {
-      //TODO Message:Error
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
-    //TODO Message:Registered and Authenticated
+    sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().RegisterSuccessful));
   }
 
 }

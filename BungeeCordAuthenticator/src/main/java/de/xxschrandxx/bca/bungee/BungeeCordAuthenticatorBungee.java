@@ -31,7 +31,7 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     getProxy().registerChannel("bca:sync");
 
     getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
-    getProxy().getPluginManager().registerListener(this, new AuthenticatedListener(this));
+    getProxy().getPluginManager().registerListener(this, new SessionListener(this));
     getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(this));
 
   }
