@@ -3,7 +3,6 @@ package de.xxschrandxx.bca.bungee.api;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import de.xxschrandxx.api.bungee.Config;
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
@@ -14,7 +13,10 @@ public class ConfigHandler {
 
   private Config configyml, messageyml;
 
-  protected File hikariconfigfile;
+  private File hikariconfigfile = new File(bcab.getDataFolder(), "hikariconfig.properties");
+  public File getHikariConfigFile() {
+    return hikariconfigfile;
+  } 
 
   public ConfigHandler(BungeeCordAuthenticatorBungee bcab) {
     //Setting bcab
@@ -24,16 +26,16 @@ public class ConfigHandler {
     loadConfig();
 
     //Loading HikariConfig-Path
-    hikariconfigfile = new File(bcab.getDataFolder(), "hikariconfig.properties");
     if (!hikariconfigfile.exists()) {
       try {
         hikariconfigfile.createNewFile();
         FileWriter writer = new FileWriter(hikariconfigfile);
         writer.write("#Default file, infos configuration infos under:");
         writer.write("#https://github.com/brettwooldridge/HikariCP/wiki/Configuration");
-        writer.write("jdbcUrl=jdbc:mysql://localhost:3306/simpsons");
+        writer.write("jdbcUrl=jdbc:mysql://localhost:3306/");
         writer.write("username=test");
         writer.write("password=test");
+        writer.write("dataSource.databaseName=test");
         writer.write("dataSource.cachePrepStmts=true");
         writer.write("dataSource.prepStmtCacheSize=250");
         writer.write("dataSource.useServerPrepStmts=true");
@@ -51,22 +53,70 @@ public class ConfigHandler {
     }
 
     //Loading message.yml
-    messageyml = new Config(bcab, "message.yml");
+    loadMessage();
   }
 
   //Config Values
-  protected Boolean isDebugging;
+  //debug
+  public Boolean isDebugging;
 
-  protected void loadConfig() {
-    Boolean error = false;
+  //Sessions
+  public Boolean SessionEnabled;
+  public Integer SessionLength;
+
+  //Registration
+  public Integer MaxAccountsPerIP;
+  public Integer MinCharacters;
+
+  public void loadConfig() {
+    boolean error = false;
     configyml = new Config(bcab, "config.yml");
     //isDebugging
-    if (configyml.get().contains("isDebugging")) {
-      configyml.get().getBoolean("isDebugging");
+    if (configyml.get().contains("debug")) {
+      isDebugging = configyml.get().getBoolean("debug");
     }
     else {
-      bcab.getLogger().warning("loadConfig() | isDebugging is not given. Setting it...");
-      configyml.get().set("isDebugging", false);
+      bcab.getLogger().warning("loadConfig() | debug is not given. Setting it...");
+      configyml.get().set("debug", false);
+      error = true;
+    }
+    //Sesions
+    //SessionEnabled
+    if (configyml.get().contains("session.enabled")) {
+      isDebugging = configyml.get().getBoolean("session.enabled");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | session.enabled is not given. Setting it...");
+      configyml.get().set("session.enabled", false);
+      error = true;
+    }
+    //SessionLength
+    if (configyml.get().contains("session.length")) {
+      isDebugging = configyml.get().getBoolean("session.length");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | session.length is not given. Setting it...");
+      configyml.get().set("session.length", 5);
+      error = true;
+    }
+    //Registration
+    //MaxAccountsPerIP
+    if (configyml.get().contains("registration.maxaccountsperip")) {
+      MaxAccountsPerIP = configyml.get().getInt("registration.maxaccountsperip");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | registration.maxaccountsperip is not given. Setting it...");
+      configyml.get().set("registration.maxaccountsperip", 5);
+      error = true;
+    }
+    //MinCharacters
+    if (configyml.get().contains("registration.mincharacters")) {
+      MaxAccountsPerIP = configyml.get().getInt("registration.mincharacters");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | registration.mincharacters is not given. Setting it...");
+      configyml.get().set("registration.mincharacters", 8);
+      error = true;
     }
 
     if (error) {
@@ -75,8 +125,36 @@ public class ConfigHandler {
     }
   }
 
-  protected void saveConfig() {
+  public void saveConfig() {
     if (configyml != null)
       configyml.save();
   }
+
+  //Message Values
+  public String prefix;
+  
+  public void loadMessage() {
+    boolean error = false;    
+    messageyml = new Config(bcab, "message.yml");
+    //Prefix
+    if (messageyml.get().contains("Prefix")) {
+      prefix = messageyml.get().getString("Prefix");
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | Prefix is not given. Setting it...");
+      messageyml.get().set("Prefix", "&8[&6BungeeCordAuthenticatorBungee&8]&7");
+      error = true;
+    }
+
+    if (error) {
+      saveMessage();
+      loadMessage();
+    }
+  }
+
+  public void saveMessage() {
+    if (messageyml != null)
+      messageyml.save();
+  }
+
 }

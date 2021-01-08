@@ -73,7 +73,7 @@
           <relocations>
             <relocation>
               <pattern>org.bstats</pattern>
-              <shadedPattern>de.xxschrandxx</shadedPattern>
+              <shadedPattern>de.xxschrandxx.lib.org.bstats</shadedPattern>
             </relocation>
           </relocations>
           <artifactSet>
