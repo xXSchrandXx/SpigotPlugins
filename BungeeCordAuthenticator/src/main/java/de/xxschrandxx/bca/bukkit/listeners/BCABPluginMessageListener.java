@@ -20,7 +20,7 @@ public class BCABPluginMessageListener implements PluginMessageListener {
 
   @Override
   public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-    if (channel.equals("bungeeauth:login")) {
+    if (channel.equals("bca:login")) {
       ByteArrayDataInput in = ByteStreams.newDataInput(message);
       String uuidString = in.readUTF();
       UUID uuid = UUID.fromString(uuidString);
@@ -29,7 +29,7 @@ public class BCABPluginMessageListener implements PluginMessageListener {
       if (!bcab.getAPI().isAuthenticated(uuid))
         bcab.getAPI().addAuthenticated(uuid);;
     }
-    if (channel.equals("bungeeauth:logout")) {
+    if (channel.equals("bca:logout")) {
       ByteArrayDataInput in = ByteStreams.newDataInput(message);
       String uuidString = in.readUTF();
       UUID uuid = UUID.fromString(uuidString);
@@ -38,7 +38,7 @@ public class BCABPluginMessageListener implements PluginMessageListener {
       if (bcab.getAPI().isAuthenticated(uuid))
         bcab.getAPI().removeAuthenticated(uuid);;
     }
-    if (channel.equals("bungeeauth:sync")) {
+    if (channel.equals("bca:sync")) {
       ByteArrayDataInput in = ByteStreams.newDataInput(message);
       String uuidStringList = in.readUTF();
       if (uuidStringList == null)

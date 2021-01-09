@@ -53,16 +53,16 @@ public class AuthenticationListener implements Listener {
     if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().UnauthedLocation == null) {
+    if (bcab.getAPI().getConfigHandler().AuthenticatedLocation == null) {
       return;
     }
-    if (bcab.getAPI().isAuthenticated(event.getUniqueId())) {
+    if (!bcab.getAPI().isAuthenticated(event.getUniqueId())) {
       return;
     }
     if (!event.isOnline()) {
       return;
     }
-    event.asPlayer().teleport(bcab.getAPI().getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
+    event.asPlayer().teleport(bcab.getAPI().getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
   }
   
 }

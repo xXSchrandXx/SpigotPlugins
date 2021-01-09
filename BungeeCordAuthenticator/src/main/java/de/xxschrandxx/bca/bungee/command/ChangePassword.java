@@ -36,6 +36,10 @@ public class ChangePassword extends Command {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
+    if (!bcab.getAPI().isAuthenticated(player)) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordNotAuthenticated));
+      return;
+    }
     try {
       if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
         sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ChangePasswordNotRegistered));

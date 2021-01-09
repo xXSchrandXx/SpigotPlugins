@@ -32,6 +32,10 @@ public class Login extends Command {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
+    if (bcab.getAPI().isAuthenticated(player)) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginAlreadyAuthenticated));
+      return;
+  }
     try {
       if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
         sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginNotRegistered));

@@ -161,13 +161,13 @@ public class SQLHandler {
       "`uuid` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci," +
       "`playername` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
       "`password` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
-      "`status` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
+      "`status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
       "`pwtype` TINYINT(2) UNSIGNED NOT NULL," +
       "`registeredip` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
       "`registerdate` DATE NOT NULL DEFAULT '0001-01-01'," +
       "`lastip` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
       "`lastseen` DATETIME NOT NULL DEFAULT '0001-01-01 01:01:01'," +
-      "`version` TINYINT(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL," +
+      "`version` TINYINT(2) NOT NULL," +
       "PRIMARY KEY (`id`)" +
       ")"
       );
@@ -255,7 +255,7 @@ public class SQLHandler {
       " VALUES " +
       "(" +
       "'" + uuid.toString() + "'," +
-      "'" + playername + "'," +
+      "'" + playername.toLowerCase() + "'," +
       "'" + phash + "'," +
       "'" + ptype.toString() + "'," +
       "'" + regip + "'," +
@@ -288,7 +288,42 @@ public class SQLHandler {
       logger.warning("SQLHandler.setPassword | PasswordType is null, skipping");
       return;
     }
-    update("UPDATE `" + database + "`.`" + table + "` SET password = '" + newPw + "', pwtype = '" + pwType.toString() + "' WHERE `uuid` = '" + uuid.toString() + "'");
+    update("UPDATE `" + database + "`.`" + table + "` SET `password` = '" + newPw + "', pwtype = '" + pwType.toString() + "' WHERE `uuid` = '" + uuid.toString() + "'");
+  }
+
+  /**
+   * Sets the {@link UUID} for the given playername.
+   * @param playername The playername.
+   * @param uuid The {@link UUID}
+   * @throws SQLException {@link SQLException}
+   */
+  public void setUUID(String playername, UUID uuid) throws SQLException {
+    if (uuid == null) {
+      logger.warning("SQLHandler.setUUID | UUID is null, skipping");
+      return;
+    }
+    if (playername == null) {
+      logger.warning("SQLHandler.setUUID | playername is null, skipping");
+      return;
+    }
+    if (playername.isEmpty() || playername.isBlank()) {
+      logger.warning("SQLHandler.setUUID | playername is empty or blank, skipping");
+      return;
+    }
+    update("UPDATE `" + database + "`.`" + table + "` SET `uuid` = '" + uuid + "' WHERE `playername` = '" + playername.toLowerCase() + "'");
+  }
+
+  /**
+   * Sets the version for the given {@link UUID}
+   * @param uuid The {@link UUID}.
+   * @throws SQLException {@link SQLException}
+   */
+  public void setVersion(UUID uuid) throws SQLException {
+    if (uuid == null) {
+      logger.warning("SQLHandler.setUUID | UUID is null, skipping");
+      return;
+    }
+    update("UPDATE `" + database + "`.`" + table + "` SET `version` = " + version + " WHERE `uuid` = '" + uuid.toString() + "'");
   }
 
   /**
@@ -382,8 +417,9 @@ public class SQLHandler {
       String tmppassword = (String) tmpresult.get("password");
       uuids.put(tmpuuid, tmppassword);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getPassword | returns null.");
     return null;
   }
 
@@ -405,8 +441,9 @@ public class SQLHandler {
       Integer tmppwtype = (Integer) tmpresult.get("pwtype");
       uuids.put(tmpuuid, tmppwtype);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getType | returns null.");
     return null;
   }
 
@@ -429,9 +466,9 @@ public class SQLHandler {
       Timestamp tmpdate = (Timestamp) tmpresult.get("lastseen");
       uuids.put(tmpuuid, tmpdate);
     }
-    if (uuids.get(uuid) != null) {
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
-    }
+    logger.warning("SQLHandler.getLastSeen | returns null.");
     return null;
   }
 
@@ -454,9 +491,9 @@ public class SQLHandler {
       String tmpdate = (String) tmpresult.get("registerdate");
       uuids.put(tmpuuid, tmpdate);
     }
-    if (uuids.get(uuid) != null) {
+    if (uuids.containsKey(uuid))
       return regdateformat.parse(uuids.get(uuid));
-    }
+    logger.warning("SQLHandler.getRegisterDate | returns null.");
     return null;
   }
 
@@ -478,8 +515,9 @@ public class SQLHandler {
       String tmplastip = (String) tmpresult.get("lastip");
       uuids.put(tmpuuid, tmplastip);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getLastIP | returns null.");
     return null;
   }
 
@@ -501,8 +539,9 @@ public class SQLHandler {
       String tmpregtip = (String) tmpresult.get("registeredip");
       uuids.put(tmpuuid, tmpregtip);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getRegisteredIP | returns null.");
     return null;
   }
 
@@ -524,8 +563,9 @@ public class SQLHandler {
       OnlineStatus tmpstatus = OnlineStatus.valueOf((String) tmpresult.get("status"));
       uuids.put(tmpuuid, tmpstatus);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getStatus | returns null.");
     return null;
   }
 
@@ -535,20 +575,50 @@ public class SQLHandler {
    * @return The version of the entry or null if {@link UUID} is null.
    * @throws SQLException {@link SQLException}
    */
-  public String getVersion(UUID uuid) throws SQLException {
+  public Integer getVersion(UUID uuid) throws SQLException {
     if (uuid == null) {
       logger.warning("SQLHandler.getVersion | UUID is null, skipping");
       return null;
     }
     List<Map<String, Object>> result = query("SELECT `uuid`, `version` FROM `" + database + "`.`" + table + "` WHERE `uuid` = '" + uuid.toString() + "'");
-    ConcurrentHashMap<UUID, String> uuids = new ConcurrentHashMap<UUID, String>();
+    ConcurrentHashMap<UUID, Integer> uuids = new ConcurrentHashMap<UUID, Integer>();
     for (Map<String, Object> tmpresult : result) {
       UUID tmpuuid = UUID.fromString((String) tmpresult.get("uuid"));
-      String tmpversion = (String) tmpresult.get("version");
+      Integer tmpversion = (Integer) tmpresult.get("version");
       uuids.put(tmpuuid, tmpversion);
     }
-    if (uuids.get(uuid) != null)
+    if (uuids.containsKey(uuid))
       return uuids.get(uuid);
+    logger.warning("SQLHandler.getType | returns null.");
+    return null;
+  }
+
+    /**
+   * Gets the version of the entry from the given playername}.
+   * @param playername The playername for the version.
+   * @return The version of the entry or null if {@link UUID} is null.
+   * @throws SQLException {@link SQLException}
+   */
+  public Integer getVersion(String playername) throws SQLException {
+    if (playername == null) {
+      logger.warning("SQLHandler.getVersion | playername is null, skipping");
+      return null;
+    }
+    if (playername.isEmpty() || playername.isBlank()) {
+      logger.warning("SQLHandler.getVersion | playername is empty or blank, skipping");
+      return null;
+    }
+    playername = playername.toLowerCase();
+    List<Map<String, Object>> result = query("SELECT `playername`, `version` FROM `" + database + "`.`" + table + "` WHERE `playername` = '" + playername + "'");
+    ConcurrentHashMap<String, Integer> names = new ConcurrentHashMap<String, Integer>();
+    for (Map<String, Object> tmpresult : result) {
+      String tmpname = (String) tmpresult.get("playername");
+      Integer tmpversion = (Integer) tmpresult.get("version");
+      names.put(tmpname, tmpversion);
+    }
+    if (names.containsKey(playername))
+      return names.get(playername);
+    logger.warning("SQLHandler.getType | returns null.");
     return null;
   }
 
@@ -572,7 +642,8 @@ public class SQLHandler {
     }
     if (uuids.get(uuid) != null)
       return uuids.get(uuid);
-    return null;
+      logger.warning("SQLHandler.getName | returns null.");
+      return null;
   }
 
   /**
@@ -629,8 +700,9 @@ public class SQLHandler {
       UUID tmpuuid = UUID.fromString((String) tmpresult.get("uuid"));
       names.put(tmpname, tmpuuid);
     }
-    if (names.get(pName) != null)
+    if (names.containsKey(pName))
       return names.get(pName);
+    logger.warning("SQLHandler.getUUID | returns null.");
     return null;
   }
 

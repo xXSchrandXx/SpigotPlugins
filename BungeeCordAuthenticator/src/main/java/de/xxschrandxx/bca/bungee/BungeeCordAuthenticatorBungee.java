@@ -34,6 +34,10 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     getProxy().getPluginManager().registerListener(this, new SessionListener(this));
     getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(this));
 
+    getLogger().info("Successfully enabled BungeeCordAuthenticatorBungee.");
+    if (getAPI().getConfigHandler().isDebugging)
+      getLogger().info("Debbung enabled.");
+
   }
 
   public void onDisable() {

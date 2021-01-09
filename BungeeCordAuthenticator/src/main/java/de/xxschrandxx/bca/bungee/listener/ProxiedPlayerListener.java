@@ -1,6 +1,7 @@
 package de.xxschrandxx.bca.bungee.listener;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -37,12 +38,11 @@ public class ProxiedPlayerListener implements Listener {
     if (bcab.getAPI().isAuthenticated(player)) {
       return;
     }
+    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyServerSwitch));
     event.setCancelled(true);
-    //TODO Message:DenySwitch
   }
 
-  //Executing last because of other event.setCanceled(false) can be called
-  @EventHandler(priority = -100)
+  @EventHandler
   public void onChatSendEvent(ChatEvent event) {
     if (event.isCancelled()) {
       return;
@@ -60,12 +60,11 @@ public class ProxiedPlayerListener implements Listener {
     if (bcab.getAPI().isAuthenticated(player)) {
       return;
     }
+    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyMessageSend));
     event.setCancelled(true);
-    //TODO Message:MessageSend
   }
 
-  //Executing last because of other event.setCanceled(false) can be called
-  @EventHandler(priority = -100)
+  @EventHandler
   public void onCommandSendEvent(ChatEvent event) {
     if (event.isCancelled()) {
       return;
@@ -77,19 +76,18 @@ public class ProxiedPlayerListener implements Listener {
       return;
     }
     String command = event.getMessage().split(" ")[0].replaceFirst("/", "");
-    if (!bcab.getAPI().getConfigHandler().AllowedCommands.contains(command) || !command.equalsIgnoreCase("login") || !command.equalsIgnoreCase("register")) {
+    if (bcab.getAPI().getConfigHandler().AllowedCommands.contains(command) || command.equalsIgnoreCase("login") || command.equalsIgnoreCase("register")) {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) event.getSender();
     if (bcab.getAPI().isAuthenticated(player)) {
       return;
     }
+    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyCommandSend));
     event.setCancelled(true);
-    //TODO Message:CommandDenied
   }
 
-  //Executing last because of other event.setCanceled(false) can be called
-  @EventHandler(priority = -100)
+  @EventHandler
   public void onMessageReEvent(ChatEvent event) {
     if (event.isCancelled()) {
       return;
@@ -108,7 +106,6 @@ public class ProxiedPlayerListener implements Listener {
       return;
     }
     event.setCancelled(true);
-    //TODO Message:MessageReceive
   }
 
 }

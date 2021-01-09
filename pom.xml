@@ -142,37 +142,6 @@
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.2</version>
-        <executions>
-          <execution>
-            <id>Add API</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <inherited>true</inherited>
-            <configuration>
-              <relocations>
-                <relocation>
-                  <pattern>org.bstats</pattern>
-                  <shadedPattern>de.xxschrandxx</shadedPattern>
-                </relocation>
-              </relocations>
-              <artifactSet>
-                <includes>
-                  <include>de.xxschrandxx.api:SchrandAPI</include>
-                  <include>org.bstats:bstats-bukkit</include>
-                  <include>com.github.WesJD.AnvilGUI</include>
-                </includes>
-              </artifactSet>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>3.1.0</version>
         <executions>

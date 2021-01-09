@@ -68,6 +68,34 @@ public class SQLHandlerBungee extends SQLHandler {
   }
 
   /**
+   * Sets the {@link UUID} for the given {@link ProxiedPlayer}.
+   * {@link SQLHandler#setUUID(String, UUID)}
+   * @param player The {@link ProxiedPlayer} for the playername.
+   * @throws SQLException {@link SQLException}
+   */
+  public void setUUID(ProxiedPlayer player) throws SQLException {
+    if (player == null) {
+      logger.warning("SQLHandlerBungee.setPassword | ProxiedPlayer is null, skipping");
+      return;
+    }
+    setUUID(player.getName(), player.getUniqueId());
+  }
+
+  /**
+   * Sets the version for the given {@link ProxiedPlayer}.
+   * {@link SQLHandler#setVersion(UUID)}
+   * @param player The {@link ProxiedPlayer} for the {@link UUID}.
+   * @throws SQLException {@link SQLException}
+   */
+  public void setVersion(ProxiedPlayer player) throws SQLException {
+    if (player == null) {
+      logger.warning("SQLHandlerBungee.setPassword | ProxiedPlayer is null, skipping");
+      return;
+    }
+    setVersion(player.getUniqueId());
+  }
+
+  /**
    * Removes the entry for the given {@link ProxiedPlayer}.
    * {@link SQLHandler#removePlayerEntry(UUID)}
    * @param player The {@link ProxiedPlayer} to remvoe.
@@ -256,7 +284,7 @@ public class SQLHandlerBungee extends SQLHandler {
    * @return The version of the entry or null if {@link ProxiedPlayer} is null.
    * @throws SQLException {@link SQLException}
    */
-  public String getVersion(ProxiedPlayer player) throws SQLException {
+  public Integer getVersion(ProxiedPlayer player) throws SQLException {
     if (player == null) {
       logger.warning("SQLHandlerBungee.getVersion | ProxiedPlayer is null, skipping");
       return null;

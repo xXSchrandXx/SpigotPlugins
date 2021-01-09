@@ -36,7 +36,12 @@ public class Config {
         this.plugin.getDataFolder().mkdirs();
       if (!this.cfgFile.exists()) {
         try {
-          ConfigurationProvider.getProvider(YamlConfiguration.class).save(cfgd, cfgFile);
+          if (cfg != null)
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(cfg, cfgFile);
+          else if (cfgd != null)
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(cfgd, cfgFile);
+          else //Create empty config
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(new Configuration(), cfgFile);
         }
         catch (IOException e) {
           e.printStackTrace();

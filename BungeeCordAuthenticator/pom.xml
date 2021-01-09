@@ -43,28 +43,38 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <relocations>
-            <relocation>
-              <pattern>com.zaxxer</pattern>
-              <shadedPattern>de.xxschrandxx.lib.com.zaxxer</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.bstats</pattern>
-              <shadedPattern>de.xxschrandxx.lib.org.bstats</shadedPattern>
-            </relocation>
-          </relocations>
-          <artifactSet>
-            <includes>
-              <include>de.xxschrandxx.api:SchrandAPI:jar:*</include>
-              <include>org.bstats:bstats-bukkit:jar:*</include>
-              <include>com.zaxxer:HikariCP:jar:*</include>
-            </includes>
-          </artifactSet>
-        </configuration>
+        <version>3.2.2</version>
+        <executions>
+          <execution>
+            <id>Add API</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <inherited>true</inherited>
+            <configuration>
+              <relocations>
+                <relocation>
+                  <pattern>com.zaxxer</pattern>
+                  <shadedPattern>de.xxschrandxx.lib.com.zaxxer</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>de.xxschrandxx.lib.org.bstats</shadedPattern>
+                </relocation>
+              </relocations>
+              <artifactSet>
+                <includes>
+                  <include>de.xxschrandxx.api:SchrandAPI</include>
+                  <include>org.bstats:bstats-bukkit</include>
+                  <include>com.zaxxer:HikariCP:jar:*</include>
+                </includes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
-    </plugins>
+      </plugins>
   </build>
 
 </project>

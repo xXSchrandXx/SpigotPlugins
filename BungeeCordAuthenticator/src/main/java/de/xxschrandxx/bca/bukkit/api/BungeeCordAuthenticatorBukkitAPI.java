@@ -94,7 +94,6 @@ public class BungeeCordAuthenticatorBukkitAPI {
 
   public void askForSync(Player player) {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    out.writeUTF("sync");
     player.sendPluginMessage(bcab, "bungeeauth:sync", out.toByteArray());
   }
 

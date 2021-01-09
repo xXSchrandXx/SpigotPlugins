@@ -1,43 +1,47 @@
 package de.xxschrandxx.bca.bukkit.api;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
 
 public class ConfigHandler {
 
   private BungeeCordAuthenticatorBukkit bcab;
 
-  private Config configyml, messageyml;
-  
+  private File configyml, messageyml;
+
+  private YamlConfiguration config, message;
+
   public ConfigHandler(BungeeCordAuthenticatorBukkit bcab) {
     this.bcab = bcab;
-    
-    //Loading config.yml
+
+    // Loading config.yml
     loadConfig();
 
-    //Loading message.yml
+    // Loading message.yml
     loadMessage();
 
   }
 
-  //Config Values
-  //debug
+  // Config Values
+  // debug
   public Boolean isDebugging;
 
-  //Protection
+  // Protection
   public Boolean AllowMessageReceive;
   public Boolean AllowMessageSend;
   public List<String> AllowedCommands;
   public Boolean AllowMovement;
 
-  //Teleportation
+  // Teleportation
   public Boolean TeleportUnauthed;
   public Location UnauthedLocation;
 
@@ -45,76 +49,226 @@ public class ConfigHandler {
   public Location AuthenticatedLocation;
 
   public void loadConfig() {
-    configyml = new Config(bcab, "config.yml");
+    boolean error = false;
+    configyml = new File(bcab.getDataFolder(), "config.yml");
+    if (!configyml.exists()) {
+      try {
+        bcab.getDataFolder().mkdirs();
+        configyml.createNewFile();
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    config = YamlConfiguration.loadConfiguration(configyml);
     //Debug
-    configyml.get().addDefault("debug", false);
-    isDebugging = configyml.get().getBoolean("debug");
+    if (config.contains("debug")) {
+      isDebugging = config.getBoolean("debug");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | debug is missing, setting it...");
+      config.set("debug", false);
+    }
     //Protection
     //AllowMessageReceive
-    configyml.get().addDefault("protection.allowmessagereceive", false);
-    AllowMessageReceive = configyml.get().getBoolean("protection.allowmessagereceive");
+    if (config.contains("protection.allowmessagereceive")) {
+      AllowMessageReceive = config.getBoolean("protection.allowmessagereceive");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | protection.allowmessagereceive is missing, setting it...");
+      config.set("protection.allowmessagereceive", false);
+    }
     //AllowMessageSend
-    configyml.get().addDefault("protection.allowmessagesend", false);
-    AllowMessageSend = configyml.get().getBoolean("protection.allowmessagesend");
+    if (config.contains("protection.allowmessagesend")) {
+      AllowMessageSend = config.getBoolean("protection.allowmessagesend");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | protection.allowmessagesend is missing, setting it...");
+      config.set("protection.allowmessagesend", false);
+    }
     //AllowedCommands
-    List<String> allowedcommands = new ArrayList<String>();
-    allowedcommands.add("command1");
-    allowedcommands.add("command2");
-    configyml.get().addDefault("protection.allowedcommands", allowedcommands);
-    AllowedCommands = configyml.get().getStringList("protections.allowedcommands");
+    if (config.contains("protection.allowedcommands")) {
+      AllowedCommands = config.getStringList("protection.allowedcommands");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | protection.allowedcommands is missing, setting it...");
+      List<String> allowedcommands = new ArrayList<String>();
+      allowedcommands.add("command1");
+      allowedcommands.add("command2");
+      config.set("protection.allowedcommands", allowedcommands);
+    }
     //AllowMovement
-    configyml.get().addDefault("protection.allowmovement", false);
-    AllowMessageSend = configyml.get().getBoolean("protection.allowmovement");
+    if (config.contains("protection.allowmovement")) {
+      AllowMovement = config.getBoolean("protection.allowmovement");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | protection.allowmovement is missing, setting it...");
+      config.set("protection.allowmovement", false);
+    }
     //Teleportation
     //TeleportUnauthed
-    configyml.get().addDefault("teleportation.teleportunauthed", false);
-    TeleportUnauthed = configyml.get().getBoolean("teleportation.teleportunauthed");
+    if (config.contains("teleportation.unauthed.enable")) {
+      TeleportUnauthed = config.getBoolean("teleportation.unauthed.enable");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.enable is missing, setting it...");
+      config.set("teleportation.unauthed.enable", false);
+    }
     //UnauthedLocation
-    configyml.get().addDefault("teleportation.location.world", "world");
-    configyml.get().addDefault("teleportation.location.x", 0.0);
-    configyml.get().addDefault("teleportation.location.y", 0.0);
-    configyml.get().addDefault("teleportation.location.z", 0.0);
-    configyml.get().addDefault("teleportation.location.yaw", 0.0);
-    configyml.get().addDefault("teleportation.location.pitch", 0.0);
-    if (TeleportUnauthed) {
-      String worldname = configyml.get().getString("teleportation.location.world");
-      double x = configyml.get().getDouble("teleportation.location.x");
-      double y = configyml.get().getDouble("teleportation.location.y");
-      double z = configyml.get().getDouble("teleportation.location.z");
-      float yaw = configyml.get().getLong("teleportation.location.yaw");
-      float pitch = configyml.get().getLong("teleportation.location.pitch");
-      World world = null;
+    World world = null;
+    String worldname = null;
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    float yaw = 0;
+    float pitch = 0;
+    if (config.contains("teleportation.unauthed.location.world")) {
+      worldname = config.getString("teleportation.unauthed.location.world");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.world is missing, setting it...");
+      config.set("teleportation.unauthed.location.world", "world");
+    }
+    if (config.contains("teleportation.unauthed.location.x")) {
+      x = config.getDouble("teleportation.unauthed.location.x");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.x is missing, setting it...");
+      config.set("teleportation.unauthed.location.x", 0.0);
+    }
+    if (config.contains("teleportation.unauthed.location.y")) {
+      y = config.getDouble("teleportation.unauthed.location.y");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.y is missing, setting it...");
+      config.set("teleportation.unauthed.location.y", 0.0);
+    }
+    if (config.contains("teleportation.unauthed.location.z")) {
+      z = config.getDouble("teleportation.unauthed.location.z");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.z is missing, setting it...");
+      config.set("teleportation.unauthed.location.z", 0.0);
+    }
+    if (config.contains("teleportation.unauthed.location.yaw")) {
+      yaw = config.getLong("teleportation.unauthed.location.yaw");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.yaw is missing, setting it...");
+      config.set("teleportation.unauthed.location.yaw", 0.0);
+    }
+    if (config.contains("teleportation.unauthed.location.pitch")) {
+      pitch = config.getLong("teleportation.unauthed.location.pitch");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.pitch is missing, setting it...");
+      config.set("teleportation.unauthed.location.pitch", 0.0);
+    }
+    if (!error) {
       if ((world = Bukkit.getWorld(worldname)) != null) {
         UnauthedLocation = new Location(world, x, y, z, yaw, pitch);
       }
     }
     //TeleportAuthenticated
-    configyml.get().addDefault("teleportation.teleportunauthed", false);
-    TeleportAuthenticated = configyml.get().getBoolean("teleportation.teleportunauthed");
+    if (config.contains("teleportation.authed.enable")) {
+      TeleportAuthenticated = config.getBoolean("teleportation.authed.enable");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.enable is missing, setting it...");
+      config.set("teleportation.authed.enable", false);
+    }
     //AuthenticatedLocation
-    configyml.get().addDefault("teleportation.location.world", "world");
-    configyml.get().addDefault("teleportation.location.x", 0.0);
-    configyml.get().addDefault("teleportation.location.y", 0.0);
-    configyml.get().addDefault("teleportation.location.z", 0.0);
-    configyml.get().addDefault("teleportation.location.yaw", 0.0);
-    configyml.get().addDefault("teleportation.location.pitch", 0.0);
-    if (TeleportAuthenticated) {
-      String worldname = configyml.get().getString("teleportation.location.world");
-      double x = configyml.get().getDouble("teleportation.location.x");
-      double y = configyml.get().getDouble("teleportation.location.y");
-      double z = configyml.get().getDouble("teleportation.location.z");
-      float yaw = configyml.get().getLong("teleportation.location.yaw");
-      float pitch = configyml.get().getLong("teleportation.location.pitch");
-      World world = null;
-      if ((world = Bukkit.getWorld(worldname)) != null) {
-        AuthenticatedLocation = new Location(world, x, y, z, yaw, pitch);
+    World world2 = null;
+    String worldname2 = null;
+    double x2 = 0;
+    double y2 = 0;
+    double z2 = 0;
+    float yaw2 = 0;
+    float pitch2 = 0;
+    if (config.contains("teleportation.authed.location.world")) {
+      worldname2 = config.getString("teleportation.authed.location.world");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.world is missing, setting it...");
+      config.set("teleportation.authed.location.world", "world");
+    }
+    if (config.contains("teleportation.authed.location.x")) {
+      x2 = config.getDouble("teleportation.authed.location.x");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.x is missing, setting it...");
+      config.set("teleportation.authed.location.x", 0.0);
+    }
+    if (config.contains("teleportation.authed.location.y")) {
+      y2 = config.getDouble("teleportation.authed.location.y");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.y is missing, setting it...");
+      config.set("teleportation.authed.location.y", 0.0);
+    }
+    if (config.contains("teleportation.authed.location.z")) {
+      z2 = config.getDouble("teleportation.authed.location.z");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.z is missing, setting it...");
+      config.set("teleportation.authed.location.z", 0.0);
+    }
+    if (config.contains("teleportation.authed.location.yaw")) {
+      yaw2 = config.getLong("teleportation.authed.location.yaw");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.yaw is missing, setting it...");
+      config.set("teleportation.authed.location.yaw", 0.0);
+    }
+    if (config.contains("teleportation.authed.location.pitch")) {
+      pitch2 = config.getLong("teleportation.authed.location.pitch");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.pitch is missing, setting it...");
+      config.set("teleportation.authed.location.pitch", 0.0);
+    }
+    if (!error) {
+      if ((world2 = Bukkit.getWorld(worldname2)) != null) {
+        AuthenticatedLocation = new Location(world2, x2, y2, z2, yaw2, pitch2);
       }
+    }
+
+    if (error) {
+      saveConfig();
+      loadConfig();
     }
   }
 
   public void saveConfig() {
-    if (configyml != null)
-      configyml.save();
+    if (configyml == null)
+      return;
+    if (config == null)
+     return;
+    try {
+      config.save(configyml);
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   //Message Values
@@ -126,22 +280,62 @@ public class ConfigHandler {
   public String DenyCommandSend;
 
   public void loadMessage() {
-    messageyml = new Config(bcab, "message.yml");
+    boolean error = false;
+    messageyml = new File(bcab.getDataFolder(), "message.yml");
+    if (!messageyml.exists()) {
+      try {
+        bcab.getDataFolder().mkdirs();
+        messageyml.createNewFile();
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    message = YamlConfiguration.loadConfiguration(messageyml);
     //Prefix
-    configyml.get().addDefault("prefix", "&8[&6BCA&8]&7");
-    Prefix = configyml.get().getString("prefix");
+    if (message.contains("prefix")) {
+      Prefix = message.getString("prefix");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadMessage() | prefix is missing, setting it...");
+      message.set("prefix", "&8[&6BCA&8]&7 ");
+    }
     //DenyMessageSend
-    configyml.get().addDefault("denymessagesend", "You are not allowed to send chat messages.");
-    DenyMessageSend = configyml.get().getString("denymessagereceive");
+    if (message.contains("denymessagesend")) {
+      Prefix = message.getString("denymessagesend");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadMessage() | denymessagesend is missing, setting it...");
+      message.set("denymessagesend", "You are not allowed to send chat messages.");
+    }
     //DenyCommandSend
-    configyml.get().addDefault("denycommandsend", "You are not allowed to send commands.");
-    DenyCommandSend = configyml.get().getString("denycommandsend");
-
+    if (message.contains("denycommandsend")) {
+      Prefix = message.getString("denycommandsend");
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadMessage() | denycommandsend is missing, setting it...");
+      message.set("denycommandsend", "You are not allowed to send commands.");
+    }
+    if (error) {
+      saveMessage();
+      loadMessage();
+    }
   }
 
   public void saveMessage() {
-    if (messageyml != null)
-      messageyml.save();
+    if (messageyml == null)
+      return;
+    if (message == null)
+     return;
+    try {
+      message.save(messageyml);
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
 }
