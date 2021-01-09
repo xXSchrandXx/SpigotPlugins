@@ -11,17 +11,28 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class SessionListener implements Listener {
+public class BCABListener implements Listener {
   
   private BungeeCordAuthenticatorBungee bcab;
 
-  public SessionListener(BungeeCordAuthenticatorBungee bcab) {
+  public BCABListener(BungeeCordAuthenticatorBungee bcab) {
     this.bcab = bcab;
+  }
+
+  @EventHandler
+  public void onPostLoginKick(PostLoginEvent event) {
+    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+      return;
+    }
+    if (bcab.getAPI().hasOpenSession(event.getPlayer())) {
+      return;
+    }
+    bcab.getAPI().addUnauthedKick(event.getPlayer());
   }
 
   //Executing last because of other event.setCanceled(false) can be called
   @EventHandler(priority = -100)
-  public void onPreLogin(PostLoginEvent event) {
+  public void onPostLoginSession(PostLoginEvent event) {
     UUID uuid = event.getPlayer().getUniqueId();
     String playername = event.getPlayer().getName();
 

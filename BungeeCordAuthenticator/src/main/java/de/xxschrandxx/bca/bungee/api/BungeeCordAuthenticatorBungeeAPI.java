@@ -15,7 +15,7 @@ import com.google.common.io.ByteStreams;
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.event.*;
 import de.xxschrandxx.bca.bungee.api.password.PasswordHandler;
-import de.xxschrandxx.bca.bungee.api.task.SessionTask;
+import de.xxschrandxx.bca.bungee.api.task.*;
 import de.xxschrandxx.bca.core.OnlineStatus;
 import de.xxschrandxx.bca.core.SQLHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -49,6 +49,15 @@ public class BungeeCordAuthenticatorBungeeAPI {
   private ConcurrentHashMap<UUID, SessionTask> opensessions = new ConcurrentHashMap<UUID, SessionTask>();
   public ConcurrentHashMap<UUID, SessionTask> getOpenSessions() {
     return opensessions;
+  }
+
+  private ConcurrentHashMap<UUID, UnauthedTask> unauthedkick = new ConcurrentHashMap<UUID, UnauthedTask>();
+  public void addUnauthedKick(ProxiedPlayer player) {
+    if (!unauthedkick.containsKey(player.getUniqueId()))
+      unauthedkick.put(player.getUniqueId(), new UnauthedTask(bcab, player));
+  }
+  public ConcurrentHashMap<UUID, UnauthedTask> getUnauthedKick() {
+    return unauthedkick;
   }
 
   /** 
@@ -109,6 +118,10 @@ public class BungeeCordAuthenticatorBungeeAPI {
     out.writeUTF(uuid.toString());
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
       si.getValue().sendData("bca:login", out.toByteArray());
+    }
+    if (unauthedkick.containsKey(uuid)) {
+      unauthedkick.get(uuid).cancel();
+      unauthedkick.remove(uuid);
     }
   }
 

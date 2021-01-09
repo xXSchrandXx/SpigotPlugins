@@ -6,3 +6,11 @@ Versions:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1-SNAPSHOT/apidocs/)
     * [BungeeCordAuthenticator-javadoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1-SNAPSHOT/BungeeCordAuthenticator-0.0.1-SNAPSHOT-javadoc.jar)
     * [BungeeCordAuthenticator](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1-SNAPSHOT/BungeeCordAuthenticator-0.0.1-SNAPSHOT.jar)
+  * 0.0.1:
+    * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1/apidocs/)
+    * [BungeeCordAuthenticator-javadoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1/BungeeCordAuthenticator-0.0.1-javadoc.jar)
+    * [BungeeCordAuthenticator](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.1/BungeeCordAuthenticator-0.0.1.jar)
+  * 0.0.2-SNAPSHOT:
+    * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/apidocs/)
+    * [BungeeCordAuthenticator-javadoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/BungeeCordAuthenticator-0.0.2-SNAPSHOT-javadoc.jar)
+    * [BungeeCordAuthenticator](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/BungeeCordAuthenticator-0.0.2-SNAPSHOT.jar)

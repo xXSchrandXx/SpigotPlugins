@@ -88,6 +88,10 @@ public class ConfigHandler {
   public List<String> AllowedCommands;
   public Boolean AllowMessageReceive;
 
+  //UnauthedTask
+  public Boolean UnauthenticatedKickEnabled;
+  public Integer UnauthenticatedKickLength;
+
 
   public void loadConfig() {
     boolean error = false;
@@ -200,6 +204,25 @@ public class ConfigHandler {
       config.set("protection.allowedcommands", allowedcmds);
       error = true;
     }
+    //Unauthenticated
+    //UnauthenticatedKickEnabled
+    if (config.contains("unauthenticatedkick.enabled")) {
+      UnauthenticatedKickEnabled = config.getBoolean("unauthenticatedkick.enabled");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | unauthenticatedkick.enabled is not given. Setting it...");
+      config.set("unauthenticatedkick.enabled", false);
+      error = true;
+    }
+    //UnauthenticatedKickLength
+    if (config.contains("unauthenticatedkick.length")) {
+      UnauthenticatedKickLength = config.getInt("unauthenticatedkick.length");
+    }
+    else {
+      bcab.getLogger().warning("loadConfig() | unauthenticatedkick.length is not given. Setting it...");
+      config.set("unauthenticatedkick.length", 2);
+      error = true;
+    }
 
     if (isDebugging) {
       bcab.getLogger().info("DEBUG | " +
@@ -278,6 +301,9 @@ public class ConfigHandler {
   public String DenyServerSwitch;
   public String DenyMessageSend;
   public String DenyCommandSend;
+
+  //UnauthenticatedKick
+  public String UnauthenticatedKickMessage;
 
   public void loadMessage() {
     boolean error = false;
@@ -567,6 +593,15 @@ public class ConfigHandler {
     else {
       bcab.getLogger().warning("loadMessage() | protection.commandsend is not given. Setting it...");
       message.set("protection.commandsend", "You are not allowed to send commands.");
+      error = true;
+    }
+    //UnauthenticatedKickMessage
+    if (message.contains("unauthenticatedkick.message")) {
+      UnauthenticatedKickMessage = color(message.getString("unauthenticatedkick.message"));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | unauthenticatedkick.message is not given. Setting it...");
+      message.set("unauthenticatedkick.message", "It took you too long to log in.");
       error = true;
     }
 
