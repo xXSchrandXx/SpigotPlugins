@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>de.xxschrandxx.sss</groupId>
+  <artifactId>ServerStatusSign</artifactId>
+  <version>0.0.4-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20210110.183123</timestamp>
+      <buildNumber>4</buildNumber>
+    </snapshot>
+    <lastUpdated>20210110183123</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.0.4-20210110.183123-4</value>
+        <updated>20210110183123</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.0.4-20210110.183123-4</value>
+        <updated>20210110183123</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>javadoc</classifier>
+        <extension>jar</extension>
+        <value>0.0.4-20210110.183123-4</value>
+        <updated>20210110183123</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
