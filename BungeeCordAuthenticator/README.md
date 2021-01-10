@@ -14,3 +14,15 @@ Versions:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/apidocs/)
     * [BungeeCordAuthenticator-javadoc](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/BungeeCordAuthenticator-0.0.2-SNAPSHOT-javadoc.jar)
     * [BungeeCordAuthenticator](https://xxschrandxx.github.io/SpigotPlugins/BungeeCordAuthenticator/0.0.2-SNAPSHOT/BungeeCordAuthenticator-0.0.2-SNAPSHOT.jar)
+## Maven-Repo:
+```
+<repository>
+ <id>spigotplugins-repo</id>
+ <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
+</repository>
+<dependency>
+  <groupId>de.xxschrandxx.bca</groupId>
+  <artifactId>BungeeCordAuthenticator</artifactId>
+  <version>`VERSION`</version>
+</dependency>
+```
