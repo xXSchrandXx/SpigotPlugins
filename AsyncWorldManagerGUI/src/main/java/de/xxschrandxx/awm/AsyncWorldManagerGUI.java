@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui;
+package de.xxschrandxx.awm;
 
 import java.util.logging.Level;
 
@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.xxschrandxx.api.minecraft.message.*;
 import de.xxschrandxx.api.minecraft.*;
-import de.xxschrandxx.awm.gui.menus.*;
+import de.xxschrandxx.awm.menus.*;
 
 public class AsyncWorldManagerGUI extends JavaPlugin {
 

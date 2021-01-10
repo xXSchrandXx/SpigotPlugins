@@ -1,10 +1,10 @@
-package de.xxschrandxx.awm.gui;
+package de.xxschrandxx.awm;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import de.xxschrandxx.awm.gui.menus.MenuManager;
+import de.xxschrandxx.awm.menus.MenuManager;
 
 public class DisconnectListener implements Listener {
   @EventHandler

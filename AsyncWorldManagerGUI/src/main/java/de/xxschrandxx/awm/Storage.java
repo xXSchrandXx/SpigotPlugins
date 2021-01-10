@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui;
+package de.xxschrandxx.awm;
 
 import java.util.ArrayList;
 import java.util.List;

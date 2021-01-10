@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui;
+package de.xxschrandxx.awm;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.chat.HoverEvent;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
-import de.xxschrandxx.awm.gui.menus.*;
+import de.xxschrandxx.awm.menus.*;
 
 public class CMDAsyncWorldManagerGUI implements CommandExecutor, TabCompleter {
 

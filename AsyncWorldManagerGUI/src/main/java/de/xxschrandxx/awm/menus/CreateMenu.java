@@ -1,10 +1,10 @@
-package de.xxschrandxx.awm.gui.menus;
+package de.xxschrandxx.awm.menus;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+import de.xxschrandxx.awm.menus.MenuManager.MenuForm;
 
 public final class CreateMenu extends Menu {
 

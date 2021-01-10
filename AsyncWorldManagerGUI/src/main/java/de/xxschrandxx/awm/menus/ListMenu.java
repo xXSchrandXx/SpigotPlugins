@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui.menus;
+package de.xxschrandxx.awm.menus;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,9 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import de.xxschrandxx.api.minecraft.awm.WorldStatus;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
-import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
-import de.xxschrandxx.awm.gui.Storage;
-import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+import de.xxschrandxx.awm.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.Storage;
+import de.xxschrandxx.awm.menus.MenuManager.MenuForm;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 public final class ListMenu extends Menu {

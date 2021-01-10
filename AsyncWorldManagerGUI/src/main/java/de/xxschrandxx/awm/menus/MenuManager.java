@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui.menus;
+package de.xxschrandxx.awm.menus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +26,8 @@ import de.xxschrandxx.awm.api.modifier.Modifier;
 import de.xxschrandxx.awm.api.config.WorldConfigManager;
 import de.xxschrandxx.awm.api.config.WorldData;
 import de.xxschrandxx.awm.api.gamerulemanager.Rule;
-import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
-import de.xxschrandxx.awm.gui.Storage;
+import de.xxschrandxx.awm.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.Storage;
 
 public class MenuManager {
 

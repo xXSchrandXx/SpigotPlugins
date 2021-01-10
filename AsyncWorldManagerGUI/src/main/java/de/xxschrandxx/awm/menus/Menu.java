@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui.menus;
+package de.xxschrandxx.awm.menus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,8 +8,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
-import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+import de.xxschrandxx.awm.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.menus.MenuManager.MenuForm;
 
 public class Menu implements InventoryHolder, Listener {
 

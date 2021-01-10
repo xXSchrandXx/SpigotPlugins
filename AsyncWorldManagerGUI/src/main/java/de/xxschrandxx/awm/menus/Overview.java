@@ -1,4 +1,4 @@
-package de.xxschrandxx.awm.gui.menus;
+package de.xxschrandxx.awm.menus;
 
 import java.util.logging.Level;
 
@@ -8,9 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.xxschrandxx.awm.gui.AsyncWorldManagerGUI;
-import de.xxschrandxx.awm.gui.Storage;
-import de.xxschrandxx.awm.gui.menus.MenuManager.MenuForm;
+import de.xxschrandxx.awm.AsyncWorldManagerGUI;
+import de.xxschrandxx.awm.Storage;
+import de.xxschrandxx.awm.menus.MenuManager.MenuForm;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 public final class Overview extends Menu {
