@@ -26,6 +26,7 @@
     <module>SchrandAPI</module>
     <module>NetherPortalGate</module>
     <module>ServerStatusSign</module>
+    <module>WoltlabAPI</module>
   </modules>
 
   <repositories>

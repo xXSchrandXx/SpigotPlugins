@@ -1,0 +1,6 @@
+name: ${project.artifactId}Bungee
+main: ${project.groupId}.bungee.WoltlabAPIBungee
+version: ${project.version}
+author: xXSchrandXx
+description: ${project.artifactId}Bungee
+softdepend: []
