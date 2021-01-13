@@ -133,9 +133,9 @@ public class SQLHandler {
   }
 
   /**
-   * Checks weather the table exisits.
-   * @param table THe name of the table.
-   * @return Weatehr the table exists.
+   * Checks if the table exisits.
+   * @param table The name of the table.
+   * @return Weather the table exists.
    * @throws SQLException {@link SQLException}
    */
   public Boolean existsTable(String table) throws SQLException {
@@ -146,6 +146,12 @@ public class SQLHandler {
       return true;
   }
 
+  /**
+   * Check if the table has a uuid column.
+   * @param table The table name.
+   * @return Weather the table has the uuid column.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean existsUUIDinTable(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = '" + database + "' AND `TABLE_NAME` = '" + table + "'");
     ArrayList<String> columns = new ArrayList<String>();
@@ -159,6 +165,12 @@ public class SQLHandler {
       return false;
   }
 
+  /**
+   * Check if the table has a mcName column.
+   * @param table The table name.
+   * @return Weather the table has the uuid column.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean existsMCNameinTable(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = '" + database + "' AND `TABLE_NAME` = '" + table + "'");
     ArrayList<String> columns = new ArrayList<String>();
@@ -172,6 +184,31 @@ public class SQLHandler {
       return false;
   }
 
+  /**
+   * Check if https://shop.fabihome.de/product/7-minecraft-verifikation/ is installed.
+   * @param table The table name. E.g. 'wcf1_package'.
+   * @return Weather the package is installed.
+   * @throws SQLException {@link SQLException}
+   */
+  public Boolean hasMinecraftIntegrationInstalled(String table) throws SQLException {
+    List<Map<String, Object>> result = query("SELECT `package` FROM `" + database + "`.`" + table + "` WHERE `package` = 'de.fabihome.minecraft'");
+    ArrayList<String> packages = new ArrayList<String>();
+    for (Map<String, Object> tmpresult : result) {
+      String tmppackage = (String) tmpresult.get("package");
+      packages.add(tmppackage);
+    }
+    if (packages.isEmpty())
+      return false;
+    else
+      return true;
+  }
+
+  /**
+   * Check if the tabke has a isVerified column.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @return Weather the table has the isVerified column.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean existsisVerifiedinTable(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = '" + database + "' AND `TABLE_NAME` = '" + table + "'");
     ArrayList<String> columns = new ArrayList<String>();
@@ -185,6 +222,13 @@ public class SQLHandler {
       return false;
   }
 
+  /**
+   * Gets the userID for the given {@link UUID}.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param uuid The {@link UUID}.
+   * @return The userID or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public Integer getUserIDfromUUID(String table, UUID uuid) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `uuid`, `userID` FROM `" + database + "`.`" + table + "` WHERE `uuid` = '" + uuid.toString() + "'");
     ConcurrentHashMap<UUID, Integer> uuids = new ConcurrentHashMap<UUID, Integer>();
@@ -199,6 +243,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the userID for the given Minecraft-Name.
+   * @param table The talbe name. E.g. 'wcf1_user'.
+   * @param mcName The Minecraft-Name.
+   * @return The userID or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   @Deprecated
   public Integer getUserIDfromMCName(String table, String mcName) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `mcName`, `userID` FROM `" + database + "`.`" + table + "` WHERE `mcName` = '" + mcName + "'");
@@ -214,6 +265,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the userID for the given Forum-Name.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param ForumName The Forum-Name.
+   * @return The userID or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public Integer getUserIDfromForumName(String table, String ForumName) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `username`, `userID` FROM `" + database + "`.`" + table + "` WHERE `username` = '" + ForumName + "'");
     ConcurrentHashMap<String, Integer> names = new ConcurrentHashMap<String, Integer>();
@@ -228,6 +286,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the {@link UUID} for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The {@link UUID} or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public UUID getUUIDfromUserID(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `uuid` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, UUID> userIDs = new ConcurrentHashMap<Integer, UUID>();
@@ -242,6 +307,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Ges the hashed Password for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The hashed password or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public String getHashedPassword(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `password` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, String> userIDs = new ConcurrentHashMap<Integer, String>();
@@ -256,6 +328,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the online-groupID for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The online-groupID or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public String getUserOnlineGroupID(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `userOnlineGroupID` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, String> userIDs = new ConcurrentHashMap<Integer, String>();
@@ -270,6 +349,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the rankID for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The rankID or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public Integer getUserRankID(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `rankID` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, Integer> userIDs = new ConcurrentHashMap<Integer, Integer>();
@@ -284,6 +370,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets weather the userID is banned.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return Weather the userID is banned.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean isUserIDBanned(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `banExpires` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, Integer> userIDs = new ConcurrentHashMap<Integer, Integer>();
@@ -298,6 +391,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets the email for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID
+   * @return The email or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public String getEmail(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `email` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, String> userIDs = new ConcurrentHashMap<Integer, String>();
@@ -312,6 +412,13 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Gets a {@link List} of the groupIDs for the given userID.
+   * @param table The table name. E.g. 'wcf1_user_to_group'.
+   * @param userID The userID.
+   * @return A {@link List} of the groupIDs.
+   * @throws SQLException {@link SQLException}
+   */
   public List<Integer> getGroupIDs(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `groupID` FROM `" + database + "`.`" + table + "` WHERE `userID`= '" + userID + "'");
     List<Integer> groupdis = new ArrayList<Integer>();
@@ -322,6 +429,13 @@ public class SQLHandler {
     return groupdis;
   }
 
+  /**
+   * Gets the activitypoints for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The activity points or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public Integer getActivityPoints(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `activityPoints` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, Integer> activitypoints = new ConcurrentHashMap<Integer, Integer>();
@@ -336,6 +450,12 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Check if https://wbbsupport.de/filebase/entry/14-freunde-system-woltlab-suite/ is installed. 
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @return Weather the friend-system is installed.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean hasFriendsInstalled(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `package` FROM `" + database + "`.`" + table + "` WHERE `package` = 'de.wbbsupport.wsc.friends'");
     ArrayList<String> packages = new ArrayList<String>();
@@ -349,9 +469,16 @@ public class SQLHandler {
       return true;
   }
 
-  public ArrayList<Integer> getFriends(String table, Integer userID) throws SQLException {
+  /**
+   * Gets a {@link List} of friends as userIDs for the given userID.
+   * @param table The table name. E.g. 'wcf1_user_friend'.
+   * @param userID The userID.
+   * @return A {@link List} of friends as userIDs.
+   * @throws SQLException {@link SQLException}
+   */
+  public List<Integer> getFriends(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userFromID`, `userToID` FROM `" + database + "`.`" + table + "` WHERE (`userFromID` = '" + userID + "' OR `userToID` = '" + userID + "') AND `state` = 1");
-    ArrayList<Integer> friendslist = new ArrayList<Integer>();
+    List<Integer> friendslist = new ArrayList<Integer>();
     for (Map<String, Object> tmpresult : result) {
       Integer tmpuserfromid = (Integer) tmpresult.get("userFromID");
       Integer tmpusertoid = (Integer) tmpresult.get("userToID");
@@ -366,6 +493,12 @@ public class SQLHandler {
     return friendslist;
   }
 
+  /**
+   * Check if https://pluginstore.woltlab.com/file/2283-jcoins/ is installed.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @return Weather jCoins is installed.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean hasJCoinsInstalled(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `package` FROM `" + database + "`.`" + table + "` WHERE `package` = 'de.wcflabs.wcf.jcoins' OR `package` = 'de.wcflabs.wbb.jcoins'");
     ArrayList<String> packages = new ArrayList<String>();
@@ -379,6 +512,13 @@ public class SQLHandler {
       return true;
   }
 
+  /**
+   * Gets the amount of jCoins for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return The amount of jCoins or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
   public Integer getJCoinsAmoutn(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `jCoinsAmount`, `userID` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
     ConcurrentHashMap<Integer, Integer> userIDs = new ConcurrentHashMap<Integer, Integer>();
@@ -393,6 +533,12 @@ public class SQLHandler {
       return null;
   }
 
+  /**
+   * Checks if https://pluginstore.woltlab.com/file/2992-teamspeak-api/ is installed.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @return Weather teamspeak-api is installed.
+   * @throws SQLException {@link SQLException}
+   */
   public Boolean hasTeamspeakAPIInstalled(String table) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `package` FROM `" + database + "`.`" + table + "` WHERE `package` = 'eu.hanashi.wsc.teamspeak-api'");
     ArrayList<String> packages = new ArrayList<String>();
@@ -406,9 +552,16 @@ public class SQLHandler {
       return true;
   }
 
-  public ArrayList<String> getTeamSpeakUIDs(String table, Integer userID) throws SQLException {
+  /**
+   * Gets a {@link List} of TeamspeakUIDs for the given userID.
+   * @param table The table name. E.g. 'wcf1_user'.
+   * @param userID The userID.
+   * @return A {@link List} of TeamspeakUIDs or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
+  public List<String> getTeamSpeakUIDs(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `teamSpeakUID` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
-    ArrayList<String> userIDs = new ArrayList<String>();
+    List<String> userIDs = new ArrayList<String>();
     for (Map<String, Object> tmpresult : result) {
       String tmojCoins = (String) tmpresult.get("teamSpeakUID");
       userIDs.add(tmojCoins);
