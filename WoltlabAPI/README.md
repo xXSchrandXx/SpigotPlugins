@@ -22,3 +22,4 @@ Versions:
 ## Setting stuff:
 Do not modify database values unless you know what you are doing.
 Create a page wich will listen to your changes.
+E.g. https://github.com/xXSchrandXx/SimplejCoinsListener

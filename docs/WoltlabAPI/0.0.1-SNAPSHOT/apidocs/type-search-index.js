@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"de.xxschrandxx.wsc.core","l":"jCoinsGiver"},{"p":"de.xxschrandxx.wsc.core","l":"SQLHandler"},{"p":"de.xxschrandxx.wsc.bukkit","l":"WoltlabAPIBukkit"},{"p":"de.xxschrandxx.wsc.bungee","l":"WoltlabAPIBungee"}];updateSearchResults();
