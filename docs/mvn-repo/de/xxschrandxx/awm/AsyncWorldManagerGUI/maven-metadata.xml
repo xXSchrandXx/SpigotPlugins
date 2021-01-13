@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-  <groupId>de.xxschrandxx.awm.gui</groupId>
+  <groupId>de.xxschrandxx.awm</groupId>
   <artifactId>AsyncWorldManagerGUI</artifactId>
   <versioning>
     <versions>
       <version>0.0.1-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20210110183105</lastUpdated>
+    <lastUpdated>20210113224825</lastUpdated>
   </versioning>
 </metadata>
