@@ -20,13 +20,13 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class SQLHandler {
 
-  private HikariDataSource hikari;
+  protected HikariDataSource hikari;
 
-  private String database;
+  protected String database;
 
   protected Logger logger;
 
-  private Boolean isdebug;
+  protected Boolean isdebug;
 
   /**
    * Creates a {@link HikariDataSource}.
@@ -50,7 +50,7 @@ public class SQLHandler {
     hikari = new HikariDataSource(config);
   }
 
-  private final Connection getConnection() throws SQLException {
+  protected final Connection getConnection() throws SQLException {
     if (hikari == null) {
       throw new SQLException("Unable to get a connection from the pool. (hikari is null)");
     }

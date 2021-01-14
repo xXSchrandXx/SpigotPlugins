@@ -29,7 +29,7 @@ public class jCoinsGiver {
      * @throws ProtocolException {@link ProtocolException}
      * @throws SecurityException {@link SecurityException}
      */
-  public List<String> sendMoney(String url, String secretkey, Integer authorID, String authorname, Boolean moderative, Integer receiveruserID, Integer amount, String reason) throws IOException, ProtocolException, SecurityException {
+  public static List<String> sendMoney(String url, String secretkey, Integer authorID, String authorname, Boolean moderative, Integer receiveruserID, Integer amount, String reason) throws IOException, ProtocolException, SecurityException {
     List<String> result = new ArrayList<String>();
     String urlString = url +
         "&secretkey=" + secretkey +
