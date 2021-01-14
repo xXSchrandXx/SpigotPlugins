@@ -22,4 +22,4 @@ Versions:
 ## Setting stuff:
 Do not modify database values unless you know what you are doing.
 Create a page wich will listen to your changes.
-E.g. https://github.com/xXSchrandXx/SimplejCoinsListener
+E.g. [SimplejCoinsListener-Package](https://github.com/xXSchrandXx/SimplejCoinsListener) with [jCoinsGiver-Class](https://github.com/xXSchrandXx/SpigotPlugins/blob/master/WoltlabAPI/src/main/java/de/xxschrandxx/wsc/core/jCoinsGiver.java)
