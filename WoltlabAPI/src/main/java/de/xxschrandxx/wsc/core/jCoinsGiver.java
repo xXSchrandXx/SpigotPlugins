@@ -16,9 +16,9 @@ public class jCoinsGiver {
 
     /**
      * Sends jCoins to https://github.com/xXSchrandXx/SimplejCoinsListener 
-     * @param url The {@link URL}.
+     * @param url The url String.
      * @param secretkey The secret key.
-     * @param authorID The authors ID.
+     * @param authorID The authors ID. Has to be an existing admin ID!
      * @param authorname The authors name.
      * @param moderative Weather this is moderative.
      * @param receiveruserID The receivers ID.
