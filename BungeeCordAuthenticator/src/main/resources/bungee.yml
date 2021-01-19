@@ -1,6 +1,6 @@
 name: ${project.artifactId}Bungee
-main: ${project.groupId}.bungee.BungeeCordAuthenticatorBungee
+main: ${project.groupId}.bungee.${project.artifactId}Bungee
 version: ${project.version}
 author: xXSchrandXx
 description: ${project.artifactId}Bungee
-softdepend: []
+loadbefore: [FastLogin]

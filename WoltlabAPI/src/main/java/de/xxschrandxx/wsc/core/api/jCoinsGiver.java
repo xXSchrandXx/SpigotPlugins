@@ -1,4 +1,4 @@
-package de.xxschrandxx.wsc.core;
+package de.xxschrandxx.wsc.core.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;

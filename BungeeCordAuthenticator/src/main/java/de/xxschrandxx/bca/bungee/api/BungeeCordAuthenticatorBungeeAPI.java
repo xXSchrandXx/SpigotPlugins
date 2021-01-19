@@ -263,17 +263,9 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.sync | ProxiedPlayer is null, skipping");
       return;
     }
-    String uuidlistString = null;
-    for (UUID uuid : getAuthenticated()) {
-      if (uuidlistString == null) {
-        uuidlistString =  uuid.toString();
-      }
-      else {
-        uuidlistString = uuidlistString + ";" + uuid.toString();
-      }
-    }
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    out.writeUTF(uuidlistString);
+    String message = player.getUniqueId().toString() + ";" + isAuthenticated(player);
+    out.writeUTF(message);
     player.sendData("bca:sync", out.toByteArray());
   }
 

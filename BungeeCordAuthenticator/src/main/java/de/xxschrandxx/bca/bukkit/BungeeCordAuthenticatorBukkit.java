@@ -15,16 +15,9 @@ public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
     return api;
   }
 
-  public boolean isSync = false;
-
   public void onEnable() {
 
     api = new BungeeCordAuthenticatorBukkitAPI(this);
-    
-    getServer().getMessenger().registerIncomingPluginChannel(this, "bca:login", new BCABPluginMessageListener(this));
-    getServer().getMessenger().registerIncomingPluginChannel(this, "bca:logout", new BCABPluginMessageListener(this));
-    getServer().getMessenger().registerOutgoingPluginChannel(this, "bca:sync");
-    getServer().getMessenger().registerIncomingPluginChannel(this, "bca:sync", new BCABPluginMessageListener(this));
 
     getServer().getPluginManager().registerEvents(new AuthenticationListener(this), this);
     getServer().getPluginManager().registerEvents(new BlockListener(this), this);

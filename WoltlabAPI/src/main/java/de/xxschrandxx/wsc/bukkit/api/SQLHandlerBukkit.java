@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import de.xxschrandxx.wsc.core.SQLHandler;
+import de.xxschrandxx.wsc.core.api.SQLHandler;
 
 public class SQLHandlerBukkit extends SQLHandler {
 

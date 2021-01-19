@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>de.xxschrandxx</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>WoltlabSyncer</artifactId>
+  <groupId>de.xxschrandxx.wsc</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <dependencies>
+
+    <!-- WoltlabAPI -->
+    <dependency>
+      <groupId>de.xxschrandxx.wsc</groupId>
+      <artifactId>WoltlabAPI</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.2</version>
+        <executions>
+          <execution>
+            <id>Add API</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <inherited>true</inherited>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>de.xxschrandxx.wsc:WoltlabAPI:jar:*</include>
+                </includes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      </plugins>
+  </build>
+
+</project>

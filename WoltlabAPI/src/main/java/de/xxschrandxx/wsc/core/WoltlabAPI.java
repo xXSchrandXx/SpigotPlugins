@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.Logger;
 
+import de.xxschrandxx.wsc.core.api.SQLHandler;
+
 public class WoltlabAPI {
 
   protected Boolean isDebug;
@@ -13,16 +15,26 @@ public class WoltlabAPI {
 
   protected SQLHandler sql;
 
+  /**
+   * Gets the {@link SQLHandler}.
+   * @return {@link SQLHandler}.
+   */
   public SQLHandler getSQL() {
     return sql;
   }
 
   public WoltlabAPI(SQLHandler sql) {
     this.sql = sql;
-    this.isDebug = sql.isdebug;
-    this.Logger = sql.logger;
+    this.isDebug = sql.isDebug();
+    this.Logger = sql.getLogger();
   }
 
+  /**
+   * Creates the default HikariCPConfig {@link File}.
+   * @param parent The parent directory.
+   * @return The HikariCPConfig {@link File}.
+   * @throws IOException {@link IOException}
+   */
   public static File createDefaultHikariCPConfig(File parent) throws IOException {
     File hikariconfigfile = new File(parent, "hikariconfig.properties");
     if (!hikariconfigfile.exists()) {

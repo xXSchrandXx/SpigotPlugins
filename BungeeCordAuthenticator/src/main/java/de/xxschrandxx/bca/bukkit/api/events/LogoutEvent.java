@@ -1,8 +1,5 @@
 package de.xxschrandxx.bca.bukkit.api.events;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -12,35 +9,18 @@ import org.bukkit.event.HandlerList;
  */
 public class LogoutEvent extends Event {
 
-  private final UUID uuid;
+  private final Player player;
 
-  public LogoutEvent(UUID uuid) {
-    this.uuid = uuid;
+  public LogoutEvent(Player player) {
+    this.player = player;
   }
 
   /**
-   * Gets the {@link UUID} for the event.
-   * @return The {@link UUID}.
+   * Gets the {@link Player} for the event.
+   * @return The {@link Player}.
    */
-  public UUID getUniqueId() {
-    return uuid;
-  }
-
-  /**
-   * Gets the {@link Player} for the Event.
-   * Be careful! This may return null if the {@link Player} is not on this server.
-   * @return The {@link Player} or null if {@link Player} is offline.
-   */
-  public Player asPlayer() {
-    return Bukkit.getPlayer(uuid);
-  }
-
-  /**
-   * Gets weahter the {@link Player} is online on this server.
-   * @return Weather the {@link Player} is online on this server.
-   */
-  public boolean isOnline() {
-    return asPlayer() != null;
+  public Player get() {
+    return player;
   }
 
   private static final HandlerList handlers = new HandlerList();

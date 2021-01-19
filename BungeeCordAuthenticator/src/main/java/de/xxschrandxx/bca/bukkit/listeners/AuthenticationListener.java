@@ -17,7 +17,15 @@ public class AuthenticationListener implements Listener {
     this.bcab = bcab;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  public void onPreJoin(PlayerJoinEvent event) {
+    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+      return;
+    }
+    bcab.getAPI().getMessenger().askFor(event.getPlayer());
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
   public void onJoin(PlayerJoinEvent event) {
     if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
       return;
@@ -39,13 +47,10 @@ public class AuthenticationListener implements Listener {
     if (bcab.getAPI().getConfigHandler().UnauthedLocation == null) {
       return;
     }
-    if (bcab.getAPI().isAuthenticated(event.getUniqueId())) {
+    if (bcab.getAPI().isAuthenticated(event.get())) {
       return;
     }
-    if (!event.isOnline()) {
-      return;
-    }
-    event.asPlayer().teleport(bcab.getAPI().getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
+    event.get().teleport(bcab.getAPI().getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
@@ -56,13 +61,10 @@ public class AuthenticationListener implements Listener {
     if (bcab.getAPI().getConfigHandler().AuthenticatedLocation == null) {
       return;
     }
-    if (!bcab.getAPI().isAuthenticated(event.getUniqueId())) {
+    if (!bcab.getAPI().isAuthenticated(event.get())) {
       return;
     }
-    if (!event.isOnline()) {
-      return;
-    }
-    event.asPlayer().teleport(bcab.getAPI().getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
+    event.get().teleport(bcab.getAPI().getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
   }
   
 }

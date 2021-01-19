@@ -19,6 +19,16 @@ Versions:
 </dependency>
 ```
 
+## Usage:
+### BungeeCord:
+```
+
+```
+### Bukkit:
+```
+
+```
+
 ## Setting stuff:
 Do not modify database values unless you know what you are doing.
 Create a page wich will listen to your changes.

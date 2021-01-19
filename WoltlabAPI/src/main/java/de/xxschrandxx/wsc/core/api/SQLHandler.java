@@ -1,4 +1,4 @@
-package de.xxschrandxx.wsc.core;
+package de.xxschrandxx.wsc.core.api;
 
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -21,12 +21,24 @@ import com.zaxxer.hikari.HikariDataSource;
 public class SQLHandler {
 
   protected HikariDataSource hikari;
+  public HikariDataSource getDataSource() {
+    return hikari;
+  }
 
   protected String database;
+  public String getDatabase() {
+    return database;
+  }
 
   protected Logger logger;
+  public Logger getLogger() {
+    return logger;
+  }
 
   protected Boolean isdebug;
+  public Boolean isDebug() {
+    return isdebug;
+  }
 
   /**
    * Creates a {@link HikariDataSource}.

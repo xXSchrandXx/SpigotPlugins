@@ -30,7 +30,6 @@ public class BCABListener implements Listener {
     bcab.getAPI().addUnauthedKick(event.getPlayer());
   }
 
-  //Executing last because of other event.setCanceled(false) can be called
   @EventHandler(priority = -100)
   public void onPostLoginSession(PostLoginEvent event) {
     UUID uuid = event.getPlayer().getUniqueId();

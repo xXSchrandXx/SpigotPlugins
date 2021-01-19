@@ -12,7 +12,12 @@ public class WoltlabAPIBukkit extends WoltlabAPI {
   public SQLHandlerBukkit getSQL() {
     return (SQLHandlerBukkit) sql;
   }
-
+  /**
+   * Create a new {@link WoltlabAPI} for Bukkit.
+   * @param SQLProperties The {@link Path} to the HikariCP config file.
+   * @param Logger The {@link Logger} for debug messages.
+   * @param isDebug Weather debug messages should get logged.
+   */
   public WoltlabAPIBukkit(Path SQLProperties, Logger Logger, Boolean isDebug) {
     super(new SQLHandlerBukkit(SQLProperties, Logger, isDebug));
   }

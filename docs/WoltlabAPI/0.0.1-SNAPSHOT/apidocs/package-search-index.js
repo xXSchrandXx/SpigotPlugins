@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.wsc.bukkit"},{"l":"de.xxschrandxx.wsc.bukkit.api"},{"l":"de.xxschrandxx.wsc.bungee"},{"l":"de.xxschrandxx.wsc.bungee.api"},{"l":"de.xxschrandxx.wsc.core"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.wsc.bukkit"},{"l":"de.xxschrandxx.wsc.bukkit.api"},{"l":"de.xxschrandxx.wsc.bungee"},{"l":"de.xxschrandxx.wsc.bungee.api"},{"l":"de.xxschrandxx.wsc.core"},{"l":"de.xxschrandxx.wsc.core.api"}];updateSearchResults();
