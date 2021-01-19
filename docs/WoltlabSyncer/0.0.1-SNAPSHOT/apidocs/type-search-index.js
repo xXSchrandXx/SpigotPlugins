@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"de.xxschrandxx.wsc.bukkit.api","l":"ConfigHandlerBukkit"},{"p":"de.xxschrandxx.wsc.bungee.api","l":"ConfigHandlerBungee"},{"p":"de.xxschrandxx.wsc.bukkit","l":"WoltlabSyncerBukkit"},{"p":"de.xxschrandxx.wsc.bungee","l":"WoltlabSyncerBungee"}];updateSearchResults();
