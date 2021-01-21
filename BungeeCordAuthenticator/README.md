@@ -26,3 +26,35 @@ Versions:
   <version>`VERSION`</version>
 </dependency>
 ```
+## API Usage:
+<details>
+<summary>BungeeCord</summary>
+
+``` JAVA
+public BungeeCordAuthenticatorBungeeAPI getBungeeCordAuthenticatorAPI() {
+  if (getProxy().getPluginManager().getPlugin("BungeeCordAuthenticatorBungee") != null) {
+    return BungeeCordAuthenticatorBungee.getInstance().getAPI();
+  }
+  else {
+    return null;
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Bukkit</summary>
+
+``` JAVA
+public BungeeCordAuthenticatorBukkitAPI getBungeeCordAuthenticatorAPI() {
+  if (getProxy().getPluginManager().getPlugin("BungeeCordAuthenticatorBukkit") != null) {
+    return BungeeCordAuthenticatorBukkit.getInstance().getAPI();
+  }
+  else {
+    return null;
+  }
+}
+```
+
+</details>
