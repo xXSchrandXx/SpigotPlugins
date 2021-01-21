@@ -216,7 +216,7 @@ public class SQLHandler {
   }
 
   /**
-   * Check if the tabke has a isVerified column.
+   * Check if the table has a isVerified column.
    * @param table The table name. E.g. 'wcf1_user'.
    * @return Weather the table has the isVerified column.
    * @throws SQLException {@link SQLException}
@@ -232,6 +232,48 @@ public class SQLHandler {
       return true;
     else
       return false;
+  }
+
+  /**
+   * Checks if the given userID is verified.
+   * @param table The table name. E. g. 'wcf1_user'.
+   * @param userID The userID to check with.
+   * @return Weather the userID is verfied or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
+  public Boolean isVerfied(String table, Integer userID) throws SQLException {
+    List<Map<String, Object>> result = query("SELECT `userID`, `isVerified` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
+    ConcurrentHashMap<Integer, Integer> userids = new ConcurrentHashMap<Integer, Integer>();
+    for (Map<String, Object> tmpresult : result) {
+      Integer tmpuserID = (Integer) tmpresult.get("userID");
+      Integer tmpisverified = (Integer) tmpresult.get("isVerified");
+      userids.put(tmpuserID, tmpisverified);
+    }
+    if (userids.containsKey(userID))
+      return userids.get(userID).equals(1);
+    else
+      return null;
+  }
+
+    /**
+   * Checks if the given {@link UUID} is verified.
+   * @param table The table name. E. g. 'wcf1_user'.
+   * @param uuid The {@link UUID} to check with.
+   * @return Weather the {@link UUID} is verfied or null if none is given.
+   * @throws SQLException {@link SQLException}
+   */
+  public Boolean isVerfied(String table, UUID uuid) throws SQLException {
+    List<Map<String, Object>> result = query("SELECT `uuid`, `isVerified` FROM `" + database + "`.`" + table + "` WHERE `uuid` = '" + uuid.toString() + "'");
+    ConcurrentHashMap<UUID, Integer> uuids = new ConcurrentHashMap<UUID, Integer>();
+    for (Map<String, Object> tmpresult : result) {
+      UUID tmpuuid = UUID.fromString((String) tmpresult.get("uuid"));
+      Integer tmpisverified = (Integer) tmpresult.get("isVerified");
+      uuids.put(tmpuuid, tmpisverified);
+    }
+    if (uuids.containsKey(uuid))
+      return uuids.get(uuid).equals(1);
+    else
+      return null;
   }
 
   /**
@@ -347,12 +389,12 @@ public class SQLHandler {
    * @return The online-groupID or null if none is given.
    * @throws SQLException {@link SQLException}
    */
-  public String getUserOnlineGroupID(String table, Integer userID) throws SQLException {
+  public Integer getUserOnlineGroupID(String table, Integer userID) throws SQLException {
     List<Map<String, Object>> result = query("SELECT `userID`, `userOnlineGroupID` FROM `" + database + "`.`" + table + "` WHERE `userID` = '" + userID + "'");
-    ConcurrentHashMap<Integer, String> userIDs = new ConcurrentHashMap<Integer, String>();
+    ConcurrentHashMap<Integer, Integer> userIDs = new ConcurrentHashMap<Integer, Integer>();
     for (Map<String, Object> tmpresult : result) {
       Integer tmpuserID = (Integer) tmpresult.get("userID");
-      String tmpuserOnlineGroupID = (String) tmpresult.get("userOnlineGroupID");
+      Integer tmpuserOnlineGroupID = (Integer) tmpresult.get("userOnlineGroupID");
       userIDs.put(tmpuserID, tmpuserOnlineGroupID);
     }
     if (userIDs.containsKey(userID))

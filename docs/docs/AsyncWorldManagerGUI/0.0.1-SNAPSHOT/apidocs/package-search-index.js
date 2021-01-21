@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.awm"},{"l":"de.xxschrandxx.awm.menus"}];updateSearchResults();

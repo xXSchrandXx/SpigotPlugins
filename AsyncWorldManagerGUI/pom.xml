@@ -3,7 +3,7 @@
 
   <parent>
     <groupId>de.xxschrandxx</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>spigotplugins-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 

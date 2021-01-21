@@ -74,6 +74,12 @@
       <url>https://jitpack.io</url>
     </repository>
 
+    <!-- PAF Repo -->
+    <repository>
+      <id>simonsators-repo</id>
+      <url>https://simonsator.de/repo</url>
+    </repository>
+
   </repositories>
 
   <dependencies>
