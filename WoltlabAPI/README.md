@@ -22,6 +22,7 @@ Versions:
 ## Usage:
 <details>
 <summary>BungeeCord</summary>
+
 ``` JAVA
 public class Main extends Plugin {
 
@@ -44,10 +45,12 @@ private WoltlabAPIBungee wab;
 
 }
 ```
+
 </details>
 
 <details>
 <summary>Bukkit</summary>
+
 ``` JAVA
 public class Main extends JavaPlugin {
 
@@ -70,6 +73,7 @@ private WoltlabAPIBukkit wab;
 
 }
 ```
+
 </details>
 
 ## Setting stuff:
