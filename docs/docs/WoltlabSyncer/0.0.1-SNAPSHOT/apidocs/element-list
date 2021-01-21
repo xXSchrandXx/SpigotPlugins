@@ -3,4 +3,5 @@ de.xxschrandxx.wsc.bukkit.api
 de.xxschrandxx.wsc.bukkit.listener
 de.xxschrandxx.wsc.bungee
 de.xxschrandxx.wsc.bungee.api
+de.xxschrandxx.wsc.bungee.listener
 de.xxschrandxx.wsc.core
