@@ -54,7 +54,7 @@ private WoltlabAPIBungee wab;
 ``` JAVA
 public class Main extends JavaPlugin {
 
-private WoltlabAPIBukkit wab;
+  private WoltlabAPIBukkit wab;
 
   public WoltlabAPIBukkit getAPI() {
     return wab;

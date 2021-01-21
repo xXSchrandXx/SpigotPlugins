@@ -16,23 +16,31 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     return api;
   }
 
+  private static BungeeCordAuthenticatorBungee instance;
+
+  public static BungeeCordAuthenticatorBungee getInstance() {
+    return instance;
+  }
+
   public void onEnable() {
 
-    api = new BungeeCordAuthenticatorBungeeAPI(this);
+    instance = this;
 
-    getProxy().getPluginManager().registerCommand(this, new Login(this));
-    getProxy().getPluginManager().registerCommand(this, new Logout(this));
-    getProxy().getPluginManager().registerCommand(this, new Register(this));
-    getProxy().getPluginManager().registerCommand(this, new Reset(this));
-    getProxy().getPluginManager().registerCommand(this, new BCAB(this));
+    api = new BungeeCordAuthenticatorBungeeAPI(instance);
+
+    getProxy().getPluginManager().registerCommand(instance, new Login());
+    getProxy().getPluginManager().registerCommand(instance, new Logout());
+    getProxy().getPluginManager().registerCommand(instance, new Register());
+    getProxy().getPluginManager().registerCommand(instance, new Reset());
+    getProxy().getPluginManager().registerCommand(instance, new BCAB());
 
 		getProxy().registerChannel("bca:login");
 		getProxy().registerChannel("bca:logout");
     getProxy().registerChannel("bca:sync");
 
-    getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
-    getProxy().getPluginManager().registerListener(this, new BCABListener(this));
-    getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(this));
+    getProxy().getPluginManager().registerListener(instance, new PluginMessageListener());
+    getProxy().getPluginManager().registerListener(instance, new BCABListener());
+    getProxy().getPluginManager().registerListener(instance, new ProxiedPlayerListener());
 
     getLogger().info("Successfully enabled BungeeCordAuthenticatorBungee.");
     if (getAPI().getConfigHandler().isDebugging)

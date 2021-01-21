@@ -3,8 +3,6 @@ package de.xxschrandxx.bca.bukkit.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.entity.Player;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
@@ -31,12 +29,13 @@ public class BungeeCordAuthenticatorBukkitAPI {
   public BungeeCordAuthenticatorBukkitAPI(BungeeCordAuthenticatorBukkit bcab) {
     this.bcab = bcab;
     ch = new ConfigHandler(bcab);
-    m = new Messenger(bcab);
+    m = new Messenger();
+    m.register(bcab);
   }
 
   private List<Player> authenticated = new ArrayList<Player>();
 
-  public boolean login(@Nonnull Player player) {
+  public boolean login(Player player) {
     if (!player.isOnline()) {
       bcab.getLogger().warning(player.getUniqueId().toString() + " is not on this server.");
       return false;
@@ -45,7 +44,7 @@ public class BungeeCordAuthenticatorBukkitAPI {
     return authenticated.add(player);
   }
 
-  public boolean logout(@Nonnull Player player) {
+  public boolean logout(Player player) {
     if (!player.isOnline()) {
       bcab.getLogger().warning(player.getUniqueId().toString() + " is not on this server.");
     }
@@ -53,16 +52,21 @@ public class BungeeCordAuthenticatorBukkitAPI {
     return authenticated.remove(player);
   }
 
-  public boolean isAuthenticated(@Nonnull Player player) {
+  public boolean isAuthenticated(Player player) {
     if (authenticated.contains(player)) {
       return true;
     }
+    /*
     else if (bcab.getAPI().getMessenger().askFor(player).join()) {
       return true;
     }
+    */
     else {
       return false;
     }
   }
 
+  public int scheduleSyncDelayedTask(Runnable r, int i) {
+    return bcab.getServer().getScheduler().scheduleSyncDelayedTask(bcab, r, i);
+  }
 }

@@ -25,22 +25,23 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 
 public class PlayerListener implements Listener {
 
-  private BungeeCordAuthenticatorBukkit bcab;
+  private BungeeCordAuthenticatorBukkitAPI api;
 
-  public PlayerListener(BungeeCordAuthenticatorBukkit bcab) {
-    this.bcab = bcab;
+  public PlayerListener() {
+    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onMessageReceive(AsyncPlayerChatEvent event) {
-    if (bcab.getAPI().getConfigHandler().AllowMessageReceive) {
+    if (api.getConfigHandler().AllowMessageReceive) {
       return;
     }
     for (Player player : event.getRecipients()) {
-      if (bcab.getAPI().isAuthenticated(player)) {
+      if (api.isAuthenticated(player)) {
         return;
       }
       event.getRecipients().remove(player);
@@ -53,36 +54,36 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onMessageSend(AsyncPlayerChatEvent event) {
-    if (bcab.getAPI().getConfigHandler().AllowMessageSend) {
+    if (api.getConfigHandler().AllowMessageSend) {
       return;
     }
 
     Player player = event.getPlayer();
 
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
-    player.sendMessage(bcab.getAPI().getConfigHandler().DenyMessageSend);
+    player.sendMessage(api.getConfigHandler().DenyMessageSend);
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
     String cmd = event.getMessage().split(" ")[0].toLowerCase();
-    if (bcab.getAPI().getConfigHandler().AllowedCommands.contains(cmd)) {
+    if (api.getConfigHandler().AllowedCommands.contains(cmd)) {
       return;
     }
 
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
-    event.getPlayer().sendMessage(bcab.getAPI().getConfigHandler().DenyCommandSend);
+    event.getPlayer().sendMessage(api.getConfigHandler().DenyCommandSend);
 }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
   public void onPlayerMove(PlayerMoveEvent event) {
-    if (bcab.getAPI().getConfigHandler().AllowMovement) {
+    if (api.getConfigHandler().AllowMovement) {
       return;
     }
 
@@ -99,7 +100,7 @@ public class PlayerListener implements Listener {
     }
 
     Player player = event.getPlayer();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
 
@@ -109,7 +110,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerInteract(PlayerInteractEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -117,7 +118,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -125,7 +126,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -137,7 +138,7 @@ public class PlayerListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
@@ -145,7 +146,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerShear(PlayerShearEntityEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -153,7 +154,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerFish(PlayerFishEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -161,7 +162,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -169,7 +170,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerEditBook(PlayerEditBookEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -177,7 +178,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onSignChange(SignChangeEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -186,7 +187,7 @@ public class PlayerListener implements Listener {
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   @Deprecated
   public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -194,7 +195,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerDropItem(PlayerDropItemEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -202,7 +203,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerHeldItem(PlayerItemHeldEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -210,7 +211,7 @@ public class PlayerListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
   public void onPlayerConsumeItem(PlayerItemConsumeEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -223,12 +224,12 @@ public class PlayerListener implements Listener {
     }
     final Player player = (Player) event.getPlayer();
       
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
 
     event.setCancelled(true);
-    bcab.getServer().getScheduler().scheduleSyncDelayedTask(bcab, player::closeInventory, 1);
+    api.scheduleSyncDelayedTask(player::closeInventory, 1);
 
   }
 
@@ -238,7 +239,7 @@ public class PlayerListener implements Listener {
       return;
     }
     Player player = (Player) event.getWhoClicked();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);

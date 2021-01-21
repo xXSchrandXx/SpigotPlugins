@@ -1,6 +1,9 @@
 package de.xxschrandxx.bca.bungee.listener;
 
+import java.sql.SQLException;
+
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
+import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -11,10 +14,10 @@ import net.md_5.bungee.event.EventHandler;
 
 public class ProxiedPlayerListener implements Listener {
   
-  private BungeeCordAuthenticatorBungee bcab;
+  private BungeeCordAuthenticatorBungeeAPI api;
 
-  public ProxiedPlayerListener(BungeeCordAuthenticatorBungee bcab) {
-    this.bcab = bcab;
+  public ProxiedPlayerListener() {
+    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
   }
 
   @EventHandler
@@ -22,7 +25,7 @@ public class ProxiedPlayerListener implements Listener {
     if (event.isCancelled()) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().AllowServerSwitch) {
+    if (api.getConfigHandler().AllowServerSwitch) {
       return;
     }
     if (event.getReason() == Reason.JOIN_PROXY) {
@@ -35,10 +38,25 @@ public class ProxiedPlayerListener implements Listener {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) event.getPlayer();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    try {
+      if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
+        if (api.getConfigHandler().isDebugging)
+          api.getLogger().info("DEBUG | onServerSwitch " + player.getUniqueId().toString() + " is not in database.");
+        player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyServerSwitch));
+        event.setCancelled(true);
+        return;
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyServerSwitch));
+      event.setCancelled(true);
       return;
     }
-    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyServerSwitch));
+    if (api.isAuthenticated(player)) {
+      return;
+    }
+    player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyServerSwitch));
     event.setCancelled(true);
   }
 
@@ -53,14 +71,29 @@ public class ProxiedPlayerListener implements Listener {
     if (event.isCommand() || event.isProxyCommand()) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().AllowMessageSend) {
+    if (api.getConfigHandler().AllowMessageSend) {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    try {
+      if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
+        if (api.getConfigHandler().isDebugging)
+          api.getLogger().info("DEBUG | onChatSendEvent " + player.getUniqueId().toString() + " is not in database.");
+        player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyMessageSend));
+        event.setCancelled(true);
+        return;
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyMessageSend));
+      event.setCancelled(true);
       return;
     }
-    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyMessageSend));
+    if (api.isAuthenticated(player)) {
+      return;
+    }
+    player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyMessageSend));
     event.setCancelled(true);
   }
 
@@ -76,14 +109,29 @@ public class ProxiedPlayerListener implements Listener {
       return;
     }
     String command = event.getMessage().split(" ")[0].replaceFirst("/", "");
-    if (bcab.getAPI().getConfigHandler().AllowedCommands.contains(command) || command.equalsIgnoreCase("login") || command.equalsIgnoreCase("register")) {
+    if (api.getConfigHandler().AllowedCommands.contains(command) || command.equalsIgnoreCase("login") || command.equalsIgnoreCase("register")) {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    try {
+      if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
+        if (api.getConfigHandler().isDebugging)
+          api.getLogger().info("DEBUG | onCommandSendEvent " + player.getUniqueId().toString() + " is not in database.");
+        player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyCommandSend));
+        event.setCancelled(true);
+        return;
+        }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyCommandSend));
+      event.setCancelled(true);
       return;
     }
-    player.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().DenyCommandSend));
+    if (api.isAuthenticated(player)) {
+      return;
+    }
+    player.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().DenyCommandSend));
     event.setCancelled(true);
   }
 
@@ -98,11 +146,27 @@ public class ProxiedPlayerListener implements Listener {
     if (event.isCommand() || event.isProxyCommand()) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().AllowMessageReceive) {
+    if (api.getConfigHandler().AllowMessageReceive) {
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) event.getReceiver();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    try {
+      if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
+        if (api.getConfigHandler().isDebugging)
+          api.getLogger().info("DEBUG | onMessageReEvent " + player.getUniqueId().toString() + " is not in database.");
+        event.setCancelled(true);
+        return;
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      event.setCancelled(true);
+      return;
+    }
+    if (api.isAuthenticated(player)) {
+      return;
+    }
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);

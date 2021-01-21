@@ -3,6 +3,7 @@ package de.xxschrandxx.bca.bungee.command;
 import java.sql.SQLException;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
+import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,59 +11,59 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class Reset extends Command {
 
-  BungeeCordAuthenticatorBungee bcab;
+  BungeeCordAuthenticatorBungeeAPI api;
 
-  public Reset(BungeeCordAuthenticatorBungee bcab) {
+  public Reset() {
     super("reset");
-    this.bcab = bcab;
+    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
   }
 
   @Override
   public void execute(CommandSender sender, String[] args) {
     if (!(sender instanceof ProxiedPlayer)) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().PlayerOnly));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().PlayerOnly));
       return;
     }
     if (args.length > 1) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ResetUsage));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().ResetUsage));
       return;
     }
     if (args.length < 1) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ResetUsage));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().ResetUsage));
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
     try {
-      if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
-        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ResetNotRegistered));
+      if (!api.getSQL().checkPlayerEntry(player)) {
+        sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().ResetNotRegistered));
         return;
       }
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
-      if (!bcab.getAPI().checkPassword(player.getUniqueId(), args[0])) {
-        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ResetWrongPassword));
+      if (!api.checkPassword(player.getUniqueId(), args[0])) {
+        sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().ResetWrongPassword));
         return;
       }
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
-      bcab.getAPI().removePlayerEntry(player.getUniqueId());
+      api.removePlayerEntry(player.getUniqueId());
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
-    sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().ResetSuccessful));
+    sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().ResetSuccessful));
   }
 
 }

@@ -7,64 +7,66 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 import de.xxschrandxx.bca.bukkit.api.events.*;
 
 public class AuthenticationListener implements Listener {
 
-  private BungeeCordAuthenticatorBukkit bcab;
+  private BungeeCordAuthenticatorBukkitAPI api;
 
-  public AuthenticationListener(BungeeCordAuthenticatorBukkit bcab) {
-    this.bcab = bcab;
+  public AuthenticationListener() {
+    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onPreJoin(PlayerJoinEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
-    bcab.getAPI().getMessenger().askFor(event.getPlayer());
+    //TODO
+    //api.getMessenger().askFor(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOW)
   public void onJoin(PlayerJoinEvent event) {
-    if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
+    if (!api.getConfigHandler().TeleportUnauthed) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().UnauthedLocation == null) {
+    if (api.getConfigHandler().UnauthedLocation == null) {
       return;
     }
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
-    event.getPlayer().teleport(bcab.getAPI().getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
+    event.getPlayer().teleport(api.getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
   }
   
   @EventHandler(priority = EventPriority.LOWEST)
   public void onLogout(LogoutEvent event) {
-    if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
+    if (!api.getConfigHandler().TeleportUnauthed) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().UnauthedLocation == null) {
+    if (api.getConfigHandler().UnauthedLocation == null) {
       return;
     }
-    if (bcab.getAPI().isAuthenticated(event.get())) {
+    if (api.isAuthenticated(event.get())) {
       return;
     }
-    event.get().teleport(bcab.getAPI().getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
+    event.get().teleport(api.getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onLogin(LoginEvent event) {
-    if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
+    if (!api.getConfigHandler().TeleportUnauthed) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().AuthenticatedLocation == null) {
+    if (api.getConfigHandler().AuthenticatedLocation == null) {
       return;
     }
-    if (!bcab.getAPI().isAuthenticated(event.get())) {
+    if (!api.isAuthenticated(event.get())) {
       return;
     }
-    event.get().teleport(bcab.getAPI().getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
+    event.get().teleport(api.getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
   }
   
 }

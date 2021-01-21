@@ -6,18 +6,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 
 public class BlockListener implements Listener {
 
-  private BungeeCordAuthenticatorBukkit bcab;
+  private BungeeCordAuthenticatorBukkitAPI api;
 
-  public BlockListener(BungeeCordAuthenticatorBukkit bcab) {
-    this.bcab = bcab;
+  public BlockListener() {
+    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
   @EventHandler(ignoreCancelled = true)
   public void onBlockPlace(BlockPlaceEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);
@@ -25,7 +26,7 @@ public class BlockListener implements Listener {
 
   @EventHandler(ignoreCancelled = true)
   public void onBlockBreak(BlockBreakEvent event) {
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+    if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
     event.setCancelled(true);

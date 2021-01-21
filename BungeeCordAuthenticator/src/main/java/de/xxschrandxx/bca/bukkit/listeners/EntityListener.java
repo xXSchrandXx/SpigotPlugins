@@ -16,13 +16,14 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 
 public class EntityListener implements Listener {
 
-  private BungeeCordAuthenticatorBukkit bcab;
+  private BungeeCordAuthenticatorBukkitAPI api;
 
-  public EntityListener(BungeeCordAuthenticatorBukkit bcab) {
-    this.bcab = bcab;
+  public EntityListener() {
+    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -31,7 +32,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.getEntity().setFireTicks(0);
@@ -45,7 +46,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getDamager();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
@@ -57,7 +58,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getTarget();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setTarget(null);
@@ -70,7 +71,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
@@ -82,7 +83,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setAmount(0);
@@ -95,7 +96,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
@@ -109,7 +110,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) shooter;
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);
@@ -121,7 +122,7 @@ public class EntityListener implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);

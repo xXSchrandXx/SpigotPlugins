@@ -189,51 +189,51 @@ public class SQLHandler {
    */
   public void createPlayerEntry(UUID uuid, String playername, String phash, Integer ptype, Date regdate, String regip, String lastip, Date lastseen) throws SQLException {
     if (uuid == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | UUID is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | UUID is null, skipping");
       return;
     }
     if (playername == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | Playername is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Playername is null, skipping");
       return;
     }
     if (playername.isEmpty() || playername.isBlank()) {
-      logger.warning("SQLHandler.checkPlayerEntry | Playername is empty or blank, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Playername is empty or blank, skipping");
       return;
     }
     if (phash == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | Hashed password is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Hashed password is null, skipping");
       return;
     }
     if (playername.isEmpty() || playername.isBlank()) {
-      logger.warning("SQLHandler.checkPlayerEntry | Hashed password is empty or blank, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Hashed password is empty or blank, skipping");
       return;
     }
     if (ptype == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | Password type is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Password type is null, skipping");
       return;
     }
     if (regdate == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | Registrationdate is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | Registrationdate is null, skipping");
       return;
     }
     if (regip == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | RegistrationIP is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | RegistrationIP is null, skipping");
       return;
     }
     if (playername.isEmpty() || playername.isBlank()) {
-      logger.warning("SQLHandler.checkPlayerEntry | RegistrationIP is empty or blank, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | RegistrationIP is empty or blank, skipping");
       return;
     }
     if (lastip == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | LastIP is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | LastIP is null, skipping");
       return;
     }
     if (playername.isEmpty() || playername.isBlank()) {
-      logger.warning("SQLHandler.checkPlayerEntry | LastIP is empty or blank, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | LastIP is empty or blank, skipping");
       return;
     }
     if (lastseen == null) {
-      logger.warning("SQLHandler.checkPlayerEntry | LastSeen is null, skipping");
+      logger.warning("SQLHandler.createPlayerEntry | LastSeen is null, skipping");
       return;
     }
     String lastseenString = lastseenformat.format(lastseen);
@@ -371,7 +371,31 @@ public class SQLHandler {
     List<Map<String, Object>> result = query("SELECT `uuid` FROM `" + database + "`.`" + table + "` WHERE `uuid` = '" + uuid.toString() + "'");
     if (result.isEmpty())
       return false;
-    return true;
+    else
+      return true;
+  }
+
+  /**
+   * Check weather a entry for the given playername exists.
+   * @param playername The playername to check.
+   * @return Weather a entry for the given playername exists or null if given playername is null.
+   * @throws SQLException {@link SQLException}
+   */
+  @Deprecated
+  public Boolean checkPlayerEntry(String playername) throws SQLException {
+    if (playername == null) {
+      logger.warning("SQLHandler.checkPlayerEntry | playername is null, skipping");
+      return null;
+    }
+    if (playername.isEmpty() || playername.isBlank()) {
+      logger.warning("SQLHandler.checkPlayerEntry | playername is emty or blank, skipping");
+      return null;
+    }
+    List<Map<String, Object>> result = query("SELECT `playername` FROM `" + database + "`.`" + table + "` WHERE `playername` = '" + playername.toLowerCase() + "'");
+    if (result.isEmpty())
+      return false;
+    else
+      return true;
   }
 
   /**

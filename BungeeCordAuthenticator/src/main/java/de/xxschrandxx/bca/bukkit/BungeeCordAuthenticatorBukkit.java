@@ -15,18 +15,26 @@ public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
     return api;
   }
 
+  private static BungeeCordAuthenticatorBukkit instance;
+
+  public static BungeeCordAuthenticatorBukkit getInstance() {
+    return instance;
+  }
+
   public void onEnable() {
 
-    api = new BungeeCordAuthenticatorBukkitAPI(this);
+    instance = this;
 
-    getServer().getPluginManager().registerEvents(new AuthenticationListener(this), this);
-    getServer().getPluginManager().registerEvents(new BlockListener(this), this);
-    getServer().getPluginManager().registerEvents(new EntityListener(this), this);
-    getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+    api = new BungeeCordAuthenticatorBukkitAPI(instance);
+
+    getServer().getPluginManager().registerEvents(new AuthenticationListener(), instance);
+    getServer().getPluginManager().registerEvents(new BlockListener(), instance);
+    getServer().getPluginManager().registerEvents(new EntityListener(), instance);
+    getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
     if (ServerVersion.getVersion().i() >= Version.v1_9.i())
-      getServer().getPluginManager().registerEvents(new PlayerListener19(this), this);
+      getServer().getPluginManager().registerEvents(new PlayerListener19(), instance);
     if (ServerVersion.getVersion().i() >= Version.v1_11.i())
-      getServer().getPluginManager().registerEvents(new PlayerListener111(this), this);
+      getServer().getPluginManager().registerEvents(new PlayerListener111(), instance);
 
   }
 

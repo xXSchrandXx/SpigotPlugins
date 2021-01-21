@@ -7,13 +7,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityAirChangeEvent;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 
 public class PlayerListener111 implements Listener {
 
-  private BungeeCordAuthenticatorBukkit bcab;
+  private BungeeCordAuthenticatorBukkitAPI api;
 
-  public PlayerListener111(BungeeCordAuthenticatorBukkit bcab) {
-    this.bcab = bcab;
+  public PlayerListener111() {
+    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -22,7 +23,7 @@ public class PlayerListener111 implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if (bcab.getAPI().isAuthenticated(player)) {
+    if (api.isAuthenticated(player)) {
       return;
     }
     event.setCancelled(true);

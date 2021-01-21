@@ -224,18 +224,19 @@ public class ConfigHandler {
       error = true;
     }
 
-    if (isDebugging) {
-      bcab.getLogger().info("DEBUG | " +
-        "isDebuggin=" + isDebugging +
-        ", SessionEnabled=" + SessionEnabled +
-        ", SessionLength=" + SessionLength +
-        ", MaxAccountsPerIP=" + MaxAccountsPerIP +
-        ", MinCharacters=" + MinCharacters +
-        ", MaxAttempts=" + MaxAttempts +
-        ", AllowServerSwitch=" + AllowServerSwitch +
-        ", AllowMessageSend=" + AllowMessageSend + 
-        ", AllowedCommands=" + AllowedCommands +
-        ", AllowMessageReceive=" + AllowMessageReceive);
+    if (isDebugging != null) {
+      if (isDebugging)
+        bcab.getLogger().info("DEBUG | " +
+          "isDebuggin=" + isDebugging +
+          ", SessionEnabled=" + SessionEnabled +
+          ", SessionLength=" + SessionLength +
+          ", MaxAccountsPerIP=" + MaxAccountsPerIP +
+          ", MinCharacters=" + MinCharacters +
+          ", MaxAttempts=" + MaxAttempts +
+          ", AllowServerSwitch=" + AllowServerSwitch +
+          ", AllowMessageSend=" + AllowMessageSend + 
+          ", AllowedCommands=" + AllowedCommands +
+          ", AllowMessageReceive=" + AllowMessageReceive);
     }
 
     if (error) {

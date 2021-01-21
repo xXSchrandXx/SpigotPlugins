@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -24,6 +25,11 @@ import net.md_5.bungee.api.config.ServerInfo;
 public class BungeeCordAuthenticatorBungeeAPI {
 
   private BungeeCordAuthenticatorBungee bcab;
+
+  private Logger lg;
+  public Logger getLogger() {
+    return lg;
+  }
 
   private ConfigHandler ch;
   public ConfigHandler getConfigHandler() {
@@ -68,11 +74,13 @@ public class BungeeCordAuthenticatorBungeeAPI {
 
     this.bcab = bcab;
 
+    lg = bcab.getLogger();
+
     //Loading Config
     ch = new ConfigHandler(bcab);
 
     //Loading SQLHandler
-    sql = new SQLHandlerBungee(ch.getHikariConfigFile().toPath(), bcab.getLogger(), ch.isDebugging);
+    sql = new SQLHandlerBungee(ch.getHikariConfigFile().toPath(), lg, ch.isDebugging);
 
     //Loading PasswordHandler
     ph = new PasswordHandler(sql);
@@ -359,12 +367,12 @@ public class BungeeCordAuthenticatorBungeeAPI {
    * @return Weather the registration was successful.
    * @throws SQLException {@link SQLException}
    */
-  public Boolean createNewPlayerEntry(ProxiedPlayer player, String password) throws SQLException {
+  public Boolean createPlayerEntry(ProxiedPlayer player, String password) throws SQLException {
     if (player == null) {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | ProxiedPlayer is null, skipping");
       return null;
     }
-    return createNewPlayerEntry(player.getUniqueId(), player.getName(), password, player.getAddress().getAddress().getHostAddress());
+    return createPlayerEntry(player.getUniqueId(), player.getName(), password, player.getAddress().getAddress().getHostAddress());
   }
 
   /**
@@ -377,7 +385,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    * @return Weather the registration was successful.
    * @throws SQLException {@link SQLException}
    */
-  public Boolean createNewPlayerEntry(UUID uuid, String playername, String password, String ip) throws SQLException {
+  public Boolean createPlayerEntry(UUID uuid, String playername, String password, String ip) throws SQLException {
     if (uuid == null) {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | UUID is null, skipping");
       return null;
