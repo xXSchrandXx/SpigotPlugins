@@ -1,21 +1,21 @@
-package de.xxschrandxx.wsc.bukkit.listener;
+package de.xxschrandxx.wsc.bungee.listener;
 
 import java.sql.SQLException;
 import java.util.Date;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
+import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
 
-import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
-import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
 public class SyncPrimaryGroup implements Listener {
 
-  private WoltlabSyncerBukkit plugin;
+  private WoltlabSyncerBungee plugin;
 
-  public SyncPrimaryGroup(WoltlabSyncerBukkit plugin) {
+  public SyncPrimaryGroup(WoltlabSyncerBungee plugin) {
     this.plugin = plugin;
   }
 
@@ -26,20 +26,20 @@ public class SyncPrimaryGroup implements Listener {
   */
 
   @EventHandler
-  public void onLogin(PlayerLoginEvent e) {
+  public void onLogin(PostLoginEvent e) {
     if (plugin.getConfigHandler().SyncPrimaryGroupEnabled)
-    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncPrimaryGroup(e.getPlayer()));
+    plugin.getProxy().getScheduler().runAsync(plugin, syncPrimaryGroup(e.getPlayer()));
   }
 
-  private Runnable syncPrimaryGroup(final Player p) {
+  private Runnable syncPrimaryGroup(final ProxiedPlayer p) {
     return new Runnable() {
       @Override
       public void run() {
-        PlayerDataBukkit oldpdb = plugin.getConfigHandler().getPlayerData(p);
+        PlayerDataBungee oldpdb = plugin.getConfigHandler().getPlayerData(p);
         if (!oldpdb.isVerified()) {
           return;
         }
-        PlayerDataBukkit pdb = (PlayerDataBukkit) oldpdb.copy();
+        PlayerDataBungee pdb = (PlayerDataBungee) oldpdb.copy();
         try {
           Integer userID = pdb.getID();
           if (userID != -1) {
@@ -57,7 +57,7 @@ public class SyncPrimaryGroup implements Listener {
                   .replace("%uuid%", p.getUniqueId().toString())
                   .replace("%playername%", p.getName())
                   .replace("%group%", groupName);
-                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commandLine);
+                plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), commandLine);
               }
             }
             pdb.setPrimaryGroup(groupName);

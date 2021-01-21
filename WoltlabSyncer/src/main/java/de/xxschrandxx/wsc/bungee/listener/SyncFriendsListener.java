@@ -1,22 +1,22 @@
-package de.xxschrandxx.wsc.bukkit.listener;
+package de.xxschrandxx.wsc.bungee.listener;
 
 import java.util.Date;
 import java.util.UUID;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
-import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
+import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
+
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
 public class SyncFriendsListener implements Listener {
 
-  private WoltlabSyncerBukkit plugin;
+  private WoltlabSyncerBungee plugin;
 
-  public SyncFriendsListener(WoltlabSyncerBukkit plugin) {
+  public SyncFriendsListener(WoltlabSyncerBungee plugin) {
     this.plugin = plugin;
   }
 
@@ -27,15 +27,15 @@ public class SyncFriendsListener implements Listener {
   */
 
   @EventHandler
-  public void onLogin(PlayerLoginEvent e) {
+  public void onLogin(PostLoginEvent e) {
     if (plugin.getConfigHandler().isDebug) plugin.getLogger().info("DEBUG | Syncing Friends for " + e.getPlayer().getUniqueId());
-    PlayerDataBukkit pdb = plugin.getConfigHandler().getPlayerData(e.getPlayer());
+    PlayerDataBungee pdb = plugin.getConfigHandler().getPlayerData(e.getPlayer());
     if (pdb != null) {
-      plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncFriends(pdb));
+      plugin.getProxy().getScheduler().runAsync(plugin, syncFriends(pdb));
     }
   }
 
-  public Runnable syncFriends(final PlayerDataBukkit pdb) {
+  public Runnable syncFriends(final PlayerDataBungee pdb) {
     PAFPlayerManager pafm = PAFPlayerManager.getInstance();
     PAFPlayer pp = pafm.getPlayer(pdb.getUniqueId());
     return new Runnable(){
@@ -69,16 +69,16 @@ public class SyncFriendsListener implements Listener {
     return new Runnable() {
       @Override
       public void run() {
-        PlayerDataBukkit oldpdb1 = plugin.getConfigHandler().getPlayerData(uuid1);
-        PlayerDataBukkit pdb1 = (PlayerDataBukkit) oldpdb1.copy();
+        PlayerDataBungee oldpdb1 = plugin.getConfigHandler().getPlayerData(uuid1);
+        PlayerDataBungee pdb1 = (PlayerDataBungee) oldpdb1.copy();
         if (!pdb1.getFriends().contains(uuid2)) {
           pdb1.addFriend(uuid2);
         }
         pdb1.setLastUpdate(new Date());
         plugin.getConfigHandler().setPlayerData(oldpdb1, pdb1);
         
-        PlayerDataBukkit oldpdb2 = plugin.getConfigHandler().getPlayerData(uuid2);
-        PlayerDataBukkit pdb2 = (PlayerDataBukkit) oldpdb2.copy();
+        PlayerDataBungee oldpdb2 = plugin.getConfigHandler().getPlayerData(uuid2);
+        PlayerDataBungee pdb2 = (PlayerDataBungee) oldpdb2.copy();
         if (!pdb2.getFriends().contains(uuid1)) {
           pdb2.addFriend(uuid1);
         }
@@ -102,16 +102,16 @@ public class SyncFriendsListener implements Listener {
     return new Runnable() {
       @Override
       public void run() {
-        PlayerDataBukkit oldpdb1 = plugin.getConfigHandler().getPlayerData(uuid1);
-        PlayerDataBukkit pdb1 = (PlayerDataBukkit) oldpdb1.copy();
+        PlayerDataBungee oldpdb1 = plugin.getConfigHandler().getPlayerData(uuid1);
+        PlayerDataBungee pdb1 = (PlayerDataBungee) oldpdb1.copy();
         if (!pdb1.getFriends().contains(uuid2)) {
           pdb1.removeFriend(uuid2);
         }
         pdb1.setLastUpdate(new Date());
         plugin.getConfigHandler().setPlayerData(oldpdb1, pdb1);
         
-        PlayerDataBukkit oldpdb2 = plugin.getConfigHandler().getPlayerData(uuid2);
-        PlayerDataBukkit pdb2 = (PlayerDataBukkit) oldpdb2.copy();
+        PlayerDataBungee oldpdb2 = plugin.getConfigHandler().getPlayerData(uuid2);
+        PlayerDataBungee pdb2 = (PlayerDataBungee) oldpdb2.copy();
         if (!pdb2.getFriends().contains(uuid1)) {
           pdb2.removeFriend(uuid1);
         }

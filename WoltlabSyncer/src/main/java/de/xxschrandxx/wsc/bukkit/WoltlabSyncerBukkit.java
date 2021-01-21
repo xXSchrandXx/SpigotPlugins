@@ -15,10 +15,28 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
     return wab;
   }
 
+  private jCoinsGiverListener jcg;
+
+  public jCoinsGiverListener getjCoinsGiverListener() {
+    return jcg;
+  }
+
+  private SyncAllGroupsListener sag;
+
+  public SyncAllGroupsListener getSyncAllGroupsListener() {
+    return sag;
+  }
+
   private SyncFriendsListener sfl;
 
   public SyncFriendsListener getFriendsListener() {
     return sfl;
+  }
+
+  private SyncPrimaryGroup spg;
+
+  public SyncPrimaryGroup getPrimaryGroupListener() {
+    return spg;
   }
 
   private ConfigHandlerBukkit ch;
@@ -37,10 +55,12 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
 
     //Setting up Listener
     if (getConfigHandler().SyncPrimaryGroupEnabled) {
-      getServer().getPluginManager().registerEvents(new SyncPrimaryGroup(this), this);
+      spg = new SyncPrimaryGroup(this);
+      getServer().getPluginManager().registerEvents(spg, this);
     }
     if (getConfigHandler().SyncAllGroupsEnabled) {
-      getServer().getPluginManager().registerEvents(new SyncAllGroupsListener(this), this);
+      sag = new SyncAllGroupsListener(this);
+      getServer().getPluginManager().registerEvents(sag, this);
     }
     if (getConfigHandler().SyncFriendsEnabled) {
       try {

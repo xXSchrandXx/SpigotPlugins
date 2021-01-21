@@ -1,7 +1,11 @@
 package de.xxschrandxx.wsc.bungee;
 
 import de.xxschrandxx.wsc.bungee.api.ConfigHandlerBungee;
+import de.xxschrandxx.wsc.bungee.listener.*;
+
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.sql.SQLException;
 
 public class WoltlabSyncerBungee extends Plugin {
 
@@ -11,19 +15,90 @@ public class WoltlabSyncerBungee extends Plugin {
     return wab;
   }
 
-  private ConfigHandlerBungee chb;
+  private jCoinsGiverListener jcg;
+
+  public jCoinsGiverListener getjCoinsGiverListener() {
+    return jcg;
+  }
+
+  private SyncAllGroupsListener sag;
+
+  public SyncAllGroupsListener getSyncAllGroupsListener() {
+    return sag;
+  }
+
+  private SyncFriendsListener sfl;
+
+  public SyncFriendsListener getFriendsListener() {
+    return sfl;
+  }
+
+  private SyncPrimaryGroup spg;
+
+  public SyncPrimaryGroup getPrimaryGroupListener() {
+    return spg;
+  }
+
+  private ConfigHandlerBungee ch;
 
   public ConfigHandlerBungee getConfigHandler() {
-    return chb;
+    return ch;
   }
 
   @Override
   public void onEnable() {
     //Setting up Config.
-    chb = new ConfigHandlerBungee(this);
+    ch = new ConfigHandlerBungee(this);
 
     //Setting up API
-    wab = new WoltlabAPIBungee(chb.SQLProperties.toPath(), getLogger(), chb.isDebug);
+    wab = new WoltlabAPIBungee(getConfigHandler().SQLProperties.toPath(), getLogger(), getConfigHandler().isDebug);
+
+    //Setting up Listener
+    if (getConfigHandler().SyncPrimaryGroupEnabled) {
+      spg = new SyncPrimaryGroup(this);
+      getProxy().getPluginManager().registerListener(this, spg);
+    }
+    if (getConfigHandler().SyncAllGroupsEnabled) {
+      sag = new SyncAllGroupsListener(this);
+      getProxy().getPluginManager().registerListener(this, sag);
+    }
+    if (getConfigHandler().SyncFriendsEnabled) {
+      try {
+        if (getAPI().getSQL().hasFriendsInstalled(getConfigHandler().PackageTable)) {
+          if (getProxy().getPluginManager().getPlugin("FriendsAPIForPartyAndFriends") != null || getProxy().getPluginManager().getPlugin("PartyAndFriends") != null || getProxy().getPluginManager().getPlugin("PartyAndFriendsGUI") != null) {
+            sfl = new SyncFriendsListener(this);
+            getProxy().getPluginManager().registerListener(this, sfl);
+          }
+          else {
+            getLogger().warning("You don't have PAF installed");
+          }
+        }
+        else {
+          getLogger().warning("You don't have the FriendsPackage installed");
+        }
+      }
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    if (getConfigHandler().jCoinsgiverEnabled) {
+      try {
+        if (getAPI().getSQL().hasJCoinsInstalled(getConfigHandler().PackageTable)) {
+          getProxy().getPluginManager().registerListener(this, new jCoinsGiverListener(this));
+        }
+        else {
+          getLogger().warning("You don't have the jCoinsPackage installed");
+        }
+      }
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  @Override
+  public void onDisable() {
+    getConfigHandler().savePlayerDatas();
   }
 
 }

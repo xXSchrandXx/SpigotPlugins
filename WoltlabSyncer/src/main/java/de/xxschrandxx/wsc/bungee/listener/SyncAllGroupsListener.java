@@ -1,4 +1,4 @@
-package de.xxschrandxx.wsc.bukkit.listener;
+package de.xxschrandxx.wsc.bungee.listener;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -6,19 +6,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
+import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
 
-import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
-import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 
 public class SyncAllGroupsListener implements Listener {
 
-  private WoltlabSyncerBukkit plugin;
+  private WoltlabSyncerBungee plugin;
 
-  public SyncAllGroupsListener(WoltlabSyncerBukkit plugin) {
+  public SyncAllGroupsListener(WoltlabSyncerBungee plugin) {
     this.plugin = plugin;
   }
 
@@ -29,25 +29,25 @@ public class SyncAllGroupsListener implements Listener {
   */
 
   @EventHandler
-  public void onLogin(PlayerLoginEvent e) {
+  public void onLogin(PostLoginEvent e) {
     if (plugin.getConfigHandler().SyncAllGroupsEnabled)
-      plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncGroup(e.getPlayer()));
+      plugin.getProxy().getScheduler().runAsync(plugin, syncGroup(e.getPlayer()));
   }
 
-  private Runnable syncGroup(final Player p) {
+  private Runnable syncGroup(final ProxiedPlayer p) {
     return new Runnable(){
       @Override
       public void run() {
-        PlayerDataBukkit oldpdb = plugin.getConfigHandler().getPlayerData(p);
+        PlayerDataBungee oldpdb = plugin.getConfigHandler().getPlayerData(p);
         if (!oldpdb.isVerified()) {
           return;
         }
-        PlayerDataBukkit pdb = (PlayerDataBukkit) oldpdb.copy();
+        PlayerDataBungee pdb = (PlayerDataBungee) oldpdb.copy();
         try {
           List<String> hasGroupNames = pdb.getGroups();
           Integer userID = pdb.getID();
           if (userID != -1) {
-            userID = plugin.getAPI().getSQL().getUserIDfromPlayerwithUUID(plugin.getConfigHandler().UserTable, p);
+            userID = plugin.getAPI().getSQL().getUserIDfromProxiedPlayerwithUUID(plugin.getConfigHandler().UserTable, p);
           }
           List<Integer> groupIDs = plugin.getAPI().getSQL().getGroupIDs(plugin.getConfigHandler().UserTable, userID);
           List<String> addgroupNames = new ArrayList<String>();
@@ -62,7 +62,7 @@ public class SyncAllGroupsListener implements Listener {
                 .replace("%uuid%", p.getUniqueId().toString())
                 .replace("%playername%", p.getName())
                 .replace("%group%", groupName);
-              plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commandLine);
+              plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), commandLine);
               pdb.addGroup(groupName);
             }
           }
@@ -78,7 +78,7 @@ public class SyncAllGroupsListener implements Listener {
                 .replace("%uuid%", p.getUniqueId().toString())
                 .replace("%playername%", p.getName())
                 .replace("%group%", groupName);
-              plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commandLine);
+              plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), commandLine);
               pdb.addGroup(groupName);
             }
           }
