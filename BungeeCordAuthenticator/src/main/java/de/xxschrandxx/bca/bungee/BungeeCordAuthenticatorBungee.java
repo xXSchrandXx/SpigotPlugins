@@ -6,6 +6,7 @@ import java.util.UUID;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import de.xxschrandxx.bca.bungee.command.*;
 import de.xxschrandxx.bca.bungee.listener.*;
+
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeCordAuthenticatorBungee extends Plugin {
@@ -22,9 +23,11 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     return instance;
   }
 
-  public void onEnable() {
-
+  public void onLoad() {
     instance = this;
+  }
+
+  public void onEnable() {
 
     api = new BungeeCordAuthenticatorBungeeAPI(instance);
 
