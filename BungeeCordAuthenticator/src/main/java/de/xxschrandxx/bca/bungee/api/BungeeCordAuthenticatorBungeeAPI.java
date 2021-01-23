@@ -125,7 +125,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData("bca:login", out.toByteArray());
+      si.getValue().sendData(login, out.toByteArray());
     }
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
@@ -171,7 +171,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData("bca:logout", out.toByteArray());
+      si.getValue().sendData(logout, out.toByteArray());
     }
   }
 
@@ -262,6 +262,8 @@ public class BungeeCordAuthenticatorBungeeAPI {
     getSQL().removePlayerEntry(uuid);
   }
 
+  public String login = "bca:login", logout = "bca:logout", sync = "bca:sync";
+
   /**
    * Syncs the with BungeeCordAuthenticatorBukkit Part.
    * @param player The {@link ProxiedPlayer} wich joined the server as first Player.
@@ -274,7 +276,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     String message = player.getUniqueId().toString() + ";" + isAuthenticated(player);
     out.writeUTF(message);
-    player.sendData("bca:sync", out.toByteArray());
+    player.sendData(sync, out.toByteArray());
   }
 
   /**

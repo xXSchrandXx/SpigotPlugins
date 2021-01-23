@@ -172,7 +172,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${docsDirectory}/docs/</outputDirectory>
+              <outputDirectory>${docsDirectory}</outputDirectory>
               <resources>
                 <resource>
                   <directory>/target/</directory>

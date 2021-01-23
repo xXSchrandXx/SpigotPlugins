@@ -23,7 +23,7 @@ public class PluginMessageListener implements Listener {
 
   @EventHandler
   public void onPluginMessageRecieve(PluginMessageEvent e) {
-    if (!e.getTag().equals("bca:sync")) {
+    if (!e.getTag().equals(api.sync)) {
         return;
     }
     if (api.getConfigHandler().isDebugging)

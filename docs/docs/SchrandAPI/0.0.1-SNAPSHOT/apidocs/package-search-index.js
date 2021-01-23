@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.api.bungee"},{"l":"de.xxschrandxx.api.minecraft"},{"l":"de.xxschrandxx.api.minecraft.awm"},{"l":"de.xxschrandxx.api.minecraft.message"},{"l":"de.xxschrandxx.api.minecraft.otherapi"}];updateSearchResults();
