@@ -23,11 +23,9 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     return instance;
   }
 
-  public void onLoad() {
-    instance = this;
-  }
-
   public void onEnable() {
+
+    instance = this;
 
     api = new BungeeCordAuthenticatorBungeeAPI(instance);
 
