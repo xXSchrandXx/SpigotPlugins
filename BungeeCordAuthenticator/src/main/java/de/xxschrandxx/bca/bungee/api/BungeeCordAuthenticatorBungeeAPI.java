@@ -18,11 +18,40 @@ import de.xxschrandxx.bca.bungee.api.event.*;
 import de.xxschrandxx.bca.bungee.api.password.PasswordHandler;
 import de.xxschrandxx.bca.bungee.api.task.*;
 import de.xxschrandxx.bca.core.OnlineStatus;
+import de.xxschrandxx.bca.core.PluginChannels;
 import de.xxschrandxx.bca.core.SQLHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeeCordAuthenticatorBungeeAPI {
+
+
+  /** 
+   * Creates a new API for BungeeCordAuthenticatorBungee.
+   * @param bcab The loaded {@link BungeeCordAuthenticatorBungee} plugin.
+   */
+  public BungeeCordAuthenticatorBungeeAPI(BungeeCordAuthenticatorBungee bcab) {
+
+    this.bcab = bcab;
+
+    lg = bcab.getLogger();
+
+    //Loading Config
+    ch = new ConfigHandler(bcab);
+    if (getConfigHandler().isDebugging)
+      getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded Config.");
+
+    //Loading SQLHandler
+    sql = new SQLHandlerBungee(ch.getHikariConfigFile().toPath(), lg, ch.isDebugging);
+    if (getConfigHandler().isDebugging)
+      getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded SQLHandler.");
+
+    //Loading PasswordHandler
+    ph = new PasswordHandler(sql);
+    if (getConfigHandler().isDebugging)
+      getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded PasswordHandler.");
+
+  }
 
   private BungeeCordAuthenticatorBungee bcab;
 
@@ -66,27 +95,6 @@ public class BungeeCordAuthenticatorBungeeAPI {
     return unauthedkick;
   }
 
-  /** 
-   * Creates a new API for BungeeCordAuthenticatorBungee.
-   * @param bcab The loaded {@link BungeeCordAuthenticatorBungee} plugin.
-   */
-  public BungeeCordAuthenticatorBungeeAPI(BungeeCordAuthenticatorBungee bcab) {
-
-    this.bcab = bcab;
-
-    lg = bcab.getLogger();
-
-    //Loading Config
-    ch = new ConfigHandler(bcab);
-
-    //Loading SQLHandler
-    sql = new SQLHandlerBungee(ch.getHikariConfigFile().toPath(), lg, ch.isDebugging);
-
-    //Loading PasswordHandler
-    ph = new PasswordHandler(sql);
-
-  }
-
   /**
    * {@linkplain #setAuthenticated(UUID)}
    * @param player The {@link ProxiedPlayer} for the {@link UUID}.
@@ -125,7 +133,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData(login, out.toByteArray());
+      si.getValue().sendData(PluginChannels.login, out.toByteArray());
     }
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
@@ -171,7 +179,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
     for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData(logout, out.toByteArray());
+      si.getValue().sendData(PluginChannels.logout, out.toByteArray());
     }
   }
 
@@ -262,8 +270,6 @@ public class BungeeCordAuthenticatorBungeeAPI {
     getSQL().removePlayerEntry(uuid);
   }
 
-  public String login = "bca:login", logout = "bca:logout", sync = "bca:sync";
-
   /**
    * Syncs the with BungeeCordAuthenticatorBukkit Part.
    * @param player The {@link ProxiedPlayer} wich joined the server as first Player.
@@ -276,7 +282,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     String message = player.getUniqueId().toString() + ";" + isAuthenticated(player);
     out.writeUTF(message);
-    player.sendData(sync, out.toByteArray());
+    player.sendData(PluginChannels.sync, out.toByteArray());
   }
 
   /**

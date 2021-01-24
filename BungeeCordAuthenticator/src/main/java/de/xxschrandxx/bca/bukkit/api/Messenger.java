@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.core.PluginChannels;
 
 public class Messenger implements PluginMessageListener {
 
@@ -24,25 +25,23 @@ public class Messenger implements PluginMessageListener {
     api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
-  private String login = "bca:login", logout = "bca:logout", sync = "bca:sync";
-
   public void register(JavaPlugin plugin) {
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, login, this);
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, logout, this);
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, sync, this);
-    plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, sync);
+    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.login, this);
+    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.logout, this);
+    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.sync, this);
+    plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, PluginChannels.sync);
   }
 
   public void unregister(JavaPlugin plugin) {
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, login, this);
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, logout, this);
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, sync, this);
-    plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, sync);
+    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.login, this);
+    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.logout, this);
+    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.sync, this);
+    plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, PluginChannels.sync);
   }
 
   @Override
   public void onPluginMessageReceived(String channel, Player receiver, byte[] bytes) {
-    if (channel.equals(login)) {
+    if (channel.equals(PluginChannels.login)) {
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message = in.readUTF();
       UUID uuid = UUID.fromString(message);
@@ -55,7 +54,7 @@ public class Messenger implements PluginMessageListener {
       }
       api.login(player);
     }
-    else if (channel.equals(logout)) {
+    else if (channel.equals(PluginChannels.logout)) {
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message = in.readUTF();
       UUID uuid = UUID.fromString(message);
@@ -69,7 +68,7 @@ public class Messenger implements PluginMessageListener {
       api.logout(player);
 
     }
-    else if (channel.equals(sync)) {
+    else if (channel.equals(PluginChannels.sync)) {
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message[] = in.readUTF().split(";");
       UUID uuid = UUID.fromString(message[0]);
@@ -103,7 +102,7 @@ public class Messenger implements PluginMessageListener {
   public void askFir(JavaPlugin plugin, Player player) {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(player.getUniqueId().toString());
-    player.sendPluginMessage(plugin, sync, out.toByteArray());
+    player.sendPluginMessage(plugin, PluginChannels.sync, out.toByteArray());
     /* TODO
     CompletableFuture<Boolean> future = new CompletableFuture<Boolean>();
     future.completeOnTimeout(false, 10, TimeUnit.SECONDS);

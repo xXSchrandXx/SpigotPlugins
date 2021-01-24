@@ -7,6 +7,7 @@ import com.google.common.io.ByteStreams;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import de.xxschrandxx.bca.core.PluginChannels;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
@@ -23,7 +24,7 @@ public class PluginMessageListener implements Listener {
 
   @EventHandler
   public void onPluginMessageRecieve(PluginMessageEvent e) {
-    if (!e.getTag().equals(api.sync)) {
+    if (!e.getTag().equals(PluginChannels.sync)) {
         return;
     }
     if (api.getConfigHandler().isDebugging)
