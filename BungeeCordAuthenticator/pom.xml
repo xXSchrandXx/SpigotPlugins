@@ -48,6 +48,14 @@
       <version>1.7.30</version>
     </dependency>
 
+    <!-- FastLogin -->
+    <dependency>
+      <groupId>com.github.games647</groupId>
+      <artifactId>FastLoginBungee</artifactId>
+      <version>1.11-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/FastLoginBungee.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <build>

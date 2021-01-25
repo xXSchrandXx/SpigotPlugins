@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorHook;
 import de.xxschrandxx.bca.bungee.command.*;
 import de.xxschrandxx.bca.bungee.listener.*;
 import de.xxschrandxx.bca.core.PluginChannels;
@@ -38,6 +39,13 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
       this.onDisable();
       return;
     }
+
+    if (getProxy().getPluginManager().getPlugin("FastLogin") != null) {
+      if (api.getConfigHandler().isDebugging)
+        getLogger().info("onEnable | Found FastLogin, hooking into it...");
+      new BungeeCordAuthenticatorHook(this);
+    }
+
 
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loadeding channel...");

@@ -6,4 +6,5 @@
 *.classpath
 *.project
 *.factorypath
+*/lib/
 build.bat

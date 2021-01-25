@@ -3,4 +3,4 @@ main: ${project.groupId}.bungee.${project.artifactId}Bungee
 version: ${project.version}
 author: xXSchrandXx
 description: ${project.artifactId}Bungee
-loadbefore: [FastLogin]
+softDepends: [FastLogin]
