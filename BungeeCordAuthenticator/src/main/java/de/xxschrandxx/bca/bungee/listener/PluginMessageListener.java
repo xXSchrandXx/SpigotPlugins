@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import de.xxschrandxx.bca.core.PluginChannels;
 import net.md_5.bungee.api.ProxyServer;
@@ -18,8 +17,8 @@ public class PluginMessageListener implements Listener {
 
   private BungeeCordAuthenticatorBungeeAPI api;
 
-  public PluginMessageListener() {
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+  public PluginMessageListener(BungeeCordAuthenticatorBungeeAPI api) {
+    this.api = api;
   }
 
   @EventHandler

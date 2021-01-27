@@ -2,7 +2,6 @@ package de.xxschrandxx.bca.bungee.command;
 
 import java.sql.SQLException;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,9 +12,9 @@ public class Reset extends Command {
 
   BungeeCordAuthenticatorBungeeAPI api;
 
-  public Reset() {
+  public Reset(BungeeCordAuthenticatorBungeeAPI api) {
     super("reset");
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+    api = api;
   }
 
   @Override

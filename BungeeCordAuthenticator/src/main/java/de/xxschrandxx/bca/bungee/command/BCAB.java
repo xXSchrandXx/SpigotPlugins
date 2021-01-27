@@ -1,6 +1,5 @@
 package de.xxschrandxx.bca.bungee.command;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
@@ -9,9 +8,9 @@ public class BCAB extends Command {
 
   BungeeCordAuthenticatorBungeeAPI api;
 
-  public BCAB() {
+  public BCAB(BungeeCordAuthenticatorBungeeAPI api) {
     super("bcab");
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+    this.api = api;
   }
 
   @Override

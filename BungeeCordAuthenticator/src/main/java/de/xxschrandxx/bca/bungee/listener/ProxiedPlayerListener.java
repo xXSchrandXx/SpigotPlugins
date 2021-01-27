@@ -2,7 +2,6 @@ package de.xxschrandxx.bca.bungee.listener;
 
 import java.sql.SQLException;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,8 +15,8 @@ public class ProxiedPlayerListener implements Listener {
   
   private BungeeCordAuthenticatorBungeeAPI api;
 
-  public ProxiedPlayerListener() {
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+  public ProxiedPlayerListener(BungeeCordAuthenticatorBungeeAPI api) {
+    this.api = api;
   }
 
   @EventHandler

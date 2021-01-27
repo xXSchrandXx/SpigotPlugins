@@ -25,9 +25,9 @@ import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeeCordAuthenticatorBungeeAPI {
 
-
-  /** 
+  /**
    * Creates a new API for BungeeCordAuthenticatorBungee.
+   * 
    * @param bcab The loaded {@link BungeeCordAuthenticatorBungee} plugin.
    */
   public BungeeCordAuthenticatorBungeeAPI(BungeeCordAuthenticatorBungee bcab) {

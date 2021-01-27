@@ -3,7 +3,6 @@ package de.xxschrandxx.bca.bungee.listener;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 
 import net.md_5.bungee.api.chat.TextComponent;
@@ -17,8 +16,8 @@ public class BCABListener implements Listener {
   
   private BungeeCordAuthenticatorBungeeAPI api;
 
-  public BCABListener() {
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+  public BCABListener(BungeeCordAuthenticatorBungeeAPI api) {
+    this.api = api;
   }
 
   @EventHandler

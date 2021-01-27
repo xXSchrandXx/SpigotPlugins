@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
-import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorHook;
 import de.xxschrandxx.bca.bungee.command.*;
 import de.xxschrandxx.bca.bungee.listener.*;
 import de.xxschrandxx.bca.core.PluginChannels;
@@ -28,8 +27,6 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
 
   public void onEnable() {
 
-    instance = this;
-
     api = new BungeeCordAuthenticatorBungeeAPI(this);
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded BungeeCordAuthenticatorBungeeAPI.");
@@ -39,13 +36,6 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
       this.onDisable();
       return;
     }
-
-    if (getProxy().getPluginManager().getPlugin("FastLogin") != null) {
-      if (api.getConfigHandler().isDebugging)
-        getLogger().info("onEnable | Found FastLogin, hooking into it...");
-      new BungeeCordAuthenticatorHook(this);
-    }
-
 
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loadeding channel...");
@@ -63,32 +53,32 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading commands...");
     //Loading Commands
-    getProxy().getPluginManager().registerCommand(this, new Login());
+    getProxy().getPluginManager().registerCommand(this, new Login(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command Login");
-    getProxy().getPluginManager().registerCommand(this, new Logout());
+    getProxy().getPluginManager().registerCommand(this, new Logout(api));
     if (api.getConfigHandler().isDebugging)
     getLogger().info("onEnable | loaded command Logout");
-      getProxy().getPluginManager().registerCommand(this, new Register());
+      getProxy().getPluginManager().registerCommand(this, new Register(api));
     if (api.getConfigHandler().isDebugging)
     getLogger().info("onEnable | loaded command Register");
-      getProxy().getPluginManager().registerCommand(this, new Reset());
+      getProxy().getPluginManager().registerCommand(this, new Reset(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command Reset");
-    getProxy().getPluginManager().registerCommand(this, new BCAB());
+    getProxy().getPluginManager().registerCommand(this, new BCAB(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command BCAB");
 
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading listener...");
     //Loading Listener
-    getProxy().getPluginManager().registerListener(this, new PluginMessageListener());
+    getProxy().getPluginManager().registerListener(this, new PluginMessageListener(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded PluginMessageListener");
-    getProxy().getPluginManager().registerListener(this, new BCABListener());
+    getProxy().getPluginManager().registerListener(this, new BCABListener(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded BCABListener");
-    getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener());
+    getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(api));
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded ProxiedPlayerListener");
 
@@ -96,6 +86,8 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("Debbung enabled.");
 
+    instance = this;
+    
   }
 
   public void onDisable() {

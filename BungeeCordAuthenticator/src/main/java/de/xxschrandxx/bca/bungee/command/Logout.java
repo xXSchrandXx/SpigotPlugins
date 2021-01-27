@@ -2,7 +2,6 @@ package de.xxschrandxx.bca.bungee.command;
 
 import java.sql.SQLException;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,9 +12,9 @@ public class Logout extends Command {
 
   BungeeCordAuthenticatorBungeeAPI api;
 
-  public Logout() {
+  public Logout(BungeeCordAuthenticatorBungeeAPI api) {
     super("logout");
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+    this.api = api;
   }
 
   @Override

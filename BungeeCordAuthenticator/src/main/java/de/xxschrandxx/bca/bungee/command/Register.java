@@ -2,7 +2,6 @@ package de.xxschrandxx.bca.bungee.command;
 
 import java.sql.SQLException;
 
-import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,9 +12,9 @@ public class Register extends Command {
 
   BungeeCordAuthenticatorBungeeAPI api;
 
-  public Register() {
+  public Register(BungeeCordAuthenticatorBungeeAPI api) {
     super("register");
-    api = BungeeCordAuthenticatorBungee.getInstance().getAPI();
+    this.api = api;
   }
 
   @Override
