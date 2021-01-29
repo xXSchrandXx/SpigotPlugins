@@ -6,6 +6,7 @@ import de.xxschrandxx.api.minecraft.ServerVersion;
 import de.xxschrandxx.api.minecraft.otherapi.Version;
 import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 import de.xxschrandxx.bca.bukkit.listeners.*;
+import de.xxschrandxx.bca.core.PluginChannels;
 
 public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
 
@@ -25,16 +26,47 @@ public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
 
     instance = this;
 
-    api = new BungeeCordAuthenticatorBukkitAPI(instance);
+    api = new BungeeCordAuthenticatorBukkitAPI(this);
 
-    getServer().getPluginManager().registerEvents(new AuthenticationListener(), instance);
-    getServer().getPluginManager().registerEvents(new BlockListener(), instance);
-    getServer().getPluginManager().registerEvents(new EntityListener(), instance);
-    getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
-    if (ServerVersion.getVersion().i() >= Version.v1_9.i())
-      getServer().getPluginManager().registerEvents(new PlayerListener19(), instance);
-    if (ServerVersion.getVersion().i() >= Version.v1_11.i())
-      getServer().getPluginManager().registerEvents(new PlayerListener111(), instance);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loading incoming channel...");
+    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.login, api.getMessenger());
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.login);
+    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.logout, api.getMessenger());
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.logout);
+    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.sync, api.getMessenger());
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.sync);
+    getServer().getMessenger().registerOutgoingPluginChannel(this, PluginChannels.sync);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded outgoing channel " + PluginChannels.sync);
+
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loading listener...");
+    getServer().getPluginManager().registerEvents(new AuthenticationListener(), this);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded AuthenticationListener");
+    getServer().getPluginManager().registerEvents(new BlockListener(), this);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded BlockListener");
+    getServer().getPluginManager().registerEvents(new EntityListener(), this);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded EntityListener");
+    getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+    if (api.getConfigHandler().isDebugging)
+      getLogger().info("onEnable | loaded PlayerListener");
+    if (ServerVersion.getVersion().i() >= Version.v1_9.i()) {
+      getServer().getPluginManager().registerEvents(new PlayerListener19(), this);
+      if (api.getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loaded PlayerListener19");
+    }
+    if (ServerVersion.getVersion().i() >= Version.v1_11.i()) {
+      getServer().getPluginManager().registerEvents(new PlayerListener111(), this);
+      if (api.getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loaded PlayerListener111");
+    }
 
   }
 

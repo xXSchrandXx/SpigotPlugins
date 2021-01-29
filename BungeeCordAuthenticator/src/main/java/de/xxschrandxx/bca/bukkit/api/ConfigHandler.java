@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -61,64 +62,71 @@ public class ConfigHandler {
       }
     }
     config = YamlConfiguration.loadConfiguration(configyml);
+    String path;
     //Debug
-    if (config.contains("debug")) {
-      isDebugging = config.getBoolean("debug");
+    path = "debug";
+    if (config.contains(path)) {
+      isDebugging = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | debug is missing, setting it...");
-      config.set("debug", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //Protection
     //AllowMessageReceive
-    if (config.contains("protection.allowmessagereceive")) {
-      AllowMessageReceive = config.getBoolean("protection.allowmessagereceive");
+    path = "protection.allowmessagereceive";
+    if (config.contains(path)) {
+      AllowMessageReceive = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | protection.allowmessagereceive is missing, setting it...");
-      config.set("protection.allowmessagereceive", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //AllowMessageSend
-    if (config.contains("protection.allowmessagesend")) {
-      AllowMessageSend = config.getBoolean("protection.allowmessagesend");
+    path = "protection.allowmessagesend";
+    if (config.contains(path)) {
+      AllowMessageSend = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | protection.allowmessagesend is missing, setting it...");
-      config.set("protection.allowmessagesend", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //AllowedCommands
-    if (config.contains("protection.allowedcommands")) {
-      AllowedCommands = config.getStringList("protection.allowedcommands");
+    path = "protection.allowedcommands";
+    if (config.contains(path)) {
+      AllowedCommands = config.getStringList(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | protection.allowedcommands is missing, setting it...");
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
       List<String> allowedcommands = new ArrayList<String>();
       allowedcommands.add("command1");
       allowedcommands.add("command2");
-      config.set("protection.allowedcommands", allowedcommands);
+      config.set(path, allowedcommands);
     }
     //AllowMovement
-    if (config.contains("protection.allowmovement")) {
-      AllowMovement = config.getBoolean("protection.allowmovement");
+    path = "protection.allowmovement";
+    if (config.contains(path)) {
+      AllowMovement = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | protection.allowmovement is missing, setting it...");
-      config.set("protection.allowmovement", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //Teleportation
     //TeleportUnauthed
-    if (config.contains("teleportation.unauthed.enable")) {
-      TeleportUnauthed = config.getBoolean("teleportation.unauthed.enable");
+    path = "teleportation.unauthed.enable";
+    if (config.contains(path)) {
+      TeleportUnauthed = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.enable is missing, setting it...");
-      config.set("teleportation.unauthed.enable", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //UnauthedLocation
     World world = null;
@@ -128,53 +136,59 @@ public class ConfigHandler {
     double z = 0;
     float yaw = 0;
     float pitch = 0;
-    if (config.contains("teleportation.unauthed.location.world")) {
-      worldname = config.getString("teleportation.unauthed.location.world");
+    path = "teleportation.unauthed.location.world";
+    if (config.contains(path)) {
+      worldname = config.getString(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.world is missing, setting it...");
-      config.set("teleportation.unauthed.location.world", "world");
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, "world");
     }
-    if (config.contains("teleportation.unauthed.location.x")) {
-      x = config.getDouble("teleportation.unauthed.location.x");
-    }
-    else {
-      error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.x is missing, setting it...");
-      config.set("teleportation.unauthed.location.x", 0.0);
-    }
-    if (config.contains("teleportation.unauthed.location.y")) {
-      y = config.getDouble("teleportation.unauthed.location.y");
+    path = "teleportation.unauthed.location.x";
+    if (config.contains(path)) {
+      x = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.y is missing, setting it...");
-      config.set("teleportation.unauthed.location.y", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
-    if (config.contains("teleportation.unauthed.location.z")) {
-      z = config.getDouble("teleportation.unauthed.location.z");
-    }
-    else {
-      error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.z is missing, setting it...");
-      config.set("teleportation.unauthed.location.z", 0.0);
-    }
-    if (config.contains("teleportation.unauthed.location.yaw")) {
-      yaw = config.getLong("teleportation.unauthed.location.yaw");
+    path = "teleportation.unauthed.location.y";
+    if (config.contains(path)) {
+      y = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.yaw is missing, setting it...");
-      config.set("teleportation.unauthed.location.yaw", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
-    if (config.contains("teleportation.unauthed.location.pitch")) {
-      pitch = config.getLong("teleportation.unauthed.location.pitch");
+    path = "teleportation.unauthed.location.z";
+    if (config.contains(path)) {
+      z = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.unauthed.location.pitch is missing, setting it...");
-      config.set("teleportation.unauthed.location.pitch", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
+    }
+    path = "teleportation.unauthed.location.yaw";
+    if (config.contains(path)) {
+      yaw = config.getLong(path);
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
+    }
+    path = "teleportation.unauthed.location.pitch";
+    if (config.contains(path)) {
+      pitch = config.getLong(path);
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
     if (!error) {
       if ((world = Bukkit.getWorld(worldname)) != null) {
@@ -182,13 +196,14 @@ public class ConfigHandler {
       }
     }
     //TeleportAuthenticated
-    if (config.contains("teleportation.authed.enable")) {
-      TeleportAuthenticated = config.getBoolean("teleportation.authed.enable");
+    path = "teleportation.authed.enable";
+    if (config.contains(path)) {
+      TeleportAuthenticated = config.getBoolean(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.enable is missing, setting it...");
-      config.set("teleportation.authed.enable", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, false);
     }
     //AuthenticatedLocation
     World world2 = null;
@@ -198,58 +213,79 @@ public class ConfigHandler {
     double z2 = 0;
     float yaw2 = 0;
     float pitch2 = 0;
-    if (config.contains("teleportation.authed.location.world")) {
-      worldname2 = config.getString("teleportation.authed.location.world");
+    path = "teleportation.authed.location.world";
+    if (config.contains(path)) {
+      worldname2 = config.getString(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.world is missing, setting it...");
-      config.set("teleportation.authed.location.world", "world");
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, "world");
     }
-    if (config.contains("teleportation.authed.location.x")) {
-      x2 = config.getDouble("teleportation.authed.location.x");
-    }
-    else {
-      error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.x is missing, setting it...");
-      config.set("teleportation.authed.location.x", 0.0);
-    }
-    if (config.contains("teleportation.authed.location.y")) {
-      y2 = config.getDouble("teleportation.authed.location.y");
+    path = "teleportation.authed.location.x";
+    if (config.contains(path)) {
+      x2 = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.y is missing, setting it...");
-      config.set("teleportation.authed.location.y", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
-    if (config.contains("teleportation.authed.location.z")) {
-      z2 = config.getDouble("teleportation.authed.location.z");
-    }
-    else {
-      error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.z is missing, setting it...");
-      config.set("teleportation.authed.location.z", 0.0);
-    }
-    if (config.contains("teleportation.authed.location.yaw")) {
-      yaw2 = config.getLong("teleportation.authed.location.yaw");
+    path = "teleportation.authed.location.y";
+    if (config.contains(path)) {
+      y2 = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.yaw is missing, setting it...");
-      config.set("teleportation.authed.location.yaw", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
-    if (config.contains("teleportation.authed.location.pitch")) {
-      pitch2 = config.getLong("teleportation.authed.location.pitch");
+    path = "teleportation.authed.location.z";
+    if (config.contains(path)) {
+      z2 = config.getDouble(path);
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadConfig() | teleportation.authed.location.pitch is missing, setting it...");
-      config.set("teleportation.authed.location.pitch", 0.0);
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
+    }
+    path = "teleportation.authed.location.yaw";
+    if (config.contains(path)) {
+      yaw2 = config.getLong(path);
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + "w is missing, setting it...");
+      config.set(path, 0.0);
+    }
+    path = "teleportation.authed.location.pitch";
+    if (config.contains(path)) {
+      pitch2 = config.getLong(path);
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, 0.0);
     }
     if (!error) {
       if ((world2 = Bukkit.getWorld(worldname2)) != null) {
         AuthenticatedLocation = new Location(world2, x2, y2, z2, yaw2, pitch2);
       }
+    }
+
+    if (isDebugging != null) {
+      if (isDebugging)
+        bcab.getLogger().info("DEBUG | " +
+        "isDebugging=" + isDebugging +
+        ", AllowMessageSend=" + AllowMessageSend +
+        ", AllowMessageReceive=" + AllowMessageReceive +
+        ", AllowedCommands=" + AllowedCommands +
+        ", AllowMovement=" + AllowMovement +
+        ", TeleportUnauthed=" + TeleportUnauthed +
+        ", UnauthedLocation=" + UnauthedLocation +
+        ", TeleportAuthenticated=" + TeleportAuthenticated +
+        ", AuthenticatedLocation=" + AuthenticatedLocation
+        );
     }
 
     if (error) {
@@ -292,32 +328,36 @@ public class ConfigHandler {
       }
     }
     message = YamlConfiguration.loadConfiguration(messageyml);
+    String path;
     //Prefix
-    if (message.contains("prefix")) {
-      Prefix = message.getString("prefix");
+    path = "prefix";
+    if (message.contains(path)) {
+      Prefix = color(message.getString(path));
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadMessage() | prefix is missing, setting it...");
-      message.set("prefix", "&8[&6BCA&8]&7 ");
+      bcab.getLogger().warning("loadMessage() | " + path + " is missing, setting it...");
+      message.set(path, "&8[&6BCA&8]&7 ");
     }
     //DenyMessageSend
-    if (message.contains("denymessagesend")) {
-      Prefix = message.getString("denymessagesend");
+    path = "denymessagesend";
+    if (message.contains(path)) {
+      DenyMessageSend = color(message.getString(path));
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadMessage() | denymessagesend is missing, setting it...");
-      message.set("denymessagesend", "You are not allowed to send chat messages.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is missing, setting it...");
+      message.set(path, "You are not allowed to send chat messages.");
     }
     //DenyCommandSend
-    if (message.contains("denycommandsend")) {
-      Prefix = message.getString("denycommandsend");
+    path = "denycommandsend";
+    if (message.contains(path)) {
+      DenyCommandSend = color(message.getString(path));
     }
     else {
       error = true;
-      bcab.getLogger().warning("loadMessage() | denycommandsend is missing, setting it...");
-      message.set("denycommandsend", "You are not allowed to send commands.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is missing, setting it...");
+      message.set(path, "You are not allowed to send commands.");
     }
     if (error) {
       saveMessage();
@@ -336,6 +376,10 @@ public class ConfigHandler {
     catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public String color(String message) {
+    return ChatColor.translateAlternateColorCodes('&', message);
   }
 
 }

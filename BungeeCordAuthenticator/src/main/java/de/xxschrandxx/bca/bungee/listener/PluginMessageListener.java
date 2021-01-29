@@ -26,9 +26,14 @@ public class PluginMessageListener implements Listener {
     if (!e.getTag().equals(PluginChannels.sync)) {
         return;
     }
-    if (api.getConfigHandler().isDebugging)
-      api.getLogger().info("DEBUG | Got sync question");
-
+    if (api.getConfigHandler().isDebugging) {
+      if (e.getSender() instanceof ProxiedPlayer) {
+        api.getLogger().info("DEBUG | Got sync question from " + ((ProxiedPlayer) e.getSender()).getName());
+      }
+      else {
+        api.getLogger().info("DEBUG | Got sync question from " + e.getSender().getSocketAddress());
+      }
+    }
     ByteArrayDataInput in = ByteStreams.newDataInput( e.getData() );
     UUID uuid = UUID.fromString(in.readUTF());
     ProxiedPlayer p = (ProxiedPlayer) ProxyServer.getInstance().getPlayer(uuid);

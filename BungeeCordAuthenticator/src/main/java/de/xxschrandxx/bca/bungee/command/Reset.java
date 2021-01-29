@@ -14,7 +14,7 @@ public class Reset extends Command {
 
   public Reset(BungeeCordAuthenticatorBungeeAPI api) {
     super("reset");
-    api = api;
+    this.api = api;
   }
 
   @Override

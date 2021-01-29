@@ -65,12 +65,5 @@
       <version>1.16.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.github.games647</groupId>
-      <artifactId>FastLoginBungee</artifactId>
-      <version>1.11-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/FastLoginBungee.jar</systemPath>
-    </dependency>
   </dependencies>
 </project>

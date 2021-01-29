@@ -2,6 +2,7 @@ package de.xxschrandxx.bca.bukkit.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
 
@@ -25,12 +26,17 @@ public class BungeeCordAuthenticatorBukkitAPI {
     return m;
   }
 
+  private Logger lg;
+
+  public Logger getLogger() {
+    return lg;
+  }
 
   public BungeeCordAuthenticatorBukkitAPI(BungeeCordAuthenticatorBukkit bcab) {
     this.bcab = bcab;
+    lg = bcab.getLogger();
     ch = new ConfigHandler(bcab);
-    m = new Messenger();
-    m.register(bcab);
+    m = new Messenger(bcab);
   }
 
   private List<Player> authenticated = new ArrayList<Player>();

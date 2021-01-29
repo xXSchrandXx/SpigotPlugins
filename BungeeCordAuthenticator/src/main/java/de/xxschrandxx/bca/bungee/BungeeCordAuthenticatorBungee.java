@@ -42,13 +42,13 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     //Loading Channel
     getProxy().registerChannel(PluginChannels.login);
     if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded channel: " + PluginChannels.login);
+      getLogger().info("onEnable | loaded channel " + PluginChannels.login);
     getProxy().registerChannel(PluginChannels.logout);
     if (api.getConfigHandler().isDebugging)
-    getLogger().info("onEnable | loaded channel: " + PluginChannels.logout);
+    getLogger().info("onEnable | loaded channel " + PluginChannels.logout);
       getProxy().registerChannel(PluginChannels.sync);
     if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded channel: " + PluginChannels.sync);
+      getLogger().info("onEnable | loaded channel " + PluginChannels.sync);
 
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading commands...");

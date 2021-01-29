@@ -107,120 +107,133 @@ public class ConfigHandler {
       e.printStackTrace();
     }
 
+    String path = null;
     //isDebugging
-    if (config.contains("debug")) {
-      isDebugging = config.getBoolean("debug");
+    path = "debug";
+    if (config.contains(path)) {
+      isDebugging = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | debug is not given. Setting it...");
-      config.set("debug", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //Sesions
     //SessionEnabled
-    if (config.contains("session.enabled")) {
-      SessionEnabled = config.getBoolean("session.enabled");
+    path = "session.enabled";
+    if (config.contains(path)) {
+      SessionEnabled = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | session.enabled is not given. Setting it...");
-      config.set("session.enabled", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //SessionLength
-    if (config.contains("session.length")) {
-      SessionLength = config.getInt("session.length");
+    path = "session.length";
+    if (config.contains(path)) {
+      SessionLength = config.getInt(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | session.length is not given. Setting it...");
-      config.set("session.length", 5);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, 5);
       error = true;
     }
     //Registration
     //MaxAccountsPerIP
-    if (config.contains("registration.maxaccountsperip")) {
-      MaxAccountsPerIP = config.getInt("registration.maxaccountsperip");
+    path = "registration.maxaccountsperip";
+    if (config.contains(path)) {
+      MaxAccountsPerIP = config.getInt(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | registration.maxaccountsperip is not given. Setting it...");
-      config.set("registration.maxaccountsperip", 5);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, 5);
       error = true;
     }
     //MinCharacters
-    if (config.contains("registration.mincharacters")) {
-      MinCharacters = config.getInt("registration.mincharacters");
+    path = "registration.mincharacters";
+    if (config.contains(path)) {
+      MinCharacters = config.getInt(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | registration.mincharacters is not given. Setting it...");
-      config.set("registration.mincharacters", 8);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, 8);
       error = true;
     }
     //Login
     //MaxAttempts
-    if (config.contains("login.maxattempts")) {
-      MaxAttempts = config.getInt("login.maxattempts");
+    path = "login.maxattempts";
+    if (config.contains(path)) {
+      MaxAttempts = config.getInt(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | login.maxattempts is not given. Setting it...");
-      config.set("login.maxattempts", 3);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, 3);
       error = true;
     }
     //Protection
     //AllowServerSwitch
-    if (config.contains("protection.allowserverswitch")) {
-      AllowServerSwitch = config.getBoolean("protection.allowserverswitch");
+    path = "protection.allowserverswitch";
+    if (config.contains(path)) {
+      AllowServerSwitch = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | protection.allowserverswitch is not given. Setting it...");
-      config.set("protection.allowserverswitch", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //AllowMessageSend
-    if (config.contains("protection.allowmessagesend")) {
-      AllowMessageSend = config.getBoolean("protection.allowmessagesend");
+    path = "protection.allowmessagesend";
+    if (config.contains(path)) {
+      AllowMessageSend = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | protection.allowmessagesend is not given. Setting it...");
-      config.set("protection.allowmessagesend", false);
+      bcab.getLogger().warning("loadConfig() | " + path  + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //AllowMessageReceive
-    if (config.contains("protection.allowmessagereceive")) {
-      AllowMessageReceive = config.getBoolean("protection.allowmessagereceive");
+    path = "protection.allowmessagereceive";
+    if (config.contains(path)) {
+      AllowMessageReceive = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | protection.allowmessagereceive is not given. Setting it...");
-      config.set("protection.allowmessagereceive", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //AllowedCommands
-    if (config.contains("protection.allowedcommands")) {
-      AllowedCommands = config.getStringList("protection.allowedcommands");
+    path = "protection.allowedcommands";
+    if (config.contains(path)) {
+      AllowedCommands = config.getStringList(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | protection.allowedcommands is not given. Setting it...");
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
       ArrayList<String> allowedcmds = new ArrayList<String>();
       allowedcmds.add("command1");
       allowedcmds.add("command2");
-      config.set("protection.allowedcommands", allowedcmds);
+      config.set(path, allowedcmds);
       error = true;
     }
     //Unauthenticated
     //UnauthenticatedKickEnabled
-    if (config.contains("unauthenticatedkick.enabled")) {
-      UnauthenticatedKickEnabled = config.getBoolean("unauthenticatedkick.enabled");
+    path = "unauthenticatedkick.enabled";
+    if (config.contains(path)) {
+      UnauthenticatedKickEnabled = config.getBoolean(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | unauthenticatedkick.enabled is not given. Setting it...");
-      config.set("unauthenticatedkick.enabled", false);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
     //UnauthenticatedKickLength
-    if (config.contains("unauthenticatedkick.length")) {
-      UnauthenticatedKickLength = config.getInt("unauthenticatedkick.length");
+    path = "unauthenticatedkick.length";
+    if (config.contains(path)) {
+      UnauthenticatedKickLength = config.getInt(path);
     }
     else {
-      bcab.getLogger().warning("loadConfig() | unauthenticatedkick.length is not given. Setting it...");
-      config.set("unauthenticatedkick.length", 2);
+      bcab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, 2);
       error = true;
     }
 
@@ -236,7 +249,10 @@ public class ConfigHandler {
           ", AllowServerSwitch=" + AllowServerSwitch +
           ", AllowMessageSend=" + AllowMessageSend + 
           ", AllowedCommands=" + AllowedCommands +
-          ", AllowMessageReceive=" + AllowMessageReceive);
+          ", AllowMessageReceive=" + AllowMessageReceive +
+          ", UnauthenticatedKickEnabled=" + UnauthenticatedKickEnabled +
+          ", UnauthenticatedKickLength=" + UnauthenticatedKickLength
+          );
     }
 
     if (error) {
@@ -320,289 +336,321 @@ public class ConfigHandler {
       e.printStackTrace();
     }
 
+    String path;
     //Prefix
-    if (message.contains("prefix")) {
-      Prefix = color(message.getString("prefix"));
+    path = "prefix";
+    if (message.contains(path)) {
+      Prefix = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | prefix is not given. Setting it...");
-      message.set("prefix", "&8[&6BCA&8]&7 ");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "&8[&6BCA&8]&7 ");
       error = true;
     }
     //PlayerOnly
-    if (message.contains("playeronly")) {
-      PlayerOnly = color(message.getString("playeronly"));
+    path = "playeronly";
+    if (message.contains(path)) {
+      PlayerOnly = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | playeronly is not given. Setting it...");
-      message.set("playeronly", "This command can only be executed by Players.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "This command can only be executed by Players.");
       error = true;
     }
     //SQLError
-    if (message.contains("sqlerror")) {
-      PlayerOnly = color(message.getString("sqlerror"));
+    path = "sqlerror";
+    if (message.contains(path)) {
+      PlayerOnly = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | sqlerror is not given. Setting it...");
-      message.set("sqlerror", "An error has occurred in the database, contact an administrator.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "An error has occurred in the database, contact an administrator.");
       error = true;
     }
     //Register
     //RegisterUsage
-    if (message.contains("register.usage")) {
-      RegisterUsage = color(message.getString("register.usage"));
+    path = "register.usage";
+    if (message.contains(path)) {
+      RegisterUsage = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.usage is not given. Setting it...");
-      message.set("register.usage", "Usage: /register [password] [password]");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /register [password] [password]");
       error = true;
     }
     //RegisterSamePassword
-    if (message.contains("register.samepassword")) {
-      RegisterSamePassword = color(message.getString("register.samepassword"));
+    path = "register.samepassword";
+    if (message.contains(path)) {
+      RegisterSamePassword = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.samepassword is not given. Setting it...");
-      message.set("register.samepassword", "The passwords must be identical.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The passwords must be identical.");
       error = true;
     }
     //RegisterNotEnoughCharacters
-    if (message.contains("register.notenoughcharacters")) {
-      RegisterNotEnoughCharacters = color(message.getString("register.notenoughcharacters"));
+    path = "register.notenoughcharacters";
+    if (message.contains(path)) {
+      RegisterNotEnoughCharacters = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.notenoughcharacters is not given. Setting it...");
-      message.set("register.notenoughcharacters", "The password must be at least %minchars% characters long.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The password must be at least %minchars% characters long.");
       error = true;
     }
     //RegisterAlreadyRegistered
-    if (message.contains("register.alreadyregistered")) {
-      RegisterAlreadyRegistered = color(message.getString("register.alreadyregistered"));
+    path = "register.alreadyregistered";
+    if (message.contains(path)) {
+      RegisterAlreadyRegistered = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.alreadyregistered is not given. Setting it...");
-      message.set("register.alreadyregistered", "You are already registered.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are already registered.");
       error = true;
     }
     //RegisterMaxAccountsPerIP
-    if (message.contains("register.maxaccountsperip")) {
-      RegisterMaxAccountsPerIP = color(message.getString("register.maxaccountsperip"));
+    path = "register.maxaccountsperip";
+    if (message.contains(path)) {
+      RegisterMaxAccountsPerIP = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.maxaccountsperip is not given. Setting it...");
-      message.set("register.maxaccountsperip", "The maximum number of accounts allowed for your IP has been reached.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The maximum number of accounts allowed for your IP has been reached.");
       error = true;
     }
     //RegisterError
-    if (message.contains("register.error")) {
-      RegisterError = color(message.getString("register.error"));
+    path = "register.error";
+    if (message.contains(path)) {
+      RegisterError = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.error is not given. Setting it...");
-      message.set("register.error", "An error has occurred during registration, contact an administrator.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "An error has occurred during registration, contact an administrator.");
       error = true;
     }
     //RegisterSuccessful
-    if (message.contains("register.successful")) {
-      RegisterSuccessful = color(message.getString("register.successful"));
+    path = "register.successful";
+    if (message.contains(path)) {
+      RegisterSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | register.successful is not given. Setting it...");
-      message.set("register.successful", "You have registered successfully.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You have registered successfully.");
       error = true;
     }
     //Login
     //LoginUsage
-    if (message.contains("login.usage")) {
-      LoginUsage = color(message.getString("login.usage"));
+    path = "login.usage";
+    if (message.contains(path)) {
+      LoginUsage = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | login.usage is not given. Setting it...");
-      message.set("login.usage", "Usage: /login [password]");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /login [password]");
       error = true;
     }
     //LoginAlreadyAuthenticated
-    if (message.contains("login.alreadyauthenticated")) {
-      LoginAlreadyAuthenticated = color(message.getString("login.alreadyauthenticated"));
+    path = "login.alreadyauthenticated";
+    if (message.contains(path)) {
+      LoginAlreadyAuthenticated = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | login.alreadyauthenticated is not given. Setting it...");
-      message.set("login.alreadyauthenticated", "You are already authenticated.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are already authenticated.");
       error = true;
     }
     //LoginNotRegistered
-    if (message.contains("login.notregistered")) {
-      LoginNotRegistered = color(message.getString("login.notregistered"));
+    path = "login.notregistered";
+    if (message.contains(path)) {
+      LoginNotRegistered = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | login.notregistered is not given. Setting it...");
-      message.set("login.notregistered", "You are not registered on this server. Use /register [password] [password]");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not registered on this server. Use /register [password] [password]");
       error = true;
     }
     //LoginWrongPassword
-    if (message.contains("login.wrongpassword")) {
-      LoginWrongPassword = color(message.getString("login.wrongpassword"));
+    path = "login.wrongpassword";
+    if (message.contains(path)) {
+      LoginWrongPassword = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | login.wrongpassword is not given. Setting it...");
-      message.set("login.wrongpassword", "Wrong password.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Wrong password.");
       error = true;
     }
     //LoginSuccessful
-    if (message.contains("login.successful")) {
-      LoginSuccessful = color(message.getString("login.successful"));
+    path = "login.successful";
+    if (message.contains(path)) {
+      LoginSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | login.successful is not given. Setting it...");
-      message.set("login.successful", "Login successful.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Login successful.");
       error = true;
     }
     //Logout
     //LogoutNotAuthenticated
-    if (message.contains("logout.notauthenticated")) {
-      LogoutNotAuthenticated = color(message.getString("logout.notauthenticated"));
+    path = "logout.notauthenticated";
+    if (message.contains(path)) {
+      LogoutNotAuthenticated = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | logout.notauthenticated is not given. Setting it...");
-      message.set("logout.notauthenticated", "You are not authenticated");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not authenticated");
       error = true;
     }
     //LogoutSuccessful
-    if (message.contains("logout.successful")) {
-      LogoutSuccessful = color(message.getString("logout.successful"));
+    path = "logout.successful";
+    if (message.contains(path)) {
+      LogoutSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | logout.successful is not given. Setting it...");
-      message.set("logout.successful", "Logout successful.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Logout successful.");
       error = true;
     }
     //ChangePassword
     //ChangePasswordUsage
-    if (message.contains("changepassword.usage")) {
-      ChangePasswordUsage = color(message.getString("changepassword.usage"));
+    path = "changepassword.usage";
+    if (message.contains(path)) {
+      ChangePasswordUsage = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.usage is not given. Setting it...");
-      message.set("changepassword.usage", "Usage: /changepassword [oldpassword] [newpassword]");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /changepassword [oldpassword] [newpassword]");
       error = true;
     }
     //ChangePasswordNotEnoughCharacters
-    if (message.contains("changepassword.notenoughcharacters")) {
-      ChangePasswordNotEnoughCharacters = color(message.getString("changepassword.notenoughcharacters"));
+    path = "changepassword.notenoughcharacters";
+    if (message.contains(path)) {
+      ChangePasswordNotEnoughCharacters = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.notenoughcharacters is not given. Setting it...");
-      message.set("changepassword.notenoughcharacters", "The password must be at least %minchars% characters long.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The password must be at least %minchars% characters long.");
       error = true;
     }
     //ChangePasswordNotAuthenticated
-    if (message.contains("changepassword.notauthenticated")) {
-      ChangePasswordNotAuthenticated = color(message.getString("changepassword.notauthenticated"));
+    path = "changepassword.notauthenticated";
+    if (message.contains(path)) {
+      ChangePasswordNotAuthenticated = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.notauthenticated is not given. Setting it...");
-      message.set("changepassword.notauthenticated", "You have to be authenticated for this command.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You have to be authenticated for this command.");
       error = true;
     }
     //ChangePasswordNotRegistered
-    if (message.contains("changepassword.notregistered")) {
-      ChangePasswordNotRegistered = color(message.getString("changepassword.notregistered"));
+    path = "changepassword.notregistered";
+    if (message.contains(path)) {
+      ChangePasswordNotRegistered = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.notregistered is not given. Setting it...");
-      message.set("changepassword.notregistered", "You are not registered.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not registered.");
       error = true;
     }
     //ChangePasswordWrongPassword
-    if (message.contains("changepassword.wrongpassword")) {
-      ChangePasswordWrongPassword = color(message.getString("changepassword.wrongpassword"));
+    path = "changepassword.wrongpassword";
+    if (message.contains(path)) {
+      ChangePasswordWrongPassword = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.wrongpassword is not given. Setting it...");
-      message.set("changepassword.wrongpassword", "Wrong password.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Wrong password.");
       error = true;
     }
     //ChangePasswordSuccessful
-    if (message.contains("changepassword.successful")) {
-      ChangePasswordSuccessful = color(message.getString("changepassword.successful"));
+    path = "changepassword.successful";
+    if (message.contains(path)) {
+      ChangePasswordSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | changepassword.successful is not given. Setting it...");
-      message.set("changepassword.successful", "Successfully changed password.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Successfully changed password.");
       error = true;
     }
     //Reset
     //ResetUsage
-    if (message.contains("reset.usage")) {
-      ChangePasswordSuccessful = color(message.getString("reset.usage"));
+    path = "reset.usage";
+    if (message.contains(path)) {
+      ChangePasswordSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | reset.usage is not given. Setting it...");
-      message.set("reset.usage", "Usage: /reset [password]");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /reset [password]");
       error = true;
     }
     //ResetNotRegistered
-    if (message.contains("reset.notregistered")) {
-      ChangePasswordSuccessful = color(message.getString("reset.notregistered"));
+    path = "reset.notregistered";
+    if (message.contains(path)) {
+      ChangePasswordSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | reset.notregistered is not given. Setting it...");
-      message.set("reset.notregistered", "You are not registered.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not registered.");
       error = true;
     }
     //ResetWrongPassword
-    if (message.contains("reset.wrongpassword")) {
-      ChangePasswordSuccessful = color(message.getString("reset.wrongpassword"));
+    path = "reset.wrongpassword";
+    if (message.contains(path)) {
+      ChangePasswordSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | reset.wrongpassword is not given. Setting it...");
-      message.set("reset.wrongpassword", "Wrrong password.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Wrrong password.");
       error = true;
     }
     //ResetSuccessful
-    if (message.contains("reset.successful")) {
-      ChangePasswordSuccessful = color(message.getString("reset.successful"));
+    path = "reset.successful";
+    if (message.contains(path)) {
+      ChangePasswordSuccessful = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | reset.successful is not given. Setting it...");
-      message.set("reset.successful", "Reset successful.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Reset successful.");
       error = true;
     }
     //Protection
     //DenyServerSwitch
-    if (message.contains("protection.serverswitch")) {
-      DenyServerSwitch = color(message.getString("protection.serverswitch"));
+    path = "protection.serverswitch";
+    if (message.contains(path)) {
+      DenyServerSwitch = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | protection.serverswitch is not given. Setting it...");
-      message.set("protection.serverswitch", "You are not allowed to switch servers.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not allowed to switch servers.");
       error = true;
     }
     //DenyMessageSend
-    if (message.contains("protection.messagesend")) {
-      DenyMessageSend = color(message.getString("protection.messagesend"));
+    path = "protection.messagesend";
+    if (message.contains(path)) {
+      DenyMessageSend = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | protection.messagesend is not given. Setting it...");
-      message.set("protection.messagesend", "You are not allowed to send messages.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not allowed to send messages.");
       error = true;
     }
     //DenyCommandSend
-    if (message.contains("protection.commandsend")) {
-      DenyCommandSend = color(message.getString("protection.commandsend"));
+    path = "protection.commandsend";
+    if (message.contains(path)) {
+      DenyCommandSend = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | protection.commandsend is not given. Setting it...");
-      message.set("protection.commandsend", "You are not allowed to send commands.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You are not allowed to send commands.");
       error = true;
     }
     //UnauthenticatedKickMessage
-    if (message.contains("unauthenticatedkick.message")) {
-      UnauthenticatedKickMessage = color(message.getString("unauthenticatedkick.message"));
+    path = "unauthenticatedkick.message";
+    if (message.contains(path)) {
+      UnauthenticatedKickMessage = color(message.getString(path));
     }
     else {
-      bcab.getLogger().warning("loadMessage() | unauthenticatedkick.message is not given. Setting it...");
-      message.set("unauthenticatedkick.message", "It took you too long to log in.");
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "It took you too long to log in.");
       error = true;
     }
 

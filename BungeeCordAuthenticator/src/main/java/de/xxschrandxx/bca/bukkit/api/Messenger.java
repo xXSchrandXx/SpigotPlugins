@@ -1,17 +1,12 @@
 package de.xxschrandxx.bca.bukkit.api;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
@@ -19,56 +14,50 @@ import de.xxschrandxx.bca.core.PluginChannels;
 
 public class Messenger implements PluginMessageListener {
 
-  private BungeeCordAuthenticatorBukkitAPI api;
+  private BungeeCordAuthenticatorBukkit bcab;
 
-  public Messenger() {
-    api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
-  }
-
-  public void register(JavaPlugin plugin) {
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.login, this);
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.logout, this);
-    plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, PluginChannels.sync, this);
-    plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, PluginChannels.sync);
-  }
-
-  public void unregister(JavaPlugin plugin) {
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.login, this);
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.logout, this);
-    plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, PluginChannels.sync, this);
-    plugin.getServer().getMessenger().unregisterOutgoingPluginChannel(plugin, PluginChannels.sync);
+  public Messenger(BungeeCordAuthenticatorBukkit bcab) {
+    this.bcab = bcab;
   }
 
   @Override
   public void onPluginMessageReceived(String channel, Player receiver, byte[] bytes) {
-    if (channel.equals(PluginChannels.login)) {
-      ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
-      String message = in.readUTF();
-      UUID uuid = UUID.fromString(message);
-      if (uuid == null) {
-        return;
-      }
-      Player player = Bukkit.getServer().getPlayer(uuid);
-      if (player == null) {
-        return;
-      }
-      api.login(player);
+    bcab.getLogger().info("onPluginMessageReceived | Got message");
+    if (!channel.startsWith(PluginChannels.prefix)) {
+      return;
     }
-    else if (channel.equals(PluginChannels.logout)) {
+    if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message");
+    if (channel.equalsIgnoreCase(PluginChannels.login)) {
+      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.login);
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message = in.readUTF();
       UUID uuid = UUID.fromString(message);
       if (uuid == null) {
         return;
       }
-      Player player = Bukkit.getServer().getPlayer(uuid);
+      Player player = bcab.getServer().getPlayer(uuid);
       if (player == null) {
         return;
       }
-      api.logout(player);
+      bcab.getAPI().login(player);
+    }
+    else if (channel.equalsIgnoreCase(PluginChannels.logout)) {
+      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.logout);
+      ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
+      String message = in.readUTF();
+      UUID uuid = UUID.fromString(message);
+      if (uuid == null) {
+        return;
+      }
+      Player player = bcab.getServer().getPlayer(uuid);
+      if (player == null) {
+        return;
+      }
+      bcab.getAPI().logout(player);
 
     }
-    else if (channel.equals(PluginChannels.sync)) {
+    else if (channel.equalsIgnoreCase(PluginChannels.sync)) {
+      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.sync);
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message[] = in.readUTF().split(";");
       UUID uuid = UUID.fromString(message[0]);
@@ -76,47 +65,28 @@ public class Messenger implements PluginMessageListener {
       if (uuid == null) {
         return;
       }
-      Player player = Bukkit.getServer().getPlayer(uuid);
+      Player player = bcab.getServer().getPlayer(uuid);
       if (player == null) {
         return;
       }
       if (isAuthenticated) {
-        api.login(player);
+        bcab.getAPI().login(player);
       }
       else {
-        api.logout(player);
+        bcab.getAPI().logout(player);
       }
-      /* TODO
-      if (!futures.containsKey(player)) {
-        return;
-      }
-      futures.get(player).complete(isAuthenticated);
-      */
     }
   }
-  
-  //TODO
-//  private final ConcurrentHashMap<Player, CompletableFuture<Boolean>> futures = new ConcurrentHashMap<Player, CompletableFuture<Boolean>>();
 
-//  public CompletableFuture<Boolean> askFor(Player player) {
-  public void askFir(JavaPlugin plugin, Player player) {
+  public void askFor(Player player) {
+    askFor(player, player.getUniqueId());
+  }
+
+  public void askFor(Player sender, UUID uuid) {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    out.writeUTF(player.getUniqueId().toString());
-    player.sendPluginMessage(plugin, PluginChannels.sync, out.toByteArray());
-    /* TODO
-    CompletableFuture<Boolean> future = new CompletableFuture<Boolean>();
-    future.completeOnTimeout(false, 10, TimeUnit.SECONDS);
-    future.whenComplete((boo, th) -> {
-      futures.remove(player);
-    });
-    future.thenRun(new Runnable(){
-      @Override
-      public void run() {
-        futures.remove(player);
-      }
-    });
-    return futures.put(player, future);
-    */
+    out.writeUTF(uuid.toString());
+    if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("askFor | Asking for " + uuid.toString() + " because of " + sender.getName());
+    sender.sendPluginMessage(bcab, PluginChannels.sync, out.toByteArray());
   }
 
 }

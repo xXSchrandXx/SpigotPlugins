@@ -24,7 +24,7 @@ public class AuthenticationListener implements Listener {
       return;
     }
     //TODO
-    //api.getMessenger().askFor(event.getPlayer());
+    api.getMessenger().askFor(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOW)

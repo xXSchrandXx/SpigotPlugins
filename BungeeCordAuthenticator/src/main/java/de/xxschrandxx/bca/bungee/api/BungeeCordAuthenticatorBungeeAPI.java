@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Random;
 import java.util.List;
 import java.util.UUID;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -21,7 +20,6 @@ import de.xxschrandxx.bca.core.OnlineStatus;
 import de.xxschrandxx.bca.core.PluginChannels;
 import de.xxschrandxx.bca.core.SQLHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.config.ServerInfo;
 
 public class BungeeCordAuthenticatorBungeeAPI {
 
@@ -96,19 +94,6 @@ public class BungeeCordAuthenticatorBungeeAPI {
   }
 
   /**
-   * {@linkplain #setAuthenticated(UUID)}
-   * @param player The {@link ProxiedPlayer} for the {@link UUID}.
-   * @throws SQLException {@link SQLException}
-   */
-  public void setAuthenticated(ProxiedPlayer player) throws SQLException{
-    if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setAuthenticated | ProxiedPlayer is null, skipping");
-      return;
-    }
-    setAuthenticated(player.getUniqueId());
-  }
-
-  /**
    * Sets the {@link OnlineStatus} to {@link OnlineStatus#authenticated} for the given {@link UUID}.
    * If {@link #hasOpenSession(UUID)}, removes it.
    * @param uuid The {@link UUID} to set.
@@ -116,9 +101,27 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void setAuthenticated(UUID uuid) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setAuthenticated | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | UUID is null, skipping");
       return;
     }
+    setAuthenticated(bcab.getProxy().getPlayer(uuid));
+  }
+
+  /**
+   * {@linkplain #setAuthenticated(UUID)}
+   * @param player The {@link ProxiedPlayer} for the {@link UUID}.
+   * @throws SQLException {@link SQLException}
+   */
+  public void setAuthenticated(ProxiedPlayer player) throws SQLException{
+    if (player == null) {
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | ProxiedPlayer is null, skipping");
+      return;
+    }
+    if (!player.isConnected()) {
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | ProxiedPlayer is not connected, skipping");
+      return;
+    }
+    UUID uuid = player.getUniqueId();
     //Setting SQL first because of the SQLException
     getSQL().setStatus(uuid, OnlineStatus.authenticated);
     //Remove OpenSession
@@ -132,9 +135,8 @@ public class BungeeCordAuthenticatorBungeeAPI {
     //Sending PluginMessage
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData(PluginChannels.login, out.toByteArray());
-    }
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage from " + uuid.toString() + " to " + player.getServer().getInfo().getName());
+    player.sendData(PluginChannels.login, out.toByteArray());
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
       unauthedkick.remove(uuid);
@@ -148,23 +150,14 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void unsetAuthenticated(ProxiedPlayer player) throws SQLException {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetAuthenticated | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is null, skipping");
       return;
     }
-    unsetAuthenticated(player.getUniqueId());
-  }
-
-  /**
-   * Sets the {@link OnlineStatus} to {@link OnlineStatus#unauthenticated} for the given {@link UUID}.
-   * If {@link #hasOpenSession(UUID)}, removes it.
-   * @param uuid The {@link UUID} to set.
-   * @throws SQLException {@link SQLException}
-   */
-  public void unsetAuthenticated(UUID uuid) throws SQLException {
-    if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetAuthenticated | UUID is null, skipping");
+    if (!player.isConnected()) {
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is not connected, skipping");
       return;
     }
+    UUID uuid = player.getUniqueId();
     //Setting SQL first because of the SQLException
     getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
     //Remove OpenSession
@@ -178,9 +171,22 @@ public class BungeeCordAuthenticatorBungeeAPI {
     //Sending PluginMessage
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    for (Entry<String, ServerInfo> si : bcab.getProxy().getServers().entrySet()) {
-      si.getValue().sendData(PluginChannels.logout, out.toByteArray());
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage");
+    player.sendData(PluginChannels.logout, out.toByteArray());
+  }
+
+  /**
+   * Sets the {@link OnlineStatus} to {@link OnlineStatus#unauthenticated} for the given {@link UUID}.
+   * If {@link #hasOpenSession(UUID)}, removes it.
+   * @param uuid The {@link UUID} to set.
+   * @throws SQLException {@link SQLException}
+   */
+  public void unsetAuthenticated(UUID uuid) throws SQLException {
+    if (uuid == null) {
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | UUID is null, skipping");
+      return;
     }
+    unsetAuthenticated(bcab.getProxy().getPlayer(uuid));
   }
 
   /**
@@ -190,7 +196,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void setOpenSession(ProxiedPlayer player) throws SQLException {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setOpensession | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setOpensession | ProxiedPlayer is null, skipping");
       return;
     }
     setOpenSession(player.getUniqueId());
@@ -204,7 +210,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void setOpenSession(UUID uuid) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setOpensession | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setOpensession | UUID is null, skipping");
       return;
     }
     //Setting SQL first because of the SQLException
@@ -221,7 +227,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
 
   public void unsetOpenSession(ProxiedPlayer player) throws SQLException {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetOpensession | ProxiedPalyer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetOpensession | ProxiedPalyer is null, skipping");
       return;
     }
     unsetAuthenticated(player.getUniqueId());
@@ -235,7 +241,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void unsetOpenSession(UUID uuid) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.unsetOpensession | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetOpensession | UUID is null, skipping");
       return;
     }
     //Setting SQL first because of the SQLException
@@ -259,7 +265,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void removePlayerEntry(UUID uuid) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.reset | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.reset | UUID is null, skipping");
       return;
     }
     //Setting unauthenticate
@@ -276,11 +282,11 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void sync(ProxiedPlayer player) {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.sync | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.sync | ProxiedPlayer is null, skipping");
       return;
     }
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    String message = player.getUniqueId().toString() + ";" + isAuthenticated(player);
+    String message = player.getUniqueId().toString() + ";" + isAuthenticated(player).toString();
     out.writeUTF(message);
     player.sendData(PluginChannels.sync, out.toByteArray());
   }
@@ -292,7 +298,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean isAuthenticated(ProxiedPlayer player) {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.isAuthenticated | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.isAuthenticated | ProxiedPlayer is null, skipping");
       return null;
     }
     return isAuthenticated(player.getUniqueId());
@@ -305,7 +311,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean isAuthenticated(UUID uuid) {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.isAuthenticated | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.isAuthenticated | UUID is null, skipping");
       return null;
     }
     if (getAuthenticated().contains(uuid))
@@ -321,7 +327,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean hasOpenSession(ProxiedPlayer player) {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.hasOpenSession | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.hasOpenSession | ProxiedPlayer is null, skipping");
       return null;
     }
     return hasOpenSession(player.getUniqueId());
@@ -334,7 +340,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean hasOpenSession(UUID uuid) {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.hasOpenSession | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.hasOpenSession | UUID is null, skipping");
       return null;
     }
     if (getOpenSessions().contains(uuid))
@@ -353,15 +359,15 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean checkPassword(UUID uuid, String password) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.checkPassword | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.checkPassword | UUID is null, skipping");
       return null;
     }
     if (password == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.checkPassword | password is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.checkPassword | password is null, skipping");
       return null;
     }
     if (password.isEmpty() || password.isBlank()) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.checkPassword | password is empty or blank, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.checkPassword | password is empty or blank, skipping");
       return null;
     }
     return getPasswordHandler().checkPassword(password, uuid);
@@ -377,7 +383,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean createPlayerEntry(ProxiedPlayer player, String password) throws SQLException {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | ProxiedPlayer is null, skipping");
       return null;
     }
     return createPlayerEntry(player.getUniqueId(), player.getName(), password, player.getAddress().getAddress().getHostAddress());
@@ -395,23 +401,23 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public Boolean createPlayerEntry(UUID uuid, String playername, String password, String ip) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | UUID is null, skipping");
       return null;
     }
     if (password == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | password is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | password is null, skipping");
       return null;
     }
     if (password.isEmpty() || password.isBlank()) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | password is empty or blank, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | password is empty or blank, skipping");
       return null;
     }
     if (ip == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | ip is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | ip is null, skipping");
       return null;
     }
     if (ip.isEmpty() || ip.isBlank()) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.createNewPlayerEntry | ip is empty or blank, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.createNewPlayerEntry | ip is empty or blank, skipping");
       return null;
     }
     Integer ptype = new Random().nextInt(getPasswordHandler().getMaxTypes()+1);
@@ -432,7 +438,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void setPassword(ProxiedPlayer player, String password) throws SQLException {
     if (player == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setPassword | ProxiedPlayer is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setPassword | ProxiedPlayer is null, skipping");
       return;
     }
     setPassword(player.getUniqueId(), password);
@@ -446,15 +452,15 @@ public class BungeeCordAuthenticatorBungeeAPI {
    */
   public void setPassword(UUID uuid, String password) throws SQLException {
     if (uuid == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setPassword | UUID is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setPassword | UUID is null, skipping");
       return;
     }
     if (password == null) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setPassword | password is null, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setPassword | password is null, skipping");
       return;
     }
     if (password.isEmpty() || password.isBlank()) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungee.setPassword | password is empty or blank, skipping");
+      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setPassword | password is empty or blank, skipping");
       return;
     }
     Integer ptype = new Random().nextInt(getPasswordHandler().getMaxTypes()+1);

@@ -88,7 +88,7 @@ public class SQLHandler {
 
   protected void update(String qry) throws SQLException {
     if (isdebug)
-      logger.info("DEUG | performing -> " + qry);
+      logger.info("DEBUG | performing -> " + qry);
     Connection con = getConnection();
     Statement st = null;
     try {
@@ -103,7 +103,7 @@ public class SQLHandler {
 
   protected List<Map<String, Object>> query(String qry) throws SQLException {
     if (isdebug)
-      logger.info("DEUG | performing -> " + qry);
+      logger.info("DEBUG | performing -> " + qry);
     List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     Connection con = getConnection();
     Statement st = null;
@@ -132,7 +132,7 @@ public class SQLHandler {
         catch (SQLException ignore) {}
     }
     if (isdebug)
-      logger.info("DEUG | got -> " + resultList.toString());
+      logger.info("DEBUG | got -> " + resultList.toString());
     return resultList;
   }
 
