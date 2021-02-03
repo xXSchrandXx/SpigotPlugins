@@ -102,31 +102,34 @@ public class BCABListener implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onDisconnect(PlayerDisconnectEvent event) {
-    if (!api.getConfigHandler().SessionEnabled) {
+    ProxiedPlayer player = event.getPlayer();
+    if (api.getConfigHandler().SessionEnabled) {
       try {
-        if (!api.getSQL().checkPlayerEntry(event.getPlayer())) {
+        if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
+          if (api.getConfigHandler().isDebugging)
+            api.getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
           return;
         }
-        api.unsetAuthenticated(event.getPlayer());
+        api.setOpenSession(player);
       }
       catch (SQLException e) {
         e.printStackTrace();
       }
-      return;
     }
-    ProxiedPlayer player = event.getPlayer();
-    try {
-      if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
-        if (api.getConfigHandler().isDebugging)
-          api.getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
-        return;
+    else {
+      try {
+        if (!api.getSQL().checkPlayerEntry(player)) {
+          if (api.getConfigHandler().isDebugging)
+            api.getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
+          return;
+        }
+        api.unsetAuthenticated(player);
       }
-      api.setOpenSession(player);
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 package de.xxschrandxx.bca.bungee.api;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -124,6 +125,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     UUID uuid = player.getUniqueId();
     //Setting SQL first because of the SQLException
     getSQL().setStatus(uuid, OnlineStatus.authenticated);
+    getSQL().setLastSeen(uuid, player.getAddress().getAddress().getHostAddress(), new Timestamp(System.currentTimeMillis()));
     //Remove OpenSession
     if (opensessions.contains(uuid))
       unsetOpenSession(uuid);
@@ -154,10 +156,12 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is null, skipping");
       return;
     }
+    /*
     if (!player.isConnected()) {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is not connected, skipping");
       return;
     }
+    */
     UUID uuid = player.getUniqueId();
     //Setting SQL first because of the SQLException
     getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
