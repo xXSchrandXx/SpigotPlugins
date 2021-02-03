@@ -132,14 +132,14 @@ public class BungeeCordAuthenticatorBungeeAPI {
       authenticated.add(uuid);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new LoginEvent(uuid));
-    //Sending PluginMessage
-    ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    out.writeUTF(uuid.toString());
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
       unauthedkick.remove(uuid);
     }
     if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.login + ", " + uuid.toString());
+    //Sending PluginMessage
+    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    out.writeUTF(uuid.toString());
 //    player.sendData(PluginChannels.login, out.toByteArray());
     player.getServer().getInfo().sendData(PluginChannels.login, out.toByteArray());
   }

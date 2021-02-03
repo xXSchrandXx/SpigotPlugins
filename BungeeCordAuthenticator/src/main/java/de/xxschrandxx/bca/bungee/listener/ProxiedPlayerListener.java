@@ -10,6 +10,7 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 public class ProxiedPlayerListener implements Listener {
   
@@ -19,7 +20,7 @@ public class ProxiedPlayerListener implements Listener {
     this.api = api;
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   public void onServerSwitch(ServerConnectEvent event) {
     if (event.isCancelled()) {
       return;

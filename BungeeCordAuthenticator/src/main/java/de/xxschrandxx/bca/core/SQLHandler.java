@@ -23,7 +23,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class SQLHandler {
 
-  private Integer version = 1;
+  private Integer version = 2;
 
   private HikariDataSource hikari;
 

@@ -24,7 +24,7 @@ public class AuthenticationListener implements Listener {
       return;
     }
     //TODO
-    api.getMessenger().askFor(event.getPlayer());
+    //api.getMessenger().askFor(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOW)
@@ -41,7 +41,7 @@ public class AuthenticationListener implements Listener {
     event.getPlayer().teleport(api.getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
   }
   
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onLogout(LogoutEvent event) {
     if (!api.getConfigHandler().TeleportUnauthed) {
       return;
@@ -49,13 +49,15 @@ public class AuthenticationListener implements Listener {
     if (api.getConfigHandler().UnauthedLocation == null) {
       return;
     }
+    /*
     if (api.isAuthenticated(event.get())) {
       return;
     }
+    */
     event.get().teleport(api.getConfigHandler().UnauthedLocation, TeleportCause.PLUGIN);
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onLogin(LoginEvent event) {
     if (!api.getConfigHandler().TeleportUnauthed) {
       return;
@@ -63,9 +65,11 @@ public class AuthenticationListener implements Listener {
     if (api.getConfigHandler().AuthenticatedLocation == null) {
       return;
     }
+    /*
     if (!api.isAuthenticated(event.get())) {
       return;
     }
+    */
     event.get().teleport(api.getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
   }
   

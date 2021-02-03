@@ -46,6 +46,8 @@ public class BungeeCordAuthenticatorBukkitAPI {
       bcab.getLogger().warning(player.getUniqueId().toString() + " is not on this server.");
       return false;
     }
+    if (getConfigHandler().isDebugging)
+      getLogger().info("DEBUG | login calling LoginEvent");
     bcab.getServer().getPluginManager().callEvent(new LoginEvent(player));
     return authenticated.add(player);
   }
@@ -54,6 +56,8 @@ public class BungeeCordAuthenticatorBukkitAPI {
     if (!player.isOnline()) {
       bcab.getLogger().warning(player.getUniqueId().toString() + " is not on this server.");
     }
+    if (getConfigHandler().isDebugging)
+      getLogger().info("DEBUG | login calling LogoutEvent");
     bcab.getServer().getPluginManager().callEvent(new LogoutEvent(player));
     return authenticated.remove(player);
   }

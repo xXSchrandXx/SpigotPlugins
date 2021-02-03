@@ -22,7 +22,6 @@ public class Messenger implements PluginMessageListener {
 
   @Override
   public void onPluginMessageReceived(String channel, Player receiver, byte[] bytes) {
-    bcab.getLogger().info("onPluginMessageReceived | Got message");
     if (!channel.startsWith(PluginChannels.prefix)) {
       return;
     }

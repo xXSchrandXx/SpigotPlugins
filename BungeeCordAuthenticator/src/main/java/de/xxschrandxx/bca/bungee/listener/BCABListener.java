@@ -3,14 +3,20 @@ package de.xxschrandxx.bca.bungee.listener;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
+import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import de.xxschrandxx.bca.core.PluginChannels;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 public class BCABListener implements Listener {
   
@@ -50,18 +56,6 @@ public class BCABListener implements Listener {
     if (api.getConfigHandler().isDebugging)
       api.getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " -> " + playername);
 
-    try {
-      if (!api.getSQL().checkPlayerEntry(uuid)) {
-        if (api.getConfigHandler().isDebugging)
-          api.getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " is not in database.");
-        return;
-      }
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
-      return;
-    }
-
     //First check the Version in database
     try {
       Integer version = api.getSQL().getVersion(playername);
@@ -75,6 +69,18 @@ public class BCABListener implements Listener {
     }
     catch (SQLException e) {
       event.getPlayer().disconnect(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      e.printStackTrace();
+      return;
+    }
+
+    try {
+      if (!api.getSQL().checkPlayerEntry(uuid)) {
+        if (api.getConfigHandler().isDebugging)
+          api.getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " is not in database.");
+        return;
+      }
+    }
+    catch (SQLException e) {
       e.printStackTrace();
       return;
     }
@@ -113,6 +119,28 @@ public class BCABListener implements Listener {
     catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onServerConnectEvent(ServerConnectEvent event) {
+    if (event.isCancelled()) {
+      return;
+    }
+    //Sending PluginMessage
+    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    UUID uuid = event.getPlayer().getUniqueId();
+    out.writeUTF(uuid.toString());
+    event.getTarget().sendData(PluginChannels.login, out.toByteArray());
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onServerDisconnectEvent(ServerDisconnectEvent event) {
+    //Sending PluginMessage
+    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    UUID uuid = event.getPlayer().getUniqueId();
+    out.writeUTF(uuid.toString());
+    event.getTarget().sendData(PluginChannels.logout, out.toByteArray());
   }
 
 }
