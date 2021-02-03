@@ -112,7 +112,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
    * @param player The {@link ProxiedPlayer} for the {@link UUID}.
    * @throws SQLException {@link SQLException}
    */
-  public void setAuthenticated(ProxiedPlayer player) throws SQLException{
+  public void setAuthenticated(ProxiedPlayer player) throws SQLException {
     if (player == null) {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | ProxiedPlayer is null, skipping");
       return;
@@ -135,12 +135,13 @@ public class BungeeCordAuthenticatorBungeeAPI {
     //Sending PluginMessage
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage from " + uuid.toString() + " to " + player.getServer().getInfo().getName());
-    player.sendData(PluginChannels.login, out.toByteArray());
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
       unauthedkick.remove(uuid);
     }
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.login + ", " + uuid.toString());
+//    player.sendData(PluginChannels.login, out.toByteArray());
+    player.getServer().getInfo().sendData(PluginChannels.login, out.toByteArray());
   }
 
   /**
@@ -171,8 +172,9 @@ public class BungeeCordAuthenticatorBungeeAPI {
     //Sending PluginMessage
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage");
-    player.sendData(PluginChannels.logout, out.toByteArray());
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | Sending pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.logout + ", " + uuid.toString());
+//    player.sendData(PluginChannels.logout, out.toByteArray());
+    player.getServer().getInfo().sendData(PluginChannels.logout, out.toByteArray());
   }
 
   /**
@@ -286,9 +288,12 @@ public class BungeeCordAuthenticatorBungeeAPI {
       return;
     }
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    String message = player.getUniqueId().toString() + ";" + isAuthenticated(player).toString();
+    UUID uuid = player.getUniqueId();
+    String message = uuid.toString() + ";" + isAuthenticated(player).toString();
     out.writeUTF(message);
-    player.sendData(PluginChannels.sync, out.toByteArray());
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.sync | Sending pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.sync + ", " + uuid.toString());
+//    player.sendData(PluginChannels.sync, out.toByteArray());
+    player.getServer().getInfo().sendData(PluginChannels.sync, out.toByteArray());
   }
 
   /**

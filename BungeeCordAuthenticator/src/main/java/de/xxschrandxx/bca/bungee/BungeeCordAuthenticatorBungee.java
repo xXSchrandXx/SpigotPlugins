@@ -27,6 +27,8 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
 
   public void onEnable() {
 
+    instance = this;
+
     api = new BungeeCordAuthenticatorBungeeAPI(this);
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded BungeeCordAuthenticatorBungeeAPI.");
@@ -86,8 +88,6 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("Debbung enabled.");
 
-    instance = this;
-    
   }
 
   public void onDisable() {

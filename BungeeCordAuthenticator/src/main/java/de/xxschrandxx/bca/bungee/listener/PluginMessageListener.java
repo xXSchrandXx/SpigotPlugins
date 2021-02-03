@@ -36,7 +36,11 @@ public class PluginMessageListener implements Listener {
     }
     ByteArrayDataInput in = ByteStreams.newDataInput( e.getData() );
     UUID uuid = UUID.fromString(in.readUTF());
+    if (api.getConfigHandler().isDebugging)
+      api.getLogger().info("DEBUG | Sync question had " + uuid.toString() + " as UUID");
     ProxiedPlayer p = (ProxiedPlayer) ProxyServer.getInstance().getPlayer(uuid);
+    if (api.getConfigHandler().isDebugging)
+      api.getLogger().info("DEBUG | Now sending sync for " + uuid.toString() + " / " + p.getName());
     api.sync(p);
   }
 
