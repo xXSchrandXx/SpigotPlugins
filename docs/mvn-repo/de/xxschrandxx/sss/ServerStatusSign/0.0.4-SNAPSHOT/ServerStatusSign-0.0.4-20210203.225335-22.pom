@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>de.xxschrandxx</groupId>
+    <artifactId>spigotplugins-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>ServerStatusSign</artifactId>
+  <groupId>de.xxschrandxx.sss</groupId>
+  <version>0.0.4-SNAPSHOT</version>
+  
+  <dependencies>
+
+  	<dependency>
+      <groupId>de.xxschrandxx.api</groupId>
+      <artifactId>SchrandAPI</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+
+    <dependency>
+      <groupId>BungeeCord</groupId>
+      <artifactId>BungeeCord</artifactId>
+      <version>1.15-SNAPSHOT #1477</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}\internalRepo\BungeeCord.jar</systemPath>
+    </dependency>
+
+  </dependencies>
+
+</project>
