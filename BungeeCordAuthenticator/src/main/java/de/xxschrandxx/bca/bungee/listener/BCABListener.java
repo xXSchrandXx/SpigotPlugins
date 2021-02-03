@@ -105,6 +105,15 @@ public class BCABListener implements Listener {
   @EventHandler
   public void onDisconnect(PlayerDisconnectEvent event) {
     if (!api.getConfigHandler().SessionEnabled) {
+      try {
+        if (!api.getSQL().checkPlayerEntry(event.getPlayer())) {
+          return;
+        }
+        api.unsetAuthenticated(event.getPlayer());
+      }
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
       return;
     }
     ProxiedPlayer player = event.getPlayer();
