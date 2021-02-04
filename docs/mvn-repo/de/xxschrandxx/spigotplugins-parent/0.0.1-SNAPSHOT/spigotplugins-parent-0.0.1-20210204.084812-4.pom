@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>SpigotPlugins-Parent</name>
+  <artifactId>spigotplugins-parent</artifactId>
+  <groupId>de.xxschrandxx</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  <url>https://github.com/xXSchrandXx/SchrandAPI</url>
+  <packaging>pom</packaging>
+
+  <properties>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.directory>${project.build.directory}\${project.version}\</project.build.directory>
+    <buildDirectory>${project.basedir}\target\${project.version}</buildDirectory>
+    <skipTests>true</skipTests>
+  </properties>
+
+  <modules>
+    <module>AsyncWorldManager</module>
+    <module>AsyncWorldManagerGUI</module>
+    <module>BungeeCordAuthenticator</module>
+    <module>SchrandAPI</module>
+    <module>NetherPortalGate</module>
+    <module>ServerStatusSign</module>
+    <module>WoltlabAPI</module>
+    <module>WoltlabSyncer</module>
+  </modules>
+
+  <repositories>
+
+    <!-- FAWE-Repo -->
+    <repository>
+      <id>fawe-repo</id>
+      <url>https://mvn.intellectualsites.com/content/repositories/releases/</url>
+    </repository>
+
+    <!-- WorldEdit-Repo -->
+    <repository>
+      <id>we-repo</id>
+      <url>http://maven.sk89q.com/repo/</url>
+    </repository>
+
+    <!-- Metrics-Repo -->
+    <repository>
+      <id>CodeMC</id>
+      <url>https://repo.codemc.org/repository/maven-public</url>
+    </repository>
+
+    <!-- LuckPerms-Repo -->
+    <repository>
+      <id>LuckPerms-API</id>
+      <url>https://repo1.maven.org/maven2/net/luckperms/api/</url>
+    </repository>
+
+    <!-- Spigot-Repo -->
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+
+    <!-- Bungee-Repo -->
+    <repository>
+      <id>bungeecord-repo</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
+
+    <!-- Jitpack Repo -->
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+
+    <!-- PAF Repo -->
+    <repository>
+      <id>simonsators-repo</id>
+      <url>https://simonsator.de/repo</url>
+    </repository>
+
+  </repositories>
+
+  <dependencies>
+
+    <!-- Bungee-Dependency -->
+    <dependency>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.16-R0.4-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Spigot-Dependency -->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.16.4-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <directory>${buildDirectory}</directory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+              <configuration>
+                <source>${maven.compiler.source}</source>
+                <target>${maven.compiler.source}</target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <configuration>
+              <source>${maven.compiler.source}</source>
+              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+            </configuration>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <configuration>
+            <altDeploymentRepository>internal-repo::default::file://${docsDirectory}/mvn-repo/</altDeploymentRepository>
+        </configuration>
+      </plugin> 
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!--
+            <phase>install</phase>
+            -->
+            <phase>deploy</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${docsDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>/target/</directory>
+                  <targetPath>${project.artifactId}</targetPath>
+                  <includes>
+                    <include>*/*.jar</include>
+                    <include>*/apidocs/</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <issueManagement>
+    <system>Issues</system>
+    <url>https://github.com/xXSchrandXx/SpigotPlugins/issues/new</url>
+  </issueManagement>
+
+</project>
