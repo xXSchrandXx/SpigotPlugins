@@ -38,23 +38,3 @@ Versions:
   * [NetherPortalGate](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/NetherPortalGate) (!Support discontinued use [MassiveCore](https://github.com/xXSchrandXx/MassiveCore) with [CreativeGates](https://github.com/xXSchrandXx/CreativeGates))
   * [SchrandAPI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/SchrandAPI)
   * [ServerStatusSigns](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/ServerStatusSign) (!Support discontinued)
-  
-## Maven-Repo:
-```
-<repository>
-  <id>spigotplugins-repo</id>
-  <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
-  <releases>
-    <checksumPolicy>ignore</checksumPolicy>
-  </releases>
-  <snapshots>
-    <checksumPolicy>ignore</checksumPolicy>
-  </snapshots>
-</repository>
-
-<dependency>
-  <groupId>de.xxschrandxx.awm</groupId>
-  <artifactId>AsyncWorldManager</artifactId>
-  <version>`VERSION`</version>
-</dependency>
-```

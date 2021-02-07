@@ -7,17 +7,3 @@
   * [ServerStatusSigns](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/ServerStatusSign) (!Support discontinued)
   * [WoltlabAPI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/WoltlabAPI)
   * [WoltlabSyncer](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/WoltlabSyncer)
-
-## Maven-Repo:
-```
-<repository>
-  <id>spigotplugins-repo</id>
-  <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
-  <releases>
-    <checksumPolicy>ignore</checksumPolicy>
-  </releases>
-  <snapshots>
-    <checksumPolicy>ignore</checksumPolicy>
-  </snapshots>
-</repository>
-```
