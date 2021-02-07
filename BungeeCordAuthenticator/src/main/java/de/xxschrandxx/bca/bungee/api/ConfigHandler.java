@@ -33,35 +33,7 @@ public class ConfigHandler {
     loadConfig();
 
     //Loading HikariConfig-Path
-    hikariconfigfile = new File(bcab.getDataFolder(), "hikariconfig.properties");
-    if (!hikariconfigfile.exists()) {
-      if (!bcab.getDataFolder().exists()) {
-        bcab.getDataFolder().mkdirs();
-      }
-      try {
-        hikariconfigfile.createNewFile();
-        PrintStream writer = new PrintStream(hikariconfigfile);
-        writer.println("#Default file, infos configuration infos under:");
-        writer.println("#https://github.com/brettwooldridge/HikariCP/wiki/Configuration");
-        writer.println("jdbcUrl=jdbc:mysql://localhost:3306/");
-        writer.println("username=test");
-        writer.println("password=test");
-        writer.println("dataSource.databaseName=test");
-        writer.println("dataSource.cachePrepStmts=true");
-        writer.println("dataSource.prepStmtCacheSize=250");
-        writer.println("dataSource.useServerPrepStmts=true");
-        writer.println("dataSource.useLocalSessionState=true");
-        writer.println("dataSource.rewriteBatchedStatements=true");
-        writer.println("dataSource.cacheResultSetMetadata=true");
-        writer.println("dataSource.cacheServerConfiguration=true");
-        writer.println("dataSource.elideSetAutoCommits=true");
-        writer.println("dataSource.maintainTimeStats=false");
-        writer.close();
-      }
-      catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
+    loadHikaryCP();
 
     //Loading message.yml
     loadMessage();
@@ -275,6 +247,38 @@ public class ConfigHandler {
     }
   }
 
+  public void loadHikaryCP() {
+    hikariconfigfile = new File(bcab.getDataFolder(), "hikariconfig.properties");
+    if (!hikariconfigfile.exists()) {
+      if (!bcab.getDataFolder().exists()) {
+        bcab.getDataFolder().mkdirs();
+      }
+      try {
+        hikariconfigfile.createNewFile();
+        PrintStream writer = new PrintStream(hikariconfigfile);
+        writer.println("#Default file, infos configuration infos under:");
+        writer.println("#https://github.com/brettwooldridge/HikariCP/wiki/Configuration");
+        writer.println("jdbcUrl=jdbc:mysql://localhost:3306/");
+        writer.println("username=test");
+        writer.println("password=test");
+        writer.println("dataSource.databaseName=test");
+        writer.println("dataSource.cachePrepStmts=true");
+        writer.println("dataSource.prepStmtCacheSize=250");
+        writer.println("dataSource.useServerPrepStmts=true");
+        writer.println("dataSource.useLocalSessionState=true");
+        writer.println("dataSource.rewriteBatchedStatements=true");
+        writer.println("dataSource.cacheResultSetMetadata=true");
+        writer.println("dataSource.cacheServerConfiguration=true");
+        writer.println("dataSource.elideSetAutoCommits=true");
+        writer.println("dataSource.maintainTimeStats=false");
+        writer.close();
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   //Message Values
   public String Prefix;
   public String PlayerOnly;
@@ -321,6 +325,22 @@ public class ConfigHandler {
 
   //UnauthenticatedKick
   public String UnauthenticatedKickMessage;
+
+  //BCAB
+  public String BCABUsage;
+  public String BCABPermission;
+  public String BCABSQLshutdown;
+  public String BCABReload;
+  public String BCABUserUuidEmpty;
+  public String BCABPasswordEmpty;
+  public String BCABUserUuidNull;
+  public String BCABAlreadyAuthenticated;
+  public String BCABForceLoginSuccess;
+  public String BCABNotAuthenticated;
+  public String BCABNotConnected;
+  public String BCABForceResetSuccess;
+  public String BCABForceRegisterSuccess;
+  public String BCABForcePasswordSuccess;
 
   public void loadMessage() {
     boolean error = false;
@@ -651,6 +671,147 @@ public class ConfigHandler {
     else {
       bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
       message.set(path, "It took you too long to log in.");
+      error = true;
+    }
+    //BCAB
+    //BCABUsage
+    path = "bcab.usage";
+    if (message.contains(path)) {
+      BCABUsage = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /bcab <reload/forcelogin/forcereset/forceregister/forcepassword> []");
+      error = true;
+    }
+    //BCABPermission
+    path = "bcab.nopermission";
+    if (message.contains(path)) {
+      BCABPermission = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You don't have the permission to do that. [%permission%]");
+      error = true;
+    }
+    //BCABSQLshutdown
+    path = "bcab.reload.sqlshutdown";
+    if (message.contains(path)) {
+      BCABSQLshutdown = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Closing SQL-Connection...");
+      error = true;
+    }
+    //BCABReload
+    path = "bcab.reload.success";
+    if (message.contains(path)) {
+      BCABReload = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "SQL-connection, config.yml and message.yml reloaded successfully");
+      error = true;
+    }
+    //BCABUserUuidEmpty
+    path = "bcab.useroruuidempty";
+    if (message.contains(path)) {
+      BCABUserUuidEmpty = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Name or UUID is empty or blank.");
+      error = true;
+    }
+    //BCABPasswordEmpty
+    path = "bcab.passwordempty";
+    if (message.contains(path)) {
+      BCABPasswordEmpty = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Password is empty or blank.");
+      error = true;
+    }
+    //BCABUserUuidNull
+    path = "bcab.useroruuidnull";
+    if (message.contains(path)) {
+      BCABUserUuidNull = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Player with given Name or UUID is null.");
+      error = true;
+    }
+    //BCABNotConnected
+    path = "bcab.playernotconnected";
+    if (message.contains(path)) {
+      BCABNotConnected = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Player with given Name or UUID is not connected.");
+      error = true;
+    }
+    //BCABAlreadyAuthenticated
+    path = "bcab.alreadyauthenticated";
+    if (message.contains(path)) {
+      BCABAlreadyAuthenticated = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Player with given Name or UUID is already authenticated.");
+      error = true;
+    }
+    //BCABForceLoginSuccess
+    path = "bcab.forceloginsuccess";
+    if (message.contains(path)) {
+      BCABForceLoginSuccess = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Successfully authenticated %player%.");
+      error = true;
+    }
+    //BCABNotAuthenticated
+    path = "bcab.notauthenticated";
+    if (message.contains(path)) {
+      BCABNotAuthenticated = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Player with given Name or UUID is not authenticated.");
+      error = true;
+    }
+    //BCABForceResetSuccess
+    path = "bcab.forceresetsuccess";
+    if (message.contains(path)) {
+      BCABForceResetSuccess = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Successfully authenticated %player%.");
+      error = true;
+    }
+    //BCABForceRegisterSuccess
+    path = "bcab.forceregistersuccess";
+    if (message.contains(path)) {
+      BCABForceRegisterSuccess = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Successfully registered %player%.");
+      error = true;
+    }
+    //BCABForcePasswordSuccess
+    path = "bcab.forcepasswordsuccess";
+    if (message.contains(path)) {
+      BCABForcePasswordSuccess = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Successfully set %player%'s password.");
       error = true;
     }
 

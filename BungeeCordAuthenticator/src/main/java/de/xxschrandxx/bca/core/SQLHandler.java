@@ -82,11 +82,11 @@ public class SQLHandler {
   /**
    * {@linkplain HikariDataSource}
    */
-  protected void shutdown() {
+  public void shutdown() {
     hikari.close();
   } 
 
-  protected void update(String qry) throws SQLException {
+  public void update(String qry) throws SQLException {
     if (isdebug)
       logger.info("DEBUG | performing -> " + qry);
     Connection con = getConnection();
@@ -101,7 +101,7 @@ public class SQLHandler {
     }
   }
 
-  protected List<Map<String, Object>> query(String qry) throws SQLException {
+  public List<Map<String, Object>> query(String qry) throws SQLException {
     if (isdebug)
       logger.info("DEBUG | performing -> " + qry);
     List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
@@ -141,7 +141,7 @@ public class SQLHandler {
    * @return Weatehr the table exists.
    * @throws SQLException {@link SQLException}
    */
-  protected Boolean existsTable() throws SQLException {
+  public Boolean existsTable() throws SQLException {
     List<Map<String, Object>> qry = query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" + database + "' AND TABLE_NAME = '" + table + "'");
     if (qry.isEmpty())
       return false;

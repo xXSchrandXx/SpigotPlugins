@@ -7,7 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.xxschrandxx.wsc</groupId>
-  <artifactId>WoltlabSyncer</artifactId>
+  <artifactId>woltlabsyncer</artifactId>
+  <name>WoltlabSyncer</name>
   <version>0.0.1-SNAPSHOT</version>
   <build>
     <plugins>

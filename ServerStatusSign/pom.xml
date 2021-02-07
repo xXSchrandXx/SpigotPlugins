@@ -8,15 +8,17 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   
-  <artifactId>ServerStatusSign</artifactId>
+  <name>ServerStatusSign</name>
+  <artifactId>serverstatussign</artifactId>
   <groupId>de.xxschrandxx.sss</groupId>
   <version>0.0.4-SNAPSHOT</version>
-  
+  <packaging>jar</packaging>
+
   <dependencies>
 
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>SchrandAPI</artifactId>
+      <artifactId>schrandapi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 

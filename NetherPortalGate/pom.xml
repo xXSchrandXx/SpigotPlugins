@@ -8,14 +8,16 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   
-  <artifactId>NetherPortalGate</artifactId>
+  <name>NetherPortalGate</name>
+  <artifactId>netherportalgate</artifactId>
   <groupId>de.xxschrandxx.npg</groupId>
   <version>0.0.5-SNAPSHOT</version>
-  
+  <packaging>jar</packaging>
+
   <dependencies>
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>SchrandAPI</artifactId>
+      <artifactId>schrandapi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

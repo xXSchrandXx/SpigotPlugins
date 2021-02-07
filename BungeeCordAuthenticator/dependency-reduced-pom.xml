@@ -7,7 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.xxschrandxx.bca</groupId>
-  <artifactId>BungeeCordAuthenticator</artifactId>
+  <artifactId>bungeecordauthenticator</artifactId>
+  <name>BungeeCordAuthenticator</name>
   <version>0.0.2-SNAPSHOT</version>
   <build>
     <plugins>
@@ -53,6 +54,18 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>de.xxschrandxx.api</groupId>
+      <artifactId>schrandapi</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>Minecraft-Server</artifactId>
+          <groupId>Minecraft-Server</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>

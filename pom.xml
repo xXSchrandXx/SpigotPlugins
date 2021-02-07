@@ -16,7 +16,6 @@
     <project.build.directory>${project.build.directory}\${project.version}\</project.build.directory>
     <buildDirectory>${project.basedir}\target\${project.version}</buildDirectory>
     <skipTests>true</skipTests>
-    <createChecksum>false</createChecksum>
   </properties>
 
   <modules>
@@ -177,9 +176,28 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+      </plugin>
+
     </plugins>
 
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub xXSchrandXx Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/xXSchrandXx/SpigotPlugins</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </distributionManagement>
 
   <issueManagement>
     <system>Issues</system>

@@ -2,7 +2,7 @@ package de.xxschrandxx.bca.bungee.command;
 
 import java.sql.SQLException;
 
-import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,63 +10,63 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class Login extends Command {
 
-  BungeeCordAuthenticatorBungeeAPI api;
+  BungeeCordAuthenticatorBungee bcab;
 
-  public Login(BungeeCordAuthenticatorBungeeAPI api) {
+  public Login(BungeeCordAuthenticatorBungee bcab) {
     super("login");
-    this.api = api;
+    this.bcab = bcab;
   }
 
   @Override
   public void execute(CommandSender sender, String[] args) {
     if (!(sender instanceof ProxiedPlayer)) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().PlayerOnly));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().PlayerOnly));
       return;
     }
     if (args.length > 1) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginUsage));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginUsage));
       return;
     }
     if (args.length < 1) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginUsage));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginUsage));
       return;
     }
     ProxiedPlayer player = (ProxiedPlayer) sender;
-    if (api.isAuthenticated(player)) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginAlreadyAuthenticated));
+    if (bcab.getAPI().isAuthenticated(player)) {
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginAlreadyAuthenticated));
       return;
   }
     try {
-      if (!api.getSQL().checkPlayerEntry(player)) {
-        sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginNotRegistered));
+      if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginNotRegistered));
         return;
       }
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
-      if (!api.checkPassword(player.getUniqueId(), args[0])) {
-        sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginWrongPassword));
+      if (!bcab.getAPI().checkPassword(player.getUniqueId(), args[0])) {
+        sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginWrongPassword));
         return;
       }
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
     try {
-      api.setAuthenticated(player);
+      bcab.getAPI().setAuthenticated(player);
     }
     catch (SQLException e) {
-      sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
-    sender.sendMessage(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().LoginSuccessful));
+    sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginSuccessful));
   }
 
 }

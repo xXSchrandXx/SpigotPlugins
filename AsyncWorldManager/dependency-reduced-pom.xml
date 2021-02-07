@@ -7,7 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.xxschrandxx.awm</groupId>
-  <artifactId>AsyncWorldManager</artifactId>
+  <artifactId>asyncworldmanager</artifactId>
+  <name>AsyncWorldManager</name>
   <version>0.1.1-SNAPSHOT</version>
   <build>
     <plugins>
@@ -42,6 +43,18 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>de.xxschrandxx.api</groupId>
+      <artifactId>schrandapi</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>Minecraft-Server</artifactId>
+          <groupId>Minecraft-Server</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>com.sk89q.worldedit</groupId>
       <artifactId>worldedit-core</artifactId>

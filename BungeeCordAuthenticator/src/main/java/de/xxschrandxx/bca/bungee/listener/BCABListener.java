@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
+import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
 import de.xxschrandxx.bca.core.PluginChannels;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -20,18 +20,18 @@ import net.md_5.bungee.event.EventPriority;
 
 public class BCABListener implements Listener {
   
-  private BungeeCordAuthenticatorBungeeAPI api;
+  private BungeeCordAuthenticatorBungee bcab;
 
-  public BCABListener(BungeeCordAuthenticatorBungeeAPI api) {
-    this.api = api;
+  public BCABListener(BungeeCordAuthenticatorBungee bcab) {
+    this.bcab = bcab;
   }
 
   @EventHandler
   public void onPostLoginKick(PostLoginEvent event) {
     try {
-      if (!api.getSQL().checkPlayerEntry(event.getPlayer().getUniqueId())) {
-        if (api.getConfigHandler().isDebugging)
-          api.getLogger().info("DEBUG | onPostLoginKick " + event.getPlayer().getUniqueId().toString() + " is not in database.");
+      if (!bcab.getAPI().getSQL().checkPlayerEntry(event.getPlayer().getUniqueId())) {
+        if (bcab.getAPI().getConfigHandler().isDebugging)
+          bcab.getAPI().getLogger().info("DEBUG | onPostLoginKick " + event.getPlayer().getUniqueId().toString() + " is not in database.");
         return;
       }
     }
@@ -39,13 +39,13 @@ public class BCABListener implements Listener {
       e.printStackTrace();
       return;
     }
-    if (api.isAuthenticated(event.getPlayer())) {
+    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
       return;
     }
-    if (api.hasOpenSession(event.getPlayer())) {
+    if (bcab.getAPI().hasOpenSession(event.getPlayer())) {
       return;
     }
-    api.addUnauthedKick(event.getPlayer());
+    bcab.getAPI().addUnauthedKick(event.getPlayer());
   }
 
   @EventHandler(priority = -100)
@@ -53,30 +53,30 @@ public class BCABListener implements Listener {
     UUID uuid = event.getPlayer().getUniqueId();
     String playername = event.getPlayer().getName();
 
-    if (api.getConfigHandler().isDebugging)
-      api.getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " -> " + playername);
+    if (bcab.getAPI().getConfigHandler().isDebugging)
+      bcab.getAPI().getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " -> " + playername);
 
     //First check the Version in database
     try {
-      Integer version = api.getSQL().getVersion(playername);
+      Integer version = bcab.getAPI().getSQL().getVersion(playername);
       if (version == 0) {
-        api.getSQL().setUUID(playername, uuid);
-        api.getSQL().setVersion(uuid);
+        bcab.getAPI().getSQL().setUUID(playername, uuid);
+        bcab.getAPI().getSQL().setVersion(uuid);
       }
       if (version == 1) {
-        api.getSQL().setVersion(uuid);
+        bcab.getAPI().getSQL().setVersion(uuid);
       }
     }
     catch (SQLException e) {
-      event.getPlayer().disconnect(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      event.getPlayer().disconnect(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
 
     try {
-      if (!api.getSQL().checkPlayerEntry(uuid)) {
-        if (api.getConfigHandler().isDebugging)
-          api.getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " is not in database.");
+      if (!bcab.getAPI().getSQL().checkPlayerEntry(uuid)) {
+        if (bcab.getAPI().getConfigHandler().isDebugging)
+          bcab.getAPI().getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " is not in database.");
         return;
       }
     }
@@ -85,18 +85,18 @@ public class BCABListener implements Listener {
       return;
     }
 
-    if (!api.getConfigHandler().SessionEnabled) {
+    if (!bcab.getAPI().getConfigHandler().SessionEnabled) {
       return;
     }
 
-    if (!api.hasOpenSession(uuid)) {
+    if (!bcab.getAPI().hasOpenSession(uuid)) {
       return;
     }
     try {
-      api.setAuthenticated(uuid);
+      bcab.getAPI().setAuthenticated(uuid);
     }
     catch (SQLException e) {
-      event.getPlayer().disconnect(new TextComponent(api.getConfigHandler().Prefix + api.getConfigHandler().SQLError));
+      event.getPlayer().disconnect(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
@@ -105,14 +105,14 @@ public class BCABListener implements Listener {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onDisconnect(PlayerDisconnectEvent event) {
     ProxiedPlayer player = event.getPlayer();
-    if (api.getConfigHandler().SessionEnabled) {
+    if (bcab.getAPI().getConfigHandler().SessionEnabled) {
       try {
-        if (!api.getSQL().checkPlayerEntry(player.getUniqueId())) {
-          if (api.getConfigHandler().isDebugging)
-            api.getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
+        if (!bcab.getAPI().getSQL().checkPlayerEntry(player.getUniqueId())) {
+          if (bcab.getAPI().getConfigHandler().isDebugging)
+            bcab.getAPI().getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
           return;
         }
-        api.setOpenSession(player);
+        bcab.getAPI().setOpenSession(player);
       }
       catch (SQLException e) {
         e.printStackTrace();
@@ -120,12 +120,12 @@ public class BCABListener implements Listener {
     }
     else {
       try {
-        if (!api.getSQL().checkPlayerEntry(player)) {
-          if (api.getConfigHandler().isDebugging)
-            api.getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
+        if (!bcab.getAPI().getSQL().checkPlayerEntry(player)) {
+          if (bcab.getAPI().getConfigHandler().isDebugging)
+            bcab.getAPI().getLogger().info("DEBUG | onDisconnect " + player.getUniqueId().toString() + " is not in database.");
           return;
         }
-        api.unsetAuthenticated(player);
+        bcab.getAPI().unsetAuthenticated(player);
       }
       catch (SQLException e) {
         e.printStackTrace();

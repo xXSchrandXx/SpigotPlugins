@@ -7,23 +7,25 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>AsyncWorldManagerGUI</artifactId>
+  <name>AsyncWorldManagerGUI</name>
+  <artifactId>asyncworldmanagergui</artifactId>
   <groupId>de.xxschrandxx.awm</groupId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <dependencies>
 
     <!-- API Dependency -->
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>SchrandAPI</artifactId>
+      <artifactId>schrandapi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
     <!-- AWM Dependency -->
   	<dependency>
       <groupId>de.xxschrandxx.awm</groupId>
-      <artifactId>AsyncWorldManager</artifactId>
+      <artifactId>asyncworldmanager</artifactId>
       <version>0.1.0-SNAPSHOT</version>
   	</dependency>
 

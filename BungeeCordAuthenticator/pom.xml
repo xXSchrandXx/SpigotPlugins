@@ -8,16 +8,18 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   
-  <artifactId>BungeeCordAuthenticator</artifactId>
+  <name>BungeeCordAuthenticator</name>
+  <artifactId>bungeecordauthenticator</artifactId>
   <groupId>de.xxschrandxx.bca</groupId>
   <version>0.0.2-SNAPSHOT</version>
+  <packaging>jar</packaging>
   
   <dependencies>
 
     <!-- API Dependency -->
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>SchrandAPI</artifactId>
+      <artifactId>schrandapi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 

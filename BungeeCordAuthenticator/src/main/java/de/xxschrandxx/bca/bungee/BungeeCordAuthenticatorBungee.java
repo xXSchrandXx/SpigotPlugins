@@ -19,6 +19,10 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     return api;
   }
 
+  public void loadAPI() {
+    api = new BungeeCordAuthenticatorBungeeAPI(this);
+  }
+
   private static BungeeCordAuthenticatorBungee instance;
 
   public static BungeeCordAuthenticatorBungee getInstance() {
@@ -29,8 +33,9 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
 
     instance = this;
 
-    api = new BungeeCordAuthenticatorBungeeAPI(this);
-    if (api.getConfigHandler().isDebugging)
+    loadAPI();
+    
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded BungeeCordAuthenticatorBungeeAPI.");
     if (api == null) {
       getLogger().warning("onEnable | BungeeCordAuthenticatorBungeeAPI is null. disabeling plugin.");
@@ -39,49 +44,49 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
       return;
     }
 
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loadeding channel...");
     //Loading Channel
     getProxy().registerChannel(PluginChannels.login);
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded channel " + PluginChannels.login);
     getProxy().registerChannel(PluginChannels.logout);
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
     getLogger().info("onEnable | loaded channel " + PluginChannels.logout);
       getProxy().registerChannel(PluginChannels.sync);
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded channel " + PluginChannels.sync);
 
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading commands...");
     //Loading Commands
-    getProxy().getPluginManager().registerCommand(this, new Login(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerCommand(this, new Login(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command Login");
-    getProxy().getPluginManager().registerCommand(this, new Logout(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerCommand(this, new Logout(this));
+    if (getAPI().getConfigHandler().isDebugging)
     getLogger().info("onEnable | loaded command Logout");
-      getProxy().getPluginManager().registerCommand(this, new Register(api));
-    if (api.getConfigHandler().isDebugging)
+      getProxy().getPluginManager().registerCommand(this, new Register(this));
+    if (getAPI().getConfigHandler().isDebugging)
     getLogger().info("onEnable | loaded command Register");
-      getProxy().getPluginManager().registerCommand(this, new Reset(api));
-    if (api.getConfigHandler().isDebugging)
+      getProxy().getPluginManager().registerCommand(this, new Reset(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command Reset");
-    getProxy().getPluginManager().registerCommand(this, new BCAB(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerCommand(this, new BCAB(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded command BCAB");
 
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading listener...");
     //Loading Listener
-    getProxy().getPluginManager().registerListener(this, new PluginMessageListener(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerListener(this, new PluginMessageListener(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded PluginMessageListener");
-    getProxy().getPluginManager().registerListener(this, new BCABListener(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerListener(this, new BCABListener(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded BCABListener");
-    getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(api));
-    if (api.getConfigHandler().isDebugging)
+    getProxy().getPluginManager().registerListener(this, new ProxiedPlayerListener(this));
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loaded ProxiedPlayerListener");
 
     getLogger().info("Successfully enabled BungeeCordAuthenticatorBungee.");
@@ -96,7 +101,7 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
       return;
     }
 
-    if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onDisable | removing authenticated users");
     //Removing authenticaded users
     for (UUID uuid : getAPI().getAuthenticated()) {
@@ -107,8 +112,8 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
         e.printStackTrace();
       }
     }
-    if (api.getConfigHandler().SessionEnabled) {
-      if (api.getConfigHandler().isDebugging)
+    if (getAPI().getConfigHandler().SessionEnabled) {
+      if (getAPI().getConfigHandler().isDebugging)
         getLogger().info("onDisable | removing open session");
       //Removing open sessions
       for (UUID uuid : getAPI().getOpenSessions().keySet()) {
