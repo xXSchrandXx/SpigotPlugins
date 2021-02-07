@@ -11,7 +11,13 @@
 ## Maven-Repo:
 ```
 <repository>
- <id>spigotplugins-repo</id>
- <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
+  <id>spigotplugins-repo</id>
+  <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
+  <releases>
+    <checksumPolicy>ignore</checksumPolicy>
+  </releases>
+  <snapshots>
+    <checksumPolicy>ignore</checksumPolicy>
+  </snapshots>
 </repository>
 ```

@@ -7,9 +7,16 @@ Versions:
 ## Maven-Repo:
 ```
 <repository>
- <id>spigotplugins-repo</id>
- <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
+  <id>spigotplugins-repo</id>
+  <url>https://xxschrandxx.github.io/SpigotPlugins/mvn-repo/</url>
+  <releases>
+    <checksumPolicy>warn</checksumPolicy>
+  </releases>
+  <snapshots>
+    <checksumPolicy>warn</checksumPolicy>
+  </snapshots>
 </repository>
+
 <dependency>
   <groupId>de.xxschrandxx.api</groupId>
   <artifactId>SchrandAPI</artifactId>
