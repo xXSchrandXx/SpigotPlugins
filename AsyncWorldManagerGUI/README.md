@@ -4,7 +4,6 @@
 Versions:
   * 0.0.1-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/AsyncWorldManagerGUI/0.0.1-SNAPSHOT/apidocs/)
-    * [AsyncWorldManagerGUI-javadoc](https://maven.gamestrike.de/docs/AsyncWorldManagerGUI/0.0.1-SNAPSHOT/AsyncWorldManagerGUI-0.0.1-SNAPSHOT-javadoc.jar)
     * [AsyncWorldManagerGUI](https://maven.gamestrike.de/docs/AsyncWorldManagerGUI/0.0.1-SNAPSHOT/AsyncWorldManagerGUI-0.0.1-SNAPSHOT.jar)
 
 ## Maven:

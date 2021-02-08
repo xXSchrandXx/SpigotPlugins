@@ -4,7 +4,6 @@
 Versions:
   * 0.0.4-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/ServerStatusSign/0.0.4-SNAPSHOT/apidocs/)
-    * [ServerStatusSign-javadoc](https://maven.gamestrike.de/docs/ServerStatusSign/0.0.4-SNAPSHOT/ServerStatusSign-0.0.4-SNAPSHOT-javadoc.jar)
     * [ServerStatusSign](https://maven.gamestrike.de/docs/ServerStatusSign/0.0.4-SNAPSHOT/ServerStatusSign-0.0.4-SNAPSHOT.jar)
 
 ## Maven:

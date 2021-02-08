@@ -3,7 +3,6 @@
 Versions:
   * 0.0.1-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/WoltlabSyncer/0.0.1-SNAPSHOT/apidocs/)
-    * [WoltlabSyncer-javadoc](https://maven.gamestrike.de/docs/WoltlabSyncer/0.0.1-SNAPSHOT/WoltlabSyncer-0.0.1-SNAPSHOT-javadoc.jar)
     * [WoltlabSyncer](https://maven.gamestrike.de/docs/WoltlabSyncer/0.0.1-SNAPSHOT/WoltlabSyncer-0.0.1-SNAPSHOT.jar)
 
 ## jCoinsListener

@@ -2,7 +2,6 @@
 Versions:
   * 0.0.1-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/SchrandAPI/0.0.1-SNAPSHOT/apidocs/)
-    * [SchrandAPI-javadoc](https://maven.gamestrike.de/docs/SchrandAPI/0.0.1-SNAPSHOT/SchrandAPI-0.0.1-SNAPSHOT-javadoc.jar)
     * [SchrandAPI](https://maven.gamestrike.de/docs/SchrandAPI/0.0.1-SNAPSHOT/SchrandAPI-0.0.1-SNAPSHOT.jar)
 
 ## Maven:

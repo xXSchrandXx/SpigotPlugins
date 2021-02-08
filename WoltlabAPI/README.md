@@ -3,7 +3,6 @@
 Versions:
   * 0.0.1-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/WoltlabAPI/0.0.1-SNAPSHOT/apidocs/)
-    * [WoltlabAPI-javadoc](https://maven.gamestrike.de/docs/WoltlabAPI/0.0.1-SNAPSHOT/WoltlabAPI-0.0.1-SNAPSHOT-javadoc.jar)
     * [WoltlabAPI](https://maven.gamestrike.de/docs/WoltlabAPI/0.0.1-SNAPSHOT/WoltlabAPI-0.0.1-SNAPSHOT.jar)
 
 ## Usage:
