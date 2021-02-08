@@ -9,7 +9,7 @@
   </parent>
 
   <name>SchrandAPI</name>
-  <artifactId>schrandapi</artifactId>
+  <artifactId>SchrandAPI</artifactId>
   <groupId>de.xxschrandxx.api</groupId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>

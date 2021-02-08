@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/xXSchrandXx/SpigotPlugins.svg)](https://jitpack.io/#xXSchrandXx/SpigotPlugins)
+
 ## Projects:
   * [AsyncWorldManager](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManager)
   * [AsyncWorldManagerGUI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManagerGUI) (!Support discontinued)

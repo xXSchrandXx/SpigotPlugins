@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.xxschrandxx.wsc</groupId>
-  <artifactId>woltlabapi</artifactId>
+  <artifactId>WoltlabAPI</artifactId>
   <name>WoltlabAPI</name>
   <version>0.0.1-SNAPSHOT</version>
   <build>

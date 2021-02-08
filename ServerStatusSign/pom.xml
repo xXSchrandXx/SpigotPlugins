@@ -9,7 +9,7 @@
   </parent>
   
   <name>ServerStatusSign</name>
-  <artifactId>serverstatussign</artifactId>
+  <artifactId>ServerStatusSign</artifactId>
   <groupId>de.xxschrandxx.sss</groupId>
   <version>0.0.4-SNAPSHOT</version>
   <packaging>jar</packaging>

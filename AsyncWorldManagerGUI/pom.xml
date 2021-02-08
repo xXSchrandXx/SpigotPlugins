@@ -8,7 +8,7 @@
   </parent>
 
   <name>AsyncWorldManagerGUI</name>
-  <artifactId>asyncworldmanagergui</artifactId>
+  <artifactId>AsyncWorldManagerGUI</artifactId>
   <groupId>de.xxschrandxx.awm</groupId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>

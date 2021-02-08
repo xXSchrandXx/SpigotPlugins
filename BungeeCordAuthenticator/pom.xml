@@ -9,7 +9,7 @@
   </parent>
   
   <name>BungeeCordAuthenticator</name>
-  <artifactId>bungeecordauthenticator</artifactId>
+  <artifactId>BungeeCordAuthenticator</artifactId>
   <groupId>de.xxschrandxx.bca</groupId>
   <version>0.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>

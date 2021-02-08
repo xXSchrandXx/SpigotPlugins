@@ -9,7 +9,7 @@
   </parent>
   
   <name>NetherPortalGate</name>
-  <artifactId>netherportalgate</artifactId>
+  <artifactId>NetherPortalGate</artifactId>
   <groupId>de.xxschrandxx.npg</groupId>
   <version>0.0.5-SNAPSHOT</version>
   <packaging>jar</packaging>

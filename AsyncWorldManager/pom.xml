@@ -9,7 +9,7 @@
   </parent>
   
   <name>AsyncWorldManager</name>
-  <artifactId>asyncworldmanager</artifactId>
+  <artifactId>AsyncWorldManager</artifactId>
   <groupId>de.xxschrandxx.awm</groupId>
   <version>0.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>

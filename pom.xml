@@ -148,6 +148,7 @@
         </executions>
       </plugin>
 
+      <!-- Unused
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -175,6 +176,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
 
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
@@ -183,19 +185,21 @@
 
     </plugins>
 
+    <extensions>
+      <extension>
+         <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-webdav-jackrabbit</artifactId>
+         <version>3.4.2</version>
+      </extension>
+   </extensions>
+
   </build>
 
   <distributionManagement>
     <repository>
-      <id>github</id>
-      <name>GitHub xXSchrandXx Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/xXSchrandXx/SpigotPlugins</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <id>gamestrike</id>
+      <name>Gamestrike.de</name>
+      <url>dav://maven.gamestrike.de/</url>
     </repository>
   </distributionManagement>
 

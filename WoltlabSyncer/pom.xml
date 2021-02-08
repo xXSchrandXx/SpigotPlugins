@@ -9,7 +9,7 @@
   </parent>
 
   <name>WoltlabSyncer</name>
-  <artifactId>woltlabsyncer</artifactId>
+  <artifactId>WoltlabSyncer</artifactId>
   <groupId>de.xxschrandxx.wsc</groupId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>

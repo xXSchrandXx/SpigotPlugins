@@ -9,7 +9,7 @@
   </parent>
   
   <name>WoltlabAPI</name>
-  <artifactId>woltlabapi</artifactId>
+  <artifactId>WoltlabAPI</artifactId>
   <groupId>de.xxschrandxx.wsc</groupId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
