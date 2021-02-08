@@ -3,9 +3,9 @@
 
 Versions:
   * 0.0.5-SNAPSHOT:
-    * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/apidocs/)
-    * [NetherPortalGate-javadoc](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT-javadoc.jar)
-    * [NetherPortalGate](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT.jar)
+    * [JavaDoc](https://maven.gamestrike.de/docs/NetherPortalGate/0.0.5-SNAPSHOT/apidocs/)
+    * [NetherPortalGate-javadoc](https://maven.gamestrike.de/docs/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT-javadoc.jar)
+    * [NetherPortalGate](https://maven.gamestrike.de/docs/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT.jar)
 
 ## Maven:
 ```
