@@ -46,3 +46,21 @@ public BungeeCordAuthenticatorBukkitAPI getBungeeCordAuthenticatorAPI() {
 ```
 
 </details>
+
+## Maven:
+```
+<repositories>
+  <repository>
+    <id>spigotplugins-repo</id>
+    <url>https://maven.gamestrike.de/</url>
+  </repository>
+</repositories>
+<dependencies>
+  <dependency>
+    <groupId>de.xxschrandxx.bca</groupId>
+    <artifactId>BungeeCordAuthenticator</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```

@@ -148,7 +148,6 @@
         </executions>
       </plugin>
 
-      <!-- Unused
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -170,13 +169,15 @@
                     <include>*/*.jar</include>
                     <include>*/apidocs/</include>
                   </includes>
+                  <excludes>
+                    <exclude>*/*javadoc.jar</exclude>
+                  </excludes>
                 </resource>
               </resources>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      -->
 
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>

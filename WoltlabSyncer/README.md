@@ -8,3 +8,21 @@ Versions:
 
 ## jCoinsListener
 If you want to use the jCoinsListener you need to install: the [SimplejCoinsListener-Package](https://github.com/xXSchrandXx/SimplejCoinsListener).
+
+## Maven:
+```
+<repositories>
+  <repository>
+    <id>spigotplugins-repo</id>
+    <url>https://maven.gamestrike.de/</url>
+  </repository>
+</repositories>
+<dependencies>
+  <dependency>
+    <groupId>de.xxschrandxx.wsc</groupId>
+    <artifactId>WoltlabSyncer</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```

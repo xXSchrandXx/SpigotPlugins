@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"de.xxschrandxx.wsc.bukkit"},{"l":"de.xxschrandxx.wsc.bukkit.api"},{"l":"de.xxschrandxx.wsc.bukkit.listener"},{"l":"de.xxschrandxx.wsc.bungee"},{"l":"de.xxschrandxx.wsc.bungee.api"},{"l":"de.xxschrandxx.wsc.bungee.listener"},{"l":"de.xxschrandxx.wsc.core"}];updateSearchResults();

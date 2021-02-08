@@ -6,3 +6,21 @@ Versions:
     * [JavaDoc](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/apidocs/)
     * [NetherPortalGate-javadoc](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT-javadoc.jar)
     * [NetherPortalGate](https://xxschrandxx.github.io/SpigotPlugins/NetherPortalGate/0.0.5-SNAPSHOT/NetherPortalGate-0.0.5-SNAPSHOT.jar)
+
+## Maven:
+```
+<repositories>
+  <repository>
+    <id>spigotplugins-repo</id>
+    <url>https://maven.gamestrike.de/</url>
+  </repository>
+</repositories>
+<dependencies>
+  <dependency>
+    <groupId>de.xxschrandxx.npg</groupId>
+    <artifactId>NetherPortalGate</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```

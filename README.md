@@ -1,5 +1,3 @@
-[![](https://jitpack.io/v/xXSchrandXx/SpigotPlugins.svg)](https://jitpack.io/#xXSchrandXx/SpigotPlugins)
-
 ## Projects:
   * [AsyncWorldManager](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManager)
   * [AsyncWorldManagerGUI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManagerGUI) (!Support discontinued)
@@ -9,3 +7,13 @@
   * [ServerStatusSigns](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/ServerStatusSign) (!Support discontinued)
   * [WoltlabAPI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/WoltlabAPI)
   * [WoltlabSyncer](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/WoltlabSyncer)
+
+## Maven
+```
+<repositories>
+  <repository>
+    <id>spigotplugins-repo</id>
+    <url>https://maven.gamestrike.de/</url>
+  </repository>
+</repositories>
+```

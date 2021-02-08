@@ -67,3 +67,21 @@ public class Main extends JavaPlugin {
 Do not modify database values unless you know what you are doing.
 Create a page wich will listen to your changes.
 E.g. [SimplejCoinsListener-Package](https://github.com/xXSchrandXx/SimplejCoinsListener) with [jCoinsGiver-Class](https://github.com/xXSchrandXx/SpigotPlugins/blob/master/WoltlabSyncer/src/main/java/de/xxschrandxx/wsc/core/jCoinsGiver.java)
+
+## Maven:
+```
+<repositories>
+  <repository>
+    <id>spigotplugins-repo</id>
+    <url>https://maven.gamestrike.de/</url>
+  </repository>
+</repositories>
+<dependencies>
+  <dependency>
+    <groupId>de.xxschrandxx.wsc</groupId>
+    <artifactId>WoltlabAPI</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```
