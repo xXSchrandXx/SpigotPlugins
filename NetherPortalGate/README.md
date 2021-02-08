@@ -11,7 +11,7 @@ Versions:
 <repositories>
   <repository>
     <id>spigotplugins-repo</id>
-    <url>https://maven.gamestrike.de/</url>
+    <url>https://maven.gamestrike.de/mvn/</url>
   </repository>
 </repositories>
 <dependencies>
