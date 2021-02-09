@@ -19,12 +19,16 @@
   </properties>
 
   <modules>
+<!-- Unsupportet
     <module>AsyncWorldManager</module>
     <module>AsyncWorldManagerGUI</module>
+-->
     <module>BungeeCordAuthenticator</module>
     <module>SchrandAPI</module>
+<!-- Unsupportet
     <module>NetherPortalGate</module>
     <module>ServerStatusSign</module>
+-->
     <module>WoltlabAPI</module>
     <module>WoltlabSyncer</module>
   </modules>

@@ -23,16 +23,6 @@
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
-    <!-- Mojang Dependendy
-    <dependency>
-      <groupId>Minecraft-Server</groupId>
-      <artifactId>Minecraft-Server</artifactId>
-      <version>1.16.2</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}\internalRepo\patched_1.16.2.jar</systemPath>
-    </dependency>
-    -->
-
     <!-- Metrics Dependency -->
     <dependency>
       <groupId>org.bstats</groupId>

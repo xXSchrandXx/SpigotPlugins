@@ -7,10 +7,9 @@ import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.google.common.io.Files;
 
 import de.xxschrandxx.api.minecraft.Config;
 import de.xxschrandxx.api.minecraft.PermissionHandler;
@@ -132,8 +131,10 @@ public class AsyncWorldManager extends JavaPlugin {
         Bukkit.getServer().unloadWorld(f, true);
         File WorldFolder = f.getWorldFolder();
         try {
-          Files.move(WorldFolder, new File(container + File.separator + WorldFolder));
-        } catch (IOException e) {
+//          Files.move(WorldFolder, new File(container + File.separator + WorldFolder));
+          FileUtils.moveDirectory(WorldFolder, new File(container + File.separator + WorldFolder));
+        }
+        catch (IOException e) {
           getLogHandler().log(false, Level.WARNING, "Error while moving your world", e);
         }
       }

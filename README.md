@@ -1,5 +1,5 @@
 ## Projects:
-  * [AsyncWorldManager](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManager)
+  * [AsyncWorldManager](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManager) (!Support discontinued)
   * [AsyncWorldManagerGUI](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/AsyncWorldManagerGUI) (!Support discontinued)
   * [BungeeCordAuthenticator](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/BungeeCordAuthenticator)
   * [NetherPortalGate](https://github.com/xXSchrandXx/SpigotPlugins/tree/master/NetherPortalGate) (!Support discontinued use [MassiveCore](https://github.com/xXSchrandXx/MassiveCore) with [CreativeGates](https://github.com/xXSchrandXx/CreativeGates))
