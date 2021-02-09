@@ -55,12 +55,6 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>schrandapi</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
       <version>1.16-R0.4-SNAPSHOT</version>

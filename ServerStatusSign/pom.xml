@@ -18,7 +18,7 @@
 
   	<dependency>
       <groupId>de.xxschrandxx.api</groupId>
-      <artifactId>schrandapi</artifactId>
+      <artifactId>SchrandAPI</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</dependency>
 
