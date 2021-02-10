@@ -71,6 +71,7 @@ public class ConfigHandlerBukkit {
 
   public void loadConfig() {
     boolean error = false;
+    configyml = new File(wab.getDataFolder(), "config.yml");
     try {
       if (!configyml.exists()) {
         wab.getDataFolder().mkdirs();
@@ -393,6 +394,7 @@ public class ConfigHandlerBukkit {
 
   public void loadMessage() {
     boolean error = false;
+    messageyml = new File(wab.getDataFolder(), "message.yml");
     try {
       if (!messageyml.exists()) {
         wab.getDataFolder().mkdirs();

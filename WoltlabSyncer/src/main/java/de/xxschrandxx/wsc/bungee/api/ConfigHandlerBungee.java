@@ -73,6 +73,7 @@ public class ConfigHandlerBungee {
 
   public void loadConfig() {
     boolean error = false;
+    configyml = new File(wab.getDataFolder(), "config.yml");
     try {
       if (!configyml.exists()) {
         wab.getDataFolder().mkdirs();
@@ -148,7 +149,8 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, false);
+      SyncPrimaryGroupIDs.put(1, "default");
+      config.set(path, SyncPrimaryGroupIDs);
       error = true;
     }
     //SyncPrimaryGroupSetCommand
@@ -192,7 +194,7 @@ public class ConfigHandlerBungee {
       config.set(path, false);
       error = true;
     }
-    //SyncAllGroupsGroupIDs
+    //SyncAllGroupsIDs
     path = "SyncAllGroups.GroupIDs";
     if (config.contains(path)) {
       for (String key : config.getSection(path).getKeys()) {
@@ -201,7 +203,8 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, false);
+      SyncAllGroupsIDs.put(1, "default");
+      config.set(path, SyncAllGroupsIDs);
       error = true;
     }
     //SyncAllGroupsSetCommand
@@ -395,6 +398,7 @@ public class ConfigHandlerBungee {
 
   public void loadMessage() {
     boolean error = false;
+    messageyml = new File(wab.getDataFolder(), "message.yml");
     try {
       if (!messageyml.exists()) {
         wab.getDataFolder().mkdirs();
@@ -436,6 +440,7 @@ public class ConfigHandlerBungee {
   }
 
   public void loadPlayerDatas() {
+    playerdatayml = new File(wab.getDataFolder(), "playerdatas.yml");
     try {
       if (!playerdatayml.exists()) {
         wab.getDataFolder().mkdirs();

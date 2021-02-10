@@ -201,7 +201,7 @@
                     <fromDir>${project.build.directory}</fromDir>
                     <includes>apidocs/**, ${project.artifactId}-${project.version}.jar, original-${project.artifactId}-${project.version}.jar</includes>
                     <excludes>*javadoc.jar,*shaded.jar</excludes>
-                    <url>dav://maven.gamestrike.de/docs/</url>
+                    <url>dav://maven.gamestrike.de/docs</url>
                     <toDir>${project.artifactId}/${project.version}</toDir>
                     <optimize>false</optimize>
                 </configuration>

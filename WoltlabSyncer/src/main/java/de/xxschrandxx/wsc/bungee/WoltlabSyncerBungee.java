@@ -96,7 +96,7 @@ public class WoltlabSyncerBungee extends Plugin {
     }
     if (getConfigHandler().FabiWotlabSyncHookEnabled) {
       Plugin wls = getProxy().getPluginManager().getPlugin("WoltlabSync");
-      if (wls != null) {
+      if (wls == null) {
         getLogger().warning("You don't have WoltlabSync installed.");
       }
       else {
