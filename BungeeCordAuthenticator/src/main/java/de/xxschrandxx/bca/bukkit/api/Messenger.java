@@ -16,8 +16,25 @@ public class Messenger implements PluginMessageListener {
 
   private BungeeCordAuthenticatorBukkit bcab;
 
-  public Messenger(BungeeCordAuthenticatorBukkit bcab) {
+  private boolean isDebugging;
+
+  public Messenger(BungeeCordAuthenticatorBukkit bcab, boolean isDebugging) {
     this.bcab = bcab;
+    this.isDebugging = isDebugging;
+    if (isDebugging)
+      bcab.getLogger().info("onEnable | loading incoming channel...");
+    bcab.getServer().getMessenger().registerIncomingPluginChannel(bcab, PluginChannels.login, this);
+    if (isDebugging)
+      bcab.getLogger().info("onEnable | loaded incoming channel " + PluginChannels.login);
+    bcab.getServer().getMessenger().registerIncomingPluginChannel(bcab, PluginChannels.logout, this);
+    if (isDebugging)
+      bcab.getLogger().info("onEnable | loaded incoming channel " + PluginChannels.logout);
+    bcab.getServer().getMessenger().registerIncomingPluginChannel(bcab, PluginChannels.sync, this);
+    if (isDebugging)
+      bcab.getLogger().info("onEnable | loaded incoming channel " + PluginChannels.sync);
+    bcab.getServer().getMessenger().registerOutgoingPluginChannel(bcab, PluginChannels.sync);
+    if (isDebugging)
+      bcab.getLogger().info("onEnable | loaded outgoing channel " + PluginChannels.sync);
   }
 
   @Override
@@ -25,9 +42,9 @@ public class Messenger implements PluginMessageListener {
     if (!channel.startsWith(PluginChannels.prefix)) {
       return;
     }
-    if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message");
+    if (isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message");
     if (channel.equalsIgnoreCase(PluginChannels.login)) {
-      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.login);
+      if (isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.login);
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message = in.readUTF();
       UUID uuid = UUID.fromString(message);
@@ -41,7 +58,7 @@ public class Messenger implements PluginMessageListener {
       bcab.getAPI().login(player);
     }
     else if (channel.equalsIgnoreCase(PluginChannels.logout)) {
-      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.logout);
+      if (isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.logout);
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message = in.readUTF();
       UUID uuid = UUID.fromString(message);
@@ -56,7 +73,7 @@ public class Messenger implements PluginMessageListener {
 
     }
     else if (channel.equalsIgnoreCase(PluginChannels.sync)) {
-      if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.sync);
+      if (isDebugging) bcab.getLogger().info("onPluginMessageReceived | Got message on " + PluginChannels.sync);
       ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
       String message[] = in.readUTF().split(";");
       UUID uuid = UUID.fromString(message[0]);
@@ -84,7 +101,7 @@ public class Messenger implements PluginMessageListener {
   public void askFor(Player sender, UUID uuid) {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    if (bcab.getAPI().getConfigHandler().isDebugging) bcab.getLogger().info("askFor | Asking for " + uuid.toString() + " because of " + sender.getName());
+    if (isDebugging) bcab.getLogger().info("askFor | Asking for " + uuid.toString() + " because of " + sender.getName());
     sender.sendPluginMessage(bcab, PluginChannels.sync, out.toByteArray());
   }
 

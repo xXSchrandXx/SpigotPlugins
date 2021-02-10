@@ -11,6 +11,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
 import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import de.xxschrandxx.wsc.bukkit.api.events.PlayerVerifiedEvent;
 
 public class SyncFriendsListener implements Listener {
 
@@ -20,11 +21,14 @@ public class SyncFriendsListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
+    if (plugin.getConfigHandler().isDebug) plugin.getLogger().info("DEBUG | Syncing Friends for " + e.getPlayer().getUniqueId());
+    PlayerDataBukkit pdb = plugin.getConfigHandler().getPlayerData(e.getPlayer());
+    if (pdb != null) {
+      plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncFriends(pdb));
+    }
   }
-  */
 
   @EventHandler
   public void onLogin(PlayerLoginEvent e) {

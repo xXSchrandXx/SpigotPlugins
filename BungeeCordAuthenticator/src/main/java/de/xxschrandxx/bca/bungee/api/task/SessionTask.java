@@ -12,8 +12,6 @@ public class SessionTask {
   private final ScheduledTask task;
   private Integer sessionlength = 0;
 
-  //TODO
-
   public SessionTask(BungeeCordAuthenticatorBungee bcab, UUID uuid) {
     Integer maxsessionlength = bcab.getAPI().getConfigHandler().SessionLength;
     task = bcab.getProxy().getScheduler().schedule(bcab, new Runnable() {

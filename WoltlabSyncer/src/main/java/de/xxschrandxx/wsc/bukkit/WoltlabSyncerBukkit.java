@@ -5,6 +5,7 @@ import de.xxschrandxx.wsc.bukkit.listener.*;
 
 import java.sql.SQLException;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WoltlabSyncerBukkit extends JavaPlugin {
@@ -92,6 +93,20 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
       }
       catch (SQLException e) {
         e.printStackTrace();
+      }
+    }
+    if (getConfigHandler().FabiWotlabSyncHookEnabled) {
+      Plugin wls = getServer().getPluginManager().getPlugin("WoltlabSync");
+      if (wls != null) {
+        getLogger().warning("You don't have WoltlabSync installed.");
+      }
+      else {
+        if (!wls.isEnabled()) {
+          getLogger().warning("You don't have WoltlabSync installed.");
+        }
+        else {
+          getServer().getPluginManager().registerEvents(new FabiWoltlabSyncListener(this), this);
+        }
       }
     }
   }

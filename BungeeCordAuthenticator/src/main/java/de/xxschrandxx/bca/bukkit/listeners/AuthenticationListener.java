@@ -18,14 +18,15 @@ public class AuthenticationListener implements Listener {
     api = BungeeCordAuthenticatorBukkit.getInstance().getAPI();
   }
 
+  /* Unused
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onPreJoin(PlayerJoinEvent event) {
     if (api.isAuthenticated(event.getPlayer())) {
       return;
     }
-    //TODO
-    //api.getMessenger().askFor(event.getPlayer());
+    api.getMessenger().askFor(event.getPlayer());
   }
+  */
 
   @EventHandler(priority = EventPriority.LOW)
   public void onJoin(PlayerJoinEvent event) {
@@ -49,7 +50,7 @@ public class AuthenticationListener implements Listener {
     if (api.getConfigHandler().UnauthedLocation == null) {
       return;
     }
-    /*
+    /* TODO
     if (api.isAuthenticated(event.get())) {
       return;
     }
@@ -65,7 +66,7 @@ public class AuthenticationListener implements Listener {
     if (api.getConfigHandler().AuthenticatedLocation == null) {
       return;
     }
-    /*
+    /* TODO
     if (!api.isAuthenticated(event.get())) {
       return;
     }

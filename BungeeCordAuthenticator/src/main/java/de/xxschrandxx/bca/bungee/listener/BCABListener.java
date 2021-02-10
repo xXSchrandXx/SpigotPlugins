@@ -26,35 +26,13 @@ public class BCABListener implements Listener {
     this.bcab = bcab;
   }
 
-  @EventHandler
-  public void onPostLoginKick(PostLoginEvent event) {
-    try {
-      if (!bcab.getAPI().getSQL().checkPlayerEntry(event.getPlayer().getUniqueId())) {
-        if (bcab.getAPI().getConfigHandler().isDebugging)
-          bcab.getAPI().getLogger().info("DEBUG | onPostLoginKick " + event.getPlayer().getUniqueId().toString() + " is not in database.");
-        return;
-      }
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
-      return;
-    }
-    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
-      return;
-    }
-    if (bcab.getAPI().hasOpenSession(event.getPlayer())) {
-      return;
-    }
-    bcab.getAPI().addUnauthedKick(event.getPlayer());
-  }
-
-  @EventHandler(priority = -100)
-  public void onPostLoginSession(PostLoginEvent event) {
+  @EventHandler(priority = -101)
+  public void onPostLogin(PostLoginEvent event) {
     UUID uuid = event.getPlayer().getUniqueId();
     String playername = event.getPlayer().getName();
 
     if (bcab.getAPI().getConfigHandler().isDebugging)
-      bcab.getAPI().getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " -> " + playername);
+      bcab.getAPI().getLogger().info("DEBUG | onPostLogin " + uuid.toString() + " -> " + playername);
 
     //First check the Version in database
     try {
@@ -72,11 +50,15 @@ public class BCABListener implements Listener {
       e.printStackTrace();
       return;
     }
+  }
+
+  @EventHandler(priority = -100)
+  public void onPostLoginSession(PostLoginEvent event) {
 
     try {
-      if (!bcab.getAPI().getSQL().checkPlayerEntry(uuid)) {
+      if (!bcab.getAPI().getSQL().checkPlayerEntry(event.getPlayer().getUniqueId())) {
         if (bcab.getAPI().getConfigHandler().isDebugging)
-          bcab.getAPI().getLogger().info("DEBUG | onPostLoginSession " + uuid.toString() + " is not in database.");
+          bcab.getAPI().getLogger().info("DEBUG | onPostLoginSession " + event.getPlayer().getUniqueId().toString() + " is not in database.");
         return;
       }
     }
@@ -89,17 +71,42 @@ public class BCABListener implements Listener {
       return;
     }
 
-    if (!bcab.getAPI().hasOpenSession(uuid)) {
+    if (!bcab.getAPI().hasOpenSession(event.getPlayer().getUniqueId())) {
       return;
     }
     try {
-      bcab.getAPI().setAuthenticated(uuid);
+      bcab.getAPI().setAuthenticated(event.getPlayer().getUniqueId());
     }
     catch (SQLException e) {
       event.getPlayer().disconnect(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().SQLError));
       e.printStackTrace();
       return;
     }
+  }
+
+  @EventHandler(priority = -99)
+  public void onPostLoginKick(PostLoginEvent event) {
+    try {
+      if (!bcab.getAPI().getSQL().checkPlayerEntry(event.getPlayer().getUniqueId())) {
+        if (bcab.getAPI().getConfigHandler().isDebugging)
+          bcab.getAPI().getLogger().info("DEBUG | onPostLoginKick " + event.getPlayer().getUniqueId().toString() + " is not in database.");
+        return;
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      return;
+    }
+    if (!bcab.getAPI().getConfigHandler().UnauthenticatedKickEnabled) {
+      return;
+    }
+    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+      return;
+    }
+    if (bcab.getAPI().hasOpenSession(event.getPlayer())) {
+      return;
+    }
+    bcab.getAPI().addUnauthedKick(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.LOWEST)

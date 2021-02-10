@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
 import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import de.xxschrandxx.wsc.bukkit.api.events.PlayerVerifiedEvent;
 
 public class SyncPrimaryGroup implements Listener {
 
@@ -19,15 +20,13 @@ public class SyncPrimaryGroup implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onLogin(PlayerVerifiedEvent e) {
+    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncPrimaryGroup(e.getPlayer()));
   }
-  */
 
   @EventHandler
   public void onLogin(PlayerLoginEvent e) {
-    if (plugin.getConfigHandler().SyncPrimaryGroupEnabled)
     plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncPrimaryGroup(e.getPlayer()));
   }
 

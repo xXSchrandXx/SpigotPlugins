@@ -33,20 +33,20 @@ public class BungeeCordAuthenticatorBungeeAPI {
 
     this.bcab = bcab;
 
-    lg = bcab.getLogger();
+    this.lg = bcab.getLogger();
 
     //Loading Config
-    ch = new ConfigHandler(bcab);
+    this.ch = new ConfigHandler(bcab);
     if (getConfigHandler().isDebugging)
-      getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded Config.");
+      getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded ConfigHandler.");
 
     //Loading SQLHandler
-    sql = new SQLHandlerBungee(ch.getHikariConfigFile().toPath(), lg, ch.isDebugging);
+    this.sql = new SQLHandlerBungee(getConfigHandler().getHikariConfigFile().toPath(), getLogger(), getConfigHandler().isDebugging);
     if (getConfigHandler().isDebugging)
       getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded SQLHandler.");
 
     //Loading PasswordHandler
-    ph = new PasswordHandler(sql);
+    this.ph = new PasswordHandler(getSQL());
     if (getConfigHandler().isDebugging)
       getLogger().info("BungeeCordAuthenticatorBungeeAPI | loaded PasswordHandler.");
 
@@ -94,6 +94,23 @@ public class BungeeCordAuthenticatorBungeeAPI {
     return unauthedkick;
   }
 
+  private ConcurrentHashMap<UUID, Integer> logintries = new ConcurrentHashMap<UUID, Integer>();
+  public Integer getLoginTries(UUID uuid) {
+    return logintries.get(uuid);
+  }
+  public void addLoginTry(UUID uuid) {
+    if (logintries.contains(uuid)) {
+      logintries.put(uuid, getLoginTries(uuid) + 1);
+    }
+    else {
+      logintries.put(uuid, 1);
+    }
+  }
+  public void clearLoginTries(UUID uuid) {
+    if (logintries.contains(uuid))
+      logintries.remove(uuid);
+  }
+
   /**
    * Sets the {@link OnlineStatus} to {@link OnlineStatus#authenticated} for the given {@link UUID}.
    * If {@link #hasOpenSession(UUID)}, removes it.
@@ -134,6 +151,9 @@ public class BungeeCordAuthenticatorBungeeAPI {
       authenticated.add(uuid);
     //Calling Event
     bcab.getProxy().getPluginManager().callEvent(new LoginEvent(uuid));
+    if (logintries.contains(uuid)) {
+      clearLoginTries(uuid);
+    }
     if (unauthedkick.containsKey(uuid)) {
       unauthedkick.get(uuid).cancel();
       unauthedkick.remove(uuid);

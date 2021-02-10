@@ -2,6 +2,7 @@ package de.xxschrandxx.bca.bukkit.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +31,23 @@ public class ConfigHandler {
     // Loading message.yml
     loadMessage();
 
+    // Loading hikariconfig.properties
+    if (ct == CheckType.SQL)
+      loadHikaryCP();
+
+  }
+
+  private File hikariconfigfile;
+
+  public File getHikariConfigFile() {
+    return hikariconfigfile;
   }
 
   // Config Values
   // debug
   public Boolean isDebugging;
+
+  public CheckType ct;
 
   // Protection
   public Boolean AllowMessageReceive;
@@ -72,6 +85,16 @@ public class ConfigHandler {
       error = true;
       bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
       config.set(path, false);
+    }
+    //Debug
+    path = "checktype";
+    if (config.contains(path)) {
+      ct = CheckType.valueOf(config.getString(path));
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, CheckType.PluginMessage.name());
     }
     //Protection
     //AllowMessageReceive
@@ -277,6 +300,7 @@ public class ConfigHandler {
       if (isDebugging)
         bcab.getLogger().info("DEBUG | " +
         "isDebugging=" + isDebugging +
+        ", CheckType=" + ct.name() +
         ", AllowMessageSend=" + AllowMessageSend +
         ", AllowMessageReceive=" + AllowMessageReceive +
         ", AllowedCommands=" + AllowedCommands +
@@ -311,6 +335,9 @@ public class ConfigHandler {
   //Prefix
   public String Prefix;
 
+  //SQLError
+  public String SQLError;
+
   //Protection
   public String DenyMessageSend;
   public String DenyCommandSend;
@@ -338,6 +365,16 @@ public class ConfigHandler {
       error = true;
       bcab.getLogger().warning("loadMessage() | " + path + " is missing, setting it...");
       message.set(path, "&8[&6BCA&8]&7 ");
+    }
+    //SQLError
+    path = "sqlerror";
+    if (message.contains(path)) {
+      SQLError = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "An error has occurred in the database, contact an administrator.");
+      error = true;
     }
     //DenyMessageSend
     path = "denymessagesend";
@@ -375,6 +412,38 @@ public class ConfigHandler {
     }
     catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  public void loadHikaryCP() {
+    hikariconfigfile = new File(bcab.getDataFolder(), "hikariconfig.properties");
+    if (!hikariconfigfile.exists()) {
+      if (!bcab.getDataFolder().exists()) {
+        bcab.getDataFolder().mkdirs();
+      }
+      try {
+        hikariconfigfile.createNewFile();
+        PrintStream writer = new PrintStream(hikariconfigfile);
+        writer.println("#Default file, infos configuration infos under:");
+        writer.println("#https://github.com/brettwooldridge/HikariCP/wiki/Configuration");
+        writer.println("jdbcUrl=jdbc:mysql://localhost:3306/");
+        writer.println("username=test");
+        writer.println("password=test");
+        writer.println("dataSource.databaseName=test");
+        writer.println("dataSource.cachePrepStmts=true");
+        writer.println("dataSource.prepStmtCacheSize=250");
+        writer.println("dataSource.useServerPrepStmts=true");
+        writer.println("dataSource.useLocalSessionState=true");
+        writer.println("dataSource.rewriteBatchedStatements=true");
+        writer.println("dataSource.cacheResultSetMetadata=true");
+        writer.println("dataSource.cacheServerConfiguration=true");
+        writer.println("dataSource.elideSetAutoCommits=true");
+        writer.println("dataSource.maintainTimeStats=false");
+        writer.close();
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 

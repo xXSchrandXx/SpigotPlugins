@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
 import de.xxschrandxx.wsc.bukkit.api.PlayerDataBukkit;
+import de.xxschrandxx.wsc.bukkit.api.events.PlayerVerifiedEvent;
 
 public class SyncAllGroupsListener implements Listener {
 
@@ -22,16 +23,14 @@ public class SyncAllGroupsListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
+    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncGroup(e.getPlayer()));
   }
-  */
 
   @EventHandler
   public void onLogin(PlayerLoginEvent e) {
-    if (plugin.getConfigHandler().SyncAllGroupsEnabled)
-      plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncGroup(e.getPlayer()));
+    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, syncGroup(e.getPlayer()));
   }
 
   private Runnable syncGroup(final Player p) {

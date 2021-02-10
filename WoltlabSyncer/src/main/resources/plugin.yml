@@ -3,5 +3,5 @@ main: ${project.groupId}.bukkit.${project.artifactId}Bukkit
 version: ${project.version}
 author: xXSchrandXx
 description: ${project.artifactId}Bukkit
-softdepend: [FriendsAPIForPartyAndFriends, PartyAndFriends, PartyAndFriendsGUI]
+softdepend: [WoltlabSync, FriendsAPIForPartyAndFriends, PartyAndFriends, PartyAndFriendsGUI]
 api-version: 1.13

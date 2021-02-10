@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
+import de.xxschrandxx.wsc.bungee.api.events.PlayerVerifiedEvent;
 import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
 import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
 
@@ -22,16 +23,14 @@ public class SyncAllGroupsListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
+    plugin.getProxy().getScheduler().runAsync(plugin, syncGroup(e.getPlayer()));
   }
-  */
 
   @EventHandler
   public void onLogin(PostLoginEvent e) {
-    if (plugin.getConfigHandler().SyncAllGroupsEnabled)
-      plugin.getProxy().getScheduler().runAsync(plugin, syncGroup(e.getPlayer()));
+    plugin.getProxy().getScheduler().runAsync(plugin, syncGroup(e.getPlayer()));
   }
 
   private Runnable syncGroup(final ProxiedPlayer p) {

@@ -66,6 +66,8 @@ public class ConfigHandlerBukkit {
   public String jCoinsgiverURL, jCoinsgiveKey, jCoinsgiverAuthorName, jCoinsgiverForumMessage;
   public Integer jCoinsgiverAuthorID, jCoinsgiverAmount, jCoinsgiverMinutes;
 
+  //FabiWotlabSyncHookEnabled
+  public Boolean FabiWotlabSyncHookEnabled;
 
   public void loadConfig() {
     boolean error = false;
@@ -350,6 +352,16 @@ public class ConfigHandlerBukkit {
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
       config.set(path, 60);
+      error = true;
+    }
+    //FabiWotlabSyncHookEnabled
+    path = "FabiWoltlabSync.Enable";
+    if (config.contains(path)) {
+      FabiWotlabSyncHookEnabled = config.getBoolean(path);
+    }
+    else {
+      wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, false);
       error = true;
     }
 

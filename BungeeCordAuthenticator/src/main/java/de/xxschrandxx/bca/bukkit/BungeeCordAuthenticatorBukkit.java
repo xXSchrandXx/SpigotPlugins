@@ -6,7 +6,6 @@ import de.xxschrandxx.api.minecraft.ServerVersion;
 import de.xxschrandxx.api.minecraft.otherapi.Version;
 import de.xxschrandxx.bca.bukkit.api.BungeeCordAuthenticatorBukkitAPI;
 import de.xxschrandxx.bca.bukkit.listeners.*;
-import de.xxschrandxx.bca.core.PluginChannels;
 
 public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
 
@@ -27,21 +26,6 @@ public class BungeeCordAuthenticatorBukkit extends JavaPlugin {
     instance = this;
 
     api = new BungeeCordAuthenticatorBukkitAPI(this);
-
-    if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loading incoming channel...");
-    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.login, api.getMessenger());
-    if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.login);
-    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.logout, api.getMessenger());
-    if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.logout);
-    getServer().getMessenger().registerIncomingPluginChannel(this, PluginChannels.sync, api.getMessenger());
-    if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded incoming channel " + PluginChannels.sync);
-    getServer().getMessenger().registerOutgoingPluginChannel(this, PluginChannels.sync);
-    if (api.getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded outgoing channel " + PluginChannels.sync);
 
     if (api.getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading listener...");

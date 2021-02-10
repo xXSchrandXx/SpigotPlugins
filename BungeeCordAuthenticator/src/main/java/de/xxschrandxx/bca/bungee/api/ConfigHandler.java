@@ -298,6 +298,7 @@ public class ConfigHandler {
   public String LoginAlreadyAuthenticated;
   public String LoginNotRegistered;
   public String LoginWrongPassword;
+  public String LoginMaxAttempts;
   public String LoginSuccessful;
 
   //Logout
@@ -380,7 +381,7 @@ public class ConfigHandler {
     //SQLError
     path = "sqlerror";
     if (message.contains(path)) {
-      PlayerOnly = color(message.getString(path));
+      SQLError = color(message.getString(path));
     }
     else {
       bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
@@ -497,6 +498,16 @@ public class ConfigHandler {
     else {
       bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
       message.set(path, "Wrong password.");
+      error = true;
+    }
+    //LoginMaxAttempts
+    path = "login.maxattempts";
+    if (message.contains(path)) {
+      LoginMaxAttempts = color(message.getString(path));
+    }
+    else {
+      bcab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You have given the wrong password too often.");
       error = true;
     }
     //LoginSuccessful

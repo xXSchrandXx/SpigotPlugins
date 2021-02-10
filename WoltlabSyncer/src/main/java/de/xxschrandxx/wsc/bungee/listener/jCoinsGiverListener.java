@@ -1,6 +1,7 @@
 package de.xxschrandxx.wsc.bungee.listener;
 
 import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
+import de.xxschrandxx.wsc.bungee.api.events.PlayerVerifiedEvent;
 import de.xxschrandxx.wsc.core.api.jCoinsGiver;
 
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,12 +24,10 @@ public class jCoinsGiverListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
     addMoneyTask(e.getPlayer());
   }
-  */
 
   @EventHandler
   public void onLogin(PostLoginEvent e) {

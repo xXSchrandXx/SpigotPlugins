@@ -5,7 +5,7 @@ import java.util.Date;
 
 import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
 import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
-
+import de.xxschrandxx.wsc.bungee.api.events.PlayerVerifiedEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -19,15 +19,13 @@ public class SyncPrimaryGroup implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onLogin(PlayerVerifiedEvent e) {
+    plugin.getProxy().getScheduler().runAsync(plugin, syncPrimaryGroup(e.getPlayer()));
   }
-  */
 
   @EventHandler
   public void onLogin(PostLoginEvent e) {
-    if (plugin.getConfigHandler().SyncPrimaryGroupEnabled)
     plugin.getProxy().getScheduler().runAsync(plugin, syncPrimaryGroup(e.getPlayer()));
   }
 

@@ -50,7 +50,21 @@ public class Login extends Command {
     try {
       if (!bcab.getAPI().checkPassword(player.getUniqueId(), args[0])) {
         sender.sendMessage(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginWrongPassword));
-        return;
+        if (bcab.getAPI().getConfigHandler().MaxAttempts == -1) {
+          return;
+        }
+        Integer tries = bcab.getAPI().getLoginTries(player.getUniqueId());
+        if (tries == null) {
+          bcab.getAPI().addLoginTry(player.getUniqueId());
+          return;
+        }
+        else {
+          if (tries >= bcab.getAPI().getConfigHandler().MaxAttempts) {
+            bcab.getAPI().clearLoginTries(player.getUniqueId());
+            player.disconnect(new TextComponent(bcab.getAPI().getConfigHandler().Prefix + bcab.getAPI().getConfigHandler().LoginMaxAttempts));
+            return;
+          }
+        }
       }
     }
     catch (SQLException e) {

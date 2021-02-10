@@ -94,6 +94,15 @@ public class WoltlabSyncerBungee extends Plugin {
         e.printStackTrace();
       }
     }
+    if (getConfigHandler().FabiWotlabSyncHookEnabled) {
+      Plugin wls = getProxy().getPluginManager().getPlugin("WoltlabSync");
+      if (wls != null) {
+        getLogger().warning("You don't have WoltlabSync installed.");
+      }
+      else {
+        getProxy().getPluginManager().registerListener(this, new FabiWoltlabSyncListener(this));
+      }
+    }
   }
 
   @Override

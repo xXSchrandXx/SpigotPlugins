@@ -7,7 +7,7 @@ import de.simonsator.partyandfriends.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
 import de.xxschrandxx.wsc.bungee.api.PlayerDataBungee;
-
+import de.xxschrandxx.wsc.bungee.api.events.PlayerVerifiedEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -20,11 +20,14 @@ public class SyncFriendsListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
+    if (plugin.getConfigHandler().isDebug) plugin.getLogger().info("DEBUG | Syncing Friends for " + e.getPlayer().getUniqueId());
+    PlayerDataBungee pdb = plugin.getConfigHandler().getPlayerData(e.getPlayer());
+    if (pdb != null) {
+      plugin.getProxy().getScheduler().runAsync(plugin, syncFriends(pdb));
+    }
   }
-  */
 
   @EventHandler
   public void onLogin(PostLoginEvent e) {

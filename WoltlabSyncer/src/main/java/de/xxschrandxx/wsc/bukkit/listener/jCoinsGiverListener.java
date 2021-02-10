@@ -1,6 +1,7 @@
 package de.xxschrandxx.wsc.bukkit.listener;
 
 import de.xxschrandxx.wsc.bukkit.WoltlabSyncerBukkit;
+import de.xxschrandxx.wsc.bukkit.api.events.PlayerVerifiedEvent;
 import de.xxschrandxx.wsc.core.api.jCoinsGiver;
 
 import java.io.IOException;
@@ -21,12 +22,10 @@ public class jCoinsGiverListener implements Listener {
     this.plugin = plugin;
   }
 
-  /* TODO
   @EventHandler
   public void onVerify(PlayerVerifiedEvent e) {
     addMoneyTask(e.getPlayer());
   }
-  */
 
   @EventHandler
   public void onLogin(PlayerLoginEvent e) {
