@@ -14,6 +14,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerDisconnectEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -140,6 +141,14 @@ public class BCABListener implements Listener {
     }
   }
 
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onServerSwitch(ServerSwitchEvent event) {
+    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    UUID uuid = event.getPlayer().getUniqueId();
+    out.writeUTF(uuid.toString());
+    event.getFrom().sendData(PluginChannels.logout, out.toByteArray());
+    event.getPlayer().getServer().sendData(PluginChannels.login, out.toByteArray());
+  }
   
   @EventHandler(priority = EventPriority.LOWEST)
   public void onServerConnectEvent(ServerConnectEvent event) {
