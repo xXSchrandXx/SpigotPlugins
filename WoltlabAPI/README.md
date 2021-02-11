@@ -83,4 +83,30 @@ E.g. [SimplejCoinsListener-Package](https://github.com/xXSchrandXx/SimplejCoinsL
     <scope>provided</scope>
   </dependency>
 </dependencies>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.2.2</version>
+      <executions>
+        <execution>
+          <id>Add API WoltlabAPI to this jar</id>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+          <inherited>true</inherited>
+          <configuration>
+            <artifactSet>
+              <includes>
+                <include>de.xxschrandxx.wsc:WoltlabAPI:jar:*</include>
+              </includes>
+            </artifactSet>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
 ```
