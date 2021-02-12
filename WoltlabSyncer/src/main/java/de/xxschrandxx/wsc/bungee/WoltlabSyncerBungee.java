@@ -1,8 +1,8 @@
 package de.xxschrandxx.wsc.bungee;
 
 import de.xxschrandxx.wsc.bungee.api.ConfigHandlerBungee;
+import de.xxschrandxx.wsc.bungee.commands.*;
 import de.xxschrandxx.wsc.bungee.listener.*;
-
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.sql.SQLException;
@@ -15,28 +15,22 @@ public class WoltlabSyncerBungee extends Plugin {
     return wab;
   }
 
+  private SyncListener sl;
+
+  public SyncListener getSyncListener() {
+    return sl;
+  }
+
   private jCoinsGiverListener jcg;
 
   public jCoinsGiverListener getjCoinsGiverListener() {
     return jcg;
   }
 
-  private SyncAllGroupsListener sag;
-
-  public SyncAllGroupsListener getSyncAllGroupsListener() {
-    return sag;
-  }
-
   private SyncFriendsListener sfl;
 
   public SyncFriendsListener getFriendsListener() {
     return sfl;
-  }
-
-  private SyncPrimaryGroup spg;
-
-  public SyncPrimaryGroup getPrimaryGroupListener() {
-    return spg;
   }
 
   private ConfigHandlerBungee ch;
@@ -51,17 +45,15 @@ public class WoltlabSyncerBungee extends Plugin {
     ch = new ConfigHandlerBungee(this);
 
     //Setting up API
-    wab = new WoltlabAPIBungee(getConfigHandler().SQLProperties.toPath(), getLogger(), getConfigHandler().isDebug);
+    wab = new WoltlabAPIBungee(getConfigHandler().SQLProperties.toPath(), getLogger(), getConfigHandler().isDebugging);
+
+    //Setting up Commands
+    getProxy().getPluginManager().registerCommand(this, new Sync(this));
+    getProxy().getPluginManager().registerCommand(this, new WoltlabSync(this));
 
     //Setting up Listener
-    if (getConfigHandler().SyncPrimaryGroupEnabled) {
-      spg = new SyncPrimaryGroup(this);
-      getProxy().getPluginManager().registerListener(this, spg);
-    }
-    if (getConfigHandler().SyncAllGroupsEnabled) {
-      sag = new SyncAllGroupsListener(this);
-      getProxy().getPluginManager().registerListener(this, sag);
-    }
+    sl = new SyncListener(this);
+    getProxy().getPluginManager().registerListener(this, sl);
     if (getConfigHandler().SyncFriendsEnabled) {
       try {
         if (getAPI().getSQL().hasFriendsInstalled(getConfigHandler().PackageTable)) {

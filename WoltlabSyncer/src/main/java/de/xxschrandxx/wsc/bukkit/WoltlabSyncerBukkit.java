@@ -1,6 +1,7 @@
 package de.xxschrandxx.wsc.bukkit;
 
 import de.xxschrandxx.wsc.bukkit.api.ConfigHandlerBukkit;
+import de.xxschrandxx.wsc.bukkit.commands.*;
 import de.xxschrandxx.wsc.bukkit.listener.*;
 
 import java.sql.SQLException;
@@ -16,28 +17,22 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
     return wab;
   }
 
+  private SyncListener sl;
+
+  public SyncListener getSyncListener() {
+    return sl;
+  }
+
   private jCoinsGiverListener jcg;
 
   public jCoinsGiverListener getjCoinsGiverListener() {
     return jcg;
   }
 
-  private SyncAllGroupsListener sag;
-
-  public SyncAllGroupsListener getSyncAllGroupsListener() {
-    return sag;
-  }
-
   private SyncFriendsListener sfl;
 
   public SyncFriendsListener getFriendsListener() {
     return sfl;
-  }
-
-  private SyncPrimaryGroup spg;
-
-  public SyncPrimaryGroup getPrimaryGroupListener() {
-    return spg;
   }
 
   private ConfigHandlerBukkit ch;
@@ -52,17 +47,15 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
     ch = new ConfigHandlerBukkit(this);
 
     //Setting up API
-    wab = new WoltlabAPIBukkit(getConfigHandler().SQLProperties.toPath(), getLogger(), getConfigHandler().isDebug);
+    wab = new WoltlabAPIBukkit(getConfigHandler().SQLProperties.toPath(), getLogger(), getConfigHandler().isDebugging);
+
+    //Setting up Commands
+    getCommand("sync").setExecutor(new Sync(this));
+    getCommand("woltlabsync").setExecutor(new WoltlabSync(this));
 
     //Setting up Listener
-    if (getConfigHandler().SyncPrimaryGroupEnabled) {
-      spg = new SyncPrimaryGroup(this);
-      getServer().getPluginManager().registerEvents(spg, this);
-    }
-    if (getConfigHandler().SyncAllGroupsEnabled) {
-      sag = new SyncAllGroupsListener(this);
-      getServer().getPluginManager().registerEvents(sag, this);
-    }
+    sl = new SyncListener(this);
+    getServer().getPluginManager().registerEvents(sl, this);
     if (getConfigHandler().SyncFriendsEnabled) {
       try {
         if (getAPI().getSQL().hasFriendsInstalled(getConfigHandler().PackageTable)) {
@@ -101,12 +94,7 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
         getLogger().warning("You don't have WoltlabSync installed.");
       }
       else {
-        if (!wls.isEnabled()) {
-          getLogger().warning("You don't have WoltlabSync installed.");
-        }
-        else {
-          getServer().getPluginManager().registerEvents(new FabiWoltlabSyncListener(this), this);
-        }
+        getServer().getPluginManager().registerEvents(new FabiWoltlabSyncListener(this), this);
       }
     }
   }

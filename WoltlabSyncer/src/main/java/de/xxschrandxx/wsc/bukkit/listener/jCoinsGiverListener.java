@@ -7,12 +7,13 @@ import de.xxschrandxx.wsc.core.api.jCoinsGiver;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 
 public class jCoinsGiverListener implements Listener {
 
@@ -22,12 +23,12 @@ public class jCoinsGiverListener implements Listener {
     this.plugin = plugin;
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onVerify(PlayerVerifiedEvent e) {
     addMoneyTask(e.getPlayer());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onLogin(PlayerLoginEvent e) {
     addMoneyTask(e.getPlayer());
   }
@@ -41,7 +42,7 @@ public class jCoinsGiverListener implements Listener {
 
   private void addMoneyTask(final Player player) {
     if (!tasks.containsKey(player)) {
-      if (plugin.getConfigHandler().isDebug)
+      if (plugin.getConfigHandler().isDebugging)
         plugin.getLogger().info("DEBUG | addMoneyTask: " + player.getName());
       tasks.put(player, plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
         int minute = 0;
@@ -66,19 +67,20 @@ public class jCoinsGiverListener implements Listener {
               }
               catch (IOException e) {
                 e.printStackTrace();
+                return;
               }
-              player.sendMessage(plugin.getConfigHandler().Prefix);
+              player.sendMessage(plugin.getConfigHandler().Prefix + plugin.getConfigHandler().MoneyTaskMessage.replace("%amount%", plugin.getConfigHandler().jCoinsgiverAmount.toString()).replace("%time%", plugin.getConfigHandler().jCoinsgiverMinutes.toString()));
             }
             minute = 0;
           }
         }
-      }, 0, 3*60));
+      }, 3 * 60, 3 * 60));
     }
   }
 
   private void removeMoneyTask(final Player p) {
     if (tasks.containsKey(p)) {
-      if (plugin.getConfigHandler().isDebug)
+      if (plugin.getConfigHandler().isDebugging)
         plugin.getLogger().info("DEBUG | removeMoneyTask: " + p.getName());
       tasks.get(p).cancel();
       tasks.remove(p);

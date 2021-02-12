@@ -17,7 +17,7 @@
         <version>3.2.2</version>
         <executions>
           <execution>
-            <id>Add API</id>
+            <id>Add API WoltlabAPI to this jar</id>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>

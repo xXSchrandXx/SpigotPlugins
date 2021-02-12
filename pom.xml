@@ -80,7 +80,7 @@
     <!-- PAF Repo -->
     <repository>
       <id>simonsators-repo</id>
-      <url>https://simonsator.de/repo</url>
+      <url>http://simonsator.de/repo</url>
     </repository>
 
   </repositories>
@@ -151,39 +151,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- unused
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${docsDirectory}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>/target/</directory>
-                  <targetPath>${project.artifactId}</targetPath>
-                  <includes>
-                    <include>*/*.jar</include>
-                    <include>*/apidocs/</include>
-                  </includes>
-                  <excludes>
-                    <exclude>*/*javadoc.jar</exclude>
-                  </excludes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      -->
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

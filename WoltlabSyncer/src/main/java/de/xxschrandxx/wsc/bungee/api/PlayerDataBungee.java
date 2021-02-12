@@ -10,21 +10,33 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PlayerDataBungee extends PlayerData {
 
-  public PlayerDataBungee(UUID uuid, Integer id, Boolean isverified, String name, String primaygroup, List<String> groups, List<UUID> friends) {
-    super(uuid, id, name, isverified, primaygroup, groups, friends);
+  public PlayerDataBungee(UUID uuid, Integer id, Boolean isverified, String name, String primarygroup, List<String> groups, List<UUID> friends) {
+    super(uuid, id, name, isverified, primarygroup, groups, friends);
   }
 
-  public PlayerDataBungee(UUID uuid) {
-    super(uuid);
+  public PlayerDataBungee(UUID uuid, String name) {
+    super(uuid, name);
+  }
+
+  public PlayerDataBungee(UUID uuid, String name, Integer id) {
+    super(uuid, name, id);
   }
 
   public PlayerDataBungee(ProxiedPlayer player) {
-    super(player.getUniqueId());
-    setName(player.getName());
+    super(player.getUniqueId(), player.getName());
+  }
+
+  public PlayerDataBungee(ProxiedPlayer player, Integer id) {
+    super(player.getUniqueId(), player.getName(), id);
   }
 
   public ProxiedPlayer asPlayer() {
     return ProxyServer.getInstance().getPlayer(getUniqueId());
+  }
+
+  @Override
+  public PlayerDataBungee copy() {
+    return new PlayerDataBungee(uuid, id, isverified, name, primarygroup, groups, friends);
   }
 
 }

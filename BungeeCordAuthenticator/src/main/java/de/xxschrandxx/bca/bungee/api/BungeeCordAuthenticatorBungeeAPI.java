@@ -162,7 +162,7 @@ public class BungeeCordAuthenticatorBungeeAPI {
     //Sending PluginMessage
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    player.getServer().getInfo().sendData(PluginChannels.login, out.toByteArray());
+    player.getServer().getInfo().sendData(PluginChannels.login, out.toByteArray()); // TODO Fix FastLogin error
   }
 
   /**

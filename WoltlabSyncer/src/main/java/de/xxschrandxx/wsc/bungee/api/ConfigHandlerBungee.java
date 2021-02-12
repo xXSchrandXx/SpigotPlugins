@@ -11,7 +11,8 @@ import java.util.UUID;
 
 import de.xxschrandxx.wsc.bungee.WoltlabAPIBungee;
 import de.xxschrandxx.wsc.bungee.WoltlabSyncerBungee;
-
+import de.xxschrandxx.wsc.bungee.api.adapter.PAFAdapter;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -40,8 +41,8 @@ public class ConfigHandlerBungee {
 
   //Config Values
 
-  //isDebug
-  public Boolean isDebug;
+  //isDebugging
+  public Boolean isDebugging;
 
   //Tables
   public String PackageTable, UserTable;
@@ -71,6 +72,12 @@ public class ConfigHandlerBungee {
   //FabiWotlabSyncHookEnabled
   public Boolean FabiWotlabSyncHookEnabled;
 
+  //CommandSync
+  public String PermissionSyncOwn, PermissionSyncOther;
+
+  //CommandWoltlabSync
+  public String CommandWoltlabSync;
+
   public void loadConfig() {
     boolean error = false;
     configyml = new File(wab.getDataFolder(), "config.yml");
@@ -89,7 +96,7 @@ public class ConfigHandlerBungee {
     //isDebugging
     path = "debug";
     if (config.contains(path)) {
-      isDebug = config.getBoolean(path);
+      isDebugging = config.getBoolean(path);
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
@@ -160,7 +167,7 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, "lp user %uuid% parent set %group%");
+      config.set(path, "lpb user %uuid% parent set %group%");
       error = true;
     }
     //SyncPrimaryGroupUnsetCommand
@@ -170,7 +177,7 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, "lp user %uuid% parent set default");
+      config.set(path, "lpb user %uuid% parent set default");
       error = true;
     }
     //SyncPrimaryGroupTable
@@ -214,7 +221,7 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, "lp user %uuid% parent add %group%");
+      config.set(path, "lpb user %uuid% parent add %group%");
       error = true;
     }
     //SyncAllGroupsUnsetCommand
@@ -224,7 +231,7 @@ public class ConfigHandlerBungee {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, "lp user %uuid% parent remove %group%");
+      config.set(path, "lpb user %uuid% parent remove %group%");
       error = true;
     }
     //SyncAllGroupsTable
@@ -369,6 +376,76 @@ public class ConfigHandlerBungee {
       config.set(path, false);
       error = true;
     }
+    //PermissionSyncOwn
+    path = "Permission.Sync.Own";
+    if (config.contains(path)) {
+      PermissionSyncOwn = config.getString(path);
+    }
+    else {
+      wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, "ws.command.sync.own");
+      error = true;
+    }
+    //PermissionSyncOther
+    path = "Permission.Sync.Other";
+    if (config.contains(path)) {
+      PermissionSyncOther = config.getString(path);
+    }
+    else {
+      wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, "ws.command.sync.other");
+      error = true;
+    }
+    //CommandWoltlabSync
+    path = "Permission.WoltlabSync";
+    if (config.contains(path)) {
+      CommandWoltlabSync = config.getString(path);
+    }
+    else {
+      wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
+      config.set(path, "ws.command.woltlabsync");
+      error = true;
+    }
+
+    if (isDebugging != null) {
+      if (isDebugging) {
+        wab.getLogger().info("DEBUG | loadConfig values: " +
+        "isDebugging=" + isDebugging +
+        "\n" +
+        ", PackageTable=" + PackageTable +
+        ", UserTable=" + UserTable +
+        ", MinTimeBetweenSync=" + MinTimeBetweenSync +
+        "\n" +
+        ", SyncPrimaryGroupEnabled= " + SyncPrimaryGroupEnabled +
+        ", SyncPrimaryGroupIDs=" + SyncPrimaryGroupIDs +
+        ", SyncPrimaryGroupSetCommand=" + SyncPrimaryGroupSetCommand +
+        ", SyncPrimaryGroupUnsetCommand=" + SyncPrimaryGroupUnsetCommand +
+        ", SyncPrimaryGroupTable=" + SyncPrimaryGroupTable +
+        "\n" +
+        ", SyncAllGroupsEnabled=" + SyncAllGroupsEnabled +
+        ", SyncAllGroupsIDs=" + SyncAllGroupsIDs +
+        ", SyncAllGroupsSetCommand=" + SyncAllGroupsSetCommand +
+        ", SyncAllGroupsUnsetCommand=" + SyncAllGroupsUnsetCommand +
+        ", SyncAllGroupsTable=" + SyncAllGroupsTable +
+        "\n" +
+        ", SyncFriendsEnabled=" + SyncFriendsEnabled +
+        ", SyncFriendsRemove=" + SyncFriendsRemove +
+        ", SyncFriendsTable=" + SyncFriendsTable +
+        "\n" +
+        ", jCoinsgiverEnabled=" + jCoinsgiverEnabled +
+        ", jCoinsgiverModerative=" + jCoinsgiverModerative +
+        ", jCoinsgiverURL=" + jCoinsgiverURL +
+        ", jCoinsgiveKey=" + jCoinsgiveKey +
+        ", jCoinsgiverAuthorName=" + jCoinsgiverAuthorName +
+        ", jCoinsgiverForumMessage=" + jCoinsgiverForumMessage +
+        ", jCoinsgiverAuthorID=" + jCoinsgiverAuthorID +
+        ", jCoinsgiverAmount=" + jCoinsgiverAmount +
+        ", jCoinsgiverMinutes=" + jCoinsgiverMinutes +
+        "\n" +
+        ", FabiWotlabSyncHookEnabled=" + FabiWotlabSyncHookEnabled
+        );
+      }
+    }
 
     //Error handeling
     if (error) {
@@ -389,12 +466,36 @@ public class ConfigHandlerBungee {
         e.printStackTrace();
       }
     }
+    else {
+      wab.getLogger().warning("saveConfig | config is null");
+    }
   }
 
   //Message Values
 
   //Prefix
   public String Prefix;
+
+  //NoPermission
+  public String NoPermission;
+
+  //MoneyTask
+  public String MoneyTaskMessage;
+
+  //CommanSync
+  public String CommandSyncEmptyOrBlank;
+  public String CommandSyncPlayerNull;
+  public String CommandSyncPlayerDataNull;
+  public String CommandSyncNotVerified;
+  public String CommandSyncUsage;
+  public String CommandSyncWait;
+  public String CommandSyncSuccess;
+
+  //WoltlabSync
+  public String WoltlabSyncUsage;
+  public String WoltlabSyncSuccess;
+  public String WoltlabSyncLoaded; 
+  public String WoltlabSyncSaved;
 
   public void loadMessage() {
     boolean error = false;
@@ -409,13 +510,145 @@ public class ConfigHandlerBungee {
     catch (IOException e) {
       e.printStackTrace();
     }
+    String path;
     //Prefix
-    if (message.contains("prefix")) {
-      Prefix = message.getString("prefix");
+    path = "prefix";
+    if (message.contains(path)) {
+      Prefix = color(message.getString(path));
     }
     else {
-      wab.getLogger().warning("loadMessage() | prefix is not given. Setting it...");
-      message.set("prefix", "&8[&6WlS&8]&7 ");
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "&8[&6WlS&8]&7 ");
+      error = true;
+    }
+    //NoPermission
+    path = "nopermission";
+    if (message.contains(path)) {
+      NoPermission = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You don't have the permission to do that. [%permission%]");
+      error = true;
+    }
+    //MoneyTaskMessage
+    path = "moneytask.add";
+    if (message.contains(path)) {
+      MoneyTaskMessage = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You got %amount% for being online %time% minutes.");
+      error = true;
+    }
+    //CommandSyncEmptyOrBlank
+    path = "sync.emptyorblank";
+    if (message.contains(path)) {
+      CommandSyncEmptyOrBlank = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You have to give a Name or UUID.");
+      error = true;
+    }
+    //CommandSyncPlayerNull
+    path = "sync.playernull";
+    if (message.contains(path)) {
+      CommandSyncPlayerNull = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The given Name or UUID does not exist.");
+      error = true;
+    }
+    //CommandSyncPlayerDataNull
+    path = "sync.playerdatanull";
+    if (message.contains(path)) {
+      CommandSyncPlayerDataNull = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The given Name or UUID does not exist in database.");
+      error = true;
+    }
+    //CommandSyncNotVerified
+    path = "sync.notverified";
+    if (message.contains(path)) {
+      CommandSyncNotVerified = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "The given Name or UUID is not verified.");
+      error = true;
+    }
+    //CommandSyncUsage
+    path = "sync.usage";
+    if (message.contains(path)) {
+      CommandSyncUsage = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /sync [Name or UUID]");
+      error = true;
+    }
+    //CommandSyncWait
+    path = "sync.wait";
+    if (message.contains(path)) {
+      CommandSyncWait = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "You have to wait %time% Minutes.");
+      error = true;
+    }
+    //CommandSyncSuccess
+    path = "sync.success";
+    if (message.contains(path)) {
+      CommandSyncSuccess = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Your data is getting synced...");
+      error = true;
+    }
+    //WoltlabSyncUsage
+    path = "woltlabsync.usage";
+    if (message.contains(path)) {
+      WoltlabSyncUsage = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "Usage: /woltlabsync [load/save] [message/playerdata/all]");
+      error = true;
+    }
+    //WoltlabSyncSuccess
+    path = "woltlabsync.success";
+    if (message.contains(path)) {
+      WoltlabSyncSuccess = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "%config% got %action%.");
+      error = true;
+    }
+    //WoltlabSyncLoaded
+    path = "woltlabsync.loaded";
+    if (message.contains(path)) {
+      WoltlabSyncLoaded = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "loaded");
+      error = true;
+    }
+    //WoltlabSyncSaved
+    path = "woltlabsync.saved";
+    if (message.contains(path)) {
+      WoltlabSyncSaved = color(message.getString(path));
+    }
+    else {
+      wab.getLogger().warning("loadMessage() | " + path + " is not given. Setting it...");
+      message.set(path, "saved");
       error = true;
     }
 
@@ -437,10 +670,14 @@ public class ConfigHandlerBungee {
         e.printStackTrace();
       }
     }
+    else {
+      wab.getLogger().warning("saveMessage | message is null");
+    }
   }
 
   public void loadPlayerDatas() {
     playerdatayml = new File(wab.getDataFolder(), "playerdatas.yml");
+    playerdatas.clear();
     try {
       if (!playerdatayml.exists()) {
         wab.getDataFolder().mkdirs();
@@ -449,8 +686,7 @@ public class ConfigHandlerBungee {
       playerdata = ConfigurationProvider.getProvider(YamlConfiguration.class).load(playerdatayml);
       for (String key : playerdata.getKeys()) {
         UUID uuid = UUID.fromString(key);
-        PlayerDataBungee pdb = new PlayerDataBungee(uuid);
-        pdb.setName(playerdata.getString(key + ".name"));
+        PlayerDataBungee pdb = new PlayerDataBungee(uuid, playerdata.getString(key + ".name"));
         pdb.setID(playerdata.getInt(key + ".id"));
         pdb.isVerified(playerdata.getBoolean(key + ".isverified"));
         pdb.setPrimaryGroup(playerdata.getString(key + ".primarygroup"));
@@ -479,7 +715,11 @@ public class ConfigHandlerBungee {
         playerdata.set(key + ".isverified", pdb.isVerified());
         playerdata.set(key + ".primarygroup", pdb.getPrimaryGroup());
         playerdata.set(key + ".groups", pdb.getGroups());
-        playerdata.set(key + ".friends", pdb.getFriends());
+        List<String> friends = new ArrayList<String>();
+        for (UUID uuid : pdb.getFriends()) {
+          friends.add(uuid.toString());
+        }
+        playerdata.set(key + ".friends", friends);
         playerdata.set(key + ".lastupdate", pdb.getLastUpdate().getTime());
       }
       try {
@@ -489,15 +729,25 @@ public class ConfigHandlerBungee {
         e.printStackTrace();
       }
     }
+    else {
+      wab.getLogger().warning("savePlayerDatas | playerdata is null");
+    }
   }
 
   private List<PlayerDataBungee> playerdatas = new ArrayList<PlayerDataBungee>();
 
-  public boolean addPlayerData(PlayerDataBungee playerdata) {
-    return playerdatas.add(playerdata);
-  }
-
   public PlayerDataBungee setPlayerData(PlayerDataBungee oldpdb, PlayerDataBungee newpdb) {
+    if (isDebugging)
+      wab.getLogger().info("DEBUG | setPlayerData for " + oldpdb.getUniqueId() +
+        " uuid=" + newpdb.getUniqueId() +
+        ", name=" + newpdb.getName() +
+        ", id=" + newpdb.getID() +
+        ", verified=" + newpdb.isVerified() +
+        ", primarygroup=" + newpdb.getPrimaryGroup() +
+        ", groups=" + newpdb.getGroups() +
+        ", friends=" + newpdb.getFriends() +
+        ", lastupdate=" + newpdb.getLastUpdate()
+      );
     if (playerdatas.contains(oldpdb)) {
       playerdatas.remove(oldpdb);
       playerdatas.add(newpdb);
@@ -506,15 +756,15 @@ public class ConfigHandlerBungee {
     return oldpdb;
   }
 
-  public PlayerDataBungee getSyncedPlayerData(UUID uuid) {
-    return syncFromDatabase(getPlayerData(uuid));
+  public PlayerDataBungee getSyncedPlayerData(UUID uuid, String name) {
+    return syncFromDatabase(getPlayerData(uuid, name));
   }
 
   public PlayerDataBungee getSyncedPlayerData(ProxiedPlayer player) {
     return syncFromDatabase(getPlayerData(player));
   }
 
-  public PlayerDataBungee getPlayerData(UUID uuid) {
+  public PlayerDataBungee getPlayerData(UUID uuid, String name) {
     PlayerDataBungee result = null;
     for (PlayerDataBungee tmp : playerdatas) {
       if (tmp.getUniqueId().equals(uuid)) {
@@ -523,15 +773,20 @@ public class ConfigHandlerBungee {
       }
     }
     if (result == null) {
-      if (isDebug)
+      if (isDebugging)
         wab.getLogger().info("Creating PlayerData for " + uuid.toString());
-      result = new PlayerDataBungee(uuid);
+      result = new PlayerDataBungee(uuid, name);
+      result = syncFromDatabaseIgnoreTime(result);
+      playerdatas.add(result);
+    }
+    if (result.getID() == -1) {
+      result = syncFromDatabaseIgnoreTime(result);
     }
     return result;
   }
 
   public PlayerDataBungee getPlayerData(ProxiedPlayer player) {
-    return getPlayerData(player.getUniqueId());
+    return getPlayerData(player.getUniqueId(), player.getName());
   }
 
   public PlayerDataBungee getPlayerData(Integer userID) {
@@ -542,36 +797,46 @@ public class ConfigHandlerBungee {
         break;
       }
     }
-    if (isDebug && result == null) wab.getLogger().warning("getPlayerData | Will return null for " + userID);
+    if (isDebugging && result == null) wab.getLogger().warning("getPlayerData | Will return null for " + userID);
     return result;
   }
 
-  public PlayerDataBungee syncFromDatabase(PlayerDataBungee oldpdb) {
-    PlayerDataBungee pdb = (PlayerDataBungee) oldpdb.copy();
-    if ((oldpdb.getLastUpdate().getTime() - new Date().getTime()) >= MinTimeBetweenSync) {
+  public PlayerDataBungee syncFromDatabase(PlayerDataBungee pdb) {
+    if ((new Date().getTime() - pdb.getLastUpdate().getTime()) <= MinTimeBetweenSync * 1000 * 60)
       return pdb;
+    else
+      return syncFromDatabaseIgnoreTime(pdb);
+  }
+
+  public PlayerDataBungee syncFromDatabaseIgnoreTime(PlayerDataBungee oldpdb) {
+    if (isDebugging)
+      wab.getLogger().info("DEBUG | syncFromDatabaseIgnoreTime starting sync for " + oldpdb.getUniqueId());
+    PlayerDataBungee pdb = new PlayerDataBungee(oldpdb.getUniqueId(), oldpdb.getName(), oldpdb.getID());
+    if (pdb.asPlayer() != null) {
+      pdb.setName(pdb.asPlayer().getName());
     }
     try {
       if (!wab.getAPI().getSQL().existsTable(UserTable)) {
         wab.getLogger().warning("checkForChanges | usertable does not exist, skipping...");
-        return setPlayerData(oldpdb, pdb);
+        return oldpdb;
       }
       if (pdb.getID() == -1) {
-        if (wab.getAPI().getSQL().existsUUIDinTable(UserTable)) {
+        if (!wab.getAPI().getSQL().existsUUIDinTable(UserTable)) {
           wab.getLogger().warning("checkForChanges | usertable does not have `uuid` column, skipping...");
-          return setPlayerData(oldpdb, pdb);
+          return oldpdb;
         }
         pdb.setID(wab.getAPI().getSQL().getUserIDfromUUID(UserTable, pdb.getUniqueId()));
       }
       if (pdb.getID() == null) {
         wab.getLogger().warning("checkForChanges | PlayerDatas ID is null, skipping");
-        return setPlayerData(oldpdb, pdb);
+        pdb.setID(-1);
+        return oldpdb;
       }
       boolean hasMinecraftIntegrationInstalled = false;
       boolean existsisVerifiedinTable = false;
       if (!wab.getAPI().getSQL().existsTable(PackageTable)) {
         wab.getLogger().warning("checkForChanges | usertable does not exist, skipping...");
-        return setPlayerData(oldpdb, pdb);
+        return oldpdb;
       }
       else {
         hasMinecraftIntegrationInstalled = wab.getAPI().getSQL().hasMinecraftIntegrationInstalled(PackageTable);
@@ -590,10 +855,13 @@ public class ConfigHandlerBungee {
       }
       if (pdb.isVerified()) {
         if (SyncPrimaryGroupEnabled) {
+          if (isDebugging)
+            wab.getLogger().info("DEBUG | syncFromDatabaseIgnoreTime SyncPrimaryGroup");
           if (wab.getAPI().getSQL().existsTable(SyncPrimaryGroupTable)) {
             Integer groupid = wab.getAPI().getSQL().getUserOnlineGroupID(SyncPrimaryGroupTable, pdb.getID());
-            if (SyncPrimaryGroupIDs.get(groupid) != null) {
-              pdb.setPrimaryGroup(SyncPrimaryGroupIDs.get(groupid));
+            String groupname = SyncPrimaryGroupIDs.get(groupid);
+            if (groupname != null) {
+              pdb.setPrimaryGroup(groupname);
             }
           }
           else {
@@ -601,49 +869,47 @@ public class ConfigHandlerBungee {
           }
         }
         if (SyncAllGroupsEnabled) {
+          if (isDebugging)
+            wab.getLogger().info("DEBUG | syncFromDatabaseIgnoreTime SyncAllGroups");
           if (wab.getAPI().getSQL().existsTable(SyncAllGroupsTable)) {
             List<Integer> groupids = wab.getAPI().getSQL().getGroupIDs(SyncAllGroupsTable, pdb.getID());
             for (Integer groupid : groupids) {
-              if (SyncAllGroupsIDs.get(groupid) != null) {
-                pdb.setPrimaryGroup(SyncAllGroupsIDs.get(groupid));
+              String groupname = SyncAllGroupsIDs.get(groupid);
+              if (groupname != null) {
+                pdb.addGroup(groupname);
               }
             }
           }
           else {
-            wab.getLogger().warning("checkForChanges | SyncAllGroupsTable does not exist");
+            wab.getLogger().warning("syncFromDatabaseIgnoreTime | SyncAllGroupsTable does not exist");
           }
         }
         if (SyncFriendsEnabled) {
+          if (isDebugging)
+            wab.getLogger().info("DEBUG | syncFromDatabaseIgnoreTime SyncFriends");
           if (wab.getAPI().getSQL().hasFriendsInstalled(PackageTable)) {
             if (wab.getAPI().getSQL().existsTable(SyncFriendsTable)) {
               List<Integer> userids = wab.getAPI().getSQL().getFriends(SyncFriendsTable, pdb.getID());
-              List<UUID> dbfriends = new ArrayList<UUID>();
-              for (Integer userid : userids) {
-                PlayerDataBungee tmppdb = getPlayerData(userid);
+              for (Integer newfriendid : userids) {
+                PlayerDataBungee tmppdb = getPlayerData(newfriendid);
                 if (tmppdb != null) {
                   if (tmppdb.isVerified()) {
-                    dbfriends.add(tmppdb.getUniqueId());
-                  }
-                }
-                List<UUID> cachedfriends = pdb.getFriends();
-                for (UUID dbfriend : dbfriends) {
-                  if (!cachedfriends.contains(dbfriend)) {
-                    wab.getProxy().getScheduler().runAsync(wab, wab.getFriendsListener().addFriend(pdb.getUniqueId(), dbfriend));
-                  }
-                }
-                if (SyncFriendsRemove) {
-                  for (UUID cachedfriend : cachedfriends) {
-                    if (!dbfriends.contains(cachedfriend)) {
-                      wab.getProxy().getScheduler().runAsync(wab, wab.getFriendsListener().removeFriend(pdb.getUniqueId(), cachedfriend));
+                    pdb.addFriend(tmppdb.getUniqueId());
+                    if (!tmppdb.getFriends().contains(pdb.getUniqueId())) {
+                      PlayerDataBungee newtmppdb = tmppdb.copy();
+                      newtmppdb.addFriend(pdb.getUniqueId());
+                      setPlayerData(tmppdb, newtmppdb);
                     }
                   }
                 }
               }
-              
             }
             else {
-              wab.getLogger().warning("checkForChanges | SyncFriendsTable does not exist");
+              wab.getLogger().warning("syncFromDatabaseIgnoreTime | SyncFriendsTable does not exist");
             }
+          }
+          else {
+            wab.getLogger().warning("syncFromDatabaseIgnoreTime | SyncFriendsTable is not installed");
           }
         }
       }
@@ -651,7 +917,81 @@ public class ConfigHandlerBungee {
     catch (SQLException e) {
       e.printStackTrace();
     }
+    pdb.setLastUpdate(new Date());
+    updatePlayer(oldpdb, pdb);
     return setPlayerData(oldpdb, pdb);
+  }
+
+  public void updatePlayer(PlayerDataBungee oldpdb, PlayerDataBungee newpdb) {
+    if (isDebugging)
+      wab.getLogger().info("DEBUG | updating " + newpdb.getUniqueId());
+    if (newpdb.isVerified()) {
+      if (SyncPrimaryGroupEnabled) {
+        if (isDebugging)
+          wab.getLogger().info("DEBUG | updating primarygroup");
+        if (!oldpdb.getPrimaryGroup().equals(newpdb.getPrimaryGroup())) {
+          String commandLine = wab.getConfigHandler().SyncPrimaryGroupSetCommand
+            .replace("%uuid%", newpdb.getUniqueId().toString())
+            .replace("%playername%", newpdb.getName())
+            .replace("%group%", newpdb.getPrimaryGroup());
+          if (isDebugging)
+            wab.getLogger().info("DEBUG | primarygroup: " + commandLine);
+          wab.getProxy().getPluginManager().dispatchCommand(wab.getProxy().getConsole(), commandLine);
+        }
+      }
+      if (SyncAllGroupsEnabled) {
+        if (isDebugging)
+          wab.getLogger().info("DEBUG | updating allgroups");
+        for (String newgroup : newpdb.getGroups()) {
+          if (!oldpdb.getGroups().contains(newgroup)) {
+            String commandLine = wab.getConfigHandler().SyncAllGroupsSetCommand
+              .replace("%uuid%", newpdb.getUniqueId().toString())
+              .replace("%playername%", newpdb.getName())
+              .replace("%group%", newgroup);
+            if (isDebugging)
+              wab.getLogger().info("DEBUG | allgroups: " + commandLine);
+            wab.getProxy().getPluginManager().dispatchCommand(wab.getProxy().getConsole(), commandLine);
+          }
+        }
+        for (String oldgroup : oldpdb.getGroups()) {
+          if (!newpdb.getGroups().contains(oldgroup)) {
+            String commandLine = wab.getConfigHandler().SyncAllGroupsUnsetCommand
+              .replace("%uuid%", newpdb.getUniqueId().toString())
+              .replace("%playername%", newpdb.getName())
+              .replace("%group%", oldgroup);
+            if (isDebugging)
+              wab.getLogger().info("DEBUG | allgroups: " + commandLine);
+            wab.getProxy().getPluginManager().dispatchCommand(wab.getProxy().getConsole(), commandLine);
+          }
+        }
+      }
+      if (SyncFriendsEnabled) {
+        if (isDebugging)
+          wab.getLogger().info("DEBUG | updating friends");
+        for (UUID newfriend : newpdb.getFriends()) {
+          if (!oldpdb.getFriends().contains(newfriend)) {
+            if (isDebugging)
+              wab.getLogger().info("DEBUG | friends: adding " + newfriend.toString());
+            PAFAdapter.addFriend(wab, newpdb.getUniqueId(), newfriend);
+          }
+        }
+        if (SyncFriendsRemove) {
+          for (UUID oldfriend : oldpdb.getFriends()) {
+            if (!newpdb.getFriends().contains(oldfriend)) {
+              if (isDebugging)
+                wab.getLogger().info("DEBUG | friends: removing " + oldfriend.toString());
+              PAFAdapter.removeFriend(wab, newpdb.getUniqueId(), oldfriend);
+            }
+          }
+        }
+      }
+    }
+    else if (isDebugging)
+      wab.getLogger().info("DEBUG | player not verfied.");
+  }
+
+  public String color(String message) {
+    return ChatColor.translateAlternateColorCodes('&', message);
   }
 
 }

@@ -146,7 +146,9 @@ public class BCABListener implements Listener {
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     UUID uuid = event.getPlayer().getUniqueId();
     out.writeUTF(uuid.toString());
-    event.getFrom().sendData(PluginChannels.logout, out.toByteArray());
+    if (event.getFrom() != null) {
+      event.getFrom().sendData(PluginChannels.logout, out.toByteArray());
+    }
     event.getPlayer().getServer().sendData(PluginChannels.login, out.toByteArray());
   }
   

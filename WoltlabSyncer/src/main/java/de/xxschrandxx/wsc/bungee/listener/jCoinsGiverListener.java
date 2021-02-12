@@ -11,6 +11,7 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,12 +25,12 @@ public class jCoinsGiverListener implements Listener {
     this.plugin = plugin;
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onVerify(PlayerVerifiedEvent e) {
     addMoneyTask(e.getPlayer());
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOWEST)
   public void onLogin(PostLoginEvent e) {
     addMoneyTask(e.getPlayer());
   }
@@ -43,7 +44,7 @@ public class jCoinsGiverListener implements Listener {
 
   private void addMoneyTask(final ProxiedPlayer player) {
     if (!tasks.containsKey(player)) {
-      if (plugin.getConfigHandler().isDebug)
+      if (plugin.getConfigHandler().isDebugging)
         plugin.getLogger().info("DEBUG | addMoneyTask: " + player.getName());
       tasks.put(player, plugin.getProxy().getScheduler().schedule(plugin, new Runnable() {
         int minute = 0;
@@ -68,8 +69,9 @@ public class jCoinsGiverListener implements Listener {
               }
               catch (IOException e) {
                 e.printStackTrace();
+                return;
               }
-              player.sendMessage(new TextComponent(plugin.getConfigHandler().Prefix) /* TODO */);
+              player.sendMessage(new TextComponent(plugin.getConfigHandler().Prefix + plugin.getConfigHandler().MoneyTaskMessage.replace("%amount%", plugin.getConfigHandler().jCoinsgiverAmount.toString()).replace("%time%", plugin.getConfigHandler().jCoinsgiverMinutes.toString())));
             }
             minute = 0;
           }
@@ -80,7 +82,7 @@ public class jCoinsGiverListener implements Listener {
 
   private void removeMoneyTask(final ProxiedPlayer p) {
     if (tasks.containsKey(p)) {
-      if (plugin.getConfigHandler().isDebug)
+      if (plugin.getConfigHandler().isDebugging)
         plugin.getLogger().info("DEBUG | removeMoneyTask: " + p.getName());
       tasks.get(p).cancel();
       tasks.remove(p);

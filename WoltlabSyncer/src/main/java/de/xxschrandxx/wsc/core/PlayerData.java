@@ -17,17 +17,24 @@ public class PlayerData {
     this.friends = friends;
   }
 
-  public PlayerData(UUID uuid) {
+  public PlayerData(UUID uuid, String name) {
     this.uuid = uuid;
+    this.name = name;
   }
 
-  private final UUID uuid;
+  public PlayerData(UUID uuid, String name, Integer id) {
+    this.uuid = uuid;
+    this.name = name;
+    this.id = id;
+  }
+
+  protected final UUID uuid;
 
   public final UUID getUniqueId() {
     return uuid;
   }
 
-  private Integer id = -1;
+  protected Integer id = -1;
 
   public Integer getID() {
     return id;
@@ -37,7 +44,7 @@ public class PlayerData {
     this.id = id;
   }
 
-  private String name = "none";
+  protected String name = "none";
   
   public String getName() {
     return name;
@@ -47,7 +54,7 @@ public class PlayerData {
     this.name = name;
   }
 
-  private Boolean isverified = false;
+  protected Boolean isverified = false;
 
   public Boolean isVerified() {
     return isverified;
@@ -57,7 +64,7 @@ public class PlayerData {
     this.isverified = isverified;
   }
 
-  private String primarygroup = "default";
+  protected String primarygroup = "default";
 
   public String getPrimaryGroup() {
     return primarygroup;
@@ -67,7 +74,7 @@ public class PlayerData {
     primarygroup = group;
   }
 
-  private List<String> groups = new ArrayList<String>();
+  protected List<String> groups = new ArrayList<String>();
 
   public List<String> getGroups() {
     return groups;
@@ -85,7 +92,7 @@ public class PlayerData {
     return groups.remove(group);
   }
 
-  private List<UUID> friends = new ArrayList<UUID>();
+  protected List<UUID> friends = new ArrayList<UUID>();
 
   public List<UUID> getFriends() {
     return friends;

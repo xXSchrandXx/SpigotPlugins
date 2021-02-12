@@ -24,7 +24,7 @@ public class FabiWoltlabSyncListener implements Listener {
   private ConcurrentHashMap<ProxiedPlayer, ScheduledTask> tasks = new ConcurrentHashMap<ProxiedPlayer, ScheduledTask>();
 
   @EventHandler
-  public void onLogin(ChatEvent e) {
+  public void onVerifyCommand(ChatEvent e) {
     if (!(e.getSender() instanceof ProxiedPlayer)) {
       return;
     }
@@ -45,30 +45,32 @@ public class FabiWoltlabSyncListener implements Listener {
       return;
     }
     if (!tasks.containsKey(player)) {
-        tasks.put(player, plugin.getProxy().getScheduler().schedule(plugin, 
-          new Runnable(){
-            @Override
-            public void run() {
-              try {
-                if (plugin.getAPI().getSQL().isVerfied(plugin.getConfigHandler().UserTable, player.getUniqueId())) {
-                  plugin.getProxy().getPluginManager().callEvent(new PlayerVerifiedEvent(player));
-                  tasks.get(player).cancel();
-                  tasks.remove(player);
-                }
-              }
-              catch (SQLException ex) {
-
+      if (plugin.getConfigHandler().isDebugging)
+        plugin.getLogger().info("DEBUG | onVerifyCommand adding task for " + player.getUniqueId());
+      tasks.put(player, plugin.getProxy().getScheduler().schedule(plugin, 
+        new Runnable(){
+          @Override
+          public void run() {
+            try {
+              if (plugin.getAPI().getSQL().isVerfied(plugin.getConfigHandler().UserTable, player.getUniqueId())) {
+                plugin.getProxy().getPluginManager().callEvent(new PlayerVerifiedEvent(player));
+                tasks.get(player).cancel();
+                tasks.remove(player);
               }
             }
-          },
-          10, 5, TimeUnit.SECONDS)
-        );
-      }
+            catch (SQLException ex) {}
+          }
+        },
+        10, 5, TimeUnit.SECONDS)
+      );
+    }
   }
 
   @EventHandler
   public void onLogout(PlayerDisconnectEvent e) {
     if (tasks.containsKey(e.getPlayer())) {
+      if (plugin.getConfigHandler().isDebugging)
+        plugin.getLogger().info("DEBUG | onVerifyCommand removing task for " + e.getPlayer().getUniqueId());
       tasks.get(e.getPlayer()).cancel();
       tasks.remove(e.getPlayer());
     }

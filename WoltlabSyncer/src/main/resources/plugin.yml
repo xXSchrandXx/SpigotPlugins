@@ -5,3 +5,10 @@ author: xXSchrandXx
 description: ${project.artifactId}Bukkit
 softdepend: [WoltlabSync, FriendsAPIForPartyAndFriends, PartyAndFriends, PartyAndFriendsGUI]
 api-version: 1.13
+commands:
+  sync:
+    description: Sync your or a players data.
+    aliases: [ws]
+  woltlabsync:
+    description: Admincommand.
+permissions: {}

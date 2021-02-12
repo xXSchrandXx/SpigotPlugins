@@ -10,14 +10,20 @@ public class PlayerVerifiedEvent extends PlayerEvent {
     super(who);
   }
 
-  private static final HandlerList HANDLERS = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
 
-  public HandlerList getHandlers() {
-      return HANDLERS;
+  /**
+   * Return the list of handlers, equivalent to {@link #getHandlers()} and required by {@link PlayerEvent}.
+   *
+   * @return The list of handlers
+   */
+  public static HandlerList getHandlerList() {
+    return handlers;
   }
 
-  public static HandlerList getHandlerList() {
-      return HANDLERS;
+  @Override
+  public HandlerList getHandlers() {
+      return handlers;
   }
 
 }
