@@ -43,7 +43,13 @@ public class ConfigHandler {
   //Config Values
   //debug
   public Boolean isDebugging;
+
+  //Checktype
   public CheckType Checktype;
+
+  //LimboServer
+  public boolean LimboServerEnabled;
+  public String LimboServerName;
 
   //Sessions
   public Boolean SessionEnabled;
@@ -102,7 +108,6 @@ public class ConfigHandler {
       bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
       config.set(path, CheckType.SQL.name());
     }
-
     //Sesions
     //SessionEnabled
     path = "session.enabled";

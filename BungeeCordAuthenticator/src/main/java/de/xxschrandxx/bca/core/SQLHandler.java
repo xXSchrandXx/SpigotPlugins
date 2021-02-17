@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -728,6 +729,20 @@ public class SQLHandler {
       return names.get(pName);
     logger.warning("SQLHandler.getUUID | returns null.");
     return null;
+  }
+
+  /**
+   * Gets every {@link UUID} in database.
+   * @return A {@link List} of every {@link UUID} in database.
+   * @throws SQLException {@link SQLException}
+   */
+  public List<UUID> getAllUUIDs() throws SQLException {
+    List<Map<String, Object>> result = query("SELECT `uuid` FROM `" + database + "`.`" + table + "`");
+    List<UUID> uuids = new ArrayList<UUID>();
+    for (Map<String, Object> tmpresult : result) {
+      uuids.add(UUID.fromString((String)tmpresult.get("uuid")));
+    }
+    return uuids;
   }
 
 }

@@ -118,7 +118,8 @@ public enum Version {
     v1_16_1(95),
     v1_16_2(96),
     v1_16_3(97),
-    v1_16_4(98);
+    v1_16_4(98),
+    v1_16_5(99);
 
     private final int level;
 

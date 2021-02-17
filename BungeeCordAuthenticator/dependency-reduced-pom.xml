@@ -41,7 +41,8 @@
               <artifactSet>
                 <includes>
                   <include>de.xxschrandxx.api:SchrandAPI</include>
-                  <include>org.bstats:bstats-bukkit</include>
+                  <include>org.bstats:bstats-bungeecord</include>
+                  <include>org.bstats:bstats-base</include>
                   <include>com.zaxxer:HikariCP:jar:*</include>
                   <include>org.slf4j:slf4j-jdk14:jar:*</include>
                   <include>org.slf4j:slf4j-api:jar:*</include>

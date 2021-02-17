@@ -3,6 +3,9 @@ package de.xxschrandxx.bca.bungee;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.bstats.bungeecord.Metrics;
+import org.bstats.charts.SingleLineChart;
+
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import de.xxschrandxx.bca.bungee.command.*;
 import de.xxschrandxx.bca.bungee.listener.*;
@@ -29,6 +32,8 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
   public static BungeeCordAuthenticatorBungee getInstance() {
     return instance;
   }
+
+  private Metrics metrics;
 
   public void onEnable() {
 
@@ -94,6 +99,10 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
     getLogger().info("Successfully enabled BungeeCordAuthenticatorBungee.");
     if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("Debbung enabled.");
+
+    //Loading bStats
+    metrics = new Metrics(this, 10375);
+    metrics.addCustomChart(new SingleLineChart("managed_users", () -> api.getSQL().getAllUUIDs().size()));
 
   }
 

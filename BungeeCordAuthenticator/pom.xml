@@ -26,19 +26,25 @@
     <!-- Metrics Dependency -->
     <dependency>
       <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>1.5</version>
+      <artifactId>bstats-bungeecord</artifactId>
+      <version>2.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-base</artifactId>
+      <version>2.2.1</version>
       <scope>compile</scope>
     </dependency>
 
-    <!-- HikariCP -->
+    <!-- HikariCP Dependency -->
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>3.4.5</version>
     </dependency>
 
-    <!-- LoggerFactory -->
+    <!-- LoggerFactory Dependency -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
@@ -84,7 +90,8 @@
               <artifactSet>
                 <includes>
                   <include>de.xxschrandxx.api:SchrandAPI</include>
-                  <include>org.bstats:bstats-bukkit</include>
+                  <include>org.bstats:bstats-bungeecord</include>
+                  <include>org.bstats:bstats-base</include>
                   <include>com.zaxxer:HikariCP:jar:*</include>
                   <include>org.slf4j:slf4j-jdk14:jar:*</include>
                   <include>org.slf4j:slf4j-api:jar:*</include>
