@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
 import de.xxschrandxx.bca.bukkit.api.events.LoginEvent;
 import de.xxschrandxx.bca.bukkit.api.events.LogoutEvent;
+import de.xxschrandxx.bca.core.CheckType;
 import de.xxschrandxx.bca.core.OnlineStatus;
 
 public class BungeeCordAuthenticatorBukkitAPI {
@@ -44,7 +45,7 @@ public class BungeeCordAuthenticatorBukkitAPI {
     this.bcab = bcab;
     lg = bcab.getLogger();
     ch = new ConfigHandler(bcab);
-    if (getConfigHandler().ct == CheckType.SQL)
+    if (getConfigHandler().Checktype == CheckType.SQL)
       sql = new SQLHandlerBukkit(ch.getHikariConfigFile().toPath(), lg, ch.isDebugging);
     else
       m = new Messenger(bcab, ch.isDebugging);
@@ -60,7 +61,7 @@ public class BungeeCordAuthenticatorBukkitAPI {
     if (getConfigHandler().isDebugging)
       getLogger().info("DEBUG | login calling LoginEvent for " + player.getName());
     bcab.getServer().getPluginManager().callEvent(new LoginEvent(player));
-    if (getConfigHandler().ct == CheckType.SQL) {
+    if (getConfigHandler().Checktype == CheckType.SQL) {
       try {
         getSQL().setStatus(player, OnlineStatus.authenticated);
       }
@@ -81,7 +82,7 @@ public class BungeeCordAuthenticatorBukkitAPI {
     if (getConfigHandler().isDebugging)
       getLogger().info("DEBUG | login calling LogoutEvent for " + player.getName());
     bcab.getServer().getPluginManager().callEvent(new LogoutEvent(player));
-    if (getConfigHandler().ct == CheckType.SQL) {
+    if (getConfigHandler().Checktype == CheckType.SQL) {
       try {
         getSQL().setStatus(player, OnlineStatus.unauthenticated);
       }
@@ -96,7 +97,7 @@ public class BungeeCordAuthenticatorBukkitAPI {
   }
 
   public boolean isAuthenticated(Player player) {
-    if (getConfigHandler().ct == CheckType.SQL) {
+    if (getConfigHandler().Checktype == CheckType.SQL) {
       try {
         return getSQL().getStatus(player) == OnlineStatus.authenticated;
       }

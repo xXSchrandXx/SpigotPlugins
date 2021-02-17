@@ -31,6 +31,11 @@ public class jCoinsGiver {
      */
   public static List<String> sendMoney(String url, String secretkey, Integer authorID, String authorname, Boolean moderative, Integer receiveruserID, Integer amount, String reason) throws IOException, ProtocolException, SecurityException {
     List<String> result = new ArrayList<String>();
+    int moderativeInt;
+    if (moderative)
+      moderativeInt = 1;
+    else
+      moderativeInt = 0;
     String urlString = url +
         "&secretkey=" + secretkey +
         "&amount=" + amount +
@@ -38,11 +43,13 @@ public class jCoinsGiver {
         "&userID=" + receiveruserID +
         "&authorID=" + authorID +
         "&authorname=" + authorname +
-        "&moderative=" + moderative;
+        "&moderative=" + moderativeInt;
     if(urlString.contains(" "))
       urlString = urlString.replace(" ", "%20");
-    if (url.startsWith("https://")) {
-      HttpsURLConnection con = (HttpsURLConnection) (new URL(urlString)).openConnection();
+
+    URL completeurl = new URL(urlString);
+    if (urlString.startsWith("https://")) {
+      HttpsURLConnection con = (HttpsURLConnection) completeurl.openConnection();
       String input = "";
       BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), Charset.forName("UTF-8")));
       while ((input = reader.readLine()) != null) {
@@ -51,8 +58,8 @@ public class jCoinsGiver {
       reader.close();
       con.disconnect();
     }
-    else if (url.startsWith("http://")) {
-      HttpURLConnection con = (HttpURLConnection) (new URL(urlString)).openConnection();
+    else if (urlString.startsWith("http://")) {
+      HttpURLConnection con = (HttpURLConnection) completeurl.openConnection();
       String input = "";
       BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), Charset.forName("UTF-8")));
       while ((input = reader.readLine()) != null) {

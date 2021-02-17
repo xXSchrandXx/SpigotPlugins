@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.xxschrandxx.bca.bungee.BungeeCordAuthenticatorBungee;
+import de.xxschrandxx.bca.core.CheckType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -42,6 +43,7 @@ public class ConfigHandler {
   //Config Values
   //debug
   public Boolean isDebugging;
+  public CheckType Checktype;
 
   //Sessions
   public Boolean SessionEnabled;
@@ -90,6 +92,17 @@ public class ConfigHandler {
       config.set(path, false);
       error = true;
     }
+    //Checktype
+    path = "checktype";
+    if (config.contains(path)) {
+      Checktype = CheckType.valueOf(config.getString(path));
+    }
+    else {
+      error = true;
+      bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
+      config.set(path, CheckType.SQL.name());
+    }
+
     //Sesions
     //SessionEnabled
     path = "session.enabled";

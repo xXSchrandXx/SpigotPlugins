@@ -6,6 +6,7 @@ import java.util.UUID;
 import de.xxschrandxx.bca.bungee.api.BungeeCordAuthenticatorBungeeAPI;
 import de.xxschrandxx.bca.bungee.command.*;
 import de.xxschrandxx.bca.bungee.listener.*;
+import de.xxschrandxx.bca.core.CheckType;
 import de.xxschrandxx.bca.core.PluginChannels;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -44,19 +45,20 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
       return;
     }
 
-    if (getAPI().getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loadeding channel...");
-    //Loading Channel
-    getProxy().registerChannel(PluginChannels.login);
-    if (getAPI().getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded channel " + PluginChannels.login);
-    getProxy().registerChannel(PluginChannels.logout);
-    if (getAPI().getConfigHandler().isDebugging)
-    getLogger().info("onEnable | loaded channel " + PluginChannels.logout);
+    if (getAPI().getConfigHandler().Checktype == CheckType.PluginMessage) {
+      if (getAPI().getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loadeding channel...");
+      //Loading Channel
+      getProxy().registerChannel(PluginChannels.login);
+      if (getAPI().getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loaded channel " + PluginChannels.login);
+      getProxy().registerChannel(PluginChannels.logout);
+      if (getAPI().getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loaded channel " + PluginChannels.logout);
       getProxy().registerChannel(PluginChannels.sync);
-    if (getAPI().getConfigHandler().isDebugging)
-      getLogger().info("onEnable | loaded channel " + PluginChannels.sync);
-
+      if (getAPI().getConfigHandler().isDebugging)
+        getLogger().info("onEnable | loaded channel " + PluginChannels.sync);
+    }
     if (getAPI().getConfigHandler().isDebugging)
       getLogger().info("onEnable | loading commands...");
     //Loading Commands

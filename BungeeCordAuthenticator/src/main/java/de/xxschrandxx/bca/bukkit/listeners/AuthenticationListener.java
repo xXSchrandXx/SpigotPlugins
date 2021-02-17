@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
-import de.xxschrandxx.bca.bukkit.api.CheckType;
+import de.xxschrandxx.bca.core.CheckType;
 import de.xxschrandxx.bca.bukkit.api.events.*;
 
 public class AuthenticationListener implements Listener {
@@ -26,27 +26,29 @@ public class AuthenticationListener implements Listener {
 
   @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
   public void onPreJoin(PlayerJoinEvent event) {
-    if (bcab.getAPI().getConfigHandler().ct == CheckType.SQL) {
-      if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
-        bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
-      }
-      if (!tasks.containsKey(event.getPlayer())) {
-        tasks.put(event.getPlayer(), bcab.getServer().getScheduler().runTaskTimerAsynchronously(bcab, new Runnable(){
-          @Override
-          public void run() {
-            if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
-              bcab.getServer().getScheduler().runTask(bcab, new Runnable(){
-                @Override
-                public void run() {
-                  bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
-                }
-              });
-              tasks.get(event.getPlayer()).cancel();
-              tasks.remove(event.getPlayer());
-            }
+    if (bcab.getAPI().getConfigHandler().Checktype != CheckType.SQL) {
+      return;
+    }
+    if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+      bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
+      return;
+    }
+    if (!tasks.containsKey(event.getPlayer())) {
+      tasks.put(event.getPlayer(), bcab.getServer().getScheduler().runTaskTimerAsynchronously(bcab, new Runnable(){
+        @Override
+        public void run() {
+          if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
+            bcab.getServer().getScheduler().runTask(bcab, new Runnable(){
+              @Override
+              public void run() {
+                bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
+              }
+            });
+            tasks.get(event.getPlayer()).cancel();
+            tasks.remove(event.getPlayer());
           }
-        }, 3 * 5, 3 * 1));
-      }
+        }
+      }, 3 * 5, 3 * 1));
     }
   }
 

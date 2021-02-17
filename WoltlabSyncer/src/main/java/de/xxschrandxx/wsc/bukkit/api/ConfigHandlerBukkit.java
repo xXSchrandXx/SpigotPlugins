@@ -332,7 +332,7 @@ public class ConfigHandlerBukkit {
     }
     else {
       wab.getLogger().warning("loadConfig() | " + path + " is not given. Setting it...");
-      config.set(path, "You were on our server for %minutes% minutes.");
+      config.set(path, "You received %amount% of jCoins because you were on our server for %minutes% minutes.");
       error = true;
     }
     //jCoinsgiverAuthorID

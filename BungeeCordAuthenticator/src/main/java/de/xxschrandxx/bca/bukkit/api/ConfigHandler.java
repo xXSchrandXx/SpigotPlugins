@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.xxschrandxx.bca.bukkit.BungeeCordAuthenticatorBukkit;
+import de.xxschrandxx.bca.core.CheckType;
 
 public class ConfigHandler {
 
@@ -32,7 +33,7 @@ public class ConfigHandler {
     loadMessage();
 
     // Loading hikariconfig.properties
-    if (ct == CheckType.SQL)
+    if (Checktype == CheckType.SQL)
       loadHikaryCP();
 
   }
@@ -47,7 +48,7 @@ public class ConfigHandler {
   // debug
   public Boolean isDebugging;
 
-  public CheckType ct;
+  public CheckType Checktype;
 
   // Protection
   public Boolean AllowMessageReceive;
@@ -86,15 +87,15 @@ public class ConfigHandler {
       bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
       config.set(path, false);
     }
-    //Debug
+    //Checktype
     path = "checktype";
     if (config.contains(path)) {
-      ct = CheckType.valueOf(config.getString(path));
+      Checktype = CheckType.valueOf(config.getString(path));
     }
     else {
       error = true;
       bcab.getLogger().warning("loadConfig() | " + path + " is missing, setting it...");
-      config.set(path, CheckType.PluginMessage.name());
+      config.set(path, CheckType.SQL.name());
     }
     //Protection
     //AllowMessageReceive
@@ -300,7 +301,7 @@ public class ConfigHandler {
       if (isDebugging)
         bcab.getLogger().info("DEBUG | " +
         "isDebugging=" + isDebugging +
-        ", CheckType=" + ct.name() +
+        ", CheckType=" + Checktype.name() +
         ", AllowMessageSend=" + AllowMessageSend +
         ", AllowMessageReceive=" + AllowMessageReceive +
         ", AllowedCommands=" + AllowedCommands +

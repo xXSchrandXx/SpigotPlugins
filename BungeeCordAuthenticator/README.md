@@ -11,6 +11,12 @@ Versions:
   * 0.0.2-SNAPSHOT:
     * [JavaDoc](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.2-SNAPSHOT/apidocs/)
     * [BungeeCordAuthenticator](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.2-SNAPSHOT/BungeeCordAuthenticator-0.0.2-SNAPSHOT.jar)
+  * 0.0.2:
+    * [JavaDoc](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.2/apidocs/)
+    * [BungeeCordAuthenticator](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.2/BungeeCordAuthenticator-0.0.2.jar)
+  * 0.0.3-SNAPSHOT:
+    * [JavaDoc](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.3-SNAPSHOT/apidocs/)
+    * [BungeeCordAuthenticator](https://maven.gamestrike.de/docs/BungeeCordAuthenticator/0.0.3-SNAPSHOT/BungeeCordAuthenticator-0.0.3-SNAPSHOT.jar)
 
 ## API Usage:
 <details>

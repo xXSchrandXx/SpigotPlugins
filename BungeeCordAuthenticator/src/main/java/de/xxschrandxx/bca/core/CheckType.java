@@ -1,4 +1,4 @@
-package de.xxschrandxx.bca.bukkit.api;
+package de.xxschrandxx.bca.core;
 
 public enum CheckType {
   SQL, PluginMessage;

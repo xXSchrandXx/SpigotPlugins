@@ -5,6 +5,7 @@ import de.xxschrandxx.wsc.bukkit.api.events.PlayerVerifiedEvent;
 import de.xxschrandxx.wsc.core.api.jCoinsGiver;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class jCoinsGiverListener implements Listener {
       if (plugin.getConfigHandler().isDebugging)
         plugin.getLogger().info("DEBUG | addMoneyTask: " + player.getName());
       tasks.put(player, plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-        int minute = 0;
+        Integer minute = 0;
         Integer userID = null;
         @Override
         public void run() {
@@ -53,8 +54,12 @@ public class jCoinsGiverListener implements Listener {
             if (userID == null)
               userID = plugin.getConfigHandler().getPlayerData(player).getID();
             if (userID != null) {
+              if (plugin.getConfigHandler().isDebugging)
+                plugin.getLogger().info("DEBUG | " + userID.toString() + " was " + minute.toString() + " on the server.");
               try {
-                jCoinsGiver.sendMoney(
+                if (plugin.getConfigHandler().isDebugging)
+                  plugin.getLogger().info("DEBUG | Trying to send to website.");
+                List<String> webmessage = jCoinsGiver.sendMoney(
                   plugin.getConfigHandler().jCoinsgiverURL,
                   plugin.getConfigHandler().jCoinsgiveKey,
                   plugin.getConfigHandler().jCoinsgiverAuthorID,
@@ -62,8 +67,14 @@ public class jCoinsGiverListener implements Listener {
                   plugin.getConfigHandler().jCoinsgiverModerative,
                   userID,
                   plugin.getConfigHandler().jCoinsgiverAmount,
-                  plugin.getConfigHandler().jCoinsgiverForumMessage.replaceAll("%minutes%", plugin.getConfigHandler().jCoinsgiverMinutes.toString())
+                  plugin.getConfigHandler().jCoinsgiverForumMessage.replaceAll("%minutes%", plugin.getConfigHandler().jCoinsgiverMinutes.toString()).replaceAll("%amount%", plugin.getConfigHandler().jCoinsgiverAmount.toString())
                 );
+                if (plugin.getConfigHandler().isDebugging) {
+                  plugin.getLogger().info("DEBUG | Message from website:");
+                  for (String row : webmessage) {
+                    plugin.getLogger().info("DEBUG | " + row);
+                  }
+                }
               }
               catch (IOException e) {
                 e.printStackTrace();
@@ -73,8 +84,11 @@ public class jCoinsGiverListener implements Listener {
             }
             minute = 0;
           }
+          else if (plugin.getConfigHandler().isDebugging)
+            plugin.getLogger().info("DEBUG | adding 1 to minutes");
+          minute++;
         }
-      }, 3 * 60, 3 * 60));
+      }, 0, 3 * 60));
     }
   }
 

@@ -20,7 +20,9 @@ import de.xxschrandxx.bca.bungee.api.task.*;
 import de.xxschrandxx.bca.core.OnlineStatus;
 import de.xxschrandxx.bca.core.PluginChannels;
 import de.xxschrandxx.bca.core.SQLHandler;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 
 public class BungeeCordAuthenticatorBungeeAPI {
 
@@ -158,11 +160,21 @@ public class BungeeCordAuthenticatorBungeeAPI {
       unauthedkick.get(uuid).cancel();
       unauthedkick.remove(uuid);
     }
-    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Sending pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.login + ", " + uuid.toString());
-    //Sending PluginMessage
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Try to send pluginmessage from " + player.getName() + " on " + player.getServer().getInfo().getName() + ": " + PluginChannels.login + ", " + uuid.toString());
+    Server server = player.getServer();
+    if (server == null) {
+      if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Server is null, skipping...");
+      return;
+    }
+    ServerInfo serverinfo = server.getInfo();
+    if (serverinfo == null) {
+      if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | ServerInfo is null, skipping...");
+      return;
+    }
     ByteArrayDataOutput out = ByteStreams.newDataOutput();
     out.writeUTF(uuid.toString());
-    player.getServer().getInfo().sendData(PluginChannels.login, out.toByteArray()); // TODO Fix FastLogin error
+    serverinfo.sendData(PluginChannels.login, out.toByteArray());
+    if (getConfigHandler().isDebugging) getLogger().info("BungeeCordAuthenticatorBungeeAPI.setAuthenticated | Successfully send pluginmessage");
   }
 
   /**
@@ -175,12 +187,6 @@ public class BungeeCordAuthenticatorBungeeAPI {
       bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is null, skipping");
       return;
     }
-    /*
-    if (!player.isConnected()) {
-      bcab.getLogger().warning("BungeeCordAuthenticatorBungeeAPI.unsetAuthenticated | ProxiedPlayer is not connected, skipping");
-      return;
-    }
-    */
     UUID uuid = player.getUniqueId();
     //Setting SQL first because of the SQLException
     getSQL().setStatus(uuid, OnlineStatus.unauthenticated);
