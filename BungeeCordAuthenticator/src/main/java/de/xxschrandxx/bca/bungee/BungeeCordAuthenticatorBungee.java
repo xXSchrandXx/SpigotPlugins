@@ -102,7 +102,7 @@ public class BungeeCordAuthenticatorBungee extends Plugin {
 
     //Loading bStats
     metrics = new Metrics(this, 10375);
-    metrics.addCustomChart(new SingleLineChart("managed_users", () -> api.getSQL().getAllUUIDs().size()));
+    metrics.addCustomChart(new SingleLineChart("managed_users", () -> BungeeCordAuthenticatorBungee.getInstance().getAPI().getSQL().getAllUUIDs().size()));
 
   }
 

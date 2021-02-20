@@ -11,7 +11,7 @@
   <name>WoltlabSyncer</name>
   <artifactId>WoltlabSyncer</artifactId>
   <groupId>de.xxschrandxx.wsc</groupId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -37,6 +37,26 @@
       <version>4.13.1</version>
     </dependency>
 
+    <!-- Metrics Dependency -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bungeecord</artifactId>
+      <version>2.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>2.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-base</artifactId>
+      <version>2.2.1</version>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -54,9 +74,19 @@
             </goals>
             <inherited>true</inherited>
             <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <relocations>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>de.xxschrandxx.lib.org.bstats</shadedPattern>
+                </relocation>
+              </relocations>
               <artifactSet>
                 <includes>
                   <include>de.xxschrandxx.wsc:WoltlabAPI:jar:*</include>
+                  <include>org.bstats:bstats-bungeecord</include>
+                  <include>org.bstats:bstats-bukkit</include>
+                  <include>org.bstats:bstats-base</include>
                 </includes>
               </artifactSet>
             </configuration>

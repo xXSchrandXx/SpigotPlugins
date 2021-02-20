@@ -153,16 +153,16 @@ public class ConfigHandler {
       config.set(path, false);
     }
     //UnauthedLocation
-    World world = null;
-    String worldname = null;
-    double x = 0;
-    double y = 0;
-    double z = 0;
-    float yaw = 0;
-    float pitch = 0;
+    World world1 = null;
+    String worldname1 = null;
+    double x1 = 0;
+    double y1 = 0;
+    double z1 = 0;
+    float yaw1 = 0;
+    float pitch1 = 0;
     path = "teleportation.unauthed.location.world";
     if (config.contains(path)) {
-      worldname = config.getString(path);
+      worldname1 = config.getString(path);
     }
     else {
       error = true;
@@ -171,7 +171,7 @@ public class ConfigHandler {
     }
     path = "teleportation.unauthed.location.x";
     if (config.contains(path)) {
-      x = config.getDouble(path);
+      x1 = config.getDouble(path);
     }
     else {
       error = true;
@@ -180,7 +180,7 @@ public class ConfigHandler {
     }
     path = "teleportation.unauthed.location.y";
     if (config.contains(path)) {
-      y = config.getDouble(path);
+      y1 = config.getDouble(path);
     }
     else {
       error = true;
@@ -189,7 +189,7 @@ public class ConfigHandler {
     }
     path = "teleportation.unauthed.location.z";
     if (config.contains(path)) {
-      z = config.getDouble(path);
+      z1 = config.getDouble(path);
     }
     else {
       error = true;
@@ -198,7 +198,7 @@ public class ConfigHandler {
     }
     path = "teleportation.unauthed.location.yaw";
     if (config.contains(path)) {
-      yaw = config.getLong(path);
+      yaw1 = config.getLong(path);
     }
     else {
       error = true;
@@ -207,7 +207,7 @@ public class ConfigHandler {
     }
     path = "teleportation.unauthed.location.pitch";
     if (config.contains(path)) {
-      pitch = config.getLong(path);
+      pitch1 = config.getLong(path);
     }
     else {
       error = true;
@@ -215,8 +215,8 @@ public class ConfigHandler {
       config.set(path, 0.0);
     }
     if (!error) {
-      if ((world = Bukkit.getWorld(worldname)) != null) {
-        UnauthedLocation = new Location(world, x, y, z, yaw, pitch);
+      if ((world1 = Bukkit.getWorld(worldname1)) != null) {
+        UnauthedLocation = new Location(world1, x1, y1, z1, yaw1, pitch1);
       }
     }
     //TeleportAuthenticated

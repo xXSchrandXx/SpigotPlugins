@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -22,7 +23,7 @@ public class AuthenticationListener implements Listener {
     bcab = BungeeCordAuthenticatorBukkit.getInstance();
   }
 
-  private ConcurrentHashMap<Player, BukkitTask> tasks = new ConcurrentHashMap<Player, BukkitTask>();
+  private ConcurrentHashMap<Player, BukkitTask> login = new ConcurrentHashMap<Player, BukkitTask>();
 
   @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
   public void onPreJoin(PlayerJoinEvent event) {
@@ -33,8 +34,8 @@ public class AuthenticationListener implements Listener {
       bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
       return;
     }
-    if (!tasks.containsKey(event.getPlayer())) {
-      tasks.put(event.getPlayer(), bcab.getServer().getScheduler().runTaskTimerAsynchronously(bcab, new Runnable(){
+    if (!login.containsKey(event.getPlayer())) {
+      login.put(event.getPlayer(), bcab.getServer().getScheduler().runTaskTimerAsynchronously(bcab, new Runnable() {
         @Override
         public void run() {
           if (bcab.getAPI().isAuthenticated(event.getPlayer())) {
@@ -44,11 +45,53 @@ public class AuthenticationListener implements Listener {
                 bcab.getServer().getPluginManager().callEvent(new LoginEvent(event.getPlayer()));
               }
             });
-            tasks.get(event.getPlayer()).cancel();
-            tasks.remove(event.getPlayer());
+            login.get(event.getPlayer()).cancel();
+            login.remove(event.getPlayer());
           }
         }
       }, 3 * 5, 3 * 1));
+    }
+  }
+
+
+  private ConcurrentHashMap<Player, BukkitTask> logout = new ConcurrentHashMap<Player, BukkitTask>();
+
+  @EventHandler
+  public void onLoging(LoginEvent event) {
+    if (bcab.getAPI().getConfigHandler().Checktype != CheckType.SQL) {
+      return;
+    }
+    if (!logout.containsKey(event.get())) {
+      logout.put(event.get(), bcab.getServer().getScheduler().runTaskTimerAsynchronously(bcab, new Runnable() {
+        @Override
+        public void run() {
+          if (!bcab.getAPI().isAuthenticated(event.get())) {
+            bcab.getServer().getScheduler().runTask(bcab, new Runnable(){
+              @Override
+              public void run() {
+                bcab.getServer().getPluginManager().callEvent(new LogoutEvent(event.get()));
+              }
+            });
+            logout.get(event.get()).cancel();
+            logout.remove(event.get());
+          }
+        }
+      }, 3 * 5, 3 * 1));
+    }
+  }
+
+  @EventHandler
+  public void onQuit(PlayerQuitEvent event) {
+    if (bcab.getAPI().getConfigHandler().Checktype != CheckType.SQL) {
+      return;
+    }
+    if (login.contains(event.getPlayer())) {
+      login.get(event.getPlayer()).cancel();
+      login.remove(event.getPlayer());
+    }
+    if (logout.contains(event.getPlayer())) {
+      logout.get(event.getPlayer()).cancel();
+      logout.remove(event.getPlayer());
     }
   }
 
@@ -79,7 +122,7 @@ public class AuthenticationListener implements Listener {
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onLogin(LoginEvent event) {
-    if (!bcab.getAPI().getConfigHandler().TeleportUnauthed) {
+    if (!bcab.getAPI().getConfigHandler().TeleportAuthenticated) {
       return;
     }
     if (bcab.getAPI().getConfigHandler().AuthenticatedLocation == null) {
@@ -87,5 +130,5 @@ public class AuthenticationListener implements Listener {
     }
     event.get().teleport(bcab.getAPI().getConfigHandler().AuthenticatedLocation, TeleportCause.PLUGIN);
   }
-  
+
 }

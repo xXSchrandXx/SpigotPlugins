@@ -7,6 +7,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 import java.sql.SQLException;
 
+import org.bstats.bungeecord.Metrics;
+
 public class WoltlabSyncerBungee extends Plugin {
 
   private WoltlabAPIBungee wab;
@@ -38,6 +40,8 @@ public class WoltlabSyncerBungee extends Plugin {
   public ConfigHandlerBungee getConfigHandler() {
     return ch;
   }
+
+  private Metrics metrics;
 
   @Override
   public void onEnable() {
@@ -95,6 +99,10 @@ public class WoltlabSyncerBungee extends Plugin {
         getProxy().getPluginManager().registerListener(this, new FabiWoltlabSyncListener(this));
       }
     }
+
+    //Loading bStats
+    metrics = new Metrics(this, 10405);
+
   }
 
   @Override

@@ -11,7 +11,7 @@
   <name>WoltlabAPI</name>
   <artifactId>WoltlabAPI</artifactId>
   <groupId>de.xxschrandxx.wsc</groupId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -40,6 +40,7 @@
             </goals>
             <inherited>true</inherited>
             <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
               <relocations>
                 <relocation>
                   <pattern>com.zaxxer</pattern>

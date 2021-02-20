@@ -13,15 +13,15 @@
   <groupId>de.xxschrandxx.bca</groupId>
   <version>0.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
-  
+
   <dependencies>
 
     <!-- API Dependency -->
-  	<dependency>
+    <dependency>
       <groupId>de.xxschrandxx.api</groupId>
       <artifactId>SchrandAPI</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-  	</dependency>
+    </dependency>
 
     <!-- Metrics Dependency -->
     <dependency>
@@ -73,6 +73,7 @@
             </goals>
             <inherited>true</inherited>
             <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
               <relocations>
                 <relocation>
                   <pattern>com.zaxxer</pattern>

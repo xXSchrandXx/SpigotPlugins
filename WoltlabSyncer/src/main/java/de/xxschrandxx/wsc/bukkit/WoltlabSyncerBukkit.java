@@ -6,6 +6,7 @@ import de.xxschrandxx.wsc.bukkit.listener.*;
 
 import java.sql.SQLException;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,6 +41,8 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
   public ConfigHandlerBukkit getConfigHandler() {
     return ch;
   }
+
+  private Metrics metrics;
 
   @Override
   public void onEnable() {
@@ -97,6 +100,10 @@ public class WoltlabSyncerBukkit extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FabiWoltlabSyncListener(this), this);
       }
     }
+
+    //Loading bStats
+    metrics = new Metrics(this, 10405);
+
   }
 
   @Override

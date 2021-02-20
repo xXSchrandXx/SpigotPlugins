@@ -47,10 +47,6 @@ public class ConfigHandler {
   //Checktype
   public CheckType Checktype;
 
-  //LimboServer
-  public boolean LimboServerEnabled;
-  public String LimboServerName;
-
   //Sessions
   public Boolean SessionEnabled;
   public Integer SessionLength;
